@@ -13,7 +13,7 @@ class CreateAsssignScheduleCoursesTable extends Migration
      */
     public function up()
     {
-        Schema::create('asssign_schedule_courses', function (Blueprint $table) {
+        Schema::create('assign_schedule_courses', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('Course_id'); 
             $table->foreign('Course_id')->references('id')->on('assign_course_grades');
