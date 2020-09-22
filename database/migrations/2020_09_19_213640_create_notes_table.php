@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateNotesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('notes', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('Studen_id'); 
+            $table->foreign('Studen_id')->references('id')->on('assign_student_grades');
+            $table->unsignedInteger('Activity_id'); 
+            $table->foreign('Activity_id')->references('id')->on('assign_activities');
+            $table->string('Score');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('notes');
+    }
+}
