@@ -17,3 +17,8 @@ $route = "App\Http\Controllers";
 //Route::get('/login', 'LoginController@index')->name('login');
 #HOME
 Route::get('/', $route.'\Administration@Dashboard')->name('Dashboard');
+
+Route::get('/datos',[Administration::class, 'View_User_Person']);
+Route::post('/insertar',[Administration::class, 'Create_User_Person']);
+Route::get('/editar/{usuario}',[Administration::class, 'Edit_User_Person']);
+Route::post('/actualizar/{id}',[Administration::class, 'Update_User_Person']);

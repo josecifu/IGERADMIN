@@ -32,9 +32,15 @@ class Administration extends Controller
         return view('Administration.Dashboard.Vacio');
     }
 	//Funciones de crear
-    public function Create_User_Person()
+    public function Create_User_Person(Request $request)
     {
-
+        $usuario = new User;
+        $usuario->name = $request->nombre;
+        $usuario->email = $request->email;
+        $usuario->password = bcrypt($request->contraseña);
+        $usuario->Person_id = $request->persona;
+        $usuario->save();
+        return redirect()->action([Administration::class,'View_User_Person']);
     }
 
     public function Create_menu()
@@ -61,7 +67,12 @@ class Administration extends Controller
     //Funciones para visualizacion de datos
     public function View_User_Person()
     {
-
+        $personas = Person::all();
+        $usuarios = User::all();
+        return view('Pruebas/formulario',[
+            'usuarios'=>$usuarios,
+            'personas'=>$personas,
+        ]);
     }
     public function View_menu()
     {
@@ -84,29 +95,41 @@ class Administration extends Controller
     	
     }
 
-    //Funciones de edicion
-    public function Update_User_Person()
+    //Funcion edicion
+    public function Edit_User_Person(User $usuario)
     {
-
+        return view('Pruebas/editarU',compact('usuario'));
+    }
+    //Funciones de Actualizar
+    public function Update_User_Person($id, Request $request)
+    {
+        $data=array(
+            'name' => $request->nombre,
+            'email' => $request->email,
+            'password' => bcrypt($request->contraseña),
+            'Person_id' => $request->persona,
+        );
+        User::where('id', $id)->update($data);
+        return redirect()->action([Administration::class,'View_User_Person']);
     }
     public function Update_menu()
     {
-    	
+        
     }
     public function Update_permission()
     {
-    	
+        
     }
     public function Update_grade()
     {
-    	
+        
     }
     public function Update_courses()
     {
-    	
+        
     }
     public function Update_schedule()
     {
-    	
+        
     }
 }
