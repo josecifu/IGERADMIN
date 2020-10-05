@@ -18,7 +18,17 @@ $route = "App\Http\Controllers";
 #HOME
 Route::get('/', $route.'\Administration@Dashboard')->name('Dashboard');
 
-Route::get('/datos',[Administration::class, 'View_User_Person']);
-Route::post('/insertar',[Administration::class, 'Create_User_Person']);
+
+Route::get('/Clientes/listado', $route.'\Administration@View_Clients')->name('View_Clients');
+
+
+
+
+
+
+
+
+Route::get('/datos', $route.'\Administration@View_User_Person')->name('View_User_Person');
+Route::post('/insertar', $route.'\Administration@Create_User_Person')->name('Create_User_Person');
 Route::get('/editar/{usuario}',[Administration::class, 'Edit_User_Person']);
 Route::post('/actualizar/{id}',[Administration::class, 'Update_User_Person']);

@@ -1,28 +1,30 @@
 <?php
-//Modelo de usuarios
-use App\User;
-//Modelo de personas para usuarios
-use App\Person;
-//modelo de Menu
-use App\menu;
-// modelo de permisos para los menus
-use App\permission;
-//modelo de jornadas 
-use App\period;
-//modelo de niveles de grados
-use App\level;
-//modelo de grado
-use App\grade;
-//Modelo de aula
-use App\classrom;
-//modelo de materias
-use App\course;
-//modelo de periodos para los cursos
-use App\schedule;
+
+
 
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+//Modelo de usuarios
+use App\Models\User;
+//Modelo de personas para usuarios
+use App\Models\Person;
+//modelo de Menu
+use App\Models\menu;
+// modelo de permisos para los menus
+use App\Models\permission;
+//modelo de jornadas 
+use App\Models\period;
+//modelo de niveles de grados
+use App\Models\level;
+//modelo de grado
+use App\Models\grade;
+//Modelo de aula
+use App\Models\classrom;
+//modelo de materias
+use App\Models\course;
+//modelo de periodos para los cursos
+use App\Models\schedule;
 
 class Administration extends Controller
 {
@@ -31,6 +33,25 @@ class Administration extends Controller
     {
         return view('Administration.Dashboard.Vacio');
     }
+    public function View_Clients()
+    {
+        $Titles =['Id','Nombre','Apellido','Pais','Pais','Pais','Pais','Pais','Pais','Pais','Acciones'];
+        $Models = [];
+        $model = user::all();
+        foreach ($model as $value) {
+            $person = Person::where('id',$value->Person_id)->first();
+            $data = [
+                'Id' => $value->id,
+                'Name' => $person->Names,
+                'Apellido' => $person->LastNames,
+                'Grado' => '4to Primaria',
+            ];
+            array_push($Models,$data);
+        }
+
+        return view('Administration.Clientes.ListadoClientes',compact('Titles','Models'));
+    }
+    
 	//Funciones de crear
     public function Create_User_Person(Request $request)
     {
