@@ -18,22 +18,22 @@ use Illuminate\Http\Request;
 
 class Student extends Controller
 {
-    public function ViewNotes(){
-
+    public function ViewNotes()
+    {
     }
-    public function ViewTests(){
-
+    public function ViewTests()
+    {
     }
-    public function AnswerTests(){
-
+    public function AnswerTests()
+    {
     }
-    public function ViewInformationCourses(){
-
+    public function ViewInformationCourses()
+    {
     }
-    public function ViewSchedule(){
-
+    public function ViewSchedule()
+    {
     }
-    public function ViewProfile(){
-
+    public function ViewProfile()
+    {
     }
 }
