@@ -26,11 +26,17 @@ use Illuminate\Http\Request;
 
 class Administration extends Controller
 {
+    //Dashboard
+    public function Dashboard()
+    {
+        return view('Administration.Dashboard.Vacio');
+    }
 	//Funciones de crear
     public function Create_User_Person()
     {
 
     }
+
     public function Create_menu()
     {
     	
