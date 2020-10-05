@@ -5,7 +5,7 @@
 							<div class="d-none d-lg-flex align-items-center mr-3">
 								<!--begin::Logo-->
 								<a href="index.html" class="mr-20">
-									<img alt="Logo" src="assets/media/logos/Logo-Iger.png" class="logo-default max-h-75px" />
+									<img alt="Logo" src="{{ asset('assets/media/logos/Logo-Iger.png')}}" class="logo-default max-h-75px" />
 								</a>
 								<!--end::Logo-->
 							</div>
