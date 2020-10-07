@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -25,6 +23,14 @@ use App\Models\classrom;
 use App\Models\course;
 //modelo de periodos para los cursos
 use App\Models\schedule;
+//Modelo Asignacion roles a usuario
+use App\Models\Assign_user_rol;
+//Modelo Asignacion roles a usuario
+use App\Models\Assign_student_grade;
+//Modelo Asignacion Jornada grado
+use App\Models\Assign_period_grade;
+//Modelo Asignacion nivel grado
+use App\Models\Assign_level_grade;
 
 class Administration extends Controller
 {
@@ -85,33 +91,96 @@ class Administration extends Controller
     	
     }
 
-    //Funciones para visualizacion de datos
-    public function View_User_Person()
+    //Funciones para visualizacion de datos 
+    public function View_User_Person()      //Visualizcion tabla personas con usuario
     {
-        $personas = Person::all();
+        $Titles = ['Id','Nombres','Apellidos','Direccion','Telefono','Fecha Nacimiento','Usuario','Email'];
         $usuarios = User::all();
-        return view('Pruebas/formulario',[
-            'usuarios'=>$usuarios,
-            'personas'=>$personas,
-        ]);
+        $Models = [];
+        foreach ($usuarios as $value) {
+            $persona = Person::where('id',$value->Person_id)->firstorfail();
+            $data = [
+                'Id' => $persona->id,
+                'Name' => $persona->Names,
+                'Apellido' => $persona->LastNames,
+                'Direccion' => $persona->Address,
+                'Telefono' => $persona->Phone,
+                'Fecha_Nacimiento' => $persona->BirthDate,
+                'Usuario' => $value->name,
+                'Correo' => $value->email,
+            ];
+            array_push($Models,$data);
+        }
+        return view('Administration/Personas/ListadoPersonas',compact('Models','Titles'));
     }
-    public function View_menu()
+
+    public function View_User_Student()      //Visualizcion tabla Estudiantes con usuario  REVISION!!
+    {
+        $Titles =['Id','Nombres','Apellidos','Direccion','Telefono','Fecha Nacimiento','Usuario','Email'];
+        $usuario_rolEstudiante = Assign_user_rol::where('Rol_id',1)->get('user_id');
+        $Models = [];
+        foreach ($usuario_rolEstudiante as $v) {
+            $usuario = User::where('id',$v->user_id)->first();
+            $persona = Person::where('id',$usuario->Person_id)->first();
+                $data = [
+                    'Id' => $persona->id,
+                    'Name' => $persona->Names,
+                    'Apellido' => $persona->LastNames,
+                    'Direccion' => $persona->Address,
+                    'Telefono' => $persona->Phone,
+                    'Fecha_Nacimiento' => $persona->BirthDate,
+                    'Usuario' => $usuario->name,
+                    'Correo' => $usuario->email,
+    
+                ];
+                array_push($Models,$data);
+        }
+        return view('Administration/Estudiantes/ListadoEstudiantes',compact('Models','Titles'));
+    }
+
+    public function View_Student_Assignment()      //Visualizcion tabla personas con usuario
+    {
+        $Titles = ['ID Asignacion','Nombres','Apellido','Direccion','Telefono','Fecha Nacimiento','Grado'];
+        $asignaciones = Assign_student_grade::all();
+        $Models = [];
+        foreach ($asignaciones as $value) {
+            $usuario = User::where('id',$value->user_id)->first(); //Obtencion usuario de aignacion estudiante/grado
+            $estudiante = Person::where('Person_id',$usuario->Person_id)->first(); //obtencion del estudiante de usuario
+            $jornadaGrado = Assign_period_grade::where('id',$value->Grade_id)->first(); //obtencion jornada/grado de asignacion estudiante/grado
+            $nivelGrado = Assign_level_grade::where('id',$jornadaGrado->grade_level_id)->first();
+            $grado = grade::where('id',$nivelGrado->Grade_id)->first();
+            $data = [
+                'Id' => $value->id,
+                'Name' => $estudiante->Names,
+                'Apellido' => $estudiante->LastNames,
+                'Direccion' => $estudiante->Address,
+                'Telefono' => $estudiante->Phone,
+                'Fecha_Nacimiento' => $estudiante->BirthDate,
+                'Grado' => $grado->Name,
+            ];
+            array_push($Models,$data);
+        }
+        return view('Administration/Estudiantes/ListadoAsignacionEstudiante',compact('Models','Titles'));
+    }
+    public function View_Menu()
     {
     	
     }
-    public function View_permission()
+    public function View_Permission()
+    {
+        $Titles = ['ID','Nombre Permiso', 'Slug'];
+        $permisos = permission::all();
+        return view('Administration/Permisos/ListadoPermisos',compact('permisos','Titles'));
+    }
+    public function View_Grade()
     {
     	
     }
-    public function View_grade()
+    public function View_Courses()
     {
     	
     }
-    public function View_courses()
-    {
-    	
-    }
-    public function View_schedule()
+    public function View_Schedule()
     {
     	
     }

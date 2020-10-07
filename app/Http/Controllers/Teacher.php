@@ -1,4 +1,8 @@
 <?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
 //tabla de informacion
 use App\Models\information;
 //tabla de asignacion de informacion
@@ -13,10 +17,6 @@ use App\Models\Question;
 use App\Models\Asign_question_test;
 //tabla de asignacion de prueba a curso
 use App\Models\asign_test_course;
-
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
 
 class Teacher extends Controller
 {
