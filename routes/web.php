@@ -28,6 +28,13 @@ Route::get('/asignacion/estudiantes',$route.'\Administration@View_Student_Assign
 Route::get('/permisos/listado',$route.'\Administration@View_Permission')->name('View_Permission');
 
 
+Route::get('/Curso/listado', $route.'\Administration@View_Grade')->name('View_Grade');
+Route::get('/Grado/listado', $route.'\Administration@View_Course')->name('View_Course');
+Route::get('/Nivel/listado', $route.'\Administration@View_Level')->name('View_Level');
+Route::get('/Clase/listado', $route.'\Administration@View_Classroom')->name('View_Classroom');
+Route::get('/Menu/listado', $route.'\Administration@View_Menu')->name('View_Menu');
+Route::get('/Rol/listado', $route.'\Administration@View_Rol')->name('View_Rol');
+
 
 #Rutas CRUD Usuario Persona
 Route::get('/datos', $route.'\Administration@View_User_Person')->name('View_User_Person');

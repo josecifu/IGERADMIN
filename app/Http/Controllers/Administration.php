@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\Person;
 //modelo de Menu
 use App\Models\menu;
+//modelo de Rol
+use App\Models\rol;
 // modelo de permisos para los menus
 use App\Models\permission;
 //modelo de jornadas 
@@ -115,6 +117,14 @@ class Administration extends Controller
         }
         return view('Administration/Personas/ListadoPersonas',compact('Models','Titles'));
     }
+<<<<<<< HEAD
+    public function View_Menu()
+    {
+    	$menus = menu::all();
+        return view('Administration.Menu.ListadoMenus',compact('menus'));
+    }
+    public function View_Rol()
+=======
 
     public function View_User_Student()      //Visualizcion tabla Estudiantes con usuario  REVISION!!
     {
@@ -165,26 +175,51 @@ class Administration extends Controller
         return view('Administration/Estudiantes/ListadoAsignacionEstudiante',compact('Models','Titles'));
     }
     public function View_Menu()
+>>>>>>> ca05e3fa530db36b4535fb9687f618697ae82fb0
     {
-    	
+        $rols = rol::all();
+        return view('Administration.Rol.ListadoRoles',compact('rols'));       
     }
+<<<<<<< HEAD
+=======
     public function View_Permission()
     {
         $Titles = ['ID','Nombre Permiso', 'Slug'];
         $permisos = permission::all();
         return view('Administration/Permisos/ListadoPermisos',compact('permisos','Titles'));
     }
+>>>>>>> ca05e3fa530db36b4535fb9687f618697ae82fb0
     public function View_Grade()
     {
-    	
+        $courses = course::all();
+        return view('Administration.Curso.ListadoCursos',compact('courses'));
     }
+<<<<<<< HEAD
+    public function View_Course()
+=======
     public function View_Courses()
+>>>>>>> ca05e3fa530db36b4535fb9687f618697ae82fb0
     {
-    	
+        $grades = grade::all();
+        return view('Administration.Grado.ListadoGrados',compact('grades'));
+    }
+    public function View_Level()
+    {
+        $levels = level::all();
+        return view('Administration.Nivel.ListadoNiveles',compact('levels'));
+    }
+    public function View_Classroom()
+    {
+        $classrooms = classroom::all();
+        return view('Administration.Clase.ListadoClases',compact('classrooms'));
     }
     public function View_Schedule()
     {
-    	
+        
+    }
+    public function View_permission()
+    {
+        
     }
 
     //Funcion edicion
