@@ -21,6 +21,7 @@ Route::get('/', $route.'\Administration@Dashboard')->name('Dashboard');
 
 Route::get('/Clientes/listado', $route.'\Administration@View_Clients')->name('View_Clients');
 Route::get('/Clientes/insertar', $route.'\Administration@Crear_Clientes')->name('Crear_Clientes');
+Route::post('/Clientes/insertar', $route.'\Administration@Guardar_clientes')->name('Guardar_clientes');
 
 #Rutas Listado estudiante, persona, asignacion estudiantes/curso
 Route::get('/estudiantes/listado',$route.'\Administration@View_User_Student')->name('View_User_Student');

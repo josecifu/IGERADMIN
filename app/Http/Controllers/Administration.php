@@ -45,6 +45,10 @@ class Administration extends Controller
     {
          return view('Administration.Clientes.Crear_Clientes');
     }
+    public function Guardar_clientes(Request $request)
+    {
+        dd($request);
+    }
     public function View_Clients()
     {
         $Titles =['Id','Nombre','Apellido','Pais','Pais','Pais','Pais','Pais','Pais','Pais','Acciones'];

@@ -12,7 +12,6 @@
     {{-- Page content --}}
     @section('content')
     <!--begin::Card-->
-
                                 <div class="card card-custom card-sticky" id="kt_page_sticky_card">
                                     <div class="card-header">
                                         <div class="card-title">
@@ -26,7 +25,7 @@
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-primary font-weight-bolder">
                                                 <i class="ki ki-check icon-sm"></i>Save Form</button>
-                                                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" onclick="crear();" aria-haspopup="true" aria-expanded="false"></button>
+                                                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                                                 <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                                                     <ul class="nav nav-hover flex-column">
                                                         <li class="nav-item">
@@ -54,7 +53,7 @@
                                     </div>
                                     <div class="card-body">
                                         <!--begin::Form-->
-                                        <form class="form" id="kt_form" >
+                                        <form class="form" id="kt_form">
                                             <div class="row">
                                                 <div class="col-xl-2"></div>
                                                 <div class="col-xl-8">
@@ -63,13 +62,13 @@
                                                         <div class="form-group row">
                                                             <label class="col-3">First Name</label>
                                                             <div class="col-9">
-                                                                <input class="form-control form-control-solid" type="text" value="Nick" name="Nombres"/>
+                                                                <input class="form-control form-control-solid" type="text" value="Nick" />
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <label class="col-3">Last Name</label>
                                                             <div class="col-9">
-                                                                <input class="form-control form-control-solid" type="text" value="Watson" name="Apellidos"/>
+                                                                <input class="form-control form-control-solid" type="text" value="Watson" />
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
@@ -458,37 +457,6 @@
                                 <!--end::Card-->
 	@stop
 	@section('scripts')
-    <script type="text/javascript">
-         $( document ).ready(function() {
-          $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            }); 
-         }
 
-         function crear()
-         {
-            console.log("HOLA");
-            var NombreCliente = document.getElementsByName("Nombres"); 
-            var ApellidosCliente = document.getElementsByName("Apellidos"); 
-            var data = [
-                Nombre: NombreCliente,
-                Apellido: ApellidosCliente,
-            ];
-            $.ajax({
-                url:'/Clientes/insertar',
-                type:'POST',
-                data: {"_token":"{{ csrf_token() }}","data":data},
-                dataType: "JSON",
-                success: function(e){
-                    console.log(e);
-                },
-                error: function(e){
-                    console.log(e);
-                }
-            });
-         }
-    </script>
       
 	@stop
