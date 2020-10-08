@@ -123,10 +123,7 @@ class Administration extends Controller
     	$menus = menu::all();
         return view('Administration.Menu.ListadoMenus',compact('menus'));
     }
-    public function View_Rol()
-    {
 
-    }
 
     public function View_User_Student()      //Visualizcion tabla Estudiantes con usuario  REVISION!!
     {
@@ -176,7 +173,7 @@ class Administration extends Controller
         }
         return view('Administration/Estudiantes/ListadoAsignacionEstudiante',compact('Models','Titles'));
     }
-    public function View_Menu()
+    public function View_Rol()
     {
         $rols = rol::all();
         return view('Administration.Rol.ListadoRoles',compact('rols'));       
@@ -214,10 +211,7 @@ class Administration extends Controller
     {
         
     }
-    public function View_permission()
-    {
-        
-    }
+
 
     //Funcion edicion
     public function Edit_User_Person(User $usuario)
