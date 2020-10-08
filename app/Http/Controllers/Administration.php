@@ -44,6 +44,8 @@ class Administration extends Controller
         $Titles =['Id','Nombre','Apellido','Pais','Pais','Pais','Pais','Pais','Pais','Pais','Acciones'];
         $Models = [];
         $model = user::all();
+        dd($model->person->Name);
+        
         foreach ($model as $value) {
             $person = Person::where('id',$value->Person_id)->first();
             $data = [
@@ -120,8 +122,8 @@ class Administration extends Controller
         $usuario_rolEstudiante = Assign_user_rol::where('Rol_id',1)->get('user_id');
         $Models = [];
         foreach ($usuario_rolEstudiante as $v) {
-            $usuario = User::where('id',$v->user_id)->first();
-            $persona = Person::where('id',$usuario->Person_id)->first();
+            $usuario = User::find($v->user_id);
+            $persona = Person::find($usuario->Person_id);
                 $data = [
                     'Id' => $persona->id,
                     'Name' => $persona->Names,
