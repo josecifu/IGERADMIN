@@ -41,15 +41,20 @@ class Administration extends Controller
     {
         return view('Administration.Dashboard.Vacio');
     }
+    public function Crear_Clientes()
+    {
+         return view('Administration.Clientes.Crear_Clientes');
+    }
     public function View_Clients()
     {
         $Titles =['Id','Nombre','Apellido','Pais','Pais','Pais','Pais','Pais','Pais','Pais','Acciones'];
         $Models = [];
         $model = user::all();
-        dd($model->person->Name);
+       
         
         foreach ($model as $value) {
             $person = Person::where('id',$value->Person_id)->first();
+
             $data = [
                 'Id' => $value->id,
                 'Name' => $person->Names,
@@ -59,7 +64,7 @@ class Administration extends Controller
             array_push($Models,$data);
         }
 
-        return view('Administration.Clientes.ListadoClientes',compact('Titles','Models'));
+        return view('Administration.Clientes.Listado_Clientes',compact('Titles','Models'));
     }
     
 	//Funciones de crear
