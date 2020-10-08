@@ -23,6 +23,13 @@ Route::get('/Clientes/listado', $route.'\Administration@View_Clients')->name('Vi
 
 
 
+Route::get('/Curso/listado', $route.'\Administration@View_Grade')->name('View_Grade');
+Route::get('/Grado/listado', $route.'\Administration@View_Course')->name('View_Course');
+Route::get('/Nivel/listado', $route.'\Administration@View_Level')->name('View_Level');
+Route::get('/Clase/listado', $route.'\Administration@View_Classroom')->name('View_Classroom');
+Route::get('/Menu/listado', $route.'\Administration@View_Menu')->name('View_Menu');
+Route::get('/Rol/listado', $route.'\Administration@View_Rol')->name('View_Rol');
+
 
 
 

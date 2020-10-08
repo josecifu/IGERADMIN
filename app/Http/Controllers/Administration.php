@@ -11,6 +11,8 @@ use App\Models\User;
 use App\Models\Person;
 //modelo de Menu
 use App\Models\menu;
+//modelo de Rol
+use App\Models\rol;
 // modelo de permisos para los menus
 use App\Models\permission;
 //modelo de jornadas 
@@ -95,25 +97,43 @@ class Administration extends Controller
             'personas'=>$personas,
         ]);
     }
-    public function View_menu()
+    public function View_Menu()
     {
-    	
+    	$menus = menu::all();
+        return view('Administration.Menu.ListadoMenus',compact('menus'));
     }
-    public function View_permission()
+    public function View_Rol()
     {
-    	
+        $rols = rol::all();
+        return view('Administration.Rol.ListadoRoles',compact('rols'));       
     }
-    public function View_grade()
+    public function View_Grade()
     {
-    	
+        $courses = course::all();
+        return view('Administration.Curso.ListadoCursos',compact('courses'));
     }
-    public function View_courses()
+    public function View_Course()
     {
-    	
+        $grades = grade::all();
+        return view('Administration.Grado.ListadoGrados',compact('grades'));
+    }
+    public function View_Level()
+    {
+        $levels = level::all();
+        return view('Administration.Nivel.ListadoNiveles',compact('levels'));
+    }
+    public function View_Classroom()
+    {
+        $classrooms = classroom::all();
+        return view('Administration.Clase.ListadoClases',compact('classrooms'));
     }
     public function View_schedule()
     {
-    	
+        
+    }
+    public function View_permission()
+    {
+        
     }
 
     //Funcion edicion
