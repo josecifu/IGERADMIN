@@ -47,7 +47,15 @@ class Administration extends Controller
     }
     public function Guardar_clientes(Request $request)
     {
-        dd($request);
+        $data = $request->data[0];
+        $Nombres= $data['Nombre'];
+        $Apellidos= $data['Apellido'];
+        //LOGICA
+        $person = new Person;
+        $person->Names = $Nombres;
+        $person->LastNames = $Apellidos;
+        //$person->save();
+        return response()->json(["Accion completada"]);
     }
     public function View_Clients()
     {

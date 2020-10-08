@@ -24,9 +24,9 @@
                                             <a href="#" class="btn btn-light-primary font-weight-bolder mr-2">
                                             <i class="ki ki-long-arrow-back icon-sm"></i>Back</a>
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-primary font-weight-bolder">
+                                                <button type="button" class="btn btn-primary font-weight-bolder" onclick="crearDatos();">
                                                 <i class="ki ki-check icon-sm"></i>Save Form</button>
-                                                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" onclick="crear();" aria-haspopup="true" aria-expanded="false"></button>
+                                                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                                                 <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                                                     <ul class="nav nav-hover flex-column">
                                                         <li class="nav-item">
@@ -63,13 +63,13 @@
                                                         <div class="form-group row">
                                                             <label class="col-3">First Name</label>
                                                             <div class="col-9">
-                                                                <input class="form-control form-control-solid" type="text" value="Nick" name="Nombres"/>
+                                                                <input class="form-control form-control-solid" type="text" value="Nick" id="Nombres"/>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <label class="col-3">Last Name</label>
                                                             <div class="col-9">
-                                                                <input class="form-control form-control-solid" type="text" value="Watson" name="Apellidos"/>
+                                                                <input class="form-control form-control-solid" type="text" value="Watson" id="Apellidos"/>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
@@ -458,6 +458,7 @@
                                 <!--end::Card-->
 	@stop
 	@section('scripts')
+
     <script type="text/javascript">
          $( document ).ready(function() {
           $.ajaxSetup({
@@ -465,24 +466,32 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             }); 
-         }
+         });
 
-         function crear()
+         function crearDatos()
          {
-            console.log("HOLA");
-            var NombreCliente = document.getElementsByName("Nombres"); 
-            var ApellidosCliente = document.getElementsByName("Apellidos"); 
-            var data = [
+            
+            var NombreCliente = $('#Nombres').val(); 
+            var ApellidosCliente = $('#Apellidos').val(); 
+            var data = [{
                 Nombre: NombreCliente,
                 Apellido: ApellidosCliente,
-            ];
+            }];
+
             $.ajax({
                 url:'/Clientes/insertar',
                 type:'POST',
                 data: {"_token":"{{ csrf_token() }}","data":data},
                 dataType: "JSON",
                 success: function(e){
-                    console.log(e);
+                swal.fire({ title: "Accion completada", 
+                  text: "Se ha guardado con exito el Cliente!", 
+                  type: "success"
+                        }).then(function () {
+                          var $url_path = '{!! url('/') !!}';
+                          window.location.href = $url_path+"/Clientes/listado";
+                        });
+                     
                 },
                 error: function(e){
                     console.log(e);
