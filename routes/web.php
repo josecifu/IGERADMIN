@@ -21,6 +21,11 @@ Route::get('/', $route.'\Administration@Dashboard')->name('Dashboard');
 
 Route::get('/Clientes/listado', $route.'\Administration@View_Clients')->name('View_Clients');
 
+#Rutas Listado estudiante, persona, asignacion estudiantes/curso
+Route::get('/estudiantes/listado',$route.'\Administration@View_User_Student')->name('View_User_Student');
+Route::get('/personas/listado',$route.'\Administration@View_User_Person')->name('View_User_Person');
+Route::get('/asignacion/estudiantes',$route.'\Administration@View_Student_Assignment')->name('View_Student_Assignment');
+Route::get('/permisos/listado',$route.'\Administration@View_Permission')->name('View_Permission');
 
 
 Route::get('/Curso/listado', $route.'\Administration@View_Grade')->name('View_Grade');
@@ -31,10 +36,7 @@ Route::get('/Menu/listado', $route.'\Administration@View_Menu')->name('View_Menu
 Route::get('/Rol/listado', $route.'\Administration@View_Rol')->name('View_Rol');
 
 
-
-
-
-
+#Rutas CRUD Usuario Persona
 Route::get('/datos', $route.'\Administration@View_User_Person')->name('View_User_Person');
 Route::post('/insertar', $route.'\Administration@Create_User_Person')->name('Create_User_Person');
 Route::get('/editar/{usuario}',[Administration::class, 'Edit_User_Person']);
