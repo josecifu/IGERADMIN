@@ -99,9 +99,9 @@ class Administration extends Controller
     {
     	
     }
-
-    //Funciones para visualizacion de datos 
-    public function View_User_Person()      //Visualizcion tabla personas con usuario
+    //Funciones para visualizacion de datos
+    //Visualizcion tabla personas con usuario
+    public function View_User_Person()
     {
         $Titles = ['Id','Nombres','Apellidos','Direccion','Telefono','Fecha Nacimiento','Usuario','Email'];
         $usuarios = User::all();
@@ -128,9 +128,8 @@ class Administration extends Controller
     	$menus = menu::all();
         return view('Administration.Menu.ListadoMenus',compact('menus'));
     }
-
-
-    public function View_User_Student()      //Visualizcion tabla Estudiantes con usuario  REVISION!!
+    //Visualizcion tabla Estudiantes con usuario
+    public function View_User_Student()
     {
         $Titles =['Id','Nombres','Apellidos','Direccion','Telefono','Fecha Nacimiento','Usuario','Email'];
         $usuario_rolEstudiante = Assign_user_rol::where('Rol_id',1)->get('user_id');
@@ -153,8 +152,8 @@ class Administration extends Controller
         }
         return view('Administration/Estudiantes/ListadoEstudiantes',compact('Models','Titles'));
     }
-
-    public function View_Student_Assignment()      //Visualizcion tabla personas con usuario
+    //Visualizcion tabla personas con usuario
+    public function View_Student_Assignment()
     {
         $Titles = ['ID Asignacion','Nombres','Apellido','Direccion','Telefono','Fecha Nacimiento','Grado'];
         $asignaciones = Assign_student_grade::all();
@@ -183,21 +182,18 @@ class Administration extends Controller
         $rols = rol::all();
         return view('Administration.Rol.ListadoRoles',compact('rols'));       
     }
-
     public function View_Permission()
     {
         $Titles = ['ID','Nombre Permiso', 'Slug'];
         $permisos = permission::all();
         return view('Administration/Permisos/ListadoPermisos',compact('permisos','Titles'));
     }
-
-    public function View_Grade()
+    public function View_Course()
     {
         $courses = course::all();
         return view('Administration.Curso.ListadoCursos',compact('courses'));
     }
-
-    public function View_Courses()
+    public function View_Grade()
     {
         $grades = grade::all();
         return view('Administration.Grado.ListadoGrados',compact('grades'));
@@ -216,7 +212,6 @@ class Administration extends Controller
     {
         
     }
-
 
     //Funcion edicion
     public function Edit_User_Person(User $usuario)
