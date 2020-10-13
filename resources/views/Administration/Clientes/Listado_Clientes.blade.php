@@ -102,7 +102,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($Models as $Model)
+                                                @foreach($Models as $Model) 
                                                 <tr>
                                                     <td>{{$Model['Id']}}</td>
                                                     <td>{{$Model['Name']}}</td>

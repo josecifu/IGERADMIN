@@ -39,7 +39,7 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            <h3 class="card-label">Listado de Permisos</h3>
+                                            <h3 class="card-label">Horarios</h3>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -86,8 +86,8 @@
                                             </div>
                                             <!--end::Dropdown-->
                                             <!--begin::Button-->
-                                            <a href="/insertar/permiso" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-plus"></i>Añadir Un Permiso</a>
+                                            <a href="/insertar/horario" class="btn btn-primary font-weight-bolder">
+                                            <i class="la la-plus"></i>Añadir un horario</a>
                                             <!--end::Button-->
                                         </div>
                                     </div>
@@ -102,15 +102,18 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($permisos as $Model)
+                                                @foreach($Models as $Model) 
                                                 <tr>
                                                     <td>{{$Model->id}}</td>
-                                                    <td>{{$Model->Name}}</td>
-                                                    <td>{{$Model->Slug}}</td>
+                                                    <td>{{$Model->StartHour}}</td>
+                                                    <td>{{$Model->EndHour}}</td>
+                                                    <td>{{$Model->Day}}</td>
+                                                    <td>{{$Model->Type}}</td>
                                                     <td>
-                                                        <a class="badge badge-primary" href='{{url("/editar/permiso/{$Model->id}")}}'>Editar</a>
-                                                        <a class="badge badge-danger" href='{{url("/eliminar/permiso/{$Model->id}")}}'>Eliminar</a>
+                                                        <a class="badge badge-primary" href='{{url("/editar/horario/{$Model->id}")}}'>Editar</a>
+                                                        <a class="badge badge-danger" href='{{url("/eliminar/horario/{$Model->id}")}}'>Eliminar</a>
                                                     </td>
+                                                    <td nowrap="nowrap"></td>
                                                 </tr>
                                                 @endforeach
                                             </tbody>

@@ -39,7 +39,7 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            <h3 class="card-label">Listado de Personas</h3>
+                                            <h3 class="card-label">Listado de personas</h3>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -86,8 +86,8 @@
                                             </div>
                                             <!--end::Dropdown-->
                                             <!--begin::Button-->
-                                            <a href="#" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-plus"></i>Añadir Una Persona</a>
+                                            <a href="insertar/persona" class="btn btn-primary font-weight-bolder">
+                                            <i class="la la-plus"></i>Añadir Un Cliente</a>
                                             <!--end::Button-->
                                         </div>
                                     </div>
@@ -112,6 +112,10 @@
                                                     <td>{{$Model['Fecha_Nacimiento']}}</td>
                                                     <td>{{$Model['Usuario']}}</td>
                                                     <td>{{$Model['Correo']}}</td>
+                                                    <td>
+                                                        <a class="badge badge-primary" href='{{url("/editar/persona/{$Model["Id"]}")}}'>Editar</a>
+                                                        <a class="badge badge-danger" href='{{url("/eliminar/persona/{$Model["Id"]}")}}'>Eliminar</a>
+                                                    </td>
                                                 </tr>
                                                 @endforeach
                                             </tbody>
