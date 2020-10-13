@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Session;
 
 class User extends Authenticatable
 {
@@ -40,4 +41,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function rols(){
+        return $this->belongsToMany(rol::class,'assign_user_rols');
+    }
+    public function setSession($rols)
+    {
+        if(count($rols) == 1){
+            Session::put([
+                'rol_id' => $rols[0]['id'],
+                'rol_Name' => $rols[0]['Name'],
+                'User_id' => $this->id,
+                'Username' =>$this->Username,
+            ]);
+        }
+    }
 }

@@ -15,11 +15,11 @@ class CreateAssignUserRolsTable extends Migration
     {
         Schema::create('assign_user_rols', function (Blueprint $table) {
             $table->Increments('id');
-            $table->unsignedInteger('Rol_id'); 
-            $table->foreign('Rol_id')->references('id')->on('rols');
+            $table->unsignedInteger('rol_id'); 
+            $table->foreign('rol_id')->references('id')->on('rols');
             $table->unsignedBigInteger('user_id'); 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->boolean('State');
+            $table->String('State');
             $table->timestamps();
         });
     }
