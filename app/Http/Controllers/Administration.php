@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 //Modelo de usuarios
 use App\Models\User;
@@ -43,7 +41,7 @@ class Administration extends Controller
     }
     public function Crear_Clientes()
     {
-         return view('Administration.Clientes.Crear_Clientes');
+        return view('Administration.Clientes.Crear_Clientes');
     }
     public function Guardar_clientes(Request $request)
     {
@@ -62,8 +60,6 @@ class Administration extends Controller
         $Titles =['Id','Nombre','Apellido','Pais','Pais','Pais','Pais','Pais','Pais','Pais','Acciones'];
         $Models = [];
         $model = user::all();
-       
-        
         foreach ($model as $value) {
             $person = Person::where('id',$value->Person_id)->first();
 
@@ -75,7 +71,6 @@ class Administration extends Controller
             ];
             array_push($Models,$data);
         }
-
         return view('Administration.Clientes.Listado_Clientes',compact('Titles','Models'));
     }
     
@@ -158,7 +153,6 @@ class Administration extends Controller
                     'Fecha_Nacimiento' => $persona->BirthDate,
                     'Usuario' => $usuario->name,
                     'Correo' => $usuario->email,
-    
                 ];
                 array_push($Models,$data);
         }
@@ -224,7 +218,6 @@ class Administration extends Controller
     {
         
     }
-
     //Funcion edicion
     public function Edit_User_Person(User $usuario)
     {
