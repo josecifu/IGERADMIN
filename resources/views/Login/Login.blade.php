@@ -67,7 +67,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                 @endif
 							</div>
 							
-							<form action="{{route('signin')}}" class="form"  method="post" autocomplete="off">
+							<form action="{{route('signin')}}" class="form"  method="post" id="kt_login_signin_form" autocomplete="off">
 
                                     {{ csrf_field() }}
 								<div class="form-group">
@@ -88,7 +88,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									<button id="kt_login_signin_submit" class="btn btn-pill btn-outline-white font-weight-bold opacity-90 px-15 py-3">Iniciar sesión</button>
 								</div>
 							</form>
-							
+							 
 						</div>
 						<!--end::Login Sign in form-->
 						<!--begin::Login Sign up form-->
@@ -158,7 +158,168 @@ License: You must have a valid license purchased only from themeforest(the above
 		<script src="{{ asset('assets/js/scripts.bundle.js')}}"></script>
 		<!--end::Global Theme Bundle-->
 		<!--begin::Page Scripts(used by this page)-->
-		<script src="{{ asset('assets/js/pages/custom/login/login-general.js')}}"></script>
+		
+		<script type="text/javascript">
+	
+
+// Class Definition
+var KTLogin = function() {
+    var _login;
+
+    var _showForm = function(form) {
+        var cls = 'login-' + form + '-on';
+        var form = 'kt_login_' + form + '_form';
+
+        _login.removeClass('login-forgot-on');
+        _login.removeClass('login-signin-on');
+        _login.removeClass('login-signup-on');
+
+        _login.addClass(cls);
+
+        KTUtil.animateClass(KTUtil.getById(form), 'animate__animated animate__backInUp');
+    }
+
+    var _handleSignInForm = function() {
+        var validation;
+
+        // Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
+        validation = FormValidation.formValidation(
+			KTUtil.getById('kt_login_signin_form'),
+			{
+				fields: {
+					name: {
+						validators: {
+							notEmpty: {
+								message: 'El usuario es requerido'
+							}
+						}
+					},
+					password: {
+						validators: {
+							notEmpty: {
+								message: 'La contraseña es requerida'
+							}
+						}
+					}
+				},
+				plugins: {
+                    trigger: new FormValidation.plugins.Trigger(),
+                    submitButton: new FormValidation.plugins.SubmitButton(),
+                    //defaultSubmit: new FormValidation.plugins.DefaultSubmit(), // Uncomment this line to enable normal button submit after form validation
+					bootstrap: new FormValidation.plugins.Bootstrap()
+				}
+			}
+		);
+
+        $('#kt_login_signin_submit').on('click', function (e) {
+            e.preventDefault();
+
+            validation.validate().then(function(status) {
+		        if (status == 'Valid') {
+                   	document.getElementById("kt_login_signin_form").submit();
+				} else {
+					swal.fire({
+		                text: "El formulario tiene algunos errores, porfavor llene todos los campos.",
+		                icon: "error",
+		                buttonsStyling: false,
+		                confirmButtonText: "Aceptar",
+                        customClass: {
+    						confirmButton: "btn font-weight-bold btn-light-primary"
+    					}
+		            }).then(function() {
+						KTUtil.scrollTop();
+					});
+				}
+		    });
+        });
+
+        // Handle forgot button
+        $('#kt_login_forgot').on('click', function (e) {
+            e.preventDefault();
+            _showForm('forgot');
+        });
+
+       
+    }
+
+   
+
+    var _handleForgotForm = function(e) {
+        var validation;
+
+        // Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
+        validation = FormValidation.formValidation(
+			KTUtil.getById('kt_login_forgot_form'),
+			{
+				fields: {
+					email: {
+						validators: {
+							notEmpty: {
+								message: 'El email es requerido'
+							},
+                            emailAddress: {
+								message: 'No es un email valido'
+							}
+						}
+					}
+				},
+				plugins: {
+					trigger: new FormValidation.plugins.Trigger(),
+					bootstrap: new FormValidation.plugins.Bootstrap()
+				}
+			}
+		);
+
+        // Handle submit button
+        $('#kt_login_forgot_submit').on('click', function (e) {
+            e.preventDefault();
+
+            validation.validate().then(function(status) {
+		        if (status == 'Valid') {
+                    // Submit form
+                    KTUtil.scrollTop();
+				} else {
+					swal.fire({
+		                text: "El formulario tiene algunos errores, porfavor llene todos los campos.",
+		                icon: "error",
+		                buttonsStyling: false,
+		                confirmButtonText: "Aceptar",
+                        customClass: {
+    						confirmButton: "btn font-weight-bold btn-light-primary"
+    					}
+		            }).then(function() {
+						KTUtil.scrollTop();
+					});
+				}
+		    });
+        });
+
+        // Handle cancel button
+        $('#kt_login_forgot_cancel').on('click', function (e) {
+            e.preventDefault();
+
+            _showForm('signin');
+        });
+    }
+
+    // Public Functions
+    return {
+        // public functions
+        init: function() {
+            _login = $('#kt_login');
+
+            _handleSignInForm();
+            _handleForgotForm();
+        }
+    };
+}();
+
+// Class Initialization
+jQuery(document).ready(function() {
+    KTLogin.init();
+});
+
+		</script>
 		<!--end::Page Scripts-->
 	</body>
 	<!--end::Body-->

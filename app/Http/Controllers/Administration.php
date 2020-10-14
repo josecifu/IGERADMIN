@@ -112,13 +112,28 @@ class Administration extends Controller
         $Telefono= $data['Telefono'];
         $FechaNacimiento= $data['FechaNacimiento'];
         //LOGICA
-        $person = new Person;
-        $person->Names = $Nombres;
-        $person->LastNames = $Apellidos;
-        $person->Address = $Direccion;
-        $person->Phone = $Telefono;
-        $person->BirthDate = $FechaNacimiento;
-        $person->save();
+        try {
+              DB::beginTransaction();
+                $person = new Person;
+                $person->Names = $Nombres;
+                $person->LastNames = $Apellidos;
+                $person->Address = $Direccion;
+                $person->Phone = $Telefono;
+                $person->BirthDate = $FechaNacimiento;
+                $person->save();
+                $user = new User;
+                $user->name = $Usuario;
+                $user->email = $Email;
+                $user->password = bcrypt($Contraseña);
+                $user->Person_id =  $person->id;
+                $user->save();
+                DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+        }
+      
+       
+       
         // $ultimo = Person::latest()->get();
         // $user = new User;
         // $user->name = $usuario;

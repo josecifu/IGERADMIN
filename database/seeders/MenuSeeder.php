@@ -45,5 +45,18 @@ class MenuSeeder extends Seeder
             'Url' => 'administration/estudiantes/Listado',  
             'menu_id' => '4'          
         ]);
+            DB::table('menus')->insert([
+            'Name' => 'Voluntarios',
+            'Icon' => 'pe-7s-home',
+            'Url' => 'administration/voluntarios',
+            'State' => '1',     
+            'Order' => '3',      
+        ]);
+             DB::table('menus')->insert([
+            'Name' => 'Listado voluntarios',
+            'State' => '1',
+            'Url' => 'administration/estudiantes/Listado',  
+            'menu_id' => '6'          
+        ]);
     }
 }
