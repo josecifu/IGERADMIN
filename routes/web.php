@@ -24,8 +24,12 @@ Route::get('/logout', $route.'\LoginController@logout')->name('logout');
 
 Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	$route = "App\Http\Controllers";
-	#Dashboad
-	Route::get('/dashboard', $route.'\Administration@Dashboard')->name('Dashboard');
+	Route::group([ 'prefix' => 'home'], function(){
+		$route = "App\Http\Controllers";
+		#Dashboad
+		Route::get('/dashboard', $route.'\Administration@Dashboard')->name('Dashboard');
+	});
+	
 
 	Route::group([ 'prefix' => 'estudiantes'], function(){
 		$route = "App\Http\Controllers";
@@ -33,7 +37,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	});
 	
 });
-
+Route::get('/clientes', $route.'\Administration@View_Clients')->name('View_Clients');
 #Rutas Listado estudiante, persona, asignacion estudiantes/curso
 
 Route::get('/personas/listado',$route.'\Administration@View_User_Person')->name('View_User_Person');

@@ -17,13 +17,33 @@ class MenuSeeder extends Seeder
             'Name' => 'Inicio',
             'Icon' => 'pe-7s-home',
            	'State' => '1',     
-            'Order' => '1',      
+            'Order' => '1',  
+            'Url' => 'administration/home',      
         ]);
         DB::table('menus')->insert([
             'Name' => 'Dashboard',
             'State' => '1',
-            'Url' => 'administration/dashboard',  
+            'Url' => 'administration/home/dashboard',  
             'menu_id' => '1'          
+        ]);
+         DB::table('menus')->insert([
+            'Name' => 'Notas',
+            'State' => '1',
+            'Url' => 'administration/home/dashboard',  
+            'menu_id' => '1'          
+        ]);
+          DB::table('menus')->insert([
+            'Name' => 'Estudiantes',
+            'Icon' => 'pe-7s-home',
+            'Url' => 'administration/estudiantes',
+            'State' => '1',     
+            'Order' => '2',      
+        ]);
+           DB::table('menus')->insert([
+            'Name' => 'Listado estudiantes',
+            'State' => '1',
+            'Url' => 'administration/estudiantes/Listado',  
+            'menu_id' => '4'          
         ]);
     }
 }

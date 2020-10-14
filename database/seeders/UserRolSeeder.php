@@ -27,5 +27,11 @@ class UserRolSeeder extends Seeder
             'State' => "Active",            
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
+          DB::table('assign_user_rols')->insert([
+            'Rol_id' => 3,
+            'user_id' => 3,
+            'State' => "Active",            
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        ]);
     }
 }

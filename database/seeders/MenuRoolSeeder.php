@@ -21,5 +21,17 @@ class MenuRoolSeeder extends Seeder
             'rol_id' => 1,
             'menu_id' => 2,       
         ]);
+         DB::table('assign_menu_rols')->insert([
+            'rol_id' => 1,
+            'menu_id' => 3,       
+        ]);
+         DB::table('assign_menu_rols')->insert([
+            'rol_id' => 1,
+            'menu_id' => 4,       
+        ]);
+         DB::table('assign_menu_rols')->insert([
+            'rol_id' => 1,
+            'menu_id' => 5,       
+        ]);
     }
 }
