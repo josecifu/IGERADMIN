@@ -108,7 +108,7 @@
                                                                             <i class="la la-phone"></i>
                                                                         </span>
                                                                     </div>
-                                                                    <input type="number" id="Telefono" value="{{$ModelsP->Phone}}" class="form-control form-control-solid" placeholder="Phone" />
+                                                                    <input type="text" id="Telefono" value="{{$ModelsP->Phone}}" class="form-control form-control-solid" placeholder="Phone" />
                                                                 </div>
                                                             </div>
                                                         </div>

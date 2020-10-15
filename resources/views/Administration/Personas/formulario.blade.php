@@ -169,7 +169,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-3">Persona</label>
+                                                            <label class="col-3">Rol Usuairo</label>
                                                             <div class="col-lg-9 col-md-9 col-sm-12">
                                                                 <select class="form-control" id="Rol">
                                                                 @if(count($rol)>0)

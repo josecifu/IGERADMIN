@@ -33,7 +33,7 @@ class MenuSeeder extends Seeder
             'menu_id' => '1'          
         ]);
           DB::table('menus')->insert([
-            'Name' => 'Estudiantes', //4
+            'Name' => 'Estudiante', //4
             'Icon' => 'pe-7s-home',
             'Url' => 'administration/estudiantes',
             'State' => '1',     
@@ -67,14 +67,14 @@ class MenuSeeder extends Seeder
 
         //ROL VOLUNTARIO
         DB::table('menus')->insert([ //9
-            'Name' => 'Grados',
+            'Name' => 'Curso',
             'Icon' => 'pe-7s-home',
             'Url' => 'administration/voluntarios',
             'State' => '1',     
             'Order' => '3',      
         ]);
         DB::table('menus')->insert([ //10
-            'Name' => 'Reportes',
+            'Name' => 'Reporte',
             'Icon' => 'pe-7s-home',
             'Url' => 'administration/voluntarios',
             'State' => '1',     
@@ -98,6 +98,11 @@ class MenuSeeder extends Seeder
             'Url' => 'administration/voluntarios/asistenciaExamen',  
             'menu_id' => '10'          
         ]);
-       
+        DB::table('menus')->insert([
+            'Name' => 'Notas',
+            'State' => '1',
+            'Url' => 'administration/voluntarios/Notas',  
+            'menu_id' => '4'          
+        ]);
     }
 }

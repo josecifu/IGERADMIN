@@ -44,6 +44,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	});
 	Route::group([ 'prefix' => 'voluntarios'], function(){
 		$route = "App\Http\Controllers";
+		Route::get('/ListadoEstudiantes',$route.'\Teacher@View_Assigned_Student')->name('View_Assigned_Student');
 		Route::get('/listado',$route.'\Administration@View_User_teacher')->name('View_User_teacher');
 	});
 });

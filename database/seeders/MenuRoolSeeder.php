@@ -90,5 +90,9 @@ class MenuRoolSeeder extends Seeder
             'rol_id' => 3,
             'menu_id' => 13,   
         ]);
+        DB::table('assign_menu_rols')->insert([
+            'rol_id' => 3,
+            'menu_id' => 14,
+        ]);
     }
 }
