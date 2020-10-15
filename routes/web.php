@@ -23,34 +23,35 @@ Route::post('/signin',  $route.'\LoginController@login')->name('signin');
 Route::get('/logout', $route.'\LoginController@logout')->name('logout');
 
 Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
+
 	$route = "App\Http\Controllers";
+	Route::get('/registrar', $route.'\Administration@Create_Person')->name('Create_Person');
+	Route::post('/guardar', $route.'\Administration@Save_Person')->name('Save_Person');
+	Route::get('/registrar/usuario', $route.'\Administration@Create_User_Person')->name('Create_User_Person');
+	Route::post('/guardar/usuario', $route.'\Administration@Save_User_Person')->name('Save_User_Person');
+
+	Route::get('/permisos/listado',$route.'\Administration@View_Permission')->name('View_Permission');
+	Route::get('/horarios/listado',$route.'\Administration@View_Schedule')->name('View_Schedule');
+
 	Route::group([ 'prefix' => 'home'], function(){
 		$route = "App\Http\Controllers";
 		#Dashboad
 		Route::get('/dashboard', $route.'\Administration@Dashboard')->name('Dashboard');
 	});
-	
-
 	Route::group([ 'prefix' => 'estudiantes'], function(){
 		$route = "App\Http\Controllers";
 		Route::get('/Listado',$route.'\Administration@View_User_Student')->name('View_User_Student');
 	});
-	
+	Route::group([ 'prefix' => 'voluntarios'], function(){
+		$route = "App\Http\Controllers";
+		Route::get('/listado',$route.'\Administration@View_User_teacher')->name('View_User_teacher');
+	});
 });
-Route::get('/clientes', $route.'\Administration@View_Clients')->name('View_Clients');
-#Rutas Listado estudiante, persona, asignacion estudiantes/curso
+Route::get('/clientes', $route.'\Administration@View_Clients')->name('View_Clients');		
 
-Route::get('/personas/listado',$route.'\Administration@View_User_Person')->name('View_User_Person');
 Route::get('/asignacion/estudiantes',$route.'\Administration@View_Student_Assignment')->name('View_Student_Assignment');
-Route::get('/permisos/listado',$route.'\Administration@View_Permission')->name('View_Permission');
-Route::get('/horarios/listado',$route.'\Administration@View_Schedule')->name('View_Schedule');
 
-#Rutas Ingreso Personas, Usuarios, permisos, horarios
-Route::get('/insertar/persona', $route.'\Administration@Create_Person')->name('Create_Person');
-Route::post('/guardar/persona', $route.'\Administration@Save_Person')->name('Save_Person');
 //Usuario
-Route::get('/insertar/usuario', $route.'\Administration@Create_User_Person')->name('Create_User_Person');
-Route::post('/guardar/usuario', $route.'\Administration@Save_User_Person')->name('Save_User_Person');
 //Permiso
 Route::get('/insertar/permiso', $route.'\Administration@Create_Permission')->name('Create_Permission');
 Route::post('/guardar/permiso', $route.'\Administration@Save_Permission')->name('Save_Permission');

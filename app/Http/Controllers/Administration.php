@@ -31,6 +31,7 @@ use App\Models\Assign_student_grade;
 use App\Models\Assign_period_grade;
 //Modelo Asignacion nivel grado
 use App\Models\Assign_level_grade;
+use Illuminate\Support\Facades\DB;
 
 class Administration extends Controller
 {
@@ -98,9 +99,10 @@ class Administration extends Controller
         return response()->json(["Accion completada"]);
     }
 
-    public function Create_Person(Request $request)
+    public function Create_Person()
     {
-        return view('Administration/Personas/formulario');
+        $rol = rol::all();
+        return view('Administration/Personas/formulario',compact('rol'));
     }
 
     public function Save_Person(Request $request)
@@ -111,6 +113,10 @@ class Administration extends Controller
         $Direccion= $data['Direccion'];
         $Telefono= $data['Telefono'];
         $FechaNacimiento= $data['FechaNacimiento'];
+        $Usuario= $data['Usuario'];
+        $Email= $data['Email'];
+        $Contraseña= $data['Contraseña'];
+        $Rol = $data['Rol'];
         //LOGICA
         try {
               DB::beginTransaction();
@@ -125,22 +131,18 @@ class Administration extends Controller
                 $user->name = $Usuario;
                 $user->email = $Email;
                 $user->password = bcrypt($Contraseña);
+                $user->State = "Active";
                 $user->Person_id =  $person->id;
                 $user->save();
+                $usuario_rol = new Assign_user_rol;
+                $usuario_rol->rol_id = $Rol;
+                $usuario_rol->user_id = $user->id;
+                $usuario_rol->State = "Active";
+                $usuario_rol->save();
                 DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
         }
-      
-       
-       
-        // $ultimo = Person::latest()->get();
-        // $user = new User;
-        // $user->name = $usuario;
-        // $user->email = $email;
-        // $user->password = bcrypt($contraseña);
-        // $user->name = $ultimo->id;
-        // $user->save();
         return response()->json(["Accion completada"]);
     }
 
@@ -223,11 +225,34 @@ class Administration extends Controller
     	$menus = menu::all();
         return view('Administration.Menu.ListadoMenus',compact('menus'));
     }
+
+    public function View_User_teacher() //Visualizcion tabla Estudiantes con usuario
+    {
+        $Titles =['Id','Nombres','Apellidos','Direccion','Telefono','Fecha Nacimiento','Usuario','Email', 'Acciones'];
+        $usuario_rol = Assign_user_rol::where('Rol_id',3)->get('user_id');
+        $Models = [];
+        foreach ($usuario_rol as $v) {
+            $usuario = User::find($v->user_id);
+            $persona = Person::find($usuario->Person_id);
+                $data = [
+                    'Id' => $persona->id,
+                    'Name' => $persona->Names,
+                    'Apellido' => $persona->LastNames,
+                    'Direccion' => $persona->Address,
+                    'Telefono' => $persona->Phone,
+                    'Fecha_Nacimiento' => $persona->BirthDate,
+                    'Usuario' => $usuario->name,
+                    'Correo' => $usuario->email,
+                ];
+                array_push($Models,$data);
+        }
+        return view('Administration/Voluntarios/ListadoVoluntarios',compact('Models','Titles'));
+    }
     
     public function View_User_Student() //Visualizcion tabla Estudiantes con usuario
     {
-        $Titles =['Id','Nombres','Apellidos','Direccion','Telefono','Fecha Nacimiento','Usuario','Email'];
-        $usuario_rolEstudiante = Assign_user_rol::where('Rol_id',1)->get('user_id');
+        $Titles =['Id','Nombres','Apellidos','Direccion','Telefono','Fecha Nacimiento','Usuario','Email', 'Acciones'];
+        $usuario_rolEstudiante = Assign_user_rol::where('Rol_id',2)->get('user_id');
         $Models = [];
         foreach ($usuario_rolEstudiante as $v) {
             $usuario = User::find($v->user_id);

@@ -33,7 +33,7 @@ class MenuSeeder extends Seeder
             'menu_id' => '1'          
         ]);
           DB::table('menus')->insert([
-            'Name' => 'Estudiantes',
+            'Name' => 'Estudiantes', //4
             'Icon' => 'pe-7s-home',
             'Url' => 'administration/estudiantes',
             'State' => '1',     
@@ -45,7 +45,7 @@ class MenuSeeder extends Seeder
             'Url' => 'administration/estudiantes/Listado',  
             'menu_id' => '4'          
         ]);
-            DB::table('menus')->insert([
+            DB::table('menus')->insert([ //6
             'Name' => 'Voluntarios',
             'Icon' => 'pe-7s-home',
             'Url' => 'administration/voluntarios',
@@ -55,8 +55,49 @@ class MenuSeeder extends Seeder
              DB::table('menus')->insert([
             'Name' => 'Listado voluntarios',
             'State' => '1',
-            'Url' => 'administration/estudiantes/Listado',  
+            'Url' => 'administration/voluntarios/listado',  
             'menu_id' => '6'          
         ]);
+            DB::table('menus')->insert([
+            'Name' => 'Ingreso voluntarios',
+            'State' => '1',
+            'Url' => 'administration/registrar',  
+            'menu_id' => '6'          
+        ]);
+
+        //ROL VOLUNTARIO
+        DB::table('menus')->insert([ //9
+            'Name' => 'Grados',
+            'Icon' => 'pe-7s-home',
+            'Url' => 'administration/voluntarios',
+            'State' => '1',     
+            'Order' => '3',      
+        ]);
+        DB::table('menus')->insert([ //10
+            'Name' => 'Reportes',
+            'Icon' => 'pe-7s-home',
+            'Url' => 'administration/voluntarios',
+            'State' => '1',     
+            'Order' => '4',      
+        ]);
+        DB::table('menus')->insert([
+            'Name' => 'Detalles Estudiantes',
+            'State' => '1',
+            'Url' => 'administration/voluntarios/ListadoEstudiantes',  
+            'menu_id' => '4'          
+        ]);
+        DB::table('menus')->insert([
+            'Name' => 'Asistencia Estudiantes',
+            'State' => '1',
+            'Url' => 'administration/voluntarios/asistenciaEstudiantes',  
+            'menu_id' => '10'          
+        ]);
+        DB::table('menus')->insert([
+            'Name' => 'Asistencia de Estudiantes al examen',
+            'State' => '1',
+            'Url' => 'administration/voluntarios/asistenciaExamen',  
+            'menu_id' => '10'          
+        ]);
+       
     }
 }

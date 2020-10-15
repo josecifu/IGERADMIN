@@ -21,11 +21,11 @@
                                             <small class=""></small></h3>
                                         </div>
                                         <div class="card-toolbar">
-                                            <a href="#" class="btn btn-light-primary font-weight-bolder mr-2">
+                                            <a href="{{url('/administration/home')}}" class="btn btn-light-primary font-weight-bolder mr-2">
                                             <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-primary font-weight-bolder" onclick="crearDatos();">
-                                                <i class="ki ki-check icon-sm"></i>Guardar Persona</button>
+                                                <i class="ki ki-check icon-sm"></i>Guardar Registro</button>
                                                 <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                                                 <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                                                     <ul class="nav nav-hover flex-column">
@@ -59,7 +59,7 @@
                                                 <div class="col-xl-2"></div>
                                                 <div class="col-xl-8">
                                                     <div class="my-5">
-                                                        <h3 class="text-dark font-weight-bold mb-10">Información de la persona:</h3>
+                                                        <h3 class="text-dark font-weight-bold mb-10">Información de la Persona:</h3>
                                                         <div class="form-group row">
                                                             <label class="col-3">Nombre</label>
                                                             <div class="col-9">
@@ -108,7 +108,7 @@
                                                                             <i class="la la-phone"></i>
                                                                         </span>
                                                                     </div>
-                                                                    <input type="number" id="Telefono" class="form-control form-control-solid" placeholder="Phone" />
+                                                                    <input type="text" id="Telefono" class="form-control form-control-solid" placeholder="Phone" />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -127,6 +127,64 @@
                                                         </div>
                                                     </div>
                                                     <div class="separator separator-dashed my-10"></div>
+                                                    <div class="my-5">
+                                                        <h3 class="text-dark font-weight-bold mb-10">Información Usuario:</h3>
+                                                        <div class="form-group row">
+                                                            <label class="col-3">Usuario</label>
+                                                            <div class="col-9">
+                                                                <div class="input-group input-group-solid">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text">
+                                                                            <i class="la la-user"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                    <input type="text" id="Usuario" class="form-control form-control-solid" placeholder="Usuario" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="col-3">Correo Electronico</label>
+                                                            <div class="col-9">
+                                                                <div class="input-group input-group-solid">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text">
+                                                                            <i class="la la-at"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                    <input type="email" id="Email" class="form-control form-control-solid" placeholder="Correo electronico" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="col-3">Contraseña</label>
+                                                            <div class="col-9">
+                                                                <div class="input-group input-group-solid">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text">
+                                                                            <i class="la la-key"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                    <input type="password" id="Contraseña" class="form-control form-control-solid" placeholder="Contraseña" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="col-3">Persona</label>
+                                                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                                                <select class="form-control" id="Rol">
+                                                                @if(count($rol)>0)
+                                                                    @foreach($rol->all() as $r) 
+                                                                        @if($r->State == 'Active')
+                                                                            <option value="{{$r->id}}">{{$r->Name}}</option>
+                                                                        @endif  
+                                                                    @endforeach
+                                                                @endif
+                                                                </select>
+                                                                <span class="form-text text-muted">Profavor seleccione una opcion.</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="separator separator-dashed my-10"></div>
                                                 </div>
                                                 <div class="col-xl-2"></div>
                                             </div>
@@ -137,6 +195,7 @@
                                 <!--end::Card-->
 	@stop
 	@section('scripts')
+
     <script type="text/javascript">
          $( document ).ready(function() {
           $.ajaxSetup({
@@ -145,6 +204,7 @@
                 }
             }); 
          });
+
          function crearDatos()
          {
             var NombrePersona = $('#Nombres').val(); 
@@ -152,26 +212,36 @@
             var DireccionPersona = $('#Direccion').val();
             var TelefonoPersona = $('#Telefono').val();
             var FechaNacimientoPersona = $('#FechaNacimiento').val();
+            var UsuarioPersona = $('#Usuario').val(); 
+            var ContraseñaPersona = $('#Contraseña').val();
+            var Rol = $('#Rol').val();
+            var EmailPersona = $('#Email').val();
             var data = [{
+                //Persona
                 Nombre: NombrePersona,
                 Apellido: ApellidosPersona,
                 Direccion: DireccionPersona,
                 Telefono: TelefonoPersona,
                 FechaNacimiento: FechaNacimientoPersona,
+                //Usuario
+                Usuario: UsuarioPersona,
+                Email: EmailPersona,
+                Contraseña: ContraseñaPersona,
+                Rol: Rol,
             }];
 
             $.ajax({
-                url:'/guardar/persona',
+                url:'/administration/guardar',
                 type:'POST',
                 data: {"_token":"{{ csrf_token() }}","data":data},
                 dataType: "JSON",
                 success: function(e){
                 swal.fire({ title: "Accion completada", 
-                  text: "Se ha guardado con exito los datos!", 
+                  text: "Se ha guardado con exito el Cliente!", 
                   type: "success"
                         }).then(function () {
                           var $url_path = '{!! url('/') !!}';
-                          window.location.href = $url_path+"/insertar/usuario";
+                          window.location.href = $url_path+"/";
                         });
                      
                 },
