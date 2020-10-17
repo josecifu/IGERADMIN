@@ -46,6 +46,8 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		$route = "App\Http\Controllers";
 		Route::get('/ListadoEstudiantes',$route.'\Teacher@View_Assigned_Student')->name('View_Assigned_Student');
 		Route::get('/listado',$route.'\Administration@View_User_teacher')->name('View_User_teacher');
+		Route::get('/editar/{id}',$route.'\Administration@Edit_Teacher')->name('Edit_Teacher');
+		Route::post('/actualizar/{id}',$route.'\Administration@Update_Person')->name('Update_Person');
 	});
 });
 Route::get('/clientes', $route.'\Administration@View_Clients')->name('View_Clients');		

@@ -333,6 +333,16 @@ class Administration extends Controller
         $Models = schedule::all();
         return view('Administration/Horarios/Horarios',compact('Models','Titles'));
     }
+    public function Edit_Teacher($id)
+    {
+        $ModelsP = Person::find($id);
+        $User = User::where('Person_id',$id)->first();
+        $ModelsU = [
+                'Usuario' => $User->name,
+                'Email' => $User->email,
+            ];
+        return view('Administration/Voluntarios/formEdit',compact('ModelsP','ModelsU'));
+    }
     public function Edit_Person($id)
     {
         $ModelsP = Person::find($id);
