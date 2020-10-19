@@ -39,7 +39,7 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            <h3 class="card-label">Listado de Voluntarios</h3>
+                                            <h3 class="card-label">Estudiantes Asignados</h3>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -86,8 +86,8 @@
                                             </div>
                                             <!--end::Dropdown-->
                                             <!--begin::Button-->
-                                            <a href="{{url('administration/registrar')}}" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-plus"></i>Añadir Un Voluntario</a>
+                                            <a href="{{url('insertar/persona')}}" class="btn btn-primary font-weight-bolder">
+                                            <i class="la la-plus"></i>Añadir Un Cliente</a>
                                             <!--end::Button-->
                                         </div>
                                     </div>
@@ -105,13 +105,11 @@
                                                 @foreach($Models as $Model)
                                                 <tr>
                                                     <td>{{$Model['Id']}}</td>
-                                                    <td>{{$Model['Name']}}</td>
+                                                    <td>{{$Model['Nombre']}}</td>
                                                     <td>{{$Model['Apellido']}}</td>
-                                                    <td>{{$Model['Direccion']}}</td>
-                                                    <td>{{$Model['Telefono']}}</td>
-                                                    <td>{{$Model['Fecha_Nacimiento']}}</td>
-                                                    <td>{{$Model['Usuario']}}</td>
                                                     <td>{{$Model['Correo']}}</td>
+                                                    <td>{{$Model['Telefono']}}</td>
+                                                    <td>{{$Model['Grado']}}</td>
                                                     <td nowrap="nowrap"></td>
                                                 </tr>
                                                 @endforeach

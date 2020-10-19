@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 //Modelo de usuarios
 use App\Models\User;
@@ -33,6 +31,7 @@ use App\Models\Assign_student_grade;
 use App\Models\Assign_period_grade;
 //Modelo Asignacion nivel grado
 use App\Models\Assign_level_grade;
+use Illuminate\Support\Facades\DB;
 
 class Administration extends Controller
 {
@@ -77,14 +76,10 @@ class Administration extends Controller
 	//Funciones de crear
     public function Create_User_Person(Request $request)
     {
-        $usuario = new User;
-        $usuario->name = $request->nombre;
-        $usuario->email = $request->email;
-        $usuario->password = bcrypt($request->contraseña);
-        $usuario->Person_id = $request->persona;
-        $usuario->save();
-        return redirect()->action([Administration::class,'View_User_Person']);
+        $personas = Person::all();
+        return view('Administration/Personas/formularioUsuarios',compact('personas'));
     }
+<<<<<<< HEAD
     public function Create_Menu()
     {
         return view('Administration.Menu.Crear_Menu');
@@ -112,28 +107,137 @@ class Administration extends Controller
         $rols->Name = $Nombres;
         //$person->save();
         return response()->json(["Accion completada"]);
+=======
+
+    public function Save_User_Person(Request $request)
+    {
+        $data = $request->data[0];
+        $Usuario= $data['Usuario'];
+        $Email= $data['Email'];
+        $Contraseña= $data['Contraseña'];
+        $PersonaID= $data['Persona'];
+        //LOGICA
+        $user = new User;
+        $user->name = $Usuario;
+        $user->email = $Email;
+        $user->password = bcrypt($Contraseña);
+        $user->Person_id = $PersonaID;
+        $user->save();
+        return response()->json(["Accion completada"]);
     }
+
+    public function Create_Person()
+    {
+        $rol = rol::all();
+        return view('Administration/Personas/formulario',compact('rol'));
+>>>>>>> c658bb22846317ea5816ab2c9b9c4e7bf9d1a7b3
+    }
+
+    public function Save_Person(Request $request)
+    {
+        $data = $request->data[0];
+        $Nombres= $data['Nombre'];
+        $Apellidos= $data['Apellido'];
+        $Direccion= $data['Direccion'];
+        $Telefono= $data['Telefono'];
+        $FechaNacimiento= $data['FechaNacimiento'];
+        $Usuario= $data['Usuario'];
+        $Email= $data['Email'];
+        $Contraseña= $data['Contraseña'];
+        $Rol = $data['Rol'];
+        //LOGICA
+        try {
+              DB::beginTransaction();
+                $person = new Person;
+                $person->Names = $Nombres;
+                $person->LastNames = $Apellidos;
+                $person->Address = $Direccion;
+                $person->Phone = $Telefono;
+                $person->BirthDate = $FechaNacimiento;
+                $person->save();
+                $user = new User;
+                $user->name = $Usuario;
+                $user->email = $Email;
+                $user->password = bcrypt($Contraseña);
+                $user->State = "Active";
+                $user->Person_id =  $person->id;
+                $user->save();
+                $usuario_rol = new Assign_user_rol;
+                $usuario_rol->rol_id = $Rol;
+                $usuario_rol->user_id = $user->id;
+                $usuario_rol->State = "Active";
+                $usuario_rol->save();
+                DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+        }
+        return response()->json(["Accion completada"]);
+    }
+
     public function Create_permission()
     {
+<<<<<<< HEAD
+=======
+    	return view('Administration/Permisos/formulario');
+>>>>>>> c658bb22846317ea5816ab2c9b9c4e7bf9d1a7b3
     }
+
+    public function Save_Permission(Request $request)
+    {
+        $data = $request->data[0];
+        $Nombre= $data['Nombre'];
+        $Slug= $data['Slug'];
+        //LOGICA
+        $permission = new permission;
+        $permission->Name = $Nombre;
+        $permission->Slug = $Slug;
+        $permission->save();
+        return response()->json(["Accion completada"]);
+    }
+    public function Create_schedule()
+    {
+    	return view('Administration/Horarios/formulario');
+    }
+    public function Save_Schedule(Request $request)
+    {
+        $data = $request->data[0];
+        $HI = $data['HoraInicio'];
+        $HF = $data['HoraFinal'];
+        $Dia = $data['Dia'];
+        $Tipo = $data['Tipo'];
+        $horario = new schedule;
+        $horario->StartHour = $HI;
+        $horario->EndHour = $HF;
+        $horario->Day = $Dia;
+        $horario->Type = $Tipo;
+        $horario->save();
+        return response()->json(["Accion completada"]);
+    }
+    
+    public function Create_menu()
+    {
+    }
+    
     public function Create_grade()
     {
     }
     public function Create_courses()
     {
     }
-    public function Create_schedule()
-    {
-    }
+
     //Funciones para visualizacion de datos
+<<<<<<< HEAD
     //Visualizacion tabla personas con usuario
     public function View_User_Person()
+=======
+    public function View_User_Person()//Visualizcion tabla personas con usuario
+>>>>>>> c658bb22846317ea5816ab2c9b9c4e7bf9d1a7b3
     {
-        $Titles = ['Id','Nombres','Apellidos','Direccion','Telefono','Fecha Nacimiento','Usuario','Email'];
+        $Titles = ['Id','Nombres','Apellidos','Direccion','Telefono','Fecha Nacimiento','Usuario','Email','Acciones'];
         $usuarios = User::all();
         $Models = [];
         foreach ($usuarios as $value) {
-            $persona = Person::where('id',$value->Person_id)->firstorfail();
+            $persona = Person::where('id',$value->Person_id)->first();
             $data = [
                 'Id' => $persona->id,
                 'Name' => $persona->Names,
@@ -146,7 +250,7 @@ class Administration extends Controller
             ];
             array_push($Models,$data);
         }
-        return view('Administration/Personas/ListadoPersonas',compact('Models','Titles'));
+        return view('Administration.Personas.ListadoPersonas',compact('Models','Titles'));
     }
 
     public function View_Menu()
@@ -154,11 +258,36 @@ class Administration extends Controller
     	$menus = menu::all();
         return view('Administration.Menu.ListadoMenus',compact('menus'));
     }
-    //Visualizcion tabla Estudiantes con usuario
-    public function View_User_Student()
+
+    public function View_User_teacher() //Visualizcion tabla Estudiantes con usuario
     {
-        $Titles =['Id','Nombres','Apellidos','Direccion','Telefono','Fecha Nacimiento','Usuario','Email'];
-        $usuario_rolEstudiante = Assign_user_rol::where('Rol_id',1)->get('user_id');
+        $Titles =['Id','Nombres','Apellidos','Direccion','Telefono','Fecha Nacimiento','Usuario','Email', 'Acciones'];
+        $usuario_rol = Assign_user_rol::where('Rol_id',3)->get('user_id');
+        $Models = [];
+        foreach ($usuario_rol as $v) {
+            $usuario = User::find($v->user_id);
+            $persona = Person::find($usuario->Person_id);
+                $data = [
+                    'Id' => $persona->id,
+                    'Name' => $persona->Names,
+                    'Apellido' => $persona->LastNames,
+                    'Direccion' => $persona->Address,
+                    'Telefono' => $persona->Phone,
+                    'Fecha_Nacimiento' => $persona->BirthDate,
+                    'Usuario' => $usuario->name,
+                    'Correo' => $usuario->email,
+<<<<<<< HEAD
+=======
+                ];
+                array_push($Models,$data);
+        }
+        return view('Administration/Voluntarios/ListadoVoluntarios',compact('Models','Titles'));
+    }
+    
+    public function View_User_Student() //Visualizcion tabla Estudiantes con usuario
+    {
+        $Titles =['Id','Nombres','Apellidos','Direccion','Telefono','Fecha Nacimiento','Usuario','Email', 'Acciones'];
+        $usuario_rolEstudiante = Assign_user_rol::where('Rol_id',2)->get('user_id');
         $Models = [];
         foreach ($usuario_rolEstudiante as $v) {
             $usuario = User::find($v->user_id);
@@ -172,12 +301,13 @@ class Administration extends Controller
                     'Fecha_Nacimiento' => $persona->BirthDate,
                     'Usuario' => $usuario->name,
                     'Correo' => $usuario->email,
+>>>>>>> c658bb22846317ea5816ab2c9b9c4e7bf9d1a7b3
                 ];
                 array_push($Models,$data);
         }
         return view('Administration/Estudiantes/ListadoEstudiantes',compact('Models','Titles'));
     }
-    //Visualizcion tabla personas con usuario
+
     public function View_Student_Assignment()
     {
         $Titles = ['ID Asignacion','Nombres','Apellido','Direccion','Telefono','Fecha Nacimiento','Grado'];
@@ -235,31 +365,104 @@ class Administration extends Controller
     }
     public function View_Schedule()
     {
-        
+        $Titles = ['ID','Hora Inicio', 'Hora Final', 'Dia', 'Tipo'];
+        $Models = schedule::all();
+        return view('Administration/Horarios/Horarios',compact('Models','Titles'));
+    }
+    public function Edit_Teacher($id)
+    {
+        $ModelsP = Person::find($id);
+        $User = User::where('Person_id',$id)->first();
+        $ModelsU = [
+                'Usuario' => $User->name,
+                'Email' => $User->email,
+            ];
+        return view('Administration/Voluntarios/formEdit',compact('ModelsP','ModelsU'));
+    }
+    public function Edit_Person($id)
+    {
+        $ModelsP = Person::find($id);
+        $User = User::where('Person_id',$id)->first();
+        $ModelsU = [
+                'Usuario' => $User->name,
+                'Email' => $User->email,
+            ];
+        return view('Administration/Personas/formEdit',compact('ModelsP','ModelsU'));
     }
 
-    //Funcion edicion
-    public function Edit_User_Person(User $usuario)
-    {
-        return view('Pruebas/editarU',compact('usuario'));
-    }
     //Funciones de Actualizar
-    public function Update_User_Person($id, Request $request)
+    public function Update_Person($id, Request $request)
     {
-        $data=array(
-            'name' => $request->nombre,
-            'email' => $request->email,
-            'password' => bcrypt($request->contraseña),
-            'Person_id' => $request->persona,
+        $data = $request->data[0];
+        $Nombres= $data['Nombre'];
+        $Apellidos= $data['Apellido'];
+        $Direccion= $data['Direccion'];
+        $Telefono= $data['Telefono'];
+        $FechaNacimiento= $data['FechaNacimiento'];
+        $Usuario = $data['Usuario'];
+        $Email= $data['Email'];
+        $Contraseña = $data['Contraseña'];
+        $PersonaID = $data['Persona'];
+        //LOGICA Usuario
+        $dataU=array(
+            'name' => $Usuario,
+            'email' => $Email,
+            'password' => bcrypt($Contraseña),
+            'Person_id' => $PersonaID ,
         );
-        User::where('id', $id)->update($data);
-        return redirect()->action([Administration::class,'View_User_Person']);
+        User::where('Person_id', $id)->update($dataU);
+        //LOGICA Persona
+        $dataP=array(
+            'Names' => $Nombres,
+            'LastNames' => $Apellidos,
+            'Address' => $Direccion,
+            'Phone' => $Telefono,
+            'BirthDate' =>$FechaNacimiento,
+        );
+        Person::where('id',$id)->update($dataP);
+        return response()->json(["Accion completada"]);
+    }
+   
+    public function Edit_Permission($id)
+    {
+        $Model = permission::find($id);
+        return view('Administration/Permisos/formEdit',compact('Model'));
+    }
+    public function Update_Permission($id, Request $request)
+    {
+        $data = $request->data[0];
+        $Nombre= $data['Permiso'];
+        $Slug= $data['Slug'];
+        //LOGICA
+        $dataP=array(
+            'Name' => $Nombre,
+            'Slug' => $Slug,
+        );
+        permission::where('id',$id)->update($dataP);
+        return response()->json(["Accion completada"]);
+    }
+    public function Edit_Schedule($id)
+    {
+        $Model = schedule::find($id);
+        return view('Administration/Horarios/formEdit',compact('Model'));
+    }
+    public function Update_Schedule($id, Request $request)
+    {
+        $data = $request->data[0];
+        $HI = $data['HoraInicio'];
+        $HF = $data['HoraFinal'];
+        $Dia = $data['Dia'];
+        $Tipo = $data['Tipo'];
+        $dataH=array(
+            'StartHour' => $HI,
+            'EndHour' => $HF,
+            'Day' => $Dia,
+            'Type' => $Tipo,
+        );
+        schedule::where('id',$id)->update($dataH);
+        return response()->json(["Accion completada"]);
     }
     public function Update_menu()
-    {
-        
-    }
-    public function Update_permission()
     {
         
     }
@@ -271,8 +474,5 @@ class Administration extends Controller
     {
         
     }
-    public function Update_schedule()
-    {
-        
-    }
+    
 }

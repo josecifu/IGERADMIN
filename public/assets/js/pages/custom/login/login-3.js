@@ -21,14 +21,14 @@ var KTLogin = function() {
 						username: {
 							validators: {
 								notEmpty: {
-									message: 'Username is required'
+									message: 'El usuario es requerido'
 								}
 							}
 						},
 						password: {
 							validators: {
 								notEmpty: {
-									message: 'Password is required'
+									message: 'La Contraseña es requerida'
 								}
 							}
 						}
@@ -67,23 +67,13 @@ var KTLogin = function() {
 					KTUtil.btnRelease(formSubmitButton);
 
 					if (response && typeof response === 'object' && response.status && response.status == 'success') {
-						Swal.fire({
-			                text: "All is cool! Now you submit this form",
-			                icon: "success",
-			                buttonsStyling: false,
-							confirmButtonText: "Ok, got it!",
-							customClass: {
-								confirmButton: "btn font-weight-bold btn-light-primary"
-							}
-			            }).then(function() {
-							KTUtil.scrollTop();
-						});
+						
 					} else {
 						Swal.fire({
-			                text: "Sorry, something went wrong, please try again.",
+			                text: "El formulario tiene algunos errores, porfavor llene todos los campos",
 			                icon: "error",
 			                buttonsStyling: false,
-							confirmButtonText: "Ok, got it!",
+							confirmButtonText: "Aceptar",
 							customClass: {
 								confirmButton: "btn font-weight-bold btn-light-primary"
 							}
@@ -96,10 +86,10 @@ var KTLogin = function() {
 		    })
 			.on('core.form.invalid', function() {
 				Swal.fire({
-					text: "Sorry, looks like there are some errors detected, please try again.",
+					text: "El formulario tiene algunos errores, porfavor llene todos los campos.",
 					icon: "error",
 					buttonsStyling: false,
-					confirmButtonText: "Ok, got it!",
+					confirmButtonText: "Aceptar",
 					customClass: {
 						confirmButton: "btn font-weight-bold btn-light-primary"
 					}
@@ -126,10 +116,10 @@ var KTLogin = function() {
 						email: {
 							validators: {
 								notEmpty: {
-									message: 'Email is required'
+									message: 'El email es requerido'
 								},
 								emailAddress: {
-									message: 'The value is not a valid email address'
+									message: 'No es un email valido'
 								}
 							}
 						}
@@ -156,10 +146,10 @@ var KTLogin = function() {
 		    })
 			.on('core.form.invalid', function() {
 				Swal.fire({
-					text: "Sorry, looks like there are some errors detected, please try again.",
+					text: "El formulario tiene algunos errores, porfavor llene todos los campos.",
 					icon: "error",
 					buttonsStyling: false,
-					confirmButtonText: "Ok, got it!",
+					confirmButtonText: "Aceptar",
 					customClass: {
 						confirmButton: "btn font-weight-bold btn-light-primary"
 					}
@@ -400,7 +390,7 @@ var KTLogin = function() {
 						KTUtil.scrollTop();
 					} else {
 						Swal.fire({
-							text: "Sorry, looks like there are some errors detected, please try again.",
+							text: "Sorry,asfasfe errors detected, please try again.",
 							icon: "error",
 							buttonsStyling: false,
 							confirmButtonText: "Ok, got it!",
@@ -458,7 +448,7 @@ var KTLogin = function() {
         init: function() {
             _handleFormSignin();
 			_handleFormForgot();
-			_handleFormSignup();
+			
         }
     };
 }();

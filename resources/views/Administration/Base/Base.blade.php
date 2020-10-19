@@ -21,7 +21,7 @@
 		<!--end::Global Theme Styles-->
 		<!--begin::Layout Themes(used by all pages)-->
 		<!--end::Layout Themes-->
-		<link rel="shortcut icon" href="{{ asset('assets/media/logos/favicon.ico')}}" />
+		<link rel="shortcut icon" href="{{ asset('assets/media/logos/faviconiger.ico')}}" />
 	</head>
 	<!--end::Head-->
 	<!--begin::Body-->
@@ -197,7 +197,7 @@
 							<!--begin::Copyright-->
 							<div class="text-dark order-2 order-md-1">
 								<span class="text-muted font-weight-bold mr-2">2020©</span>
-								<a href="http://keenthemes.com/metronic" target="_blank" class="text-white text-hover-primary">IGER 2020 donacion de proyecto</a>
+								<a href="#" target="_blank" class="text-white text-hover-primary">IGER 2020 donación de proyecto</a>
 							</div>
 							<!--end::Copyright-->
 							<!--begin::Nav-->

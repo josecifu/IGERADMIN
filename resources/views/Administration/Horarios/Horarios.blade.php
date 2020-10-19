@@ -39,7 +39,7 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            <h3 class="card-label">Listado de Voluntarios</h3>
+                                            <h3 class="card-label">Horarios</h3>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -86,8 +86,8 @@
                                             </div>
                                             <!--end::Dropdown-->
                                             <!--begin::Button-->
-                                            <a href="{{url('administration/registrar')}}" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-plus"></i>Añadir Un Voluntario</a>
+                                            <a href="/insertar/horario" class="btn btn-primary font-weight-bolder">
+                                            <i class="la la-plus"></i>Añadir un horario</a>
                                             <!--end::Button-->
                                         </div>
                                     </div>
@@ -102,16 +102,17 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($Models as $Model)
+                                                @foreach($Models as $Model) 
                                                 <tr>
-                                                    <td>{{$Model['Id']}}</td>
-                                                    <td>{{$Model['Name']}}</td>
-                                                    <td>{{$Model['Apellido']}}</td>
-                                                    <td>{{$Model['Direccion']}}</td>
-                                                    <td>{{$Model['Telefono']}}</td>
-                                                    <td>{{$Model['Fecha_Nacimiento']}}</td>
-                                                    <td>{{$Model['Usuario']}}</td>
-                                                    <td>{{$Model['Correo']}}</td>
+                                                    <td>{{$Model->id}}</td>
+                                                    <td>{{$Model->StartHour}}</td>
+                                                    <td>{{$Model->EndHour}}</td>
+                                                    <td>{{$Model->Day}}</td>
+                                                    <td>{{$Model->Type}}</td>
+                                                    <td>
+                                                        <a class="badge badge-primary" href='{{url("/editar/horario/{$Model->id}")}}'>Editar</a>
+                                                        <a class="badge badge-danger" href='{{url("/eliminar/horario/{$Model->id}")}}'>Eliminar</a>
+                                                    </td>
                                                     <td nowrap="nowrap"></td>
                                                 </tr>
                                                 @endforeach
@@ -130,68 +131,6 @@
         <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
         <!--end::Page Vendors-->
         <!--begin::Page Scripts(used by this page)-->
-        
+        <script src="{{ asset('assets/js/pages/crud/datatables/data-sources/html.js')}}"></script>
         <!--end::Page Scripts-->
-        <script type="text/javascript">
-           
-            "use strict";
-            var KTDatatablesDataSourceHtml = function() {
-
-                var initTable1 = function() {
-                    var table = $('#kt_datatable');
-
-                    // begin first table
-                    table.DataTable({
-                        responsive: true,
-                        columnDefs: [
-                            {
-                                targets: -1,
-                                title: 'Acciones',
-                                orderable: false,
-                                render: function(data, type, full, meta) {
-                                    return '\
-                                        <div class="dropdown dropdown-inline">\
-                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">\
-                                                <i class="la la-cog"></i>\
-                                            </a>\
-                                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
-                                                <ul class="nav nav-hoverable flex-column">\
-                                                    <li class="nav-item"><a class="nav-link" href="/editar/persona/'+full[0]+'"><i class="nav-icon la la-edit"></i><span class="nav-text">Editar</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
-                                                </ul>\
-                                            </div>\
-                                        </div>\
-                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
-                                            <i class="la la-edit"></i>\
-                                        </a>\
-                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Delete">\
-                                            <i class="la la-trash"></i>\
-                                        </a>\
-                                    ';
-                                },
-                            },
-                           
-                          
-                        ],
-                    });
-
-                };
-
-                return {
-
-                    //main function to initiate the module
-                    init: function() {
-                        initTable1();
-                    },
-
-                };
-
-            }();
-
-            jQuery(document).ready(function() {
-                KTDatatablesDataSourceHtml.init();
-            });
-
-
-       </script>
 	@stop

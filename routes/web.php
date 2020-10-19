@@ -14,21 +14,61 @@ use Illuminate\Support\Facades\Route;
 */
 $route = "App\Http\Controllers";
 #Login
-//Route::get('/login', 'LoginController@index')->name('login');
-#HOME
-Route::get('/', $route.'\Administration@Dashboard')->name('Dashboard');
+Route::get('/login', $route.'\LoginController@index')->name('login');
 
+Route::get('/', $route.'\Administration@Dashboard')->name('home')->middleware('auth');
+#Signin
+Route::post('/signin',  $route.'\LoginController@login')->name('signin');
+#logout
+Route::get('/logout', $route.'\LoginController@logout')->name('logout');
 
-Route::get('/Clientes/listado', $route.'\Administration@View_Clients')->name('View_Clients');
-Route::get('/Clientes/insertar', $route.'\Administration@Crear_Clientes')->name('Crear_Clientes');
-Route::post('/Clientes/insertar', $route.'\Administration@Guardar_clientes')->name('Guardar_clientes');
+Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 
-#Rutas Listado estudiante, persona, asignacion estudiantes/curso
-Route::get('/estudiantes/listado',$route.'\Administration@View_User_Student')->name('View_User_Student');
-Route::get('/personas/listado',$route.'\Administration@View_User_Person')->name('View_User_Person');
+	$route = "App\Http\Controllers";
+	Route::get('/registrar', $route.'\Administration@Create_Person')->name('Create_Person');
+	Route::post('/guardar', $route.'\Administration@Save_Person')->name('Save_Person');
+	Route::get('/registrar/usuario', $route.'\Administration@Create_User_Person')->name('Create_User_Person');
+	Route::post('/guardar/usuario', $route.'\Administration@Save_User_Person')->name('Save_User_Person');
+
+	Route::get('/permisos/listado',$route.'\Administration@View_Permission')->name('View_Permission');
+	Route::get('/horarios/listado',$route.'\Administration@View_Schedule')->name('View_Schedule');
+
+	Route::group([ 'prefix' => 'home'], function(){
+		$route = "App\Http\Controllers";
+		#Dashboad
+		Route::get('/dashboard', $route.'\Administration@Dashboard')->name('Dashboard');
+	});
+	Route::group([ 'prefix' => 'estudiantes'], function(){
+		$route = "App\Http\Controllers";
+		Route::get('/Listado',$route.'\Administration@View_User_Student')->name('View_User_Student');
+	});
+	Route::group([ 'prefix' => 'voluntarios'], function(){
+		$route = "App\Http\Controllers";
+		Route::get('/ListadoEstudiantes',$route.'\Teacher@View_Assigned_Student')->name('View_Assigned_Student');
+		Route::get('/listado',$route.'\Administration@View_User_teacher')->name('View_User_teacher');
+		Route::get('/editar/{id}',$route.'\Administration@Edit_Teacher')->name('Edit_Teacher');
+		Route::post('/actualizar/{id}',$route.'\Administration@Update_Person')->name('Update_Person');
+	});
+});
+Route::get('/clientes', $route.'\Administration@View_Clients')->name('View_Clients');		
+
 Route::get('/asignacion/estudiantes',$route.'\Administration@View_Student_Assignment')->name('View_Student_Assignment');
-Route::get('/permisos/listado',$route.'\Administration@View_Permission')->name('View_Permission');
 
+//Usuario
+//Permiso
+Route::get('/insertar/permiso', $route.'\Administration@Create_Permission')->name('Create_Permission');
+Route::post('/guardar/permiso', $route.'\Administration@Save_Permission')->name('Save_Permission');
+//Horario
+Route::get('/insertar/horario', $route.'\Administration@Create_Schedule')->name('Create_Schedule');
+Route::post('/guardar/horario', $route.'\Administration@Save_Schedule')->name('Save_Schedule');
+
+//Rutas Edicion y Actualizacion =======
+Route::get('/editar/persona/{id}',$route.'\Administration@Edit_Person')->name('Edit_Person');
+Route::post('/actualizar/{id}',$route.'\Administration@Update_Person')->name('Update_Person');
+Route::get('/editar/permiso/{id}',$route.'\Administration@Edit_Permission')->name('Edit_Permission');
+Route::post('/actualizar/permiso/{id}',$route.'\Administration@Update_Permission')->name('Update_Permission');
+Route::get('/editar/horario/{id}',$route.'\Administration@Edit_Schedule')->name('Edit_Schedule');
+Route::post('/actualizar/horario/{id}',$route.'\Administration@Update_Schedule')->name('Update_Schedule');
 
 
 
@@ -55,5 +95,10 @@ Route::post('/Menu/insertar', $route.'\Administration@Store_Menu')->name('Store_
 #Rutas CRUD Usuario Persona
 Route::get('/datos', $route.'\Administration@View_User_Person')->name('View_User_Person');
 Route::post('/insertar', $route.'\Administration@Create_User_Person')->name('Create_User_Person');
+<<<<<<< HEAD
 Route::get('/editar/{usuario}',[Administration::class, 'Edit_User_Person']);
 Route::post('/actualizar/{id}',[Administration::class, 'Update_User_Person']);
+=======
+Route::get('/edicion/{usuario}',[Administration::class, 'Edit_User_Person']);
+Route::post('/Actualizar/{id}',[Administration::class, 'Update_User_Person']);
+>>>>>>> c658bb22846317ea5816ab2c9b9c4e7bf9d1a7b3

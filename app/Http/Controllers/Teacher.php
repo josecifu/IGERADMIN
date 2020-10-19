@@ -17,9 +17,43 @@ use App\Models\Question;
 use App\Models\Asign_question_test;
 //tabla de asignacion de prueba a curso
 use App\Models\asign_test_course;
+//tabla de asignacion de estudiante grado
+use App\Models\Assign_student_grade;
+//tabla de Asignacion cursos a grados
+use App\Models\Assign_course_grade;
+//tabla de Asignacion cursos a grados
+use App\Models\Asign_teacher_course;
+//tabla de cursos
+use App\Models\course;
+//tabla de cursos
+use App\Models\User;
+//tabla de Personas
+use App\Models\Person;
+//tabla de grado
+use App\Models\grade;
 
 class Teacher extends Controller
 {
+    public function View_Assigned_Student(Request $request)
+    {
+        $Titles = ['Id','Nombre','Apellido','Correo','Telefono','Grado'];
+        $muestra = Person::all();
+        $Models=[];        
+        $id = $request->session()->get('User_id'); 
+        $CursosVoluntario = Asign_teacher_course::where('user_id',$id)->get('Course_id');
+        $gradoID = [];
+        $asignacionStudentGradeID = [];
+        $estudiantes = [];
+        foreach ($CursosVoluntario as $value) {
+            $cursoGrado = Assign_course_grade::where('Course_id',$value)->get('Grade_id');
+        }
+        $grado = grade::where('id',$cursoGrado);
+        $asignacionStudentGrade = Assign_student_grade::where('Grade_id',$grado)->get('user_id');
+        foreach ($asignacionStudentGrade as $value) {
+            $datos = Person::all();
+        }
+        return view('Administration/voluntarios/ListadoEstudiantes',compact('Titles','Models'));
+    }
 	//publicacion de informacion
     public function Create_Information()
     {

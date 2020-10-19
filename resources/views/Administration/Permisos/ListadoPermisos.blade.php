@@ -86,7 +86,7 @@
                                             </div>
                                             <!--end::Dropdown-->
                                             <!--begin::Button-->
-                                            <a href="#" class="btn btn-primary font-weight-bolder">
+                                            <a href="/insertar/permiso" class="btn btn-primary font-weight-bolder">
                                             <i class="la la-plus"></i>Añadir Un Permiso</a>
                                             <!--end::Button-->
                                         </div>
@@ -107,6 +107,10 @@
                                                     <td>{{$Model->id}}</td>
                                                     <td>{{$Model->Name}}</td>
                                                     <td>{{$Model->Slug}}</td>
+                                                    <td>
+                                                        <a class="badge badge-primary" href='{{url("/editar/permiso/{$Model->id}")}}'>Editar</a>
+                                                        <a class="badge badge-danger" href='{{url("/eliminar/permiso/{$Model->id}")}}'>Eliminar</a>
+                                                    </td>
                                                 </tr>
                                                 @endforeach
                                             </tbody>

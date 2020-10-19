@@ -102,7 +102,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($Models as $Model)
+                                                @foreach($Models as $Model) 
                                                 <tr>
                                                     <td>{{$Model['Id']}}</td>
                                                     <td>{{$Model['Name']}}</td>
@@ -132,6 +132,6 @@
         <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
         <!--end::Page Vendors-->
         <!--begin::Page Scripts(used by this page)-->
-        <script src="{{ asset('assets/js/pages/crud/datatables/data-sources/html.js')}}"></script>
+       <script src="{{ asset('assets/js/pages/crud/datatables/data-sources/html.js')}}"></script>
         <!--end::Page Scripts-->
 	@stop
