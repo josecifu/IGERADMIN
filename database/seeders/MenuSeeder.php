@@ -13,6 +13,7 @@ class MenuSeeder extends Seeder
      */
     public function run()
     {
+        //Administracion
          DB::table('menus')->insert([
             'Name' => 'Inicio',
             'Icon' => 'pe-7s-home',
@@ -104,5 +105,6 @@ class MenuSeeder extends Seeder
             'Url' => 'administration/voluntarios/Notas',  
             'menu_id' => '4'          
         ]);
+        //estudiante
     }
 }
