@@ -15,26 +15,32 @@ use App\Models\person;
 //modelo Horario
 use App\Models\schedule;
 //Modelo Nota
-use App\Note;
+use App\Models\Note;
 
 class Student extends Controller
 {
-    public function ViewNotes()
+    public function View_Profile()
     {
     }
-    public function ViewTests()
+    public function Update_Profile()
     {
     }
-    public function AnswerTests()
+    public function View_CoursesTeacherNotes()
     {
     }
-    public function ViewInformationCourses()
+    public function View_Tests()
     {
     }
-    public function ViewSchedule()
+    public function Create_AnswerTests()
     {
     }
-    public function ViewProfile()
+    public function View_Schedule()
+    {
+    }
+    public function View_informations()
+    {
+    }
+    public function View_calendario()
     {
     }
 }

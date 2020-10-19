@@ -43,7 +43,7 @@ class Administration extends Controller
     }
     public function Crear_Clientes()
     {
-         return view('Administration.Clientes.Crear_Clientes');
+        return view('Administration.Clientes.Crear_Clientes');
     }
     public function Guardar_clientes(Request $request)
     {
@@ -62,11 +62,8 @@ class Administration extends Controller
         $Titles =['Id','Nombre','Apellido','Pais','Pais','Pais','Pais','Pais','Pais','Pais','Acciones'];
         $Models = [];
         $model = user::all();
-       
-        
         foreach ($model as $value) {
             $person = Person::where('id',$value->Person_id)->first();
-
             $data = [
                 'Id' => $value->id,
                 'Name' => $person->Names,
@@ -75,10 +72,8 @@ class Administration extends Controller
             ];
             array_push($Models,$data);
         }
-
         return view('Administration.Clientes.Listado_Clientes',compact('Titles','Models'));
     }
-    
 	//Funciones de crear
     public function Create_User_Person(Request $request)
     {
@@ -90,29 +85,48 @@ class Administration extends Controller
         $usuario->save();
         return redirect()->action([Administration::class,'View_User_Person']);
     }
-
-    public function Create_menu()
+    public function Create_Menu()
     {
-    	
+        return view('Administration.Menu.Crear_Menu');
+    }
+    public function Store_Menu(Request $request)
+    {
+        $data = $request->data[0];
+        $Nombres= $data['Nombre'];
+        //LOGICA
+        $menus = new Menu;
+        $menus->Name = $Nombres;
+        //$person->save();
+        return response()->json(["Accion completada"]);
+    }
+    public function Create_Rol()
+    {
+        return view('Administration.Rol.Crear_Rol');        
+    }
+    public function Store_Rol(Request $request)
+    {
+        $data = $request->data[0];
+        $Nombres= $data['Nombre'];
+        //LOGICA
+        $rols = new Rol;
+        $rols->Name = $Nombres;
+        //$person->save();
+        return response()->json(["Accion completada"]);
     }
     public function Create_permission()
     {
-    	
     }
     public function Create_grade()
     {
-    	
     }
     public function Create_courses()
     {
-    	
     }
     public function Create_schedule()
     {
-    	
     }
     //Funciones para visualizacion de datos
-    //Visualizcion tabla personas con usuario
+    //Visualizacion tabla personas con usuario
     public function View_User_Person()
     {
         $Titles = ['Id','Nombres','Apellidos','Direccion','Telefono','Fecha Nacimiento','Usuario','Email'];
@@ -158,7 +172,6 @@ class Administration extends Controller
                     'Fecha_Nacimiento' => $persona->BirthDate,
                     'Usuario' => $usuario->name,
                     'Correo' => $usuario->email,
-    
                 ];
                 array_push($Models,$data);
         }

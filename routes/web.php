@@ -30,12 +30,26 @@ Route::get('/asignacion/estudiantes',$route.'\Administration@View_Student_Assign
 Route::get('/permisos/listado',$route.'\Administration@View_Permission')->name('View_Permission');
 
 
-Route::get('/Curso/listado', $route.'\Administration@View_Grade')->name('View_Grade');
-Route::get('/Grado/listado', $route.'\Administration@View_Course')->name('View_Course');
+
+
+
+
+Route::get('/Grado/listado', $route.'\Administration@View_Grade')->name('View_Grade');
+Route::get('/Curso/listado', $route.'\Administration@View_Course')->name('View_Course');
 Route::get('/Nivel/listado', $route.'\Administration@View_Level')->name('View_Level');
 Route::get('/Clase/listado', $route.'\Administration@View_Classroom')->name('View_Classroom');
-Route::get('/Menu/listado', $route.'\Administration@View_Menu')->name('View_Menu');
 Route::get('/Rol/listado', $route.'\Administration@View_Rol')->name('View_Rol');
+Route::get('/Rol/insertar', $route.'\Administration@Create_Rol')->name('Create_Rol');
+Route::post('/Rol/insertar', $route.'\Administration@Store_Rol')->name('Store_Rol');
+
+Route::get('/Menu/listado', $route.'\Administration@View_Menu')->name('View_Menu');
+Route::get('/Menu/insertar', $route.'\Administration@Create_Menu')->name('Create_Menu');
+Route::post('/Menu/insertar', $route.'\Administration@Store_Menu')->name('Store_Menu');
+
+
+
+
+
 
 
 #Rutas CRUD Usuario Persona
