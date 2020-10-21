@@ -95,10 +95,8 @@ Route::post('/Menu/insertar', $route.'\Administration@Store_Menu')->name('Store_
 #Rutas CRUD Usuario Persona
 Route::get('/datos', $route.'\Administration@View_User_Person')->name('View_User_Person');
 Route::post('/insertar', $route.'\Administration@Create_User_Person')->name('Create_User_Person');
-<<<<<<< HEAD
 Route::get('/editar/{usuario}',[Administration::class, 'Edit_User_Person']);
 Route::post('/actualizar/{id}',[Administration::class, 'Update_User_Person']);
 =======
 Route::get('/edicion/{usuario}',[Administration::class, 'Edit_User_Person']);
 Route::post('/Actualizar/{id}',[Administration::class, 'Update_User_Person']);
->>>>>>> c658bb22846317ea5816ab2c9b9c4e7bf9d1a7b3
