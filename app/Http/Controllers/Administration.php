@@ -40,10 +40,12 @@ class Administration extends Controller
     {
         return view('Administration.Dashboard.Vacio');
     }
+
     public function Crear_Clientes()
     {
         return view('Administration.Clientes.Crear_Clientes');
     }
+    
     public function Guardar_clientes(Request $request)
     {
         $data = $request->data[0];
@@ -56,6 +58,7 @@ class Administration extends Controller
         //$person->save();
         return response()->json(["Accion completada"]);
     }
+    
     public function View_Clients()
     {
         $Titles =['Id','Nombre','Apellido','Pais','Pais','Pais','Pais','Pais','Pais','Pais','Acciones'];
@@ -73,17 +76,19 @@ class Administration extends Controller
         }
         return view('Administration.Clientes.Listado_Clientes',compact('Titles','Models'));
     }
-	//Funciones de crear
+    
+    //Funciones de crear
     public function Create_User_Person(Request $request)
     {
         $personas = Person::all();
         return view('Administration/Personas/formularioUsuarios',compact('personas'));
     }
-<<<<<<< HEAD
+    
     public function Create_Menu()
     {
         return view('Administration.Menu.Crear_Menu');
     }
+    
     public function Store_Menu(Request $request)
     {
         $data = $request->data[0];
@@ -94,10 +99,12 @@ class Administration extends Controller
         //$person->save();
         return response()->json(["Accion completada"]);
     }
+
     public function Create_Rol()
     {
         return view('Administration.Rol.Crear_Rol');        
     }
+    
     public function Store_Rol(Request $request)
     {
         $data = $request->data[0];
@@ -107,7 +114,15 @@ class Administration extends Controller
         $rols->Name = $Nombres;
         //$person->save();
         return response()->json(["Accion completada"]);
-=======
+    }
+
+    public function Create_Student()
+    {
+    }
+    
+    public function Store_Student(Request $request)
+    {
+    }
 
     public function Save_User_Person(Request $request)
     {
@@ -125,14 +140,13 @@ class Administration extends Controller
         $user->save();
         return response()->json(["Accion completada"]);
     }
-
+    
     public function Create_Person()
     {
         $rol = rol::all();
         return view('Administration/Personas/formulario',compact('rol'));
->>>>>>> c658bb22846317ea5816ab2c9b9c4e7bf9d1a7b3
     }
-
+    
     public function Save_Person(Request $request)
     {
         $data = $request->data[0];
@@ -176,10 +190,7 @@ class Administration extends Controller
 
     public function Create_permission()
     {
-<<<<<<< HEAD
-=======
-    	return view('Administration/Permisos/formulario');
->>>>>>> c658bb22846317ea5816ab2c9b9c4e7bf9d1a7b3
+        return view('Administration/Permisos/formulario');
     }
 
     public function Save_Permission(Request $request)
@@ -194,10 +205,12 @@ class Administration extends Controller
         $permission->save();
         return response()->json(["Accion completada"]);
     }
+    
     public function Create_schedule()
     {
-    	return view('Administration/Horarios/formulario');
+        return view('Administration/Horarios/formulario');
     }
+    
     public function Save_Schedule(Request $request)
     {
         $data = $request->data[0];
@@ -214,10 +227,6 @@ class Administration extends Controller
         return response()->json(["Accion completada"]);
     }
     
-    public function Create_menu()
-    {
-    }
-    
     public function Create_grade()
     {
     }
@@ -226,12 +235,8 @@ class Administration extends Controller
     }
 
     //Funciones para visualizacion de datos
-<<<<<<< HEAD
     //Visualizacion tabla personas con usuario
     public function View_User_Person()
-=======
-    public function View_User_Person()//Visualizcion tabla personas con usuario
->>>>>>> c658bb22846317ea5816ab2c9b9c4e7bf9d1a7b3
     {
         $Titles = ['Id','Nombres','Apellidos','Direccion','Telefono','Fecha Nacimiento','Usuario','Email','Acciones'];
         $usuarios = User::all();
@@ -255,7 +260,7 @@ class Administration extends Controller
 
     public function View_Menu()
     {
-    	$menus = menu::all();
+        $menus = menu::all();
         return view('Administration.Menu.ListadoMenus',compact('menus'));
     }
 
@@ -276,8 +281,6 @@ class Administration extends Controller
                     'Fecha_Nacimiento' => $persona->BirthDate,
                     'Usuario' => $usuario->name,
                     'Correo' => $usuario->email,
-<<<<<<< HEAD
-=======
                 ];
                 array_push($Models,$data);
         }
@@ -301,7 +304,6 @@ class Administration extends Controller
                     'Fecha_Nacimiento' => $persona->BirthDate,
                     'Usuario' => $usuario->name,
                     'Correo' => $usuario->email,
->>>>>>> c658bb22846317ea5816ab2c9b9c4e7bf9d1a7b3
                 ];
                 array_push($Models,$data);
         }
@@ -332,43 +334,51 @@ class Administration extends Controller
         }
         return view('Administration/Estudiantes/ListadoAsignacionEstudiante',compact('Models','Titles'));
     }
+
     public function View_Rol()
     {
         $rols = rol::all();
         return view('Administration.Rol.ListadoRoles',compact('rols'));       
     }
+    
     public function View_Permission()
     {
         $Titles = ['ID','Nombre Permiso', 'Slug'];
         $permisos = permission::all();
         return view('Administration/Permisos/ListadoPermisos',compact('permisos','Titles'));
     }
+    
     public function View_Course()
     {
         $courses = course::all();
         return view('Administration.Curso.ListadoCursos',compact('courses'));
     }
+    
     public function View_Grade()
     {
         $grades = grade::all();
         return view('Administration.Grado.ListadoGrados',compact('grades'));
     }
+    
     public function View_Level()
     {
         $levels = level::all();
         return view('Administration.Nivel.ListadoNiveles',compact('levels'));
     }
+    
     public function View_Classroom()
     {
         $classrooms = classroom::all();
         return view('Administration.Clase.ListadoClases',compact('classrooms'));
     }
+    
     public function View_Schedule()
     {
         $Titles = ['ID','Hora Inicio', 'Hora Final', 'Dia', 'Tipo'];
         $Models = schedule::all();
         return view('Administration/Horarios/Horarios',compact('Models','Titles'));
     }
+    
     public function Edit_Teacher($id)
     {
         $ModelsP = Person::find($id);
@@ -379,6 +389,7 @@ class Administration extends Controller
             ];
         return view('Administration/Voluntarios/formEdit',compact('ModelsP','ModelsU'));
     }
+    
     public function Edit_Person($id)
     {
         $ModelsP = Person::find($id);
@@ -428,6 +439,7 @@ class Administration extends Controller
         $Model = permission::find($id);
         return view('Administration/Permisos/formEdit',compact('Model'));
     }
+    
     public function Update_Permission($id, Request $request)
     {
         $data = $request->data[0];
@@ -441,11 +453,13 @@ class Administration extends Controller
         permission::where('id',$id)->update($dataP);
         return response()->json(["Accion completada"]);
     }
+    
     public function Edit_Schedule($id)
     {
         $Model = schedule::find($id);
         return view('Administration/Horarios/formEdit',compact('Model'));
     }
+    
     public function Update_Schedule($id, Request $request)
     {
         $data = $request->data[0];
@@ -462,17 +476,19 @@ class Administration extends Controller
         schedule::where('id',$id)->update($dataH);
         return response()->json(["Accion completada"]);
     }
+    
     public function Update_menu()
     {
         
     }
+    
     public function Update_grade()
     {
         
     }
+
     public function Update_courses()
     {
         
     }
-    
 }

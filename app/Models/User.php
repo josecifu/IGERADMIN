@@ -45,7 +45,7 @@ class User extends Authenticatable
     public function rols(){
         return $this->belongsToMany(rol::class,'assign_user_rols');
     }
-    public function setSession($rols)
+    public function setSession($rols,$name)
     {
         if(count($rols) == 1){
             Session::put([

@@ -70,10 +70,6 @@ Route::post('/actualizar/permiso/{id}',$route.'\Administration@Update_Permission
 Route::get('/editar/horario/{id}',$route.'\Administration@Edit_Schedule')->name('Edit_Schedule');
 Route::post('/actualizar/horario/{id}',$route.'\Administration@Update_Schedule')->name('Update_Schedule');
 
-
-
-
-
 Route::get('/Grado/listado', $route.'\Administration@View_Grade')->name('View_Grade');
 Route::get('/Curso/listado', $route.'\Administration@View_Course')->name('View_Course');
 Route::get('/Nivel/listado', $route.'\Administration@View_Level')->name('View_Level');
@@ -85,12 +81,6 @@ Route::post('/Rol/insertar', $route.'\Administration@Store_Rol')->name('Store_Ro
 Route::get('/Menu/listado', $route.'\Administration@View_Menu')->name('View_Menu');
 Route::get('/Menu/insertar', $route.'\Administration@Create_Menu')->name('Create_Menu');
 Route::post('/Menu/insertar', $route.'\Administration@Store_Menu')->name('Store_Menu');
-
-
-
-
-
-
 
 #Rutas CRUD Usuario Persona
 Route::get('/datos', $route.'\Administration@View_User_Person')->name('View_User_Person');
