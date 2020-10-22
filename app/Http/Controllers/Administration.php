@@ -77,13 +77,7 @@ class Administration extends Controller
         return view('Administration.Clientes.Listado_Clientes',compact('Titles','Models'));
     }
     
-    //Funciones de crear
-    public function Create_User_Person(Request $request)
-    {
-        $personas = Person::all();
-        return view('Administration/Personas/formularioUsuarios',compact('personas'));
-    }
-    
+    //Funciones de crear    
     public function Create_Menu()
     {
         return view('Administration.Menu.Crear_Menu');
@@ -123,24 +117,11 @@ class Administration extends Controller
     public function Store_Student(Request $request)
     {
     }
-
-    public function Save_User_Person(Request $request)
+    public function Create_Teacher()
     {
-        $data = $request->data[0];
-        $Usuario= $data['Usuario'];
-        $Email= $data['Email'];
-        $Contraseña= $data['Contraseña'];
-        $PersonaID= $data['Persona'];
-        //LOGICA
-        $user = new User;
-        $user->name = $Usuario;
-        $user->email = $Email;
-        $user->password = bcrypt($Contraseña);
-        $user->Person_id = $PersonaID;
-        $user->save();
-        return response()->json(["Accion completada"]);
+        $roles = rol::all();
+        return view('Administration/Voluntarios/formulario',compact('roles'));
     }
-    
     public function Create_Person()
     {
         $rol = rol::all();

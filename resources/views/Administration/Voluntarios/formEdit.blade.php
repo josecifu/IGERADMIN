@@ -217,7 +217,7 @@
             }];
 
             $.ajax({
-                url:'/administration/voluntarios/actualizar/{{$ModelsP->id}}',
+                url:'/administration/teacher/update/{{$ModelsP->id}}',
                 type:'POST',
                 data: {"_token":"{{ csrf_token() }}","data":data},
                 dataType: "JSON",
@@ -227,7 +227,7 @@
                   type: "success"
                         }).then(function () {
                           var $url_path = '{!! url('/') !!}';
-                          window.location.href = $url_path+"/administration/voluntarios/listado";
+                          window.location.href = $url_path+"/administration/teacher/list";
                         });
                      
                 },

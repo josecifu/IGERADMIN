@@ -56,7 +56,7 @@ class MenuSeeder extends Seeder
              DB::table('menus')->insert([
             'Name' => 'Listado voluntarios',
             'State' => '1',
-            'Url' => 'administration/voluntarios/listado',  
+            'Url' => 'administration/teacher/list',  
             'menu_id' => '6'          
         ]);
             DB::table('menus')->insert([
@@ -70,39 +70,39 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([ //9
             'Name' => 'Curso',
             'Icon' => 'pe-7s-home',
-            'Url' => 'administration/voluntarios',
+            'Url' => 'administration/teacher',
             'State' => '1',     
             'Order' => '3',      
         ]);
         DB::table('menus')->insert([ //10
             'Name' => 'Reporte',
             'Icon' => 'pe-7s-home',
-            'Url' => 'administration/voluntarios',
+            'Url' => 'administration/teacher',
             'State' => '1',     
             'Order' => '4',      
         ]);
         DB::table('menus')->insert([
             'Name' => 'Detalles Estudiantes',
             'State' => '1',
-            'Url' => 'administration/voluntarios/ListadoEstudiantes',  
+            'Url' => 'administration/teacher/ListadoEstudiantes',  
             'menu_id' => '4'          
         ]);
         DB::table('menus')->insert([
             'Name' => 'Asistencia Estudiantes',
             'State' => '1',
-            'Url' => 'administration/voluntarios/asistenciaEstudiantes',  
+            'Url' => 'administration/teacher/asistenciaEstudiantes',  
             'menu_id' => '10'          
         ]);
         DB::table('menus')->insert([
             'Name' => 'Asistencia de Estudiantes al examen',
             'State' => '1',
-            'Url' => 'administration/voluntarios/asistenciaExamen',  
+            'Url' => 'administration/teacher/asistenciaExamen',  
             'menu_id' => '10'          
         ]);
         DB::table('menus')->insert([
             'Name' => 'Notas',
             'State' => '1',
-            'Url' => 'administration/voluntarios/Notas',  
+            'Url' => 'administration/teacher/Notas',  
             'menu_id' => '4'          
         ]);
         //estudiante
