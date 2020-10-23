@@ -58,6 +58,10 @@ class Administration extends Controller
         $person->Names = $Nombres;
         $person->LastNames = $Apellidos;
         //$person->save();
+        $logs = new Log;
+        $logs->Table = "Clientes";
+        $logs->User_Id = $request->session()->get('User_Id');
+        $logs->Description = "Se guardo cliente ID =" $person->id " Nombre =" $person->Names;
         return response()->json(["Accion completada"]);
     }
     
