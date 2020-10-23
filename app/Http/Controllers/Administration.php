@@ -15,6 +15,8 @@ use App\Models\permission;
 use App\Models\period;
 //modelo de niveles de grados
 use App\Models\level;
+//modelo de niveles de grados
+use App\Models\logs;
 //modelo de grado
 use App\Models\grade;
 //Modelo de aula
@@ -130,6 +132,7 @@ class Administration extends Controller
     
     public function Save_Person(Request $request)
     {
+        $id = $request->session()->get('User_id'); 
         $data = $request->data[0];
         $Nombres= $data['Nombre'];
         $Apellidos= $data['Apellido'];
@@ -162,6 +165,11 @@ class Administration extends Controller
                 $usuario_rol->user_id = $user->id;
                 $usuario_rol->State = "Active";
                 $usuario_rol->save();
+                $log = new logs;
+                $log->Table = "people y users";
+                $log->User_ID = $id;
+                $log->Description = "Se inserto un nuevo voluntario con el id: ".$person->id." y el usuario es: ".$user->name;
+                $log->save();   
                 DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
@@ -393,13 +401,11 @@ class Administration extends Controller
         $FechaNacimiento= $data['FechaNacimiento'];
         $Usuario = $data['Usuario'];
         $Email= $data['Email'];
-        $Contraseña = $data['Contraseña'];
         $PersonaID = $data['Persona'];
         //LOGICA Usuario
         $dataU=array(
             'name' => $Usuario,
             'email' => $Email,
-            'password' => bcrypt($Contraseña),
             'Person_id' => $PersonaID ,
         );
         User::where('Person_id', $id)->update($dataU);
@@ -412,6 +418,11 @@ class Administration extends Controller
             'BirthDate' =>$FechaNacimiento,
         );
         Person::where('id',$id)->update($dataP);
+        $log = new logs;
+        $log->Table = "people y users";
+        $log->User_ID = $id;
+        $log->Description = "Se actualizo una persona con el id: ".$id." y correo ".$Email;
+        $log->save(); 
         return response()->json(["Accion completada"]);
     }
    

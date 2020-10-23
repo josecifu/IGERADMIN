@@ -21,34 +21,11 @@
                                             <small class=""></small></h3>
                                         </div>
                                         <div class="card-toolbar">
-                                            <a href="{{url('administration/voluntarios/listado')}}" class="btn btn-light-primary font-weight-bolder mr-2">
+                                            <a href="{{url('administration/teacher/list')}}" class="btn btn-light-primary font-weight-bolder mr-2">
                                             <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-primary font-weight-bolder" onclick="crearDatos();">
                                                 <i class="ki ki-check icon-sm"></i>Guardar Cambios</button>
-                                                <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                                                <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                                                    <ul class="nav nav-hover flex-column">
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon flaticon2-reload"></i>
-                                                                <span class="nav-text">Save &amp; continue</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon flaticon2-add-1"></i>
-                                                                <span class="nav-text">Save &amp; add new</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon flaticon2-power"></i>
-                                                                <span class="nav-text">Save &amp; exit</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -152,19 +129,6 @@
                                                                         </span>
                                                                     </div>
                                                                     <input type="email" id="Email" value="{{$ModelsU['Email']}}" class="form-control form-control-solid" placeholder="Correo electronico" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label class="col-3">Contraseña</label>
-                                                            <div class="col-9">
-                                                                <div class="input-group input-group-solid">
-                                                                    <div class="input-group-prepend">
-                                                                        <span class="input-group-text">
-                                                                            <i class="la la-key"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                    <input type="password" id="Contraseña" class="form-control form-control-solid" placeholder="Contraseña" />
                                                                 </div>
                                                             </div>
                                                         </div>

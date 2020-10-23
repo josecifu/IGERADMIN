@@ -39,7 +39,7 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            <h3 class="card-label">Listado de personas</h3>
+                                            <h3 class="card-label">Notas estudiantes</h3>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -85,10 +85,6 @@
                                                 <!--end::Dropdown Menu-->
                                             </div>
                                             <!--end::Dropdown-->
-                                            <!--begin::Button-->
-                                            <a href="{{url('insertar/persona')}}" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-plus"></i>Añadir Un Cliente</a>
-                                            <!--end::Button-->
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -102,16 +98,17 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($Models as $Model)
+                                                @foreach($Titles as $Model)
                                                 <tr>
-                                                    <td>{{$Model['Id']}}</td>
-                                                    <td>{{$Model['Name']}}</td>
-                                                    <td>{{$Model['Apellido']}}</td>
-                                                    <td>{{$Model['Direccion']}}</td>
-                                                    <td>{{$Model['Telefono']}}</td>
-                                                    <td>{{$Model['Fecha_Nacimiento']}}</td>
-                                                    <td>{{$Model['Usuario']}}</td>
-                                                    <td>{{$Model['Correo']}}</td>
+                                                    <td>1</td>
+                                                    <td>Juan Perez</td>
+                                                    <td>Matematica</td>
+                                                    <td>Primero Basico</td>
+                                                    <td>1</td>
+                                                    <td>2</td>
+                                                    <td>3</td>
+                                                    <td>4</td>
+                                                    <td>60</td>
                                                     <td nowrap="nowrap"></td>
                                                 </tr>
                                                 @endforeach

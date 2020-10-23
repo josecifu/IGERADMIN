@@ -54,6 +54,21 @@ class Teacher extends Controller
         }
         return view('Administration/voluntarios/ListadoEstudiantes',compact('Titles','Models'));
     }
+    public function View_Student_Scores()
+    {
+        $NIVELES = grade::find(5)->Level();
+        $Titles = ['Id','Nombre del Estudiante','Curso','Grado','P1','P2','P3','P4','Final','Acciones'];
+        return view('Administration/Voluntarios/NotasEstudiantes',compact('Titles'));
+    }
+    //Ingreso de notas
+    public function Edit_Note()
+    {
+        
+    }
+    public function Save_Note()
+    {
+        
+    }
 	//publicacion de informacion
     public function Create_Information()
     {
@@ -72,11 +87,6 @@ class Teacher extends Controller
     }
 
     public function Update_Information()
-    {
-    }
-
-    //Ingreso de notas
-    public function Create_Note()
     {
     }
 
