@@ -71,14 +71,32 @@ Route::post('/actualizar/permiso/{id}',$route.'\Administration@Update_Permission
 Route::get('/editar/horario/{id}',$route.'\Administration@Edit_Schedule')->name('Edit_Schedule');
 Route::post('/actualizar/horario/{id}',$route.'\Administration@Update_Schedule')->name('Update_Schedule');
 
-Route::get('/Grado/listado', $route.'\Administration@View_Grade')->name('View_Grade');
-Route::get('/Curso/listado', $route.'\Administration@View_Course')->name('View_Course');
-Route::get('/Nivel/listado', $route.'\Administration@View_Level')->name('View_Level');
-Route::get('/Clase/listado', $route.'\Administration@View_Classroom')->name('View_Classroom');
-Route::get('/Rol/listado', $route.'\Administration@View_Rol')->name('View_Rol');
-Route::get('/Rol/insertar', $route.'\Administration@Create_Rol')->name('Create_Rol');
-Route::post('/Rol/insertar', $route.'\Administration@Store_Rol')->name('Store_Rol');
+Route::get('/list/grades', $route.'\Administration@View_Grade')->name('View_Grade');
+Route::get('/list/courses', $route.'\Administration@View_Course')->name('View_Course');
+Route::get('/list/levels', $route.'\Administration@View_Level')->name('View_Level');
+Route::get('/list/classrooms', $route.'\Administration@View_Classroom')->name('View_Classroom');
+Route::get('/list/rols', $route.'\Administration@View_Rol')->name('View_Rol');
+Route::get('/insert/rol', $route.'\Administration@Create_Rol')->name('Create_Rol');
+Route::post('/save/rol', $route.'\Administration@Store_Rol')->name('Store_Rol');
+Route::get('/list/menus', $route.'\Administration@View_Menu')->name('View_Menu');
+Route::get('/insert/menu', $route.'\Administration@Create_Menu')->name('Create_Menu');
+Route::post('/save/menu', $route.'\Administration@Store_Menu')->name('Store_Menu');
 
-Route::get('/Menu/listado', $route.'\Administration@View_Menu')->name('View_Menu');
-Route::get('/Menu/insertar', $route.'\Administration@Create_Menu')->name('Create_Menu');
-Route::post('/Menu/insertar', $route.'\Administration@Store_Menu')->name('Store_Menu');
+//menu estudiante
+Route::get('/list/notes', $route.'\Student@View_Courses_Notes')->name('View_Courses_Notes');
+Route::get('/list/teachers', $route.'\Student@View_Courses_Teachers')->name('View_Courses_Teachers');
+Route::get('/list/informations', $route.'\Student@View_Teacher_Informations')->name('View_Teacher_Informations');
+Route::get('/list/tests', $route.'\Student@View_Tests')->name('View_Tests');
+Route::get('/insert/answer', $route.'\Student@Create_Answer_Tests')->name('Create_Answer_Tests');
+Route::post('/save/answer', $route.'\Student@Store_Answer_Tests')->name('Store_Answer_Tests');
+Route::get('/list/schedule', $route.'\Student@View_Schedule')->name('View_Schedule');
+Route::get('/list/forms', $route.'\Student@View_Forms')->name('View_Forms');
+Route::get('/list/calendars', $route.'\Student@View_Calendar')->name('View_Calendar');
+
+#Rutas CRUD Usuario Persona
+Route::get('/datos', $route.'\Administration@View_User_Person')->name('View_User_Person');
+Route::post('/insertar', $route.'\Administration@Create_User_Person')->name('Create_User_Person');
+Route::get('/editar/{usuario}',[Administration::class, 'Edit_User_Person']);
+Route::post('/actualizar/{id}',[Administration::class, 'Update_User_Person']);
+Route::get('/edicion/{usuario}',[Administration::class, 'Edit_User_Person']);
+Route::post('/actualizar/{id}',[Administration::class, 'Update_User_Person']);
