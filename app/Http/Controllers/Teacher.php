@@ -73,6 +73,12 @@ class Teacher extends Controller
     public function Create_Information()
     {
     }
+    public function Create_Assistance()
+    {
+    }
+    public function Create_Reports()
+    {
+    }
 
 	public function Store_Information()
     {

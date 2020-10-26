@@ -61,7 +61,7 @@ class Administration extends Controller
         $logs = new Log;
         $logs->Table = "Clientes";
         $logs->User_Id = $request->session()->get('User_Id');
-        $logs->Description = "Se guardo cliente ID =" $person->id " Nombre =" $person->Names;
+        $logs->Description = "Se guardo cliente ID =". $person->id. " Nombre =". $person->Names;
         return response()->json(["Accion completada"]);
     }
     
