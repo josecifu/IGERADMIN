@@ -57,17 +57,18 @@ class Administration extends Controller
         $person = new Person;
         $person->Names = $Nombres;
         $person->LastNames = $Apellidos;
-        //$person->save();
+        $person->save();
         $logs = new Log;
         $logs->Table = "Clientes";
         $logs->User_Id = $request->session()->get('User_Id');
-        $logs->Description = "Se guardo cliente ID =" $person->id " Nombre =" $person->Names;
+        $logs->Description = "Se guardo cliente ID = ".$person->id." Nombre = ".$person->LastNames;
+        $logs->save();
         return response()->json(["Accion completada"]);
     }
     
     public function View_Clients()
     {
-        $Titles =['Id','Nombre','Apellido','Pais','Pais','Pais','Pais','Pais','Pais','Pais','Acciones'];
+        $Titles =['Id','Nombre','Apellido','Grado','Acciones'];
         $Models = [];
         $model = user::all();
         foreach ($model as $value) {
@@ -96,7 +97,12 @@ class Administration extends Controller
         //LOGICA
         $menus = new Menu;
         $menus->Name = $Nombres;
-        //$person->save();
+        $menus->save();
+        $logs = new Log;
+        $logs->Table = "Menus";
+        $logs->User_Id = $request->session()->get('User_Id');
+        $logs->Description = "Se guardo menu ID =".$menus->id." Nombre =".$menus->Name;
+        $logs->save();
         return response()->json(["Accion completada"]);
     }
 
@@ -112,16 +118,13 @@ class Administration extends Controller
         //LOGICA
         $rols = new Rol;
         $rols->Name = $Nombres;
-        //$person->save();
+        $rols->save();
+        $logs = new Log;
+        $logs->Table = "Menus";
+        $logs->User_Id = $request->session()->get('User_Id');
+        $logs->Description = "Se guardo rol ID = ".$rols->id." Nombre = ".$rols->Name;
+        $logs->save();
         return response()->json(["Accion completada"]);
-    }
-
-    public function Create_Student()
-    {
-    }
-    
-    public function Store_Student(Request $request)
-    {
     }
     public function Create_Teacher()
     {
@@ -173,7 +176,7 @@ class Administration extends Controller
                 $log->Table = "people y users";
                 $log->User_ID = $id;
                 $log->Description = "Se inserto un nuevo voluntario con el id: ".$person->id." y el usuario es: ".$user->name;
-                $log->save();   
+                $log->save();
                 DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
@@ -196,6 +199,12 @@ class Administration extends Controller
         $permission->Name = $Nombre;
         $permission->Slug = $Slug;
         $permission->save();
+        $permission->save();
+        $logs = new Log;
+        $logs->Table = "Permisos";
+        $logs->User_Id = $request->session()->get('User_Id');
+        $logs->Description = "Se guardo permiso ID = ".$permission->id." Nombre = ".$permission->Name;
+        $logs->save();
         return response()->json(["Accion completada"]);
     }
     
@@ -217,6 +226,11 @@ class Administration extends Controller
         $horario->Day = $Dia;
         $horario->Type = $Tipo;
         $horario->save();
+        $logs = new Log;
+        $logs->Table = "Horarios";
+        $logs->User_Id = $request->session()->get('User_Id');
+        $logs->Description = "Se guardo horario ID = ".$horario->id." Dia = ".$horario->Day;
+        $logs->save();
         return response()->json(["Accion completada"]);
     }
     
@@ -470,6 +484,11 @@ class Administration extends Controller
             'Type' => $Tipo,
         );
         schedule::where('id',$id)->update($dataH);
+        $logs = new Log;
+        $logs->Table = "Horarios";
+        $logs->User_Id = $request->session()->get('User_Id');
+        $logs->Description = "Se guardo horario ID = ".$horario->id." Dia = ".$horario->Day;
+        $logs->save();
         return response()->json(["Accion completada"]);
     }
     

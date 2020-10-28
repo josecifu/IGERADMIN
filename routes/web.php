@@ -80,7 +80,7 @@ Route::post('/save/rol', $route.'\Administration@Store_Rol')->name('Store_Rol');
 Route::get('/list/menus', $route.'\Administration@View_Menu')->name('View_Menu');
 Route::get('/insert/menu', $route.'\Administration@Create_Menu')->name('Create_Menu');
 Route::post('/save/menu', $route.'\Administration@Store_Menu')->name('Store_Menu');
-
+Route::get('/listado', $route.'\Student@View_Teacher_Informations')->name('View_Teacher_Informations');
 //menu estudiante
 Route::get('/list/notes', $route.'\Student@View_Courses_Notes')->name('View_Courses_Notes');
 Route::get('/list/teachers', $route.'\Student@View_Courses_Teachers')->name('View_Courses_Teachers');
