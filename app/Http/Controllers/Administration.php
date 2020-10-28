@@ -126,16 +126,6 @@ class Administration extends Controller
         $logs->save();
         return response()->json(["Accion completada"]);
     }
-    public function Create_Teacher()
-    {
-        $roles = rol::all();
-        return view('Administration/Voluntarios/formulario',compact('roles'));
-    }
-    public function Create_Person()
-    {
-        $rol = rol::all();
-        return view('Administration/Personas/formulario',compact('rol'));
-    }
     
     public function Save_Person(Request $request)
     {
@@ -494,16 +484,13 @@ class Administration extends Controller
     
     public function Update_menu()
     {
-        
     }
     
     public function Update_grade()
     {
-        
     }
 
     public function Update_courses()
     {
-        
     }
 }

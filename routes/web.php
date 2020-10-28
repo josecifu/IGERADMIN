@@ -46,9 +46,10 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/list',$route.'\Administration@View_User_teacher')->name('View_User_teacher');
 		Route::get('/edit/{id}',$route.'\Administration@Edit_Teacher')->name('Edit_Teacher');
 		Route::post('/update/{id}',$route.'\Administration@Update_Person')->name('Update_Person');
-
-		Route::get('/Notas',$route.'\Teacher@View_Student_Scores')->name('View_Student_Scores');
+		Route::get('/Scores',$route.'\Teacher@View_Student_Scores')->name('View_Student_Scores');
 		Route::get('/ListadoEstudiantes',$route.'\Teacher@View_Assigned_Student')->name('View_Assigned_Student');
+		Route::get('/assistanceList',$route.'\Teacher@Create_Assistance')->name('Create_Assistance');
+		Route::get('/report',$route.'\Teacher@Create_Reports')->name('Create_Reports');
 	});
 });
 
