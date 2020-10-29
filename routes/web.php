@@ -57,3 +57,4 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/logs',$route.'\Teacher@logs')->name('LogsTeacher');
 	});
 });
+

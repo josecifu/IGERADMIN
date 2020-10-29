@@ -31,6 +31,7 @@ use App\Models\User;
 use App\Models\Person;
 //tabla de grado
 use App\Models\grade;
+use App\Models\level;
 
 class Teacher extends Controller
 {
