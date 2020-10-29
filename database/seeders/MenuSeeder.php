@@ -14,7 +14,8 @@ class MenuSeeder extends Seeder
     public function run()
     {
         //Administracion
-         DB::table('menus')->insert([
+      
+        DB::table('menus')->insert([
             'Name' => 'Inicio',
             'Icon' => 'pe-7s-home',
            	'State' => '1',     
@@ -28,28 +29,52 @@ class MenuSeeder extends Seeder
             'menu_id' => '1'          
         ]);
          DB::table('menus')->insert([
-            'Name' => 'Notas',
+            'Name' => 'Reportes generales',
             'State' => '1',
-            'Url' => 'administration/home/dashboard',  
+            'Url' => 'administration/home/report',  
             'menu_id' => '1'          
         ]);
           DB::table('menus')->insert([
-            'Name' => 'Estudiante', //4
+            'Name' => 'Estudiantes', //4
             'Icon' => 'pe-7s-home',
-            'Url' => 'administration/estudiantes',
+            'Url' => 'administration/students',
             'State' => '1',     
             'Order' => '2',      
         ]);
            DB::table('menus')->insert([
             'Name' => 'Listado estudiantes',
             'State' => '1',
-            'Url' => 'administration/estudiantes/Listado',  
+            'Url' => 'administration/students/list',  
             'menu_id' => '4'          
         ]);
-            DB::table('menus')->insert([ //6
+        DB::table('menus')->insert([
+            'Name' => 'Listado por grados',
+            'State' => '1',
+            'Url' => 'administration/student/list/grade',  
+            'menu_id' => '4'          
+        ]);
+        DB::table('menus')->insert([
+            'Name' => 'Visualización de notas',
+            'State' => '1',
+            'Url' => 'administration/student/score',  
+            'menu_id' => '4'          
+        ]);
+        DB::table('menus')->insert([
+            'Name' => 'Visualización de examenes',
+            'State' => '1',
+            'Url' => 'administration/student/test',  
+            'menu_id' => '4'          
+        ]);
+        DB::table('menus')->insert([//9
+            'Name' => 'Estadisticas generales',
+            'State' => '1',
+            'Url' => 'administration/students/statistics',  
+            'menu_id' => '4'          
+        ]);
+            DB::table('menus')->insert([ //10
             'Name' => 'Voluntarios',
             'Icon' => 'pe-7s-home',
-            'Url' => 'administration/voluntarios',
+            'Url' => 'administration/teacher',
             'State' => '1',     
             'Order' => '3',      
         ]);
@@ -57,54 +82,82 @@ class MenuSeeder extends Seeder
             'Name' => 'Listado voluntarios',
             'State' => '1',
             'Url' => 'administration/teacher/list',  
-            'menu_id' => '6'          
+            'menu_id' => '10'          
         ]);
-            DB::table('menus')->insert([
-            'Name' => 'Ingreso voluntarios',
+        DB::table('menus')->insert([
+            'Name' => 'Visualización de espacio de trabajo',
             'State' => '1',
-            'Url' => 'administration/registrar',  
-            'menu_id' => '6'          
+            'Url' => 'administration/teacher/workspace',  
+            'menu_id' => '10'          
         ]);
-
-        //ROL VOLUNTARIO
-        DB::table('menus')->insert([ //9
-            'Name' => 'Curso',
-            'Icon' => 'pe-7s-home',
-            'Url' => 'administration/teacher',
-            'State' => '1',     
-            'Order' => '3',      
+        DB::table('menus')->insert([
+            'Name' => 'Visualización de notas',
+            'State' => '1',
+            'Url' => 'administration/teacher/score',  
+            'menu_id' => '10'          
         ]);
-        DB::table('menus')->insert([ //10
-            'Name' => 'Reporte',
+        DB::table('menus')->insert([ //14
+            'Name' => 'Estadisticas generales',
+            'State' => '1',
+            'Url' => 'administration/teacher/statistics',  
+            'menu_id' => '10'          
+        ]);       
+        DB::table('menus')->insert([
+            'Name' => 'Administracion', //15
             'Icon' => 'pe-7s-home',
-            'Url' => 'administration/teacher',
+            'Url' => 'administration/workspace',
             'State' => '1',     
             'Order' => '4',      
         ]);
-        DB::table('menus')->insert([
-            'Name' => 'Detalles Estudiantes',
+        DB::table('menus')->insert([ 
+            'Name' => 'Ver listado de encargados de circulo',
             'State' => '1',
-            'Url' => 'administration/teacher/ListadoEstudiantes',  
-            'menu_id' => '4'          
-        ]);
-        DB::table('menus')->insert([
-            'Name' => 'Asistencia Estudiantes',
+            'Url' => 'administration/workspace/list',  
+            'menu_id' => '15'          
+        ]);  
+        DB::table('menus')->insert([ 
+            'Name' => 'Ver inscripciones',
             'State' => '1',
-            'Url' => 'administration/teacher/asistenciaEstudiantes',  
-            'menu_id' => '10'          
-        ]);
-        DB::table('menus')->insert([
-            'Name' => 'Asistencia de Estudiantes al examen',
+            'Url' => 'administration/workspace/inscriptions',  
+            'menu_id' => '15'          
+        ]);  
+        DB::table('menus')->insert([ 
+            'Name' => 'Ver espacios de trabajo',
             'State' => '1',
-            'Url' => 'administration/teacher/asistenciaExamen',  
-            'menu_id' => '10'          
-        ]);
-        DB::table('menus')->insert([
-            'Name' => 'Notas',
+            'Url' => 'administration/workspace/list',  
+            'menu_id' => '15'          
+        ]);  
+        DB::table('menus')->insert([ //19
+            'Name' => 'Ver estadisticas de trabajo',
             'State' => '1',
-            'Url' => 'administration/teacher/Notas',  
-            'menu_id' => '4'          
+            'Url' => 'administration/workspace/statistics',  
+            'menu_id' => '15'          
+        ]);  
+        DB::table('menus')->insert([
+            'Name' => 'Configuraciones', //20
+            'Icon' => 'pe-7s-home',
+            'Url' => 'administration/configurations',
+            'State' => '1',     
+            'Order' => '4',      
         ]);
-        //estudiante
+        DB::table('menus')->insert([ 
+            'Name' => 'Ver listado de asignacion de niveles',
+            'State' => '1',
+            'Url' => 'administration/configurations/level/',  
+            'menu_id' => '20'          
+        ]); 
+        DB::table('menus')->insert([ 
+            'Name' => 'Ver horarios',
+            'State' => '1',
+            'Url' => 'administration/configurations/level/',  
+            'menu_id' => '20'          
+        ]); 
+        DB::table('menus')->insert([ 
+            'Name' => 'Configuraciones generales',
+            'State' => '1',
+            'Url' => 'administration/configurations/list/',  //23
+            'menu_id' => '20'          
+        ]); 
+        
     }
 }

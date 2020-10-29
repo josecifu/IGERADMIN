@@ -40,7 +40,14 @@ class Administration extends Controller
     //Dashboard
     public function Dashboard()
     {
-        return view('Administration.Dashboard.Vacio');
+        $buttons =[];
+        $button = [
+            "Name" => 'Añadir un estudiante',
+            "Link" => 'administration/home/dashboard',
+            "Type" => "add"
+        ];
+        array_push($buttons,$button);
+        return view('Administration.Dashboard.Vacio',compact('buttons'));
     }
 
     public function Crear_Clientes()

@@ -78,23 +78,21 @@
 										<div class="d-flex align-items-baseline flex-wrap mr-5">
 											<!--begin::Page Title-->
 											<h5 class="text-dark font-weight-bold my-1 mr-5">
-												@section('title')
-																					          
-																					         @show
-
-																					     </h5>
+												@section('title')								          
+												 @show
+											  </h5>
 											<!--end::Page Title-->
 											<!--begin::Breadcrumb-->
 											<ul class="breadcrumb breadcrumb-transparent breadcrumb-dot font-weight-bold p-0 my-2 font-size-sm">
 												<li class="breadcrumb-item">
-													<a href="" class="text-muted">@section('breadcrumb1')
-																					          
-																					         @show</a>
+													<a href="@section('breadcrumb1link')@show" class="text-muted">
+													@section('breadcrumb1')				          
+													@show</a>
 												</li>
 												<li class="breadcrumb-item">
-													<a href="" class="text-muted">@section('breadcrumb2')
-																					          
-																					         @show</a>
+													<a href="@section('breadcrumb2link')@show" class="text-muted">
+													@section('breadcrumb2')							          
+													@show</a>
 												</li>
 											</ul>
 											<!--end::Breadcrumb-->
@@ -105,15 +103,16 @@
 									<!--begin::Toolbar-->
 									<div class="d-flex align-items-center">
 										<!--begin::Daterange-->
-										<a href="#" class="btn btn-light-primary btn-sm font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="Select dashboard daterange" data-placement="left">
-											<span class="opacity-60 font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title">Today</span>
-											<span class="font-weight-bold" id="kt_dashboard_daterangepicker_date">Aug 16</span>
-										</a>
+										<!--<a href="#" class="btn btn-light-primary btn-sm font-weight-bold mr-2" id="kt_dashboard_daterangepicker" data-toggle="tooltip" title="Seleccione fecha para desplegar informacion" data-placement="left">
+											<span class="opacity-60 font-weight-bold mr-2" id="kt_dashboard_daterangepicker_title" style="color: white">Hoy</span>
+											<span class="font-weight-bold" id="kt_dashboard_daterangepicker_date">-</span>
+										</a>-->
 										<!--end::Daterange-->
+										@if($buttons)
 										<!--begin::Dropdown-->
-										<div class="dropdown dropdown-inline" data-toggle="tooltip" title="Quick actions" data-placement="left">
+										<div class="dropdown dropdown-inline" data-toggle="tooltip" title="Acciones" data-placement="left">
 											<a href="#" class="btn btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-												<span class="svg-icon svg-icon-success svg-icon-2x">
+												<span class="svg-icon svg-icon-warning svg-icon-2x">
 													<!--begin::Svg Icon | path:assets/media/svg/icons/Files/File-plus.svg-->
 													<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
 														<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -125,58 +124,41 @@
 													<!--end::Svg Icon-->
 												</span>
 											</a>
+											
 											<div class="dropdown-menu dropdown-menu-md dropdown-menu-right p-0 m-0">
 												<!--begin::Navigation-->
 												<ul class="navi navi-hover">
 													<li class="navi-header font-weight-bold py-4">
-														<span class="font-size-lg">Choose Label:</span>
-														<i class="flaticon2-information icon-md text-muted" data-toggle="tooltip" data-placement="right" title="Click to learn more..."></i>
+														<span class="font-size-lg">Acciones disponibles:</span>
+														<i class="flaticon2-information icon-md text-muted" data-toggle="tooltip" data-placement="right" title="Seleccione una de las opciones disponibles"></i>
 													</li>
-													<li class="navi-separator mb-3 opacity-70"></li>
-													<li class="navi-item">
-														<a href="#" class="navi-link">
-															<span class="navi-text">
-																<span class="label label-xl label-inline label-light-success">Customer</span>
-															</span>
-														</a>
-													</li>
-													<li class="navi-item">
-														<a href="#" class="navi-link">
-															<span class="navi-text">
-																<span class="label label-xl label-inline label-light-danger">Partner</span>
-															</span>
-														</a>
-													</li>
-													<li class="navi-item">
-														<a href="#" class="navi-link">
-															<span class="navi-text">
-																<span class="label label-xl label-inline label-light-warning">Suplier</span>
-															</span>
-														</a>
-													</li>
-													<li class="navi-item">
-														<a href="#" class="navi-link">
-															<span class="navi-text">
-																<span class="label label-xl label-inline label-light-primary">Member</span>
-															</span>
-														</a>
-													</li>
-													<li class="navi-item">
-														<a href="#" class="navi-link">
-															<span class="navi-text">
-																<span class="label label-xl label-inline label-light-dark">Staff</span>
-															</span>
-														</a>
-													</li>
-													<li class="navi-separator mt-3 opacity-70"></li>
-													<li class="navi-footer py-4">
-														<a class="btn btn-clean font-weight-bold btn-sm" href="#">
-														<i class="ki ki-plus icon-sm"></i>Add new</a>
-													</li>
+													
+														@foreach($buttons as $key => $button)
+															@if($key!=0)
+															<li class="navi-separator mt-3 opacity-70"></li>
+															@endif
+															@if($button['Type']=='add')
+																<li class="navi-footer py-4">
+																	<a class="btn btn-clean font-weight-bold btn-sm"  style="width: 100%" href="{{ url($button['Link'])}}">
+																	<i class="ki ki-plus icon-sm"></i>{{$button['Name']}}</a>
+																</li>
+															@elseif ($button['Type']=='btn1')
+															<li class="navi-item">
+																<a href="#" class="navi-link">
+																	<span class="navi-text">
+																		<span class="label label-xl label-inline " style="width: 100%">{{$button['Name']}}</span>
+																	</span>
+																</a>
+															</li>
+															@endif
+														@endforeach
+													
 												</ul>
 												<!--end::Navigation-->
 											</div>
+											
 										</div>
+										@endif
 										<!--end::Dropdown-->
 									</div>
 									<!--end::Toolbar-->
@@ -197,15 +179,11 @@
 							<!--begin::Copyright-->
 							<div class="text-dark order-2 order-md-1">
 								<span class="text-muted font-weight-bold mr-2">2020©</span>
-								<a href="#" target="_blank" class="text-white text-hover-primary">IGER 2020 donación de proyecto</a>
+								<a href="#" target="_blank" class="text-white text-hover-primary">IGER 2021 donación de proyecto</a>
 							</div>
 							<!--end::Copyright-->
 							<!--begin::Nav-->
-							<div class="nav nav-dark order-1 order-md-2">
-								<a href="http://keenthemes.com/metronic" target="_blank" class="nav-link pr-3 pl-0 text-muted text-hover-primary">About</a>
-								<a href="http://keenthemes.com/metronic" target="_blank" class="nav-link px-3 text-muted text-hover-primary">Team</a>
-								<a href="http://keenthemes.com/metronic" target="_blank" class="nav-link pl-3 pr-0 text-muted text-hover-primary">Contact</a>
-							</div>
+						
 							<!--end::Nav-->
 						</div>
 						<!--end::Container-->

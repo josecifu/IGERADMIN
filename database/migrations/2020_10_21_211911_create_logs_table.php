@@ -18,6 +18,7 @@ class CreateLogsTable extends Migration
             $table->string('Table');
             $table->string('User_Id');
             $table->string('Description');
+            $table->string('Type');
             $table->timestamps();
         });
     }
