@@ -23,18 +23,41 @@ use App\Models\Assign_student_grade;
 use App\Models\Assign_course_grade;
 //tabla de Asignacion cursos a grados
 use App\Models\Asign_teacher_course;
+//tabla de Asignacion usuario rol
+use App\Models\Assign_user_rol;
+//tabla de Asignacion nivel grado
+use App\Models\Assign_level_grade;
+//tabla de Asignacion periodo nivel/grado
+use App\Models\Assign_period_grade;
 //tabla de cursos
 use App\Models\course;
-//tabla de cursos
+//tabla de usuarios
 use App\Models\User;
 //tabla de Personas
 use App\Models\Person;
 //tabla de grado
 use App\Models\grade;
+//tabla de Jornadas
+use App\Models\period;
+#Tabla nivel
 use App\Models\level;
+#Tabla logs
+use App\Models\logs;
+use Illuminate\Support\Facades\DB;
 
 class Teacher extends Controller
 {
+    public function workspace()
+    {
+        $buttons =[];
+        $button = [
+            "Name" => 'Añadir un voluntario',
+            "Link" => 'administration/teacher/create',
+            "Type" => "add"
+        ];
+        array_push($buttons,$button);
+        return view('Administration/Teachers/dashboard',compact('buttons'));
+    }
     public function View_Assigned_Student(Request $request)
     {
         $Titles = ['Id','Nombre','Apellido','Correo','Telefono','Grado'];
@@ -53,13 +76,261 @@ class Teacher extends Controller
         foreach ($asignacionStudentGrade as $value) {
             $datos = Person::all();
         }
-        return view('Administration/voluntarios/ListadoEstudiantes',compact('Titles','Models'));
+        return view('Administration/Teachers/ListadoEstudiantes',compact('Titles','Models'));
     }
     public function View_Student_Scores()
     {
         $NIVELES = grade::find(5)->Level();
         $Titles = ['Id','Nombre del Estudiante','Curso','Grado','P1','P2','P3','P4','Final','Acciones'];
-        return view('Administration/Voluntarios/NotasEstudiantes',compact('Titles'));
+        return view('Administration/Teachers/NotasEstudiantes',compact('Titles'));
+    }
+    public function list() //Visualizcion tabla Voluntarios con usuario
+    {
+        $buttons =[];
+        $button = [
+            "Name" => 'Añadir un voluntario',
+            "Link" => 'administration/teacher/create',
+            "Type" => "add"
+        ];
+        array_push($buttons,$button);
+        $button = [
+            "Name" => 'Logs Voluntarios',
+            "Link" => 'administration/teacher/logs',
+            "Type" => "add"
+        ];
+        array_push($buttons,$button);
+        $Titles =['Id','Nombres','Apellidos','Direccion','Telefono','Fecha Nacimiento','Usuario','Email', 'Acciones'];
+        $usuario_rol = Assign_user_rol::where('Rol_id',3)->where('State','Active')->get('user_id');
+        $Models = [];
+        foreach ($usuario_rol as $v) {
+            $usuario = User::find($v->user_id);
+            $persona = Person::find($usuario->Person_id);
+                $data = [
+                    'Id' => $persona->id,
+                    'Name' => $persona->Names,
+                    'Apellido' => $persona->LastNames,
+                    'Direccion' => $persona->Address,
+                    'Telefono' => $persona->Phone,
+                    'Fecha_Nacimiento' => $persona->BirthDate,
+                    'Usuario' => $usuario->name,
+                    'Correo' => $usuario->email,
+                ];
+                array_push($Models,$data);
+        }
+        return view('Administration/Teachers/ListadoVoluntarios',compact('Models','Titles','buttons'));
+    }
+    public function create()
+    {
+        $buttons =[];
+        $button = [
+            "Name" => 'Listado Voluntarios',
+            "Link" => 'administration/teacher/list',
+            "Type" => "add"
+        ];  
+        $Cursos = course::all();
+        $Grados = grade::all();
+        $Niveles = level::all();
+        $Jornadas = period::all();
+        array_push($buttons,$button);
+        return view('Administration/Teachers/formulario',compact('buttons','Cursos','Grados','Niveles','Jornadas'));
+    }
+    public function save(Request $request)
+    {
+        $id = $request->session()->get('User_id'); 
+        $data = $request->data[0];
+        $Nombres= $data['Nombre'];
+        $Apellidos= $data['Apellido'];
+        $Direccion= $data['Direccion'];
+        $Telefono= $data['Telefono'];
+        $FechaNacimiento= $data['FechaNacimiento'];
+        $Usuario= $data['Usuario'];
+        $Email= $data['Email'];
+        $Contraseña= $data['Contraseña'];
+        $C= $data['Curso'];
+        $G= $data['Grado'];
+        $N= $data['Nivel'];
+        $J= $data['Jornada'];
+        $NG = Assign_level_grade::where('Level_id',$N)->where('Grade_id',$G)->first();
+        $JNG = Assign_period_grade::where('grade_level_id',$NG->id)->where('Period_id',$J)->first();
+        $CJNG = Assign_course_grade::where('Course_id',$C)->where('Grade_id',$JNG->id)->first();
+        //LOGICA
+        try {
+              DB::beginTransaction();
+                //Tabla peronas
+                $person = new Person;
+                $person->Names = $Nombres;
+                $person->LastNames = $Apellidos;
+                $person->Address = $Direccion;
+                $person->Phone = $Telefono;
+                $person->BirthDate = $FechaNacimiento;
+                $person->save();
+                //Tabla usuarios
+                $user = new User;
+                $user->name = $Usuario;
+                $user->email = $Email;
+                $user->password = bcrypt($Contraseña);
+                $user->State = "Active";
+                $user->Person_id =  $person->id;
+                $user->save();
+                //Tabla asignacion usuario a un rol
+                $usuario_rol = new Assign_user_rol;
+                $usuario_rol->rol_id = 3;
+                $usuario_rol->user_id = $user->id;
+                $usuario_rol->State = "Active";
+                $usuario_rol->save();
+                #Tabla logs
+                $usuario_curso = new Asign_teacher_course;
+                $usuario_curso->user_id = $user->id;
+                $usuario_curso->Course_id = $CJNG->id;
+                $usuario_curso->save();
+                $log = new logs;
+                $log->Table = "People";
+                $log->User_ID = $id;
+                $log->Description = "Se creo nuevo voluntario con el id: ".$person->id;
+                $log->Type = "Create";
+                $log->save();
+                $log = new logs;
+                $log->Table = "users";
+                $log->User_ID = $id;
+                $log->Description = "Se creo nuevo usuario con nombre: ".$user->name." y correo: ".$user->email;
+                $log->Type = "Create";
+                $log->save();
+                $log = new logs;
+                $log->Table = "Assign_user_rol";
+                $log->User_ID = $id;
+                $log->Description = "ID: ".$usuario_rol->id." de la Asignacion de rol voluntario al usuario: ".$user->id;
+                $log->Type = "Create";
+                $log->save();
+                $log = new logs;
+                $log->Table = "Assign_teacher_courses";
+                $log->User_ID = $id;
+                $log->Description = "ID: ".$usuario_curso->id." de la Asignacion de curso al usuario: ".$user->id;
+                $log->Type = "Create";
+                $log->save();
+                DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+        }
+        return response()->json(["Accion completada"]);
+    }
+
+    public function edit($id)
+    {
+        $buttons =[];
+        $button = [
+            "Name" => 'Listado Voluntarios',
+            "Link" => 'administration/teacher/list',
+            "Type" => "add"
+        ];
+        array_push($buttons,$button);
+        $ModelsP = Person::find($id);
+        $User = User::where('Person_id',$id)->first();
+        $ModelsU = [
+                'Usuario' => $User->name,
+                'Email' => $User->email,
+            ];
+        return view('Administration/Teachers/updateForm',compact('ModelsP','ModelsU','buttons'));
+    }
+
+    public function update(Request $request)
+    {
+        $id = $request->session()->get('User_id');
+        $data = $request->data[0];
+        $Nombres= $data['Nombre'];
+        $Apellidos= $data['Apellido'];
+        $Direccion= $data['Direccion'];
+        $Telefono= $data['Telefono'];
+        $FechaNacimiento= $data['FechaNacimiento'];
+        $Usuario = $data['Usuario'];
+        $Email= $data['Email'];
+        $PersonaID = $data['Persona'];
+        //LOGICA Usuario
+        $dataU=array(
+            'name' => $Usuario,
+            'email' => $Email,
+        );
+        User::where('Person_id', $PersonaID)->update($dataU);
+        //LOGICA Persona
+        $dataP=array(
+            'Names' => $Nombres,
+            'LastNames' => $Apellidos,
+            'Address' => $Direccion,
+            'Phone' => $Telefono,
+            'BirthDate' =>$FechaNacimiento,
+        );
+        Person::where('id',$PersonaID)->update($dataP);
+        $log = new logs;
+        $log->Table = "people y users";
+        $log->User_ID = $id;
+        $log->Description = "Se actualizaron los datos de una persona con el id: ".$PersonaID." y correo ".$Email;
+        $log->Type = "Update";
+        $log->save();
+        return response()->json(["Accion completada"]);
+    }
+
+    public function delete($id, Request $request)
+    {
+        $usuario = $request->session()->get('User_id');
+        $dataU=array(
+            'State' => 'Deactivated',
+        );
+        $log = new logs;
+        $log->Table = "Tablas users y Assign_User_Rol";
+        $log->User_ID = $usuario;
+        $log->Description = "Se desactivo un usuario con el id: ".$id;
+        $log->Type = "Update";
+        $log->save();
+        User::where('Person_id', $id)->update($dataU);
+        Assign_user_rol::where('user_id',$id)->update($dataU);
+        return redirect()->route('ListTeacher');
+    }
+    public function formScore()
+    {
+        $buttons =[];
+        $button = [
+            "Name" => 'Listado Voluntarios',
+            "Link" => 'administration/teacher/list',
+            "Type" => "add"
+        ];
+        $cursos = course::all();
+        $grados = grade::all();
+        $niveles = level::all();
+        $jornadas = period::all();
+        array_push($buttons,$button);
+        return view('Administration/Teachers/formScores',compact('buttons','cursos','niveles','grados','jornadas'));
+    }
+    public function score()
+    {
+        $buttons =[];
+        $button = [
+            "Name" => 'Añadir un voluntario',
+            "Link" => 'administration/home/dashboard',
+            "Type" => "add"
+        ];
+        array_push($buttons,$button);
+        $curso = course::find(1);
+        $grado = grade::find(3);
+        $jornada = period::find(1);
+        // // $data = $request->data[0];
+        // $curso = course::find($data['Curso']);
+        // $grado = grade::find($data['Grado']);
+        // $nivel = course::find($data['Nivel']);
+        // $jornada = course::find($data['Jornada']);
+        // $NG = Assign_level_grade::where('Level_id',$curso->id)->where('Grade_id',$grado->id)->first();
+        // $JNG = Assign_period_grade::where('grade_level_id',$NG->id)->where('Period_id',$jornada->id)->first();
+        // // $CJNG = Assign_course_grade::where('Course_id',$curso->id)->where('Grade_id',$JNG->id)->first();
+        // $AsignacionEstudiante = Assign_student_grade::where('Grade_id',$JNG->id)->first();
+        // $estudiantes = [];
+        // foreach ($AsignacionEstudiante as $value) {
+        //     $e = student::find($value->user_id);
+        //     $data = [
+        //         'Nombre' => $e->Names,
+        //         'Apellidos' =>$e->LastNames,
+        //     ];
+        //     array_push($estudiantes, $data);
+        // }
+        $Titles = ['Id','Alumno','Voluntario','Curso','P1','P2','P3','P4','Acciones'];
+        return view('Administration/Teachers/listadoNotas',compact('buttons','Titles','curso','grado','jornada'));
     }
     //Ingreso de notas
     public function Edit_Note()
@@ -189,3 +460,4 @@ class Teacher extends Controller
     {
     }
 }
+
