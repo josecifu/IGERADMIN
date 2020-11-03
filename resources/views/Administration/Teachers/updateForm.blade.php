@@ -30,7 +30,7 @@
 													<div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
 														<div class="wizard-label">
 															<i class="wizard-icon flaticon-list"></i>
-															<h3 class="wizard-title">1. Información de la persona</h3>
+															<h3 class="wizard-title">1. Actualización de la persona</h3>
 														</div>
 														<span class="svg-icon svg-icon-xl wizard-arrow">
 															<!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg-->
@@ -49,29 +49,10 @@
 													<div class="wizard-step" data-wizard-type="step">
 														<div class="wizard-label">
 															<i class="wizard-icon flaticon-user"></i>
-															<h3 class="wizard-title">2. Información Usuario</h3>
+															<h3 class="wizard-title">2. Actualización Usuario</h3>
 														</div>
-														<span class="svg-icon svg-icon-xl wizard-arrow">
-															<!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg-->
-															<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																	<polygon points="0 0 24 0 24 24 0 24" />
-																	<rect fill="#000000" opacity="0.3" transform="translate(12.000000, 12.000000) rotate(-90.000000) translate(-12.000000, -12.000000)" x="11" y="5" width="2" height="14" rx="1" />
-																	<path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
-																</g>
-															</svg>
-															<!--end::Svg Icon-->
-														</span>
 													</div>
 													<!--end::Wizard Step 2 Nav-->
-													<!--begin::Wizard Step 3 Nav-->
-													<div class="wizard-step" data-wizard-type="step">
-														<div class="wizard-label">
-															<i class="wizard-icon flaticon-list"></i>
-															<h3 class="wizard-title">3. Asginación de curso</h3>
-														</div>
-													</div>
-													<!--end::Wizard Step 3 Nav-->
 												</div>
 											</div>
 											<!--end::Wizard Nav-->
@@ -82,7 +63,6 @@
 													<form class="form" id="kt_form">
 														<!--begin::Wizard Step 1-->
 														<div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
-															<h1>Detalle Persona:</h1>
 															<div class="my-5">
 																<div class="form-group row">
 																	<label class="col-3">Nombre</label>
@@ -93,7 +73,7 @@
 																					<i class="la la-user"></i>
 																				</span>
 																			</div>
-																			<input type="text"name="Nombres" id="Nombres" class="form-control form-control-solid" placeholder="Nombre" />
+																			<input type="text"name="Nombres" id="Nombres" value="{{$ModelsP->Names}}" class="form-control form-control-solid" placeholder="Nombre" />
 																		</div>
 																	</div>
 																</div>
@@ -106,7 +86,7 @@
 																					<i class="la la-user"></i>
 																				</span>
 																			</div>
-																			<input type="text" name="Apellidos" id="Apellidos" class="form-control form-control-solid" placeholder="Apellido" />
+																			<input type="text" name="Apellidos" id="Apellidos" value="{{$ModelsP->LastNames}}" class="form-control form-control-solid" placeholder="Apellido" />
 																		</div>
 																	</div>
 																</div>
@@ -119,7 +99,7 @@
 																					<i class="la la-address-book"></i>
 																				</span>
 																			</div>
-																			<input type="text" name="Direccion" id="Direccion" class="form-control form-control-solid" placeholder="Dirección" />
+																			<input type="text" name="Direccion" id="Direccion" value="{{$ModelsP->Address}}" class="form-control form-control-solid" placeholder="Dirección" />
 																		</div>
 																	</div>
 																</div>
@@ -132,7 +112,7 @@
 																					<i class="la la-phone"></i>
 																				</span>
 																			</div>
-																			<input type="text" name="Telefono" id="Telefono" class="form-control form-control-solid" placeholder="Phone" />
+																			<input type="text" name="Telefono" id="Telefono" value="{{$ModelsP->Phone}}" class="form-control form-control-solid" placeholder="Phone" />
 																		</div>
 																	</div>
 																</div>
@@ -145,7 +125,7 @@
 																					<i class="la la-calendar"></i>
 																				</span>
 																			</div>
-																			<input type="date" name="FechaNacimiento" id="FechaNacimiento" class="form-control form-control-solid" placeholder="Phone" />
+																			<input type="date" name="FechaNacimiento" id="FechaNacimiento" value="{{$ModelsP->BirthDate}}" class="form-control form-control-solid" placeholder="Phone" />
 																		</div>
 																	</div>
 																</div>
@@ -154,7 +134,6 @@
 														<!--end::Wizard Step 1-->
 														<!--begin::Wizard Step 2-->
 														<div class="pb-5" data-wizard-type="step-content">
-															<h1>Detalle Usuario:</h1>
 															<div class="my-5">
 																<div class="form-group row">
 																	<label class="col-3">Usuario</label>
@@ -165,7 +144,7 @@
 																					<i class="la la-user"></i>
 																				</span>
 																			</div>
-																			<input type="text" name="Usuario" id="Usuario" class="form-control form-control-solid" placeholder="Usuario" />
+																			<input type="text" name="Usuario" id="Usuario" value="{{$ModelsU['Usuario']}}" class="form-control form-control-solid" placeholder="Usuario" />
 																		</div>
 																	</div>
 																</div>
@@ -178,78 +157,16 @@
 																					<i class="la la-at"></i>
 																				</span>
 																			</div>
-																			<input type="email" name="Email" id="Email" class="form-control form-control-solid" placeholder="Correo electronico" />
+																			<input type="email" name="Email" id="Email" value="{{$ModelsU['Email']}}" class="form-control form-control-solid" placeholder="Correo electronico" />
 																		</div>
 																	</div>
 																</div>
 																<div class="form-group row">
-																	<label class="col-3">Contraseña</label>
-																	<div class="col-9">
-																		<div class="input-group input-group-solid">
-																			<div class="input-group-prepend">
-																				<span class="input-group-text">
-																					<i class="la la-key"></i>
-																				</span>
-																			</div>
-																			<input type="password" name="Contraseña" id="Contraseña" class="form-control form-control-solid" placeholder="Contraseña" />
-																		</div>
-																	</div>
+																	<input type="hidden" value="{{$ModelsP->id}}" id="Persona">
 																</div>
 															</div>
 														</div>
 														<!--end::Wizard Step 2-->
-														<!--begin::Wizard Step 3-->
-														<div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
-															<h1>Detalle Asignación:</h1>
-															<div class="my-5">
-																<div class="form-group row">
-																	<label class="col-form-label text-right col-lg-3 col-sm-12">Curso</label>
-																	<div class="col-lg-9 col-md-9 col-sm-12">
-																		<select class="form-control" id="Curso" name="Curso" multiple="multiple">
-																			<optgroup Label="Cursos">
-																			@foreach($Cursos as $curso)
-																				<option value="{{$curso->id}}" >{{$curso->Name}}</option>
-																			@endforeach
-																			</optgroup>
-																		</select>
-																	</div>
-																</div>
-																<div class="form-group row">
-																	<label class="col-form-label text-right col-lg-3 col-sm-12">Grado</label>
-																	<div class="col-lg-9 col-md-9 col-sm-12">
-																		<select class="form-control" id="Grado" name="Grado">
-																				<option value="" >--Seleccione una opcion</option>
-																				@foreach($Grados as $grado)
-																					<option value="{{$grado->id}}" >{{$grado->Name}}</option>
-																				@endforeach
-																		</select>
-																	</div>
-																</div>
-																<div class="form-group row">
-																	<label class="col-form-label text-right col-lg-3 col-sm-12">Nivel</label>
-																	<div class="col-lg-9 col-md-9 col-sm-12">
-																		<select class="form-control" id="Nivel" name="Nivel">
-																				<option value="" >--Seleccione una opcion</option>
-																				@foreach($Niveles as $nivel)
-																					<option value="{{$nivel->id}}" >{{$nivel->Name}}</option>
-																				@endforeach
-																		</select>
-																	</div>
-																</div>
-																<div class="form-group row">
-																	<label class="col-form-label text-right col-lg-3 col-sm-12">Jornada</label>
-																	<div class="col-lg-9 col-md-9 col-sm-12">
-																		<select class="form-control" id="Jornada" name="Jornada">
-																				<option value="" >--Seleccione una opcion</option>
-																				@foreach($Jornadas as $jornada)
-																					<option value="{{$jornada->id}}" >{{$jornada->Name}}</option>
-																				@endforeach
-																		</select>
-																	</div>
-																</div>																
-															</div>
-														</div>
-														<!--end::Wizard Step 3-->
 														<!--begin::Wizard Actions-->
 														<div class="d-flex justify-content-between border-top mt-5 pt-10">
 															<div class="mr-2">
@@ -257,7 +174,7 @@
 															</div>
 															<div>
 																<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Registrar</button>
-																<button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>*
+																<button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>
 															</div>
 														</div>
 														<!--end::Wizard Actions-->
@@ -286,10 +203,6 @@
 		<!--begin::Page Scripts(used by this page)-->
 		<script type="text/javascript">
 			"use strict";
-		// multi select
-		$('#Curso').select2({
-         placeholder: "Select a state"
-        });
 
 // Class definition
 var KTWizard1 = function () {
@@ -335,13 +248,6 @@ var KTWizard1 = function () {
 								}
 							}
 						},
-						FechaNacimiento: {
-							validators: {
-								notEmpty: {
-									message: 'La fecha es requerida'
-								}
-							}
-						},
 					},
 					plugins: {
 						trigger: new FormValidation.plugins.Trigger(),
@@ -353,6 +259,7 @@ var KTWizard1 = function () {
 					}
 				}
 			));
+
 			// Step 2
 			_validations.push(FormValidation.formValidation(
 				_formEl,
@@ -376,6 +283,13 @@ var KTWizard1 = function () {
 							validators: {
 								notEmpty: {
 									message: 'El correo es requerido'
+								}
+							}
+						},
+						FechaNacimiento: {
+							validators: {
+								notEmpty: {
+									message: 'La fecha es requerida'
 								}
 							}
 						},
@@ -474,6 +388,7 @@ var KTWizard1 = function () {
 			init: function () {
 				_wizardEl = KTUtil.getById('kt_wizard');
 				_formEl = KTUtil.getById('kt_form');
+
 				_initValidation();
 				_initWizard();
 			}
@@ -506,36 +421,30 @@ var KTWizard1 = function () {
             var FechaNacimientoPersona = $('#FechaNacimiento').val();
             var UsuarioPersona = $('#Usuario').val(); 
             var ContraseñaPersona = $('#Contraseña').val();
+            var PersonaID = $('#Persona').val();
             var EmailPersona = $('#Email').val();
-			var Curso = $('#Curso').val();
-			var Grado = $('#Grado').val();
-			var Nivel = $('#Nivel').val();
-			var Jornada = $('#Jornada').val();
             var data = [{
-                //Persona
-				Curso: Curso,
-				Grado: Grado,
-				Nivel: Nivel,
-				Jornada: Jornada,
+                //Usuario
+                Usuario: UsuarioPersona,
+                Email: EmailPersona,
+                Contraseña: ContraseñaPersona,
+                Persona: PersonaID,
+                //PERSONA
                 Nombre: NombrePersona,
                 Apellido: ApellidosPersona,
                 Direccion: DireccionPersona,
                 Telefono: TelefonoPersona,
                 FechaNacimiento: FechaNacimientoPersona,
-                //Usuario
-                Usuario: UsuarioPersona,
-                Email: EmailPersona,
-                Contraseña: ContraseñaPersona,
             }];
 
             $.ajax({
-                url:'/administration/teacher/save',
+                url:'/administration/teacher/update',
                 type:'POST',
                 data: {"_token":"{{ csrf_token() }}","data":data},
                 dataType: "JSON",
                 success: function(e){
                 swal.fire({ title: "Accion completada", 
-                  text: "Se ha guardado con exito el Voluntario!", 
+                  text: "Se han actualizado los datos correctamente!", 
                   type: "success"
                         }).then(function () {
                           var $url_path = '{!! url('/') !!}';

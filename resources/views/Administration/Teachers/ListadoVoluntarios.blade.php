@@ -11,7 +11,6 @@
     @stop
     {{-- Page content --}}
     @section('content')
-
     <div class="content flex-column-fluid" id="kt_content">
                                 <!--begin::Notice-->
                                 <!--<div class="alert alert-custom alert-white alert-shadow gutter-b" role="alert">
@@ -86,8 +85,8 @@
                                             </div>
                                             <!--end::Dropdown-->
                                             <!--begin::Button-->
-                                            <a href="{{url('administration/teacher/insert')}}" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-plus"></i>Agregar Un Voluntario</a>
+                                            <a href="{{url('administration/teacher/create')}}" class="btn btn-primary font-weight-bolder">
+                                            <i class="la la-plus-circle"></i>Agregar Un Voluntario</a>
                                             <!--end::Button-->
                                         </div>
                                     </div>
@@ -164,7 +163,7 @@
                                         <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
                                             <i class="la la-edit"></i>\
                                         </a>\
-                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Delete">\
+                                        <a href="/administration/teacher/delete/'+full[0]+'" class="btn btn-sm btn-clean btn-icon" title="Borrar">\
                                             <i class="la la-trash"></i>\
                                         </a>\
                                     ';
@@ -194,4 +193,6 @@
 
 
        </script>
+
+      
 	@stop
