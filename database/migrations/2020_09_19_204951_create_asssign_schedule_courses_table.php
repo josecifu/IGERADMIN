@@ -30,6 +30,6 @@ class CreateAsssignScheduleCoursesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('asssign_schedule_courses');
+        Schema::dropIfExists('assign_schedule_courses');
     }
 }

@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MenuRoolSeeder::class);
         $this->call(PermsSeeder::class);
         $this->call(PermsRolSeeder::class);
+        $this->call(PeriodSeeder::class);
     }
 }

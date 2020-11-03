@@ -30,6 +30,6 @@ class CreateAsignFileQuestionTestsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('asign_file_question_tests');
+        Schema::dropIfExists('assign_file_question_tests');
     }
 }

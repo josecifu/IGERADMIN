@@ -30,6 +30,6 @@ class CreateAsignAnswerTestStudentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('asign_answer_test_students');
+        Schema::dropIfExists('assign_answer_test_students');
     }
 }

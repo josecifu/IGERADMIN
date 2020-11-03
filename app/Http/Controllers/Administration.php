@@ -19,6 +19,8 @@ use App\Models\level;
 use App\Models\logs;
 //modelo de grado
 use App\Models\grade;
+//modelo de jornadas
+use App\Models\periods;
 //Modelo de aula
 use App\Models\classrom;
 //modelo de materias
@@ -185,7 +187,38 @@ class Administration extends Controller
     {
         return view('Administration/Permisos/formulario');
     }
+    public function LevelList()
+    {
+        $buttons =[];
+        $button = [
+            "Name" => 'Añadir una jornada',
+            "Link" => 'administration/home/dashboard',
+            "Type" => "add"
+        ];
+        array_push($buttons,$button);
+        $button = [
+            "Name" => 'Ver listado de niveles y grados',
+            "Link" => 'administration/home/dashboard',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $button = [
+            "Name" => 'Ver listado de grados',
+            "Link" => 'administration/home/dashboard',
+            "Type" => "btn2"
+        ];
+        array_push($buttons,$button);
 
+        $Titles =['Id','Jornada','Niveles','No de Grados','Acciones'];
+        $Models = [];
+        $model = periods::where("State","Active")->get();
+        foreach ($model as $value) {
+            $val=[
+                "Jornada" => $value->Name,
+            ];
+        }
+        return view('Administration.Grades.Level_List',compact('Titles','Models','buttons'));
+    }
     public function Save_Permission(Request $request)
     {
         $data = $request->data[0];
@@ -367,6 +400,8 @@ class Administration extends Controller
     public function View_Level()
     {
         $levels = level::all();
+        $Titles =['Id','Nombre','Apellido','Grado','Acciones'];
+        $Models = [];
         return view('Administration.Nivel.ListadoNiveles',compact('levels'));
     }
     

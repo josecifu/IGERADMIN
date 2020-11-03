@@ -55,6 +55,15 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::post('/update', $route.'\Teacher@update')->name('UpdateTeacher');
 		Route::get('/score',$route.'\Teacher@score')->name('ScoreTeacher');
 		Route::get('/logs',$route.'\Teacher@logs')->name('LogsTeacher');
+		Route::get('/delete/{model}', $route.'\Teacher@delete')->name('DeleteTeacher');
+		Route::get('/delete/{model}', $route.'\Teacher@delete')->name('DeleteTeacher');
+	Route::get('/search',$route.'\Teacher@formScore')->name('ScoreTeacher');
+	Route::get('/workspace',$route.'\Teacher@workspace')->name('WorkspaceTeacher');
+	});
+	Route::group([ 'prefix' => 'configurations'], function(){
+		$route = "App\Http\Controllers";
+		Route::get('level/list',$route.'\Administration@LevelList')->name('LevelList');
+		
 	});
 });
 

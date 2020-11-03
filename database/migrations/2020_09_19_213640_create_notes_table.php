@@ -17,8 +17,9 @@ class CreateNotesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('Studen_id'); 
             $table->foreign('Studen_id')->references('id')->on('assign_student_grades');
-            $table->unsignedInteger('Activity_id'); 
-            $table->foreign('Activity_id')->references('id')->on('assign_activities');
+            $table->unsignedInteger('Course_id'); 
+            $table->foreign('Course_id')->references('id')->on('assign_course_grades');
+            $table->string('Activity');
             $table->string('Score');
             $table->timestamps();
         });

@@ -37,14 +37,14 @@ class MenuSeeder extends Seeder
           DB::table('menus')->insert([
             'Name' => 'Estudiantes', //4
             'Icon' => 'pe-7s-home',
-            'Url' => 'administration/students',
+            'Url' => 'administration/student',
             'State' => '1',     
             'Order' => '2',      
         ]);
            DB::table('menus')->insert([
             'Name' => 'Listado estudiantes',
             'State' => '1',
-            'Url' => 'administration/students/list',  
+            'Url' => 'administration/student/list',  
             'menu_id' => '4'          
         ]);
         DB::table('menus')->insert([
@@ -141,15 +141,15 @@ class MenuSeeder extends Seeder
             'Order' => '4',      
         ]);
         DB::table('menus')->insert([ 
-            'Name' => 'Ver listado de asignacion de niveles',
+            'Name' => 'Ver listado de asignacion de jornadas y niveles',
             'State' => '1',
-            'Url' => 'administration/configurations/level/',  
+            'Url' => 'administration/configurations/level/list',  
             'menu_id' => '20'          
         ]); 
         DB::table('menus')->insert([ 
             'Name' => 'Ver horarios',
             'State' => '1',
-            'Url' => 'administration/configurations/level/',  
+            'Url' => 'administration/configurations/schedule/list',  
             'menu_id' => '20'          
         ]); 
         DB::table('menus')->insert([ 
