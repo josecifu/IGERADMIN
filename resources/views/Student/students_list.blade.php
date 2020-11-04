@@ -105,9 +105,7 @@
                                                 @foreach($Models as $data)
                                                 <tr>
                                                     <td>{{$data['name']}}</td>
-                                                    <td>{{$data['direction']}}</td>
                                                     <td>{{$data['phone']}}</td>
-                                                    <td>{{$data['birth_date']}}</td>
                                                     <td>{{$data['user']}}</td>
                                                     <td>{{$data['email']}}</td>
                                                     <td nowrap="nowrap"></td>

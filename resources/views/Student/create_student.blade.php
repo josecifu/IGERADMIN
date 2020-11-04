@@ -11,7 +11,7 @@
     @stop
     {{-- Page content --}}
     @section('content')
-    
+
     <link href="{{ asset('assets/css/pages/wizard/wizard-1.css')}}" rel="stylesheet" type="text/css" />
                    <div class="content flex-column-fluid" id="kt_content">
 				   					<div class="card-header">
@@ -31,7 +31,7 @@
 													<div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
 														<div class="wizard-label">
 															<i class="wizard-icon flaticon-list"></i>
-															<h3 class="wizard-title">1. Información Personal</h3>
+															<h3 class="wizard-title">Información Personal</h3>
 														</div>
 														<span class="svg-icon svg-icon-xl wizard-arrow">
 															<!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg-->
@@ -50,10 +50,29 @@
 													<div class="wizard-step" data-wizard-type="step">
 														<div class="wizard-label">
 															<i class="wizard-icon flaticon-user"></i>
-															<h3 class="wizard-title">2. Información de Usuario</h3>
+															<h3 class="wizard-title">Información de Usuario</h3>
 														</div>
+														<span class="svg-icon svg-icon-xl wizard-arrow">
+															<!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg-->
+															<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+																<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																	<polygon points="0 0 24 0 24 24 0 24" />
+																	<rect fill="#000000" opacity="0.3" transform="translate(12.000000, 12.000000) rotate(-90.000000) translate(-12.000000, -12.000000)" x="11" y="5" width="2" height="14" rx="1" />
+																	<path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
+																</g>
+															</svg>
+															<!--end::Svg Icon-->
+														</span>
 													</div>
 													<!--end::Wizard Step 2 Nav-->
+													<!--begin::Wizard Step 3 Nav-->
+													<div class="wizard-step" data-wizard-type="step">
+														<div class="wizard-label">
+															<i class="wizard-icon flaticon-list"></i>
+															<h3 class="wizard-title">Asignación de Grado</h3>
+														</div>
+													</div>
+													<!--end::Wizard Step 3 Nav-->
 												</div>
 											</div>
 											<!--end::Wizard Nav-->
@@ -175,20 +194,71 @@
 																		</div>
 																	</div>
 																</div>
-																<div class="form-group row">
-																	<input type="hidden" id="Rol" value="3" class="form-control form-control-solid" placeholder="Contraseña" />
-																</div>
 															</div>
 														</div>
 														<!--end::Wizard Step 2-->
+														<!--begin::Wizard Step 3-->
+														<div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+															<div class="my-5">
+																<div class="form-group row">
+																	<label class="col-form-label text-right col-lg-1 col-sm-12">Jornada</label>
+					                                                <div class="col-md-2 my-2 my-md-0">
+					                                                    <select class="form-control" id="Jornada" name="Jornada">
+					                                                        @foreach($period as $jornada)
+					                                                            <option value="{{$jornada->id}}">
+					                                                                {{$jornada->Name}}
+					                                                            </option>
+					                                                        @endforeach
+					                                                    </select>
+					                                                </div>
+																</div>
+																<div class="form-group row">
+																	<label class="col-form-label text-right col-lg-1 col-sm-12">Nivel</label>
+					                                                <div class="col-md-2 my-2 my-md-0">
+					                                                    <select class="form-control" id="Nivel" name="Nivel">
+					                                                        @foreach($level as $nivel)
+					                                                            <option value="{{$nivel->id}}">
+					                                                                {{$nivel->Name}}
+					                                                            </option>
+					                                                        @endforeach
+					                                                    </select>
+					                                                </div>
+																</div>
+																<div class="form-group row">
+																	<label class="col-form-label text-right col-lg-1 col-sm-12">Grado</label>
+					                                                <div class="col-md-2 my-2 my-md-0">
+					                                                    <select class="form-control" id="Grado" name="Grado">
+					                                                        @foreach($grade as $grado)
+					                                                            <option value="{{$grado->id}}">
+					                                                                {{$grado->Name}}
+					                                                            </option>
+					                                                        @endforeach
+					                                                    </select>
+					                                                </div>
+																</div>
+																<div class="form-group row">
+																	<label class="col-form-label text-right col-lg-1 col-sm-12">Seccion</label>
+					                                                <div class="col-md-2 my-2 my-md-0">
+					                                                    <select class="form-control" id="Seccion" name="Seccion">
+					                                                        @foreach($section as $seccion)
+					                                                            <option value="">
+					                                                                {{$seccion->Seccion}}
+					                                                            </option>
+					                                                        @endforeach
+					                                                    </select>
+					                                                </div>
+																</div>
+															</div>
+														</div>
+														<!--end::Wizard Step 3-->
 														<!--begin::Wizard Actions-->
 														<div class="d-flex justify-content-between border-top mt-5 pt-10">
 															<div class="mr-2">
 																<button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev">Anterior</button>
 															</div>
 															<div>
-																<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Registrar</button>
-																<button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>
+																<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Guardar</button>
+																<button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>*
 															</div>
 														</div>
 														<!--end::Wizard Actions-->
@@ -217,6 +287,10 @@
 		<!--begin::Page Scripts(used by this page)-->
 		<script type="text/javascript">
 			"use strict";
+		// multi select
+		$('#Curso').select2({
+         placeholder: "Select a state"
+        });
 // Class definition
 var KTWizard1 = function () {
 	// Base elements
@@ -260,6 +334,13 @@ var KTWizard1 = function () {
 								}
 							}
 						},
+						FechaNacimiento: {
+							validators: {
+								notEmpty: {
+									message: 'La fecha es requerida'
+								}
+							}
+						},
 					},
 					plugins: {
 						trigger: new FormValidation.plugins.Trigger(),
@@ -297,13 +378,6 @@ var KTWizard1 = function () {
 								}
 							}
 						},
-						FechaNacimiento: {
-							validators: {
-								notEmpty: {
-									message: 'La fecha es requerida'
-								}
-							}
-						},
 					},
 					plugins: {
 						trigger: new FormValidation.plugins.Trigger(),
@@ -333,7 +407,6 @@ var KTWizard1 = function () {
 					validator.validate().then(function (status) {
 						if (status == 'Valid') {
 							wizard.goTo(wizard.getNewStep());
-
 							KTUtil.scrollTop();
 						} else {
 							Swal.fire({
@@ -417,10 +490,17 @@ var KTWizard1 = function () {
             var FechaNacimientoPersona = $('#FechaNacimiento').val();
             var UsuarioPersona = $('#Usuario').val(); 
             var ContraseñaPersona = $('#Contraseña').val();
-            var Rol = $('#Rol').val();
             var EmailPersona = $('#Email').val();
+			var Curso = $('#Curso').val();
+			var Grado = $('#Grado').val();
+			var Nivel = $('#Nivel').val();
+			var Jornada = $('#Jornada').val();
             var data = [{
                 //Persona
+				Curso: Curso,
+				Grado: Grado,
+				Nivel: Nivel,
+				Jornada: Jornada,
                 Nombre: NombrePersona,
                 Apellido: ApellidosPersona,
                 Direccion: DireccionPersona,
@@ -430,10 +510,9 @@ var KTWizard1 = function () {
                 Usuario: UsuarioPersona,
                 Email: EmailPersona,
                 Contraseña: ContraseñaPersona,
-                Rol: Rol,
             }];
             $.ajax({
-                url:'/administration/save',
+                url:'/administration/teacher/save',
                 type:'POST',
                 data: {"_token":"{{ csrf_token() }}","data":data},
                 dataType: "JSON",

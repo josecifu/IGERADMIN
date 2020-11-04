@@ -24,6 +24,7 @@ use App\Models\Information;
 use App\Models\Assign_course_grade;
 use App\Models\Asign_teacher_course;
 use App\Models\Course;
+use DB;
 
 class Student extends Controller
 {
@@ -32,9 +33,7 @@ class Student extends Controller
     public function list()
     {
         $Titles = [ 'Nombre del Estudiante',
-                    'Direccion',
                     'No. Telefono',
-                    'Fecha de Nacimiento',
                     'Nombre de Usuario',
                     'Correo Electronico',
                     'Ultima Cesion'];
@@ -46,9 +45,7 @@ class Student extends Controller
             $student = Person::find($user->Person_id);
             $query = [
                 'name' => $student->Names . ' ' . $student->LastNames,
-                'direction' => $student->Address,
                 'phone' => $student->Phone,
-                'birth_date' => $student->BirthDate,
                 'user' => $user->name,
                 'email' => $user->email,
             ];
@@ -60,36 +57,37 @@ class Student extends Controller
     //lista de todos los estudiantes con opciones por: nivel-grados-seccion
     public function list_grade()
     {
-        $Titles = ['Grado'];
-        $Models = [];
-/*
-        $rol = Assign_user_rol::where('rol_id',2)->get('user_id');
-        foreach ($rol as $j)
-        {
-            $student_grade = Assign_student_grade::find($j->user_id);
-            $period_grade = Assign_period_grade::find($student_grade);
-        }
-*/
-        $period_grade = Assign_period_grade::where('Seccion','A')->get('grade_level_id');
-        foreach ($period_grade as $i)
-        {
-            $level_grade = Assign_level_grade::find($i->grade_level_id);
-            $grade = Grade::find($level_grade->Grade_id);
-            $data = ['info' => $grade->Name];
-            array_push($Models,$data);
-        }
-        return view('Student/students_list_grade',compact('Models','Titles'));
+        $period = Period::all();
+        $level = Level::all();
+        $grade = Grade::all();
+        $section = DB::table('assign_period_grades')->select('Seccion')->groupby('Seccion')->get();
+        $Titles = ['Nombre del Estudiante',
+                    'No. Telefono',
+                    'Nombre de Usuario',
+                    'Correo Electronico',
+                    'Ultima Cesion'];
+        $Models = DB::table('assign_user_rols')
+            ->select('people.Names','people.LastNames','people.Phone','users.name','users.email')
+            ->join('users','users.id','=','assign_user_rols.user_id')
+            ->join('people','people.id','=','users.Person_id')
+            ->join('assign_student_grades','assign_student_grades.user_id','=','users.id')
+            ->join('assign_period_grades','assign_period_grades.id','=','assign_student_grades.Grade_id')
+            ->join('assign_level_grades','assign_level_grades.id','=','assign_period_grades.grade_level_id')
+            ->join('grades','grades.id','=','assign_level_grades.Grade_id')
+            ->where('assign_user_rols.rol_id',2)
+            ->get();
+        return view('Student/students_list_grade',compact('period','level','grade','section','Models','Titles'));
     }
 
     //visualizacion de notas con filtro: jornada, grado, nivel, curso
-    public function score(Request $request)
+    public function score()
     {
-
-        $data = DB::table('users')->join('assign_user_rols','assign_user_rols.user_id','=','users.id')->select('users.name')->where('assign_user_rols.rol_id','=',2)->get();
-
-        //dd($data);
-
-
+        $period = Period::all();
+        $level = Level::all();
+        $grade = Grade::all();
+        //$section = Assign_period_grade::all();
+        $section = DB::table('assign_period_grades')->select('Seccion')->groupby('Seccion')->get();
+        return view('Student/course_notes_view',compact('period','level','grade','section'));
     }
 
 
@@ -108,22 +106,83 @@ class Student extends Controller
     //crear estudiante incluye asignacion de grado
     public function create()
     {
-        return view('Student.create_student');
+        $period = Period::all();
+        $level = Level::all();
+        $grade = Grade::all();
+        $section = DB::table('assign_period_grades')->select('Seccion')->groupby('Seccion')->get();
+        return view('Student/create_student',compact('period','level','grade','section'));
     }
     public function save(Request $request)
     {
+        $id = $request->session()->get('User_id'); 
         $data = $request->data[0];
         $Nombres= $data['Nombre'];
         $Apellidos= $data['Apellido'];
-        $person = new Person;
-        $person->Names = $Nombres;
-        $person->LastNames = $Apellidos;
-        $person->save();
-        $logs = new Log;
-        $logs->Table = "Estudiante";
-        $logs->User_Id = $request->session()->get('User_Id');
-        $logs->Description = "Se guardo cliente ID = ".$person->id." Nombre = ".$person->LastNames;
-        $logs->save();
+        $Direccion= $data['Direccion'];
+        $Telefono= $data['Telefono'];
+        $FechaNacimiento= $data['FechaNacimiento'];
+        $Usuario= $data['Usuario'];
+        $Email= $data['Email'];
+        $Contraseña= $data['Contraseña'];
+        $G= $data['Grado'];
+        $N= $data['Nivel'];
+        $J= $data['Jornada'];
+        $NG = Assign_level_grade::where('Level_id',$N)->where('Grade_id',$G)->first();
+        $JNG = Assign_period_grade::where('grade_level_id',$NG->id)->where('Period_id',$J)->first();
+        //LOGICA
+        try {
+              DB::beginTransaction();
+                //Tabla peronas
+                $person = new Person;
+                $person->Names = $Nombres;
+                $person->LastNames = $Apellidos;
+                $person->Address = $Direccion;
+                $person->Phone = $Telefono;
+                $person->BirthDate = $FechaNacimiento;
+                $person->save();
+                //Tabla usuarios
+                $user = new User;
+                $user->name = $Usuario;
+                $user->email = $Email;
+                $user->password = bcrypt($Contraseña);
+                $user->State = "Active";
+                $user->Person_id =  $person->id;
+                $user->save();
+                //asignacion usuario a un rol
+                $usuario_rol = new Assign_user_rol;
+                $usuario_rol->rol_id = 3;
+                $usuario_rol->user_id = $user->id;
+                $usuario_rol->State = "Active";
+                $usuario_rol->save();
+                //logs
+                $log = new logs;
+                $log->Table = "People";
+                $log->User_ID = $id;
+                $log->Description = "Se creo nuevo voluntario con el id: ".$person->id;
+                $log->Type = "Create";
+                $log->save();
+                $log = new logs;
+                $log->Table = "users";
+                $log->User_ID = $id;
+                $log->Description = "Se creo nuevo usuario con nombre: ".$user->name." y correo: ".$user->email;
+                $log->Type = "Create";
+                $log->Type = "Create";
+                $log->save();
+                $log = new logs;
+                $log->save();
+                $log = new logs;
+                $log->Table = "Assign_user_rol";
+                $log->User_ID = $id;
+                $log->Description = "ID: ".$usuario_rol->id." de la Asignacion de rol voluntario al usuario: ".$user->id;
+                $log->Table = "Assign_teacher_courses";
+                $log->User_ID = $id;
+                $log->Description = "ID: ".$usuario_curso->id." de la Asignacion de curso al usuario: ".$user->id;
+                $log->Type = "Create";
+                $log->save();
+                DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+        }
         return response()->json(["Accion completada"]);
     }
 
@@ -203,6 +262,13 @@ class Student extends Controller
 
 
 
+
+
+
+
+
+
+
     //actualizar estudiante
     public function edit($id)
     {
@@ -263,6 +329,12 @@ class Student extends Controller
 
 
 
+
+
+
+
+
+
     //ESTUDIANTE
     public function edit_profile()
     {
@@ -270,14 +342,8 @@ class Student extends Controller
     public function update_profile()
     {
     }
-    public function view_course_teachers_notes()
+    public function view_course_teachers_notes(Request $request)
     {
-        //$titles = ['Id','Curso','Profesor','No. Telefono'];
-        //$teacher = Person::all();
-        //$models=[];
-        //$id = $request->session()->get('User_id');
-        //$studentgrade = Assign_student_grade::where('User_id',$id)->get('Grade_id');
-        //return view('Student/Estudiante/Listado_Curso_Voluntario',compact('titles','models'));
     }
     public function view_teacher_information(Request $request)
     {
