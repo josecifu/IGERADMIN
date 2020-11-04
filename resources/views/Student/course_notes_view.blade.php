@@ -11,7 +11,6 @@
     @stop
     {{-- Page content --}}
     @section('content')
-
     <div class="content flex-column-fluid" id="kt_content">
                                 <!--begin::Notice-->
                                 <!--<div class="alert alert-custom alert-white alert-shadow gutter-b" role="alert">
@@ -39,7 +38,7 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            <h3 class="card-label">Estudiantes Asignados</h3>
+                                            <h3 class="card-label">Listado de {{$curso->Name}} de {{$grado->Name}} jornada {{$jornada->Name}}</h3>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -86,8 +85,8 @@
                                             </div>
                                             <!--end::Dropdown-->
                                             <!--begin::Button-->
-                                            <a href="{{url('insertar/persona')}}" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-plus"></i>Añadir Un Cliente</a>
+                                            <a href="{{url('administration/teacher/create')}}" class="btn btn-primary font-weight-bolder">
+                                            <i class="la la-plus-circle"></i>Agregar Un Voluntario</a>
                                             <!--end::Button-->
                                         </div>
                                     </div>
@@ -102,17 +101,17 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($Models as $Model)
                                                 <tr>
-                                                    <td>{{$Model['Id']}}</td>
-                                                    <td>{{$Model['Nombre']}}</td>
-                                                    <td>{{$Model['Apellido']}}</td>
-                                                    <td>{{$Model['Correo']}}</td>
-                                                    <td>{{$Model['Telefono']}}</td>
-                                                    <td>{{$Model['Grado']}}</td>
+                                                    <td>1</td>
+                                                    <td>Williams Alexander Escobar Juárez</td>
+                                                    <td>Fernando Jose Alexander Ordoñez Tupul</td>
+                                                    <td>Matematica</td>
+                                                    <td>0</td>
+                                                    <td>0</td>
+                                                    <td>0</td>
+                                                    <td>0</td>
                                                     <td nowrap="nowrap"></td>
                                                 </tr>
-                                                @endforeach
                                             </tbody>
                                         </table>
                                         <!--end: Datatable-->
@@ -159,10 +158,7 @@
                                                 </ul>\
                                             </div>\
                                         </div>\
-                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
-                                            <i class="la la-edit"></i>\
-                                        </a>\
-                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Delete">\
+                                        <a href="/administration/teacher/delete/'+full[0]+'" class="btn btn-sm btn-clean btn-icon" title="Borrar">\
                                             <i class="la la-trash"></i>\
                                         </a>\
                                     ';
@@ -192,4 +188,6 @@
 
 
        </script>
+
+      
 	@stop

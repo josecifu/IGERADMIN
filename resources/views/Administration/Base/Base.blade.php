@@ -108,7 +108,7 @@
 											<span class="font-weight-bold" id="kt_dashboard_daterangepicker_date">-</span>
 										</a>-->
 										<!--end::Daterange-->
-										@if($buttons)
+										@if($buttons ?? '')
 										<!--begin::Dropdown-->
 										<div class="dropdown dropdown-inline" data-toggle="tooltip" title="Acciones" data-placement="left">
 											<a href="#" class="btn btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -133,7 +133,7 @@
 														<i class="flaticon2-information icon-md text-muted" data-toggle="tooltip" data-placement="right" title="Seleccione una de las opciones disponibles"></i>
 													</li>
 													
-														@foreach($buttons as $key => $button)
+														@foreach($buttons ?? '' as $key => $button)
 															@if($key!=0)
 															<li class="navi-separator mt-3 opacity-70"></li>
 															@endif
