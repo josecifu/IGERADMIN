@@ -38,7 +38,9 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
+                                            @if(curso)
                                             <h3 class="card-label">Listado de {{$curso->Name}} de {{$grado->Name}} jornada {{$jornada->Name}}</h3>
+                                            @endif
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
