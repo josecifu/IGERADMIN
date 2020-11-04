@@ -90,20 +90,7 @@ class Student extends Controller
         return view('Student/course_notes_view',compact('period','level','grade','section'));
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //crear estudiante incluye asignacion de grado
+    //crear estudiante con asignacion de grado
     public function create()
     {
         $period = Period::all();
@@ -116,44 +103,47 @@ class Student extends Controller
     {
         $id = $request->session()->get('User_id'); 
         $data = $request->data[0];
-        $Nombres= $data['Nombre'];
-        $Apellidos= $data['Apellido'];
-        $Direccion= $data['Direccion'];
-        $Telefono= $data['Telefono'];
-        $FechaNacimiento= $data['FechaNacimiento'];
-        $Usuario= $data['Usuario'];
-        $Email= $data['Email'];
-        $Contraseña= $data['Contraseña'];
-        $G= $data['Grado'];
-        $N= $data['Nivel'];
-        $J= $data['Jornada'];
-        $NG = Assign_level_grade::where('Level_id',$N)->where('Grade_id',$G)->first();
-        $JNG = Assign_period_grade::where('grade_level_id',$NG->id)->where('Period_id',$J)->first();
+        $name = $data['Nombre'];
+        $last_name = $data['Apellido'];
+        $address = $data['Direccion'];
+        $phone = $data['Telefono'];
+        $birth_date = $data['FechaNacimiento'];
+        $user = $data['Usuario'];
+        $email = $data['Email'];
+        $password = $data['Contraseña'];
+        $grade = $data['Grado'];
+        $level = $data['Nivel'];
+        $period = $data['Jornada'];
+        $level_grade = Assign_level_grade::where('Level_id',$level)->where('Grade_id',$grade)->first();
+        $period_grade = Assign_period_grade::where('grade_level_id',$level_grade->id)->where('Period_id',$period)->first();
         //LOGICA
         try {
               DB::beginTransaction();
-                //Tabla peronas
+                //perona
                 $person = new Person;
-                $person->Names = $Nombres;
-                $person->LastNames = $Apellidos;
-                $person->Address = $Direccion;
-                $person->Phone = $Telefono;
-                $person->BirthDate = $FechaNacimiento;
+                $person->Names = $name;
+                $person->LastNames = $last_name;
+                $person->Address = $address;
+                $person->Phone = $phone;
+                $person->BirthDate = $birth_date;
                 $person->save();
-                //Tabla usuarios
+                //usuario
                 $user = new User;
-                $user->name = $Usuario;
-                $user->email = $Email;
-                $user->password = bcrypt($Contraseña);
+                $user->name = $user;
+                $user->email = $email;
+                $user->password = bcrypt($password);
                 $user->State = "Active";
                 $user->Person_id =  $person->id;
                 $user->save();
-                //asignacion usuario a un rol
-                $usuario_rol = new Assign_user_rol;
-                $usuario_rol->rol_id = 3;
-                $usuario_rol->user_id = $user->id;
-                $usuario_rol->State = "Active";
-                $usuario_rol->save();
+                //asignacion usuario de rol
+                $user_rol = new Assign_user_rol;
+                $user_rol->rol_id = 3;
+                $user_rol->user_id = $user->id;
+                $user_rol->State = "Active";
+                $user_rol->save();
+                //asignacion de grado
+
+
                 //logs
                 $log = new logs;
                 $log->Table = "People";
@@ -173,10 +163,7 @@ class Student extends Controller
                 $log = new logs;
                 $log->Table = "Assign_user_rol";
                 $log->User_ID = $id;
-                $log->Description = "ID: ".$usuario_rol->id." de la Asignacion de rol voluntario al usuario: ".$user->id;
-                $log->Table = "Assign_teacher_courses";
-                $log->User_ID = $id;
-                $log->Description = "ID: ".$usuario_curso->id." de la Asignacion de curso al usuario: ".$user->id;
+                $log->Description = "ID: ".$user_rol->id." de la Asignacion de rol voluntario al usuario: ".$user->id;
                 $log->Type = "Create";
                 $log->save();
                 DB::commit();
@@ -188,71 +175,6 @@ class Student extends Controller
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function save_person(Request $request)
-    {
-        $id = $request->session()->get('User_id'); 
-        $data = $request->data[0];
-        $Nombres= $data['Nombre'];
-        $Apellidos= $data['Apellido'];
-        $Direccion= $data['Direccion'];
-        $Telefono= $data['Telefono'];
-        $FechaNacimiento= $data['FechaNacimiento'];
-        $Usuario= $data['Usuario'];
-        $Email= $data['Email'];
-        $Contraseña= $data['Contraseña'];
-        $Rol = $data['Rol'];
-        try {
-              DB::beginTransaction();
-                $person = new Person;
-                $person->Names = $Nombres;
-                $person->LastNames = $Apellidos;
-                $person->Address = $Direccion;
-                $person->Phone = $Telefono;
-                $person->BirthDate = $FechaNacimiento;
-                $person->save();
-                $user = new User;
-                $user->name = $Usuario;
-                $user->email = $Email;
-                $user->password = bcrypt($Contraseña);
-                $user->State = "Active";
-                $user->Person_id =  $person->id;
-                $user->save();
-                $usuario_rol = new Assign_user_rol;
-                $usuario_rol->rol_id = $Rol;
-                $usuario_rol->user_id = $user->id;
-                $usuario_rol->State = "Active";
-                $usuario_rol->save();
-                $log = new logs;
-                $log->Table = "people y users";
-                $log->User_ID = $id;
-                $log->Description = "Se inserto un nuevo voluntario con el id: ".$person->id." y el usuario es: ".$user->name;
-                $log->save();
-                DB::commit();
-        } catch (Exception $e) {
-            DB::rollBack();
-        }
-        return response()->json(["Accion completada"]);
-    }
 
 
 
