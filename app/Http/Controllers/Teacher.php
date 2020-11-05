@@ -272,7 +272,7 @@ class Teacher extends Controller
     {
         $usuario = $request->session()->get('User_id');
         $dataU=array(
-            'State' => 'Deactivated',
+            'State' => 'Desactivated',
         );
         $log = new logs;
         $log->Table = "Tablas users y Assign_User_Rol";
