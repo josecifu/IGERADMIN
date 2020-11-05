@@ -54,8 +54,8 @@ License: You must have a valid license purchased only from themeforest(the above
 						<!--begin::Login Sign in form-->
 						<div class="login-signin">
 							<div class="mb-20">
-								<h3>Iniciar sesion</h3>
-								<p class="opacity-100 font-weight-bold">Ingrese los datos que se le solicitan acontinuacion:</p>
+								<h3>Iniciar sesión</h3>
+								<p class="opacity-100 font-weight-bold">Ingrese los datos que se le solicitan acontinuación:</p>
 								 @if($errors->any())
                                 <div class="alert alert-danger alert-dismissble">
                                     <div class="alert-text">
@@ -129,7 +129,7 @@ License: You must have a valid license purchased only from themeforest(the above
 						<!--begin::Login forgot password form-->
 						<div class="login-forgot">
 							<div class="mb-20">
-								<h3>¿Olvido su contraseña?</h3>
+								<h3>¿Olvidó su contraseña?</h3>
 								<p class="opacity-60">Ingrese el correo registrado con su nombre de usuario</p>
 							</div>
 							<form class="form" id="kt_login_forgot_form">

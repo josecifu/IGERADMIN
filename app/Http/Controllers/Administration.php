@@ -19,8 +19,7 @@ use App\Models\level;
 use App\Models\logs;
 //modelo de grado
 use App\Models\grade;
-//modelo de jornadas
-use App\Models\periods;
+
 //Modelo de aula
 use App\Models\classrom;
 //modelo de materias
@@ -192,32 +191,168 @@ class Administration extends Controller
         $buttons =[];
         $button = [
             "Name" => 'Añadir una jornada',
-            "Link" => 'administration/home/dashboard',
-            "Type" => "add"
+            "Link" => 'create()',
+            "Type" => "addFunction"
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver listado de niveles y grados',
+            "Name" => 'Ver grados de una jornada',
             "Link" => 'administration/home/dashboard',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver listado de grados',
-            "Link" => 'administration/home/dashboard',
-            "Type" => "btn2"
+            "Name" => 'Ver jornadas eliminadas',
+            "Link" => 'administration/configurations/level/list/deletes',
+            "Type" => "btn1"
         ];
         array_push($buttons,$button);
 
         $Titles =['Id','Jornada','Niveles','No de Grados','Acciones'];
         $Models = [];
-        $model = periods::where("State","Active")->get();
+        $model = period::where("State","Active")->get();
+       
+    
         foreach ($model as $value) {
-            $val=[
-                "Jornada" => $value->Name,
+            $levels = "";
+            $idLvl = "";
+            foreach ($value->Levels()->get() as $key => $value2) {
+                if($levels!="")
+                $levels = $levels.", ".$value2->Name;
+                else
+                $levels =$value2->Name;
+                if($idLvl!="")
+                $idLvl = $idLvl.", ".$value2->id;
+                else
+                $idLvl =$value2->id;
+            }
+            
+            $m =[
+                "Id" => $value->id,  
+                "Jornada" => $value->Name,  
+                "idLvl" =>$idLvl,
+                "Niveles" => $levels,
+                "Grados" => count($value->Grades()->get())
             ];
+            array_push($Models,$m);
         }
-        return view('Administration.Grades.Level_List',compact('Titles','Models','buttons'));
+        $type="Active";
+        return view('Administration.Grades.Level_List',compact('Titles','Models','buttons','type'));
+    }
+    public function ViewGradesLvl($id)
+    {
+        $buttons =[];
+        $button = [
+            "Name" => 'Añadir una jornada',
+            "Link" => 'create()',
+            "Type" => "addFunction"
+        ];
+        array_push($buttons,$button);
+        $button = [
+            "Name" => 'Ver grados de una jornada',
+            "Link" => 'administration/home/dashboard',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $button = [
+            "Name" => 'Ver jornadas eliminadas',
+            "Link" => 'administration/configurations/level/list/deletes',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $Titles =['Id','Jornada','Niveles','No de Grados','Acciones'];
+        $lvl = level::find($id); 
+        $Models = [];
+        foreach ($lvl->Grades()->get() as $key => $value) {
+            $m =[
+                "Id" => $value->id,  
+                "Grade" => $value->Name." ".$lvl->Name,  
+            ];
+            array_push($Models,$m);
+        }
+        return view('Administration.Grades.List',compact('Titles','Models','buttons'));
+    }
+    public function LevelListDelete()
+    {
+        $buttons =[];
+
+        $button = [
+            "Name" => 'Ver grados de una jornada',
+            "Link" => 'administration/home/dashboard',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $button = [
+            "Name" => 'Ver jornadas activas',
+            "Link" => 'administration/configurations/level/list',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+
+        $Titles =['Id','Jornada','Niveles','No de Grados','Acciones'];
+        $Models = [];
+        $model = period::where("State","Delete")->get();
+       
+    
+        foreach ($model as $value) {
+            $levels = "";
+            $idLvl = "";
+            foreach ($value->Levels()->get() as $key => $value2) {
+                if($levels!="")
+                $levels = $levels.", ".$value2->Name;
+                else
+                $levels =$value2->Name;
+                if($idLvl!="")
+                $idLvl = $idLvl.", ".$value2->id;
+                else
+                $idLvl =$value2->id;
+            }
+            
+            $m =[
+                "Id" => $value->id,  
+                "Jornada" => $value->Name,  
+                "idLvl" =>$idLvl,
+                "Niveles" => $levels,
+                "Grados" => count($value->Grades()->get())
+            ];
+            array_push($Models,$m);
+        }
+        $type="Delete";
+        return view('Administration.Grades.Level_List',compact('Titles','Models','','buttons','type'));
+    }
+    public function PeriodSave(Request $request)
+    {
+        $period = new period;
+        $data = $request->data[0];
+        $period->Name = $data['Name'];
+        $period->State = "Active";
+        $period->save();
+        return response()->json(["Accion completada"]);
+    }
+    public function PeriodUpdate(Request $request)
+    {
+        $data = $request->data[0];
+        $period = period::find($data['Code']);
+        $period->Name = $data['Name'];
+        $period->State = "Active";
+        $period->save();
+        return response()->json(["Accion completada"]);
+    }
+    public function ChangePeriod(Request $request,$id,$type)
+    {
+        if($type=="delete")
+        {
+            $period = period::find($id);
+            $period->State= "Delete";
+            $period->save();
+        }
+        if($type=="active")
+        {
+            $period = period::find($id);
+            $period->State= "Active";
+            $period->save();
+        }
+        return redirect()->route('LevelList');
     }
     public function Save_Permission(Request $request)
     {

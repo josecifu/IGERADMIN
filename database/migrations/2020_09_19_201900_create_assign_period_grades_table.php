@@ -19,8 +19,7 @@ class CreateAssignPeriodGradesTable extends Migration
             $table->foreign('grade_level_id')->references('id')->on('assign_level_grades');
             $table->unsignedInteger('Period_id'); 
             $table->foreign('Period_id')->references('id')->on('periods');
-            $table->unsignedInteger('Classroom_id'); 
-            $table->foreign('Classroom_id')->references('id')->on('classrooms');
+            $table->string('Classroom_id')->nullable(); 
             $table->string('Seccion');
             $table->timestamps();
         });

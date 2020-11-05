@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class PeriodSeeder extends Seeder
 {
@@ -14,7 +15,7 @@ class PeriodSeeder extends Seeder
     public function run()
     {
         $periodsList = ["Matutina","Vespertina"];
-       foreach ($periodsList as $value) {
+        foreach ($periodsList as $value) {
             DB::table('periods')->insert([
                 'Name' => $value,
                 'State' => 'Active',       
@@ -22,21 +23,31 @@ class PeriodSeeder extends Seeder
         }
         $LevelList =["Primaria","Básico","Diversificado"];
         foreach ($LevelList as $value) {
-            $id = DB::table('levels')->insertGetIdDB([
+            $id = DB::table('levels')->insertGetId([
                 'Name' => $value,
+                'Period_id' => 1,
                 'State' => 'Active',       
             ]);
-            DB::table('levels')->insert([
-                'Name' => $value,
-                'State' => 'Active',       
-            ]);
-        }
-        $GradesList = ["Primero","Segundo","Tercero","Cuarto","Quinto","Sexto"];
-        foreach ($GradesList as $value) {
-            DB::table('grades')->insert([
-                'Name' => $value,
-                'State' => 'Active',       
-            ]);
+            $GradesList = ["Primero","Segundo","Tercero","Cuarto","Quinto","Sexto"];
+            foreach ($GradesList as $key => $value) {
+                if($id==1)
+                {
+                    DB::table('grades')->insert([
+                        'Name' => $value,
+                        'Level_id' => $id,
+                        'State' => 'Active',       
+                    ]);
+                } 
+                if($id==2 && $key<3)
+                {
+                     DB::table('grades')->insert([
+                        'Name' => $value,
+                        'Level_id' => $id,
+                        'State' => 'Active',       
+                    ]);
+                }
+            }   
+             
         }
     }
 }
