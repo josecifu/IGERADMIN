@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 $route = "App\Http\Controllers";
 #Login
 Route::get('/login', $route.'\LoginController@index')->name('login');
-
+Route::redirect('/', '/administration/home/dashboard');
 Route::get('/', $route.'\Administration@Dashboard')->name('home')->middleware('auth');
 #Signin
 Route::post('/signin',  $route.'\LoginController@login')->name('signin');
@@ -25,7 +25,9 @@ Route::get('/logout', $route.'\LoginController@logout')->name('logout');
 Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 
 	$route = "App\Http\Controllers";
-
+	Route::get('/load/periods', $route.'\Administration@LoadPeriods')->name('LoadPeriods');
+	Route::post('/load/levels', $route.'\Administration@LoadLevels')->name('LoadLevels');
+	Route::post('/load/grades', $route.'\Administration@LoadGrades')->name('LoadGrades');
 	#Inicio
 	Route::group([ 'prefix' => 'home'], function(){
 		$route = "App\Http\Controllers";
@@ -40,9 +42,10 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::post('/save', $route.'\Student@save')->name('SaveStudent');
 		Route::get('/edit/{model}',$route.'\Student@edit')->name('EditStudent');
 		Route::post('/update', $route.'\Student@update')->name('UpdateStudent');
-		Route::get('/list/grade',$route.'\Student@list_grade')->name('ListGradeStudent');
+		Route::get('/lists/grade',$route.'\Student@list_grade')->name('ListGradeStudent');
 		Route::get('/score',$route.'\Student@score')->name('ScoreStudent');
 		Route::get('/logs',$route.'\Student@logs')->name('LogsStudent');
+		Route::get('/test',$route.'\Student@test')->name('TestStudent');
 	});
 	#Voluntarios
 	Route::group([ 'prefix' => 'teacher'], function(){

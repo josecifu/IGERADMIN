@@ -50,19 +50,22 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([
             'Name' => 'Listado por grados',
             'State' => '1',
-            'Url' => 'administration/student/list/grade',  
+            'Type' => 'Link',
+            'Url' => 'ListGrade()',  
             'menu_id' => '4'          
         ]);
         DB::table('menus')->insert([
             'Name' => 'Visualización de notas',
             'State' => '1',
-            'Url' => 'administration/student/score',  
+            'Type' => 'Link',
+            'Url' => 'ListScore()',  
             'menu_id' => '4'          
         ]);
         DB::table('menus')->insert([
             'Name' => 'Visualización de examenes',
             'State' => '1',
-            'Url' => 'administration/student/test',  
+            'Type' => 'Link',
+            'Url' => 'ListTest()',  
             'menu_id' => '4'          
         ]);
         DB::table('menus')->insert([//9
@@ -134,7 +137,7 @@ class MenuSeeder extends Seeder
             'menu_id' => '15'          
         ]);  
         DB::table('menus')->insert([
-            'Name' => 'Configuraciones', //20
+            'Name' => 'Configuracion', //20
             'Icon' => 'pe-7s-home',
             'Url' => 'administration/configurations',
             'State' => '1',     
