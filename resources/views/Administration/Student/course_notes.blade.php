@@ -11,7 +11,7 @@
     @stop
     {{-- Page content --}}
     @section('content')
-
+    
     <div class="content flex-column-fluid" id="kt_content">
                                 <!--begin::Notice-->
                                 <!--<div class="alert alert-custom alert-white alert-shadow gutter-b" role="alert">
@@ -36,10 +36,7 @@
                                 <div class="card card-custom">
                                     <div class="card-header">
                                         <div class="card-title">
-                                            <span class="card-icon">
-                                                <i class="flaticon2-favourite text-primary"></i>
-                                            </span>
-                                            <h3 class="card-label">Listado de Asignaciones estudiantes</h3>
+                                            <h3 class="card-label">Visualización de notas</h3>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -49,7 +46,7 @@
                                                 <!--begin::Dropdown Menu-->
                                                 <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                                                     <ul class="nav flex-column nav-hover">
-                                                        <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opcion:</li>
+                                                        <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opción:</li>
                                                         <li class="nav-item">
                                                             <a href="#" class="nav-link">
                                                                 <i class="nav-icon la la-print"></i>
@@ -86,31 +83,79 @@
                                             </div>
                                             <!--end::Dropdown-->
                                             <!--begin::Button-->
-                                            <a href="#" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-plus"></i>Asignar Estudiante</a>
                                             <!--end::Button-->
                                         </div>
                                     </div>
+<!------------------------------------------------------------------------------------------------------------>
+                                    <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                                        <div class="my-5">
+                                            <div class="form-group row">
+                                                <label class="col-form-label text-right col-lg-1 col-sm-12"></label>
+                                                <div class="col-md-2 my-2 my-md-0">
+                                                    <select class="form-control" id="Jornada" name="Jornada">
+                                                        <option value="" >Jornadas</option>
+                                                        @foreach($period as $jornada)
+                                                            <option value="{{$jornada->id}}">
+                                                                {{$jornada->Name}}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2 my-2 my-md-0">
+                                                    <select class="form-control" id="Nivel" name="Nivel">
+                                                        <option value="" >Niveles</option>
+                                                        @foreach($level as $nivel)
+                                                            <option value="{{$nivel->id}}">
+                                                                {{$nivel->Name}}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2 my-2 my-md-0">
+                                                    <select class="form-control" id="Grado" name="Grado">
+                                                        <option value="" >Grados</option>
+                                                        @foreach($grade as $grado)
+                                                            <option value="{{$grado->id}}">
+                                                                {{$grado->Name}}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2 my-2 my-md-0">
+                                                    <select class="form-control" id="Seccion" name="Seccion">
+                                                        <option value="" >Secciones</option>
+                                                        @foreach($section as $seccion)
+                                                            <option value="">
+                                                                {{$seccion->Seccion}}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+<!------------------------------------------------------------------------------------------------------------->
                                     <div class="card-body">
                                         <!--begin: Datatable-->
-                                        <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
+                                        <table class="table table-bordered table-hover table-checkable" id="" style="margin-top: 13px !important">
                                             <thead>
                                                 <tr>
-                                                    @foreach($Titles as $Title)
-                                                    <th>{{ $Title }}</th>
+                                                    @foreach($Titles as $t)
+                                                    <th>{{ $t }}</th>
                                                     @endforeach
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($Models as $Model)
+                                                @foreach($Models as $m)
                                                 <tr>
-                                                    <td>{{$Model['Id']}}</td>
-                                                    <td>{{$Model['Name']}}</td>
-                                                    <td>{{$Model['Apellido']}}</td>
-                                                    <td>{{$Model['Direccion']}}</td>
-                                                    <td>{{$Model['Telefono']}}</td>
-                                                    <td>{{$Model['Fecha_Nacimiento']}}</td>
-                                                    <td>{{$Model['Grado']}}</td>
+                                                    <td>{{$m->Names}} {{$m->LastNames}}</td>
+                                                    <!--td>{{$m->teacher}}</td-->
+                                                    <td>{{$m->course}}</td>
+                                                    <!--td>{{$m->first_unit}}</td-->
+                                                    <!--td>{{$m->second_unity}}</td-->
+                                                    <!--td>{{$m->third_unit}}</td-->
+                                                    <!--td>{{$m->fourth_unit}}</td-->
+                                                    <td nowrap="nowrap"></td>
                                                 </tr>
                                                 @endforeach
                                             </tbody>
@@ -120,14 +165,60 @@
                                 </div>
                                 <!--end::Card-->
                             </div>
-
-	@stop
-	@section('scripts')
-
+    @stop
+    @section('scripts')
         <!--begin::Page Vendors(used by this page)-->
         <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
         <!--end::Page Vendors-->
         <!--begin::Page Scripts(used by this page)-->
-        <script src="{{ asset('assets/js/pages/crud/datatables/data-sources/html.js')}}"></script>
         <!--end::Page Scripts-->
-	@stop
+        <script type="text/javascript">
+            "use strict";
+            var KTDatatablesDataSourceHtml = function() {
+                var initTable1 = function() {
+                    var table = $('#kt_datatable');
+                    // begin first table
+                    table.DataTable({
+                        responsive: true,
+                        columnDefs: [
+                            {
+                                targets: -1,
+                                title: 'Acciones',
+                                orderable: false,
+                                render: function(data, type, full, meta) {
+                                    return '\
+                                        <div class="dropdown dropdown-inline">\
+                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">\
+                                                <i class="la la-cog"></i>\
+                                            </a>\
+                                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
+                                                <ul class="nav nav-hoverable flex-column">\
+                                                    <li class="nav-item"><a class="nav-link" href="/editar/persona/'+full[0]+'"><i class="nav-icon la la-edit"></i><span class="nav-text">Editar</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
+                                                </ul>\
+                                            </div>\
+                                        </div>\
+                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
+                                            <i class="la la-edit"></i>\
+                                        </a>\
+                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Delete">\
+                                            <i class="la la-trash"></i>\
+                                        </a>\
+                                    ';
+                                },
+                            },
+                        ],
+                    });
+                };
+                return {
+                    //main function to initiate the module
+                    init: function() {
+                        initTable1();
+                    },
+                };
+            }();
+            jQuery(document).ready(function() {
+                KTDatatablesDataSourceHtml.init();
+            });
+       </script>
+    @stop

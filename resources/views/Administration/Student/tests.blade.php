@@ -11,7 +11,7 @@
     @stop
     {{-- Page content --}}
     @section('content')
-
+    
     <div class="content flex-column-fluid" id="kt_content">
                                 <!--begin::Notice-->
                                 <!--<div class="alert alert-custom alert-white alert-shadow gutter-b" role="alert">
@@ -36,10 +36,7 @@
                                 <div class="card card-custom">
                                     <div class="card-header">
                                         <div class="card-title">
-                                            <span class="card-icon">
-                                                <i class="flaticon2-favourite text-primary"></i>
-                                            </span>
-                                            <h3 class="card-label">Listado de Voluntarios</h3>
+                                            <h3 class="card-label">Listado de estudiantes</h3>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -49,7 +46,7 @@
                                                 <!--begin::Dropdown Menu-->
                                                 <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                                                     <ul class="nav flex-column nav-hover">
-                                                        <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opcion:</li>
+                                                        <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opción:</li>
                                                         <li class="nav-item">
                                                             <a href="#" class="nav-link">
                                                                 <i class="nav-icon la la-print"></i>
@@ -86,32 +83,79 @@
                                             </div>
                                             <!--end::Dropdown-->
                                             <!--begin::Button-->
-                                            <a href="{{url('administration/registrar')}}" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-plus"></i>Añadir Un Voluntario</a>
+                                            <a href="{{url('administration/student/create')}}" class="btn btn-primary font-weight-bolder">
+                                            <i class="la la-plus"></i>Añadir estudiante</a>
                                             <!--end::Button-->
                                         </div>
                                     </div>
+<!---------------------------------------------------------------------------------------------------------->
+                                    <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                                        <div class="my-5">
+                                            <div class="form-group row">
+                                                <label class="col-form-label text-right col-lg-1 col-sm-12"></label>
+                                                <div class="col-md-2 my-2 my-md-0">
+                                                    <select class="form-control" id="Jornada" name="Jornada">
+                                                        <option value="" >Jornadas</option>
+                                                        @foreach($period as $jornada)
+                                                            <option value="{{$jornada->id}}">
+                                                                {{$jornada->Name}}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2 my-2 my-md-0">
+                                                    <select class="form-control" id="Nivel" name="Nivel">
+                                                        <option value="" >Niveles</option>
+                                                        @foreach($level as $nivel)
+                                                            <option value="{{$nivel->id}}">
+                                                                {{$nivel->Name}}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2 my-2 my-md-0">
+                                                    <select class="form-control" id="Grado" name="Grado">
+                                                        <option value="" >Grados</option>
+                                                        @foreach($grade as $grado)
+                                                            <option value="{{$grado->id}}">
+                                                                {{$grado->Name}}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2 my-2 my-md-0">
+                                                    <select class="form-control" id="Seccion" name="Seccion">
+                                                        <option value="" >Secciones</option>
+                                                        @foreach($section as $seccion)
+                                                            <option value="">
+                                                                {{$seccion->Seccion}}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <!--div class="col-md-1 my-2 my-md-0">
+                                                    <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Buscar</button>
+                                                </div-->
+                                            </div>
+                                        </div>
+                                    </div>
+<!------------------------------------------------------------------------------------------------------------>
                                     <div class="card-body">
                                         <!--begin: Datatable-->
-                                        <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
+                                        <table class="table table-bordered table-hover table-checkable" id="" style="margin-top: 13px !important">
                                             <thead>
                                                 <tr>
-                                                    @foreach($Titles as $Title)
-                                                    <th>{{ $Title }}</th>
+                                                    @foreach($Titles as $t)
+                                                    <th>{{ $t }}</th>
                                                     @endforeach
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($Models as $Model)
+                                                @foreach($Models as $m)
                                                 <tr>
-                                                    <td>{{$Model['Id']}}</td>
-                                                    <td>{{$Model['Name']}}</td>
-                                                    <td>{{$Model['Apellido']}}</td>
-                                                    <td>{{$Model['Direccion']}}</td>
-                                                    <td>{{$Model['Telefono']}}</td>
-                                                    <td>{{$Model['Fecha_Nacimiento']}}</td>
-                                                    <td>{{$Model['Usuario']}}</td>
-                                                    <td>{{$Model['Correo']}}</td>
+                                                    <td>{{$m->course}}</td>
+                                                    <td>{{$m->Names}} {{$m->LastNames}}</td>
+                                                    <!--td>{{$m->test}}</td-->
                                                     <td nowrap="nowrap"></td>
                                                 </tr>
                                                 @endforeach
@@ -122,24 +166,18 @@
                                 </div>
                                 <!--end::Card-->
                             </div>
-
-	@stop
-	@section('scripts')
-
+    @stop
+    @section('scripts')
         <!--begin::Page Vendors(used by this page)-->
         <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
         <!--end::Page Vendors-->
         <!--begin::Page Scripts(used by this page)-->
-        
         <!--end::Page Scripts-->
         <script type="text/javascript">
-           
             "use strict";
             var KTDatatablesDataSourceHtml = function() {
-
                 var initTable1 = function() {
                     var table = $('#kt_datatable');
-
                     // begin first table
                     table.DataTable({
                         responsive: true,
@@ -170,28 +208,18 @@
                                     ';
                                 },
                             },
-                           
-                          
                         ],
                     });
-
                 };
-
                 return {
-
                     //main function to initiate the module
                     init: function() {
                         initTable1();
                     },
-
                 };
-
             }();
-
             jQuery(document).ready(function() {
                 KTDatatablesDataSourceHtml.init();
             });
-
-
        </script>
-	@stop
+    @stop
