@@ -38,7 +38,7 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            @if(curso)
+                                            @if($curso && $grado && $jornada)
                                             <h3 class="card-label">Listado de {{$curso->Name}} de {{$grado->Name}} jornada {{$jornada->Name}}</h3>
                                             @endif
                                         </div>
@@ -86,10 +86,6 @@
                                                 <!--end::Dropdown Menu-->
                                             </div>
                                             <!--end::Dropdown-->
-                                            <!--begin::Button-->
-                                            <a href="{{url('administration/teacher/create')}}" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-plus-circle"></i>Agregar Un Voluntario</a>
-                                            <!--end::Button-->
                                         </div>
                                     </div>
                                     <div class="card-body">

@@ -47,13 +47,21 @@
 															<h1>Detalle listado de notas:</h1>
 															<div class="my-5">
 																<div class="form-group row">
-																	<label class="col-form-label text-right col-lg-3 col-sm-12">Curso</label>
+																	<label class="col-form-label text-right col-lg-3 col-sm-12">Jornada</label>
 																	<div class="col-lg-9 col-md-9 col-sm-12">
-																		<select class="form-control" id="Curso" name="Curso">
-																		<option value="" >--Seleccione una opcion</option>
-																				@foreach($cursos as $curso)
-																					<option value="{{$curso->id}}" >{{$curso->Name}}</option>	
+																		<select class="form-control" id="Jornada" name="Jornada">
+																				<option value="" >--Seleccione una opcion</option>
+																				@foreach($jornadas as $jornada)
+																					<option value="{{$jornada->id}}" >{{$jornada->Name}}</option>	
 																				@endforeach
+																		</select>
+																	</div>
+																</div>
+																<div class="form-group row">
+																	<label class="col-form-label text-right col-lg-3 col-sm-12">Nivel</label>
+																	<div class="col-lg-9 col-md-9 col-sm-12">
+																		<select class="form-control" id="Nivel" name="Nivel">
+																			<option value="" >--Seleccione una opcion</option>
 																		</select>
 																	</div>
 																</div>
@@ -69,27 +77,16 @@
 																	</div>
 																</div>
 																<div class="form-group row">
-																	<label class="col-form-label text-right col-lg-3 col-sm-12">Nivel</label>
+																	<label class="col-form-label text-right col-lg-3 col-sm-12">Curso</label>
 																	<div class="col-lg-9 col-md-9 col-sm-12">
-																		<select class="form-control" id="Nivel" name="Nivel">
-																			<option value="" >--Seleccione una opcion</option>
-																				@foreach($niveles as $nivel)
-																					<option value="{{$nivel->id}}" >{{$nivel->Name}}</option>	
+																		<select class="form-control" id="Curso" name="Curso">
+																		<option value="" >--Seleccione una opcion</option>
+																				@foreach($cursos as $curso)
+																					<option value="{{$curso->id}}" >{{$curso->Name}}</option>	
 																				@endforeach
 																		</select>
 																	</div>
-																</div>
-																<div class="form-group row">
-																	<label class="col-form-label text-right col-lg-3 col-sm-12">Jornada</label>
-																	<div class="col-lg-9 col-md-9 col-sm-12">
-																		<select class="form-control" id="Jornada" name="Jornada">
-																				<option value="" >--Seleccione una opcion</option>
-																				@foreach($jornadas as $jornada)
-																					<option value="{{$jornada->id}}" >{{$jornada->Name}}</option>	
-																				@endforeach
-																		</select>
-																	</div>
-																</div>																
+																</div>												
 															</div>
 														</div>
 														<!--end::Wizard Step 3-->
@@ -241,7 +238,21 @@ var KTWizard1 = function () {
 
 		</script>
 
-        <script type="text/javascript">
+        <script type="text/javascript">			// LLENADO DE SELECTS
+		  $('#Jornada').on('change', function(e){
+			console.log(e.target.value);	
+			var ciudad_id = e.target.value;
+			$.get('/administration/teacher/selectJ?ciudad_id=' + ciudad_id,function(data) {
+				console.log(data);
+				$('#Nivel').empty();
+				$('#Nivel').append('<option value="0" disable="true" selected="true"></option>');
+
+				$.each(data, function(llenaN, regenciesObj){
+				console.log(data);
+				$('#Nivel').append('<option value="'+ regenciesObj['id'] +'">'+ regenciesObj['Nivel'] +'</option>');
+				})
+			});
+			});
 
          $( document ).ready(function() {
           $.ajaxSetup({

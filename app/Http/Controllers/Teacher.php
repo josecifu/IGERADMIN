@@ -332,6 +332,27 @@ class Teacher extends Controller
         $Titles = ['Id','Alumno','Voluntario','Curso','P1','P2','P3','P4','Acciones'];
         return view('Administration/Teachers/listadoNotas',compact('buttons','Titles','curso','grado','jornada'));
     }
+    public function llenaN(Request $request)
+    {
+        $jornada = Input::get('ciudad_id');
+        $jornadaN = Assign_period_grade::where('Period_id',$jornada)->get();
+        $niveles = [];
+        $grados = [];
+        foreach ($jornadaN as $value) {
+            $gradelevel = Assign_level_grade::find($value->grade_level_id);
+            $nivel = level::find($gradelevel->level_id);
+            // for ($i=0; $i < $niveles.length() ; $i++) { 
+                // if($niveles[i] != $nivel->Name){
+            $dataN = [
+                'id' => $nivel->id,
+                'Nivel' => $nivel->Name
+            ];
+            array_push($niveles, $nivel);
+                // }
+            // }
+        }
+        return response()->json($niveles);
+    }
     //Ingreso de notas
     public function Edit_Note()
     {
