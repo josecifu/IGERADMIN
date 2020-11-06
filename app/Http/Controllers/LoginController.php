@@ -12,7 +12,7 @@ class LoginController extends Controller
  	use AuthenticatesUsers;
     public $maxAttempts = 4;
     public $decayMinutes = 1;
-    protected $redirectTo = '/administration/';
+    protected $redirectTo = '/administration/home/dashboard';
     public function __construct()
     {
         $this->middleware('guest')->except('logout');

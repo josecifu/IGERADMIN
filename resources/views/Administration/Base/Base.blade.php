@@ -171,7 +171,58 @@
 							</div>
 							<!--end::Subheader-->
 							 @yield('content')
-							
+
+
+							 <!--begin::Modal-->
+							 <div class="modal fade" id="kt_select_modalSelect1" role="dialog" aria-hidden="true">
+								 <div class="modal-dialog modal-lg" role="document">
+									 <div class="modal-content">
+										 <div class="modal-header">
+											 <h5 class="modal-title">Listado de alumnos por grados </h5>
+											 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												 <i aria-hidden="true" class="ki ki-close"></i>
+											 </button>
+										 </div>
+										 <form class="form">
+											 <div class="modal-body">
+												<div class="form-group row">
+													<label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione la jornada:</label>
+													<div class="col-lg-9 col-md-9 col-sm-12">
+														<select class="form-control selectpicker" data-size="10" title="Ninguna jornada ha sido seleccionada" data-live-search="true" id="periodselect1">
+														   
+														</select>
+														
+													</div>
+												</div>
+												 <div class="form-group row" id="SelectLvl" style="visibility: hidden;">
+													 <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el nivel:</label>
+													 <div class="col-lg-9 col-md-9 col-sm-12">
+														 <select class="form-control selectpicker" title="Ningun nivel ha sido seleccionado" data-size="10" data-live-search="true" id="lvlmodalselect1">
+															
+														 </select>
+														 
+													 </div>
+												 </div>
+												 <div class="form-group row" id="SelectGrd" style="visibility: hidden;">
+													<label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el grado:</label>
+													<div class="col-lg-9 col-md-9 col-sm-12">
+														<select class="form-control selectpicker" title="Ningun grado ha sido seleccionado" data-size="10" data-live-search="true" id="gradeselect1">
+														   
+														</select>
+														<span class="form-text text-muted">Visualice el listado de alumnos por grados del nivel y jornada seleccionado</span>
+													</div>
+												</div>
+											 </div>
+											 <div class="modal-footer">
+												 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+												 <button type="button" class="btn btn-primary mr-2" >Visualizar</button>
+											 </div>
+										 </form>
+									 </div>
+								 </div>
+							 </div>
+							 <!--end::Modal-->
+
 							<!--end::Content-->
 						</div>
 						<!--begin::Content Wrapper-->
@@ -920,6 +971,69 @@
 		<!--end::Page Vendors-->
 		<!--begin::Page Scripts(used by this page)-->
 		<script src="{{ asset('assets/js/pages/widgets.js')}}"></script>
+		<script type="text/javascript">
+			function ListGrade()
+			{
+				$.ajax ({
+					url: '{{route('LoadPeriods')}}',
+					type: 'GET',
+					success: (e) => {
+						$('#periodselect1').empty();
+						$.each(e['Periods'], function(fetch, data){
+						  $('#periodselect1').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
+						});
+						$('#periodselect1').selectpicker('refresh');
+					}
+				});
+				
+			}
+			function ListLevel(Period)
+			{
+				$.ajax ({
+					url: '{{route('LoadLevels')}}',
+					type: 'POST',
+					data: {
+						"_token": "{{ csrf_token() }}",
+						"PeriodId"      : Period,
+					},
+					success: (e) => {
+						$('#lvlmodalselect1').empty();
+						$.each(e['Levels'], function(fetch, data){
+						  $('#lvlmodalselect1').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
+						});
+						$('#lvlmodalselect1').selectpicker('refresh');
+					}
+				});
+				
+			}
+			$('#periodselect1').on('change', function() {
+				$('#SelectLvl').css("visibility", "visible");
+				ListLevel($('#periodselect1').val());
+			  });
+			  function ListGrades(Level)
+			  {
+				  $.ajax ({
+					  url: '{{route('LoadGrades')}}',
+					  type: 'POST',
+					  data: {
+						  "_token": "{{ csrf_token() }}",
+						  "LvlId"      : Level,
+					  },
+					  success: (e) => {
+						  $('#gradeselect1').empty();
+						  $.each(e['Grades'], function(fetch, data){
+							$('#gradeselect1').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
+						  });
+						  $('#gradeselect1').selectpicker('refresh');
+					  }
+				  });
+				  
+			  }
+			  $('#lvlmodalselect1').on('change', function() {
+				  $('#SelectGrd').css("visibility", "visible");
+				  ListGrades($('#lvlmodalselect1').val());
+				});
+		</script>
 		@section('scripts')
 																					          
 		@show

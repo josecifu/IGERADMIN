@@ -10,10 +10,10 @@ class period extends Model
     use HasFactory;
     public function Grades()
     {
-        return $this->hasManyThrough('App\Models\grade', 'App\Models\level');
+        return $this->hasManyThrough('App\Models\grade', 'App\Models\level')->get();
     }
     public function Levels()
     {
-        return $this->hasMany('App\Models\level');
+        return $this->hasMany('App\Models\level')->get();
     }
 }

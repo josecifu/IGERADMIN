@@ -186,6 +186,51 @@ class Administration extends Controller
     {
         return view('Administration/Permisos/formulario');
     }
+    public function LoadGrades(Request $request)
+    {   
+        $ModelsData = level::find($request['LvlId']);
+        $Models =[];
+        foreach ($ModelsData->Grades()  as $value) {
+            $model = [
+                "Id" =>$value->id,
+                "Name" =>$value->Name,
+            ];
+            array_push($Models,$model);
+         } 
+        return response()->json([
+            "Grades" => $Models,
+            ]);
+    }
+    public function LoadLevels(Request $request)
+    {   
+        $ModelsData = period::find($request['PeriodId']);
+        $Models =[];
+        foreach ($ModelsData->Levels()  as $value) {
+            $model = [
+                "Id" =>$value->id,
+                "Name" =>$value->Name,
+            ];
+            array_push($Models,$model);
+         } 
+        return response()->json([
+            "Levels" => $Models,
+            ]);
+    }
+    public function LoadPeriods()
+    {
+        $PeriodsData = period::where('State','Active')->get();
+        $periods =[];
+        foreach ($PeriodsData as $value) {
+            $period = [
+                "Id" =>$value->id,
+                "Name" =>$value->Name,
+            ];
+            array_push($periods,$period);
+         } 
+        return response()->json([
+            "Periods" => $periods,
+            ]);
+    }
     public function LevelList()
     {
         $buttons =[];
@@ -213,7 +258,7 @@ class Administration extends Controller
         foreach ($model as $value) {
             $levels = "";
             $idLvl = "";
-            foreach ($value->Levels()->get() as $key => $value2) {
+            foreach ($value->Levels() as $key => $value2) {
                 if($levels!="")
                 $levels = $levels.", ".$value2->Name;
                 else
@@ -228,7 +273,7 @@ class Administration extends Controller
                 "Jornada" => $value->Name,  
                 "idLvl" =>$idLvl,
                 "Niveles" => $levels,
-                "Grados" => count($value->Grades()->get())
+                "Grados" => count($value->Grades())
             ];
             array_push($Models,$m);
         }
@@ -259,7 +304,7 @@ class Administration extends Controller
         $Titles =['Id','Jornada','Niveles','No de Grados','Acciones'];
         $lvl = level::find($id); 
         $Models = [];
-        foreach ($lvl->Grades()->get() as $key => $value) {
+        foreach ($lvl->Grades() as $key => $value) {
             $m =[
                 "Id" => $value->id,  
                 "Grade" => $value->Name." ".$lvl->Name,  
@@ -268,6 +313,7 @@ class Administration extends Controller
         }
         return view('Administration.Grades.List',compact('Titles','Models','buttons'));
     }
+  
     public function LevelListDelete()
     {
         $buttons =[];
@@ -293,7 +339,7 @@ class Administration extends Controller
         foreach ($model as $value) {
             $levels = "";
             $idLvl = "";
-            foreach ($value->Levels()->get() as $key => $value2) {
+            foreach ($value->Levels() as $key => $value2) {
                 if($levels!="")
                 $levels = $levels.", ".$value2->Name;
                 else
@@ -309,7 +355,7 @@ class Administration extends Controller
                 "Jornada" => $value->Name,  
                 "idLvl" =>$idLvl,
                 "Niveles" => $levels,
-                "Grados" => count($value->Grades()->get())
+                "Grados" => count($value->Grades())
             ];
             array_push($Models,$m);
         }
