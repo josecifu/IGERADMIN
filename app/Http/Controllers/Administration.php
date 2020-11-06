@@ -207,12 +207,9 @@ class Administration extends Controller
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
-
         $Titles =['Id','Jornada','Niveles','No de Grados','Acciones'];
         $Models = [];
         $model = period::where("State","Active")->get();
-       
-    
         foreach ($model as $value) {
             $levels = "";
             $idLvl = "";
@@ -226,7 +223,6 @@ class Administration extends Controller
                 else
                 $idLvl =$value2->id;
             }
-            
             $m =[
                 "Id" => $value->id,  
                 "Jornada" => $value->Name,  
@@ -307,7 +303,7 @@ class Administration extends Controller
                 else
                 $idLvl =$value2->id;
             }
-            
+           
             $m =[
                 "Id" => $value->id,  
                 "Jornada" => $value->Name,  
