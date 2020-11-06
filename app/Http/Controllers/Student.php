@@ -32,13 +32,13 @@ class Student extends Controller
     //lista de todos los estudiantes
     public function list()
     {
-        $Titles = [ 'Nombre del Estudiante',
-                    'No. Telefono',
-                    'Nombre de Usuario',
-                    'Correo Electronico',
-                    'Ultima Cesion'];
-        $Models = [];
-        $rol = Assign_user_rol::where('Rol_id',2)->get('user_id');
+        $titles = [ 'Nombre del estudiante',
+                    'No. Teléfono',
+                    'Nombre de usuario',
+                    'Correo electrónico',
+                    'Ultima cesión'];
+        $models = [];
+        $rol = Assign_user_rol::where('rol_id',2)->get('user_id');
         foreach ($rol as $i)
         {
             $user = User::find($i->user_id);
@@ -49,9 +49,9 @@ class Student extends Controller
                 'user' => $user->name,
                 'email' => $user->email,
             ];
-            array_push($Models,$query);
+            array_push($models,$query);
         }
-        return view('Student/students_list',compact('Models','Titles'));
+        return view('Student/students_list',compact('models','titles'));
     }
 
     //lista de todos los estudiantes con opciones por: nivel-grados-seccion
@@ -61,12 +61,12 @@ class Student extends Controller
         $level = Level::all();
         $grade = Grade::all();
         $section = DB::table('assign_period_grades')->select('Seccion')->groupby('Seccion')->get();
-        $Titles = ['Nombre del Estudiante',
-                    'No. Telefono',
+        $titles = ['Nombre del Estudiante',
+                    'No. Teléfono',
                     'Nombre de Usuario',
                     'Correo Electronico',
                     'Ultima Cesion'];
-        $Models = DB::table('assign_user_rols')
+        $models = DB::table('assign_user_rols')
             ->select('people.Names','people.LastNames','people.Phone','users.name','users.email')
             ->join('users','users.id','=','assign_user_rols.user_id')
             ->join('people','people.id','=','users.Person_id')
@@ -78,7 +78,7 @@ class Student extends Controller
             ->join('levels','levels.id','=','assign_level_grades.Level_id')
             ->where('assign_user_rols.rol_id',2)
             ->get();
-        return view('Student/students_list_grade',compact('period','level','grade','section','Models','Titles'));
+        return view('Student/students_list_grade',compact('period','level','grade','section','models','titles'));
     }
 
     //visualizacion de notas con filtro: jornada, grado, nivel, curso
@@ -88,8 +88,8 @@ class Student extends Controller
         $level = Level::all();
         $grade = Grade::all();
         $section = DB::table('assign_period_grades')->select('Seccion')->groupby('Seccion')->get();
-        $Titles = ['Nombre del Estudiante','Jornada','Nivel','Grado','Seccion','Curso','I','II','III','IV'];
-        $Models = DB::table('assign_user_rols')
+        $titles = ['Nombre del estudiante','Jornada','Nivel','Grado','Sección','Curso','I','II','III','IV'];
+        $models = DB::table('assign_user_rols')
             ->select('people.Names','people.LastNames','periods.Name as period','levels.Name as level','grades.Name as grade','assign_period_grades.Seccion','courses.Name as course')
             ->join('users','users.id','=','assign_user_rols.user_id')
             ->join('people','people.id','=','users.Person_id')
@@ -103,7 +103,7 @@ class Student extends Controller
             ->join('courses','courses.id','=','assign_course_grades.Course_id')
             ->where('assign_user_rols.rol_id',2)
             ->get();
-        return view('Student/course_notes_view',compact('period','level','grade','section','Models','Titles'));
+        return view('Student/course_notes_view',compact('period','level','grade','section','models','titles'));
     }
 
 
@@ -125,15 +125,14 @@ class Student extends Controller
         $level = Level::all();
         $grade = Grade::all();
         $section = DB::table('assign_period_grades')->select('Seccion')->groupby('Seccion')->get();
-
-        $Titles = ['Curso','Profesor','Evaluación','Valor','Fecha Inicio','Fecha Final','Unidad'];
-        $Models = DB::table('assign_user_rols')
+        $titles = ['Curso','Profesor','Evaluación','Valor','Fecha Inicio','Fecha Final','Unidad'];
+        $models = DB::table('assign_user_rols')
             ->select('courses.Name as course','people.Names','people.LastNames','tests.Title','tests.Score','tests.StartDate','tests.EndDate','tests.Unity')
             ->join('users','users.id','=','assign_user_rols.user_id')
             ->join('people','people.id','=','users.Person_id')
             ->where('assign_user_rols.rol_id',3)
             ->get();
-        return view('Student/',compact('period','level','grade','section','Models','Titles'));
+        return view('Student/',compact('period','level','grade','section','models','titles'));
     }
 
     public function create()
@@ -212,7 +211,7 @@ class Student extends Controller
                 $log = new logs;
                 $log->Table = "People";
                 $log->User_ID = $id;
-                $log->Description = "Se creo nuevo voluntario con el id: ".$person->id;
+                $log->Description = "Se creo nuevo estudiante con el id: ".$person->id;
                 $log->Type = "Create";
                 $log->save();
                 $log = new logs;
@@ -227,7 +226,7 @@ class Student extends Controller
                 $log = new logs;
                 $log->Table = "Assign_user_rol";
                 $log->User_ID = $id;
-                $log->Description = "ID: ".$user_rol->id." de la Asignacion de rol voluntario al usuario: ".$user->id;
+                $log->Description = "ID: ".$user_rol->id." de la Asignacion de rol estudiante al usuario: ".$user->id;
                 $log->Type = "Create";
                 $log->save();
                 DB::commit();
@@ -240,13 +239,13 @@ class Student extends Controller
     //actualizar estudiante
     public function edit($id)
     {
-        $ModelsP = Person::find($id);
+        $person_models = Person::find($id);
         $User = User::where('Person_id',$id)->first();
-        $ModelsU = [
+        $user_models = [
                 'Usuario' => $User->name,
                 'Email' => $User->email,
             ];
-        return view('Administration/Personas/formEdit',compact('ModelsP','ModelsU'));
+        return view('Administration/Personas/formEdit',compact('person_models','user_models'));
     }
 
     //Funciones de Actualizar
@@ -319,10 +318,9 @@ class Student extends Controller
     public function view_tests(Request $request)
     {
         $id = $request->session()->get('User_id');
-        $Titles = ['Dia','Inicia','Finaliza','Tipo','Curso'];
-        $Models = DB::table('users')
+        $titles = ['Dia','Inicia','Finaliza','Tipo','Curso'];
+        $models = DB::table('users')
             ->select('','')
-            
             ->join('assign_student_grades','assign_student_grades.user_id','=','users.id')
             ->join('assign_answer_test_students','assign_answer_test_students.Student_id','=','assign_student_grades.id')
             ->join('assign_question_tests','assign_question_tests.id','=','assign_answer_test_students.Question_id')
@@ -336,7 +334,7 @@ class Student extends Controller
             ->join('courses','courses.id','=','assign_course_grades.Course_id')
             ->where('users.id',$id)
             ->get();
-        return view('Student/',compact('Models','Titles'));
+        return view('Student/',compact('models','titles'));
     }
     public function create_test_answer()
     {
@@ -347,8 +345,8 @@ class Student extends Controller
     public function view_schedule(Request $request)
     {
         $id = $request->session()->get('User_id');
-        $Titles = ['Dia','Inicia','Finaliza','Tipo','Curso'];
-        $Models = DB::table('users')
+        $titles = ['Dia','Inicia','Finaliza','Tipo','Curso'];
+        $models = DB::table('users')
             ->select('schedules.Day','schedules.StartHour','schedules.EndHour','schedules.Type','courses.Name')
             ->join('assign_student_grades','assign_student_grades.user_id','=','users.id')
             ->join('assign_period_grades','assign_period_grades.id','=','assign_student_grades.Grade_id')
@@ -362,7 +360,7 @@ class Student extends Controller
             ->join('schedules','schedules.id','=','assign_schedule_courses.Schedule_id')
             ->where('users.id',$id)
             ->get();
-        return view('Student/',compact('Models','Titles'));
+        return view('Student/',compact('models','titles'));
     }
     public function view_forms()
     {
