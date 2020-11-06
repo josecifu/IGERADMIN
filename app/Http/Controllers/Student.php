@@ -55,30 +55,12 @@ class Student extends Controller
     }
 
     //lista de todos los estudiantes con opciones por: nivel-grados-seccion
-    public function list_grade()
+    public function list_grade($id)
     {
-        $period = Period::all();
-        $level = Level::all();
-        $grade = Grade::all();
-        $section = DB::table('assign_period_grades')->select('Seccion')->groupby('Seccion')->get();
-        $titles = ['Nombre del estudiante',
-                    'No. Teléfono',
-                    'Nombre de usuario',
-                    'Correo electrónico',
-                    'Ultima cesión'];
-        $models = DB::table('assign_user_rols')
-            ->select('people.Names','people.LastNames','people.Phone','users.name','users.email')
-            ->join('users','users.id','=','assign_user_rols.user_id')
-            ->join('people','people.id','=','users.Person_id')
-            ->join('assign_student_grades','assign_student_grades.user_id','=','users.id')
-            ->join('assign_period_grades','assign_period_grades.id','=','assign_student_grades.Grade_id')
-            ->join('periods','periods.id','=','assign_period_grades.Period_id')
-            ->join('assign_level_grades','assign_level_grades.id','=','assign_period_grades.grade_level_id')
-            ->join('grades','grades.id','=','assign_level_grades.Grade_id')
-            ->join('levels','levels.id','=','assign_level_grades.Level_id')
-            ->where('assign_user_rols.rol_id',2)
-            ->get();
-        return view('Administration/Student/list_grade',compact('period','level','grade','section','models','titles'));
+        $grade = grade::find($id);
+        $models = Assign_student_grade::where('Grade_id',$id)->get();
+        $titles ="";
+        return view('Administration/Student/list_grade',compact('models','titles'));
     }
 
     //visualizacion de notas con filtro: jornada, grado, nivel, curso

@@ -19,7 +19,7 @@ class CreateAssignActivitiesTable extends Migration
             $table->integer('Score');
             $table->integer('Unity');
             $table->unsignedInteger('Course_id'); 
-            $table->foreign('Course_id')->references('id')->on('assign_course_grades');
+            $table->foreign('Course_id')->references('id')->on('courses');
             $table->timestamps();
         });
     }

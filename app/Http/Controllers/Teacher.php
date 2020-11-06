@@ -84,6 +84,10 @@ class Teacher extends Controller
         $Titles = ['Id','Nombre del Estudiante','Curso','Grado','P1','P2','P3','P4','Final','Acciones'];
         return view('Administration/Teachers/NotasEstudiantes',compact('Titles'));
     }
+    public function TestTeacher(Request $request,$id)
+    {
+        dd(grade::find($id));
+    }
     public function list() //Visualizcion tabla Voluntarios con usuario
     {
         $buttons =[];

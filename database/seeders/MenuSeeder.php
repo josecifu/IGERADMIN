@@ -50,21 +50,21 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([
             'Name' => 'Listado por grados',
             'State' => '1',
-            'Type' => 'Link',
-            'Url' => 'ListGrade()',  
+            'Type' => '1',
+            'Url' => 'ListGrade(1)',  
             'menu_id' => '4'          
         ]);
         DB::table('menus')->insert([
             'Name' => 'Visualización de notas',
             'State' => '1',
-            'Type' => 'Link',
+            'Type' => '2',
             'Url' => 'ListScore()',  
             'menu_id' => '4'          
         ]);
         DB::table('menus')->insert([
             'Name' => 'Visualización de examenes',
             'State' => '1',
-            'Type' => 'Link',
+            'Type' => '3',
             'Url' => 'ListTest()',  
             'menu_id' => '4'          
         ]);
@@ -99,14 +99,21 @@ class MenuSeeder extends Seeder
             'Url' => 'administration/teacher/score',  
             'menu_id' => '10'          
         ]);
-        DB::table('menus')->insert([ //14
+        DB::table('menus')->insert([
+            'Name' => 'Visualización de examenes',
+            'State' => '1',
+            'Type' => '4',
+            'Url' => 'ListGrade(4)',    
+            'menu_id' => '10'          
+        ]);
+        DB::table('menus')->insert([ //15
             'Name' => 'Estadisticas generales',
             'State' => '1',
             'Url' => 'administration/teacher/statistics',  
             'menu_id' => '10'          
         ]);       
         DB::table('menus')->insert([
-            'Name' => 'Administracion', //15
+            'Name' => 'Administracion', //16
             'Icon' => 'pe-7s-home',
             'Url' => 'administration/workspace',
             'State' => '1',     
@@ -116,28 +123,28 @@ class MenuSeeder extends Seeder
             'Name' => 'Ver listado de encargados de circulo',
             'State' => '1',
             'Url' => 'administration/workspace/list',  
-            'menu_id' => '15'          
+            'menu_id' => '16'          
         ]);  
-        DB::table('menus')->insert([ 
+        DB::table('menus')->insert([ //18
             'Name' => 'Ver inscripciones',
             'State' => '1',
             'Url' => 'administration/workspace/inscriptions',  
-            'menu_id' => '15'          
+            'menu_id' => '16'          
         ]);  
         DB::table('menus')->insert([ 
             'Name' => 'Ver espacios de trabajo',
             'State' => '1',
             'Url' => 'administration/workspace/list',  
-            'menu_id' => '15'          
+            'menu_id' => '16'          
         ]);  
-        DB::table('menus')->insert([ //19
+        DB::table('menus')->insert([ //20
             'Name' => 'Ver estadisticas de trabajo',
             'State' => '1',
             'Url' => 'administration/workspace/statistics',  
-            'menu_id' => '15'          
+            'menu_id' => '16'          
         ]);  
         DB::table('menus')->insert([
-            'Name' => 'Configuracion', //20
+            'Name' => 'Configuracion', //21
             'Icon' => 'pe-7s-home',
             'Url' => 'administration/configurations',
             'State' => '1',     
@@ -147,19 +154,19 @@ class MenuSeeder extends Seeder
             'Name' => 'Ver listado de asignacion de jornadas y niveles',
             'State' => '1',
             'Url' => 'administration/configurations/level/list',  
-            'menu_id' => '20'          
+            'menu_id' => '21'          
         ]); 
         DB::table('menus')->insert([ 
             'Name' => 'Ver horarios',
             'State' => '1',
             'Url' => 'administration/configurations/schedule/list',  
-            'menu_id' => '20'          
+            'menu_id' => '21'          
         ]); 
         DB::table('menus')->insert([ 
             'Name' => 'Configuraciones generales',
             'State' => '1',
-            'Url' => 'administration/configurations/list/',  //23
-            'menu_id' => '20'          
+            'Url' => 'administration/configurations/list/',  //25
+            'menu_id' => '21'          
         ]); 
         
     }

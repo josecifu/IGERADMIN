@@ -193,7 +193,7 @@ class Administration extends Controller
         foreach ($ModelsData->Grades()  as $value) {
             $model = [
                 "Id" =>$value->id,
-                "Name" =>$value->Name,
+                "Name" =>$value->Name." ".$value->Section,
             ];
             array_push($Models,$model);
          } 
@@ -220,6 +220,7 @@ class Administration extends Controller
     {
         $PeriodsData = period::where('State','Active')->get();
         $periods =[];
+       
         foreach ($PeriodsData as $value) {
             $period = [
                 "Id" =>$value->id,

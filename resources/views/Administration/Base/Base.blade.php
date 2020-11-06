@@ -174,11 +174,12 @@
 
 
 							 <!--begin::Modal-->
+
 							 <div class="modal fade" id="kt_select_modalSelect1" role="dialog" aria-hidden="true">
 								 <div class="modal-dialog modal-lg" role="document">
 									 <div class="modal-content">
 										 <div class="modal-header">
-											 <h5 class="modal-title">Listado de alumnos por grados </h5>
+											 <h5 class="modal-title" id="Title1">Listado de alumnos por grados </h5>
 											 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 												 <i aria-hidden="true" class="ki ki-close"></i>
 											 </button>
@@ -209,13 +210,13 @@
 														<select class="form-control selectpicker" title="Ningun grado ha sido seleccionado" data-size="10" data-live-search="true" id="gradeselect1">
 														   
 														</select>
-														<span class="form-text text-muted">Visualice el listado de alumnos por grados del nivel y jornada seleccionado</span>
+														<span class="form-text text-muted" id="Title2">Visualice el listado de alumnos por grados del nivel y jornada seleccionado</span>
 													</div>
 												</div>
 											 </div>
 											 <div class="modal-footer">
 												 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-												 <button type="button" class="btn btn-primary mr-2" >Visualizar</button>
+												 <button type="button" class="btn btn-primary mr-2" onclick="save();">Visualizar</button>
 											 </div>
 										 </form>
 									 </div>
@@ -972,8 +973,25 @@
 		<!--begin::Page Scripts(used by this page)-->
 		<script src="{{ asset('assets/js/pages/widgets.js')}}"></script>
 		<script type="text/javascript">
-			function ListGrade()
+			var posGrade;
+			function ListGrade(pos)
 			{
+				posGrade=pos;
+				if(pos==1)
+				{
+
+				}
+				else if(pos==3)
+				{
+					$('#Title1').html("Visualizacion de examenes por grado");
+					$('#Title2').html("Visualice el listado de examenes por grados del nivel y jornada seleccionado");
+				}
+				else if(pos==4)
+				{
+					$('#Title1').html("Visualizacion de examenes por grado");
+					$('#Title2').html("Visualice el listado de examenes por grados del nivel y jornada seleccionado");
+				}
+				
 				$.ajax ({
 					url: '{{route('LoadPeriods')}}',
 					type: 'GET',
@@ -986,6 +1004,22 @@
 					}
 				});
 				
+			}
+			function save()
+			{
+			
+				if(posGrade==1)
+				{
+					var Id = $('#gradeselect1').val();
+					var $url_path = '{!! url('/') !!}';
+                    window.location.href = $url_path+"/administration/student/lists/grade/"+Id;
+				}
+				if(posGrade==4)
+				{
+					var Id = $('#gradeselect1').val();
+					var $url_path = '{!! url('/') !!}';
+                    window.location.href = $url_path+"/administration/teacher/test/"+Id;
+				}
 			}
 			function ListLevel(Period)
 			{
@@ -1033,7 +1067,13 @@
 				  $('#SelectGrd').css("visibility", "visible");
 				  ListGrades($('#lvlmodalselect1').val());
 				});
+
+			
+
+
 		</script>
+
+
 		@section('scripts')
 																					          
 		@show

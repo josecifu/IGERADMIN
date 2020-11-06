@@ -18,7 +18,7 @@ class CreateAssignStudentGradesTable extends Migration
             $table->unsignedBigInteger('user_id'); 
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedInteger('Grade_id'); 
-            $table->foreign('Grade_id')->references('id')->on('assign_period_grades');
+            $table->foreign('Grade_id')->references('id')->on('grades');
             $table->timestamps();
         });
     }

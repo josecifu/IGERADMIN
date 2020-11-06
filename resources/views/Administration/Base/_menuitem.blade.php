@@ -4,7 +4,7 @@
 @if ($item["submenu"] == [] && $item["Url"]!="")
     @if($item["State"]=="1")
                                                 <li class="menu-item {{getSubMenuActivo($item["Url"])}}" aria-haspopup="true">
-                                                    @if($item["Type"]=="Link")
+                                                    @if($item["Type"])
                                                         <a href="#" onClick="{{ $item["Url"] }}" data-toggle="modal" data-target="#kt_select_modalSelect1" class="menu-link">
                                                             <span class="menu-text">{{ $item["Name"] }}</span>
                                                             <span class="menu-desc"></span>

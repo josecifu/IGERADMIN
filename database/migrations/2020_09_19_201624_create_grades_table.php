@@ -18,6 +18,7 @@ class CreateGradesTable extends Migration
             $table->string('Name');
             $table->unsignedInteger('Level_id'); 
             $table->foreign('Level_id')->references('id')->on('levels');
+            $table->string('Section');
             $table->string('State');
             $table->timestamps();
         });

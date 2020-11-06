@@ -35,6 +35,13 @@ class PeriodSeeder extends Seeder
                     DB::table('grades')->insert([
                         'Name' => $value,
                         'Level_id' => $id,
+                        'Section'=>'A',
+                        'State' => 'Active',       
+                    ]);
+                    DB::table('grades')->insert([
+                        'Name' => $value,
+                        'Level_id' => $id,
+                        'Section'=>'B',
                         'State' => 'Active',       
                     ]);
                 } 
@@ -43,6 +50,7 @@ class PeriodSeeder extends Seeder
                      DB::table('grades')->insert([
                         'Name' => $value,
                         'Level_id' => $id,
+                        'Section'=>'A',
                         'State' => 'Active',       
                     ]);
                 }
