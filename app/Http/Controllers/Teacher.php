@@ -51,9 +51,9 @@ class Teacher extends Controller
     {
         $buttons =[];
         $button = [
-            "Name" => 'Añadir un voluntario',
-            "Link" => 'administration/teacher/create',
-            "Type" => "add"
+            "Name" => 'Info',
+            "Link" => '#',
+            "Type" => "btn1"
         ];
         array_push($buttons,$button);
         return view('Administration/Teachers/dashboard',compact('buttons'));
@@ -94,9 +94,15 @@ class Teacher extends Controller
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Logs Voluntarios',
+            "Name" => 'Ver Voluntarios inactivos',
+            "Link" => 'administration/teacher/desactive',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $button = [
+            "Name" => 'Ver Logs Voluntarios',
             "Link" => 'administration/teacher/logs',
-            "Type" => "add"
+            "Type" => "btn1"
         ];
         array_push($buttons,$button);
         $Titles =['Id','Nombres','Apellidos','Direccion','Telefono','Fecha Nacimiento','Usuario','Email', 'Acciones'];
@@ -184,25 +190,25 @@ class Teacher extends Controller
                 $usuario_curso->Course_id = $CJNG->id;
                 $usuario_curso->save();
                 $log = new logs;
-                $log->Table = "People";
+                $log->Table = "Voluntario";
                 $log->User_ID = $id;
                 $log->Description = "Se creo nuevo voluntario con el id: ".$person->id;
                 $log->Type = "Create";
                 $log->save();
                 $log = new logs;
-                $log->Table = "users";
+                $log->Table = "Voluntario";
                 $log->User_ID = $id;
                 $log->Description = "Se creo nuevo usuario con nombre: ".$user->name." y correo: ".$user->email;
                 $log->Type = "Create";
                 $log->save();
                 $log = new logs;
-                $log->Table = "Assign_user_rol";
+                $log->Table = "Voluntario";
                 $log->User_ID = $id;
                 $log->Description = "ID: ".$usuario_rol->id." de la Asignacion de rol voluntario al usuario: ".$user->id;
                 $log->Type = "Create";
                 $log->save();
                 $log = new logs;
-                $log->Table = "Assign_teacher_courses";
+                $log->Table = "Voluntario";
                 $log->User_ID = $id;
                 $log->Description = "ID: ".$usuario_curso->id." de la Asignacion de curso al usuario: ".$user->id;
                 $log->Type = "Create";
@@ -270,15 +276,17 @@ class Teacher extends Controller
 
     public function delete($id, Request $request)
     {
-        $usuario = $request->session()->get('User_id');
+        $IID = $request->session()->get('User_id');
+        $usuarioLogueado = User::find($IID);
+        $r = User::find($id);
         $dataU=array(
             'State' => 'Desactivated',
         );
         $log = new logs;
-        $log->Table = "Tablas users y Assign_User_Rol";
-        $log->User_ID = $usuario;
-        $log->Description = "Se desactivo un usuario con el id: ".$id;
-        $log->Type = "Update";
+        $log->Table = "Voluntario";
+        $log->User_ID = $usuarioLogueado->name;
+        $log->Description = "Se desactivo un usuario con el nombre: ".$r->name." y el correo: ".$r->email;
+        $log->Type = "Delete";
         $log->save();
         User::where('Person_id', $id)->update($dataU);
         Assign_user_rol::where('user_id',$id)->update($dataU);

@@ -84,10 +84,6 @@
                                                 <!--end::Dropdown Menu-->
                                             </div>
                                             <!--end::Dropdown-->
-                                            <!--begin::Button-->
-                                            <a href="{{url('administration/teacher/create')}}" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-plus-circle"></i>Agregar Un Voluntario</a>
-                                            <!--end::Button-->
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -142,6 +138,9 @@
                     // begin first table
                     table.DataTable({
                         responsive: true,
+                        "language": {
+                            "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                        },
                         columnDefs: [
                             {
                                 targets: -1,
@@ -163,7 +162,7 @@
                                         <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
                                             <i class="la la-edit"></i>\
                                         </a>\
-                                        <a href="/administration/teacher/delete/'+full[0]+'" class="btn btn-sm btn-clean btn-icon" title="Borrar">\
+                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Borrar">\
                                             <i class="la la-trash"></i>\
                                         </a>\
                                     ';
@@ -190,7 +189,52 @@
             jQuery(document).ready(function() {
                 KTDatatablesDataSourceHtml.init();
             });
-
+            function deletePeriod($id,$name)
+            {
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                })
+                swalWithBootstrapButtons.fire({
+                    title: '¿Está seguro de eliminar el voluntario?',
+                    text: "El nombre del Voluntario: "+$name,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si, eliminar!',
+                    cancelButtonText: 'No, cancelar!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var Code = $id;
+                        var data = [{
+                            Code: Code,
+                            Name: result.value[0],
+                        }];
+                        swalWithBootstrapButtons.fire({
+                            title: 'Eliminado!',
+                            text: 'Se ha eliminado con exito!',
+                            icon: 'success',
+                            confirmButtonText: 'Aceptar',
+                        }).then(function () {
+                            
+                            var $url_path = '{!! url('/') !!}';
+                            window.location.href = $url_path+"/administration/teacher/delete/"+$id;
+                            });
+                    } else if (
+                    result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                    swalWithBootstrapButtons.fire({
+                        title: 'Cancelado!',
+                        text:  'La Voluntario no ha sido eliminada!',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar',
+                    })
+                    }
+                })
+            }
 
        </script>
 
