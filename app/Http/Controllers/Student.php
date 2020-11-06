@@ -72,8 +72,10 @@ class Student extends Controller
             ->join('people','people.id','=','users.Person_id')
             ->join('assign_student_grades','assign_student_grades.user_id','=','users.id')
             ->join('assign_period_grades','assign_period_grades.id','=','assign_student_grades.Grade_id')
+            ->join('periods','periods.id','=','assign_period_grades.Period_id')
             ->join('assign_level_grades','assign_level_grades.id','=','assign_period_grades.grade_level_id')
             ->join('grades','grades.id','=','assign_level_grades.Grade_id')
+            ->join('levels','levels.id','=','assign_level_grades.Level_id')
             ->where('assign_user_rols.rol_id',2)
             ->get();
         return view('Student/students_list_grade',compact('period','level','grade','section','Models','Titles'));
@@ -85,12 +87,55 @@ class Student extends Controller
         $period = Period::all();
         $level = Level::all();
         $grade = Grade::all();
-        //$section = Assign_period_grade::all();
         $section = DB::table('assign_period_grades')->select('Seccion')->groupby('Seccion')->get();
-        return view('Student/course_notes_view',compact('period','level','grade','section'));
+        $Titles = ['Nombre del Estudiante','Jornada','Nivel','Grado','Seccion','Curso','I','II','III','IV'];
+        $Models = DB::table('assign_user_rols')
+            ->select('people.Names','people.LastNames','periods.Name as period','levels.Name as level','grades.Name as grade','assign_period_grades.Seccion','courses.Name as course')
+            ->join('users','users.id','=','assign_user_rols.user_id')
+            ->join('people','people.id','=','users.Person_id')
+            ->join('assign_student_grades','assign_student_grades.user_id','=','users.id')
+            ->join('assign_period_grades','assign_period_grades.id','=','assign_student_grades.Grade_id')
+            ->join('periods','periods.id','=','assign_period_grades.Period_id')
+            ->join('assign_level_grades','assign_level_grades.id','=','assign_period_grades.grade_level_id')
+            ->join('grades','grades.id','=','assign_level_grades.Grade_id')
+            ->join('levels','levels.id','=','assign_level_grades.Level_id')
+            ->join('assign_course_grades','assign_course_grades.Grade_id','=','assign_period_grades.id')
+            ->join('courses','courses.id','=','assign_course_grades.Course_id')
+            ->where('assign_user_rols.rol_id',2)
+            ->get();
+        return view('Student/course_notes_view',compact('period','level','grade','section','Models','Titles'));
     }
 
-    //crear estudiante con asignacion de grado
+
+
+
+
+
+
+
+
+
+
+
+
+    //visualizacion de examenes
+    public function tests()
+    {
+        $period = Period::all();
+        $level = Level::all();
+        $grade = Grade::all();
+        $section = DB::table('assign_period_grades')->select('Seccion')->groupby('Seccion')->get();
+
+        $Titles = ['Curso','Profesor','Evaluación','Valor','Fecha Inicio','Fecha Final','Unidad'];
+        $Models = DB::table('assign_user_rols')
+            ->select('courses.Name as course','people.Names','people.LastNames','tests.Title','tests.Score','tests.StartDate','tests.EndDate','tests.Unity')
+            ->join('users','users.id','=','assign_user_rols.user_id')
+            ->join('people','people.id','=','users.Person_id')
+            ->where('assign_user_rols.rol_id',3)
+            ->get();
+        return view('Student/',compact('period','level','grade','section','Models','Titles'));
+    }
+
     public function create()
     {
         $period = Period::all();
@@ -99,6 +144,25 @@ class Student extends Controller
         $section = DB::table('assign_period_grades')->select('Seccion')->groupby('Seccion')->get();
         return view('Student/create_student',compact('period','level','grade','section'));
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //estudiante con asignacion de grado
     public function save(Request $request)
     {
         $id = $request->session()->get('User_id'); 
@@ -172,24 +236,6 @@ class Student extends Controller
         }
         return response()->json(["Accion completada"]);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     //actualizar estudiante
     public function edit($id)
@@ -270,8 +316,27 @@ class Student extends Controller
     public function view_teacher_information(Request $request)
     {
     }
-    public function view_tests()
+    public function view_tests(Request $request)
     {
+        $id = $request->session()->get('User_id');
+        $Titles = ['Dia','Inicia','Finaliza','Tipo','Curso'];
+        $Models = DB::table('users')
+            ->select('','')
+            
+            ->join('assign_student_grades','assign_student_grades.user_id','=','users.id')
+            ->join('assign_answer_test_students','assign_answer_test_students.Student_id','=','assign_student_grades.id')
+            ->join('assign_question_tests','assign_question_tests.id','=','assign_answer_test_students.Question_id')
+            ->join('tests','tests.id','=','assign_question_tests.Test_id')
+            ->join('assign_period_grades','assign_period_grades.id','=','assign_student_grades.Grade_id')
+            ->join('periods','periods.id','=','assign_period_grades.Period_id')
+            ->join('assign_level_grades','assign_level_grades.id','=','assign_period_grades.grade_level_id')
+            ->join('grades','grades.id','=','assign_level_grades.Grade_id')
+            ->join('levels','levels.id','=','assign_level_grades.Level_id')
+            ->join('assign_course_grades','assign_course_grades.Grade_id','=','assign_period_grades.id')
+            ->join('courses','courses.id','=','assign_course_grades.Course_id')
+            ->where('users.id',$id)
+            ->get();
+        return view('Student/',compact('Models','Titles'));
     }
     public function create_test_answer()
     {
@@ -279,8 +344,25 @@ class Student extends Controller
     public function save_test_answer()
     {
     }
-    public function view_schedule()
+    public function view_schedule(Request $request)
     {
+        $id = $request->session()->get('User_id');
+        $Titles = ['Dia','Inicia','Finaliza','Tipo','Curso'];
+        $Models = DB::table('users')
+            ->select('schedules.Day','schedules.StartHour','schedules.EndHour','schedules.Type','courses.Name')
+            ->join('assign_student_grades','assign_student_grades.user_id','=','users.id')
+            ->join('assign_period_grades','assign_period_grades.id','=','assign_student_grades.Grade_id')
+            ->join('periods','periods.id','=','assign_period_grades.Period_id')
+            ->join('assign_level_grades','assign_level_grades.id','=','assign_period_grades.grade_level_id')
+            ->join('grades','grades.id','=','assign_level_grades.Grade_id')
+            ->join('levels','levels.id','=','assign_level_grades.Level_id')
+            ->join('assign_course_grades','assign_course_grades.Grade_id','=','assign_period_grades.id')
+            ->join('courses','courses.id','=','assign_course_grades.Course_id')
+            ->join('assign_schedule_courses','assign_schedule_courses.Course_id','=','assign_course_grades.id')
+            ->join('schedules','schedules.id','=','assign_schedule_courses.Schedule_id')
+            ->where('users.id',$id)
+            ->get();
+        return view('Student/',compact('Models','Titles'));
     }
     public function view_forms()
     {

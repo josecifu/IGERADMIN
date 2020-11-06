@@ -31,7 +31,7 @@
 													<div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
 														<div class="wizard-label">
 															<i class="wizard-icon flaticon-list"></i>
-															<h3 class="wizard-title">Información Personal</h3>
+															<h3 class="wizard-title">Información personal</h3>
 														</div>
 														<span class="svg-icon svg-icon-xl wizard-arrow">
 															<!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg-->
@@ -50,7 +50,7 @@
 													<div class="wizard-step" data-wizard-type="step">
 														<div class="wizard-label">
 															<i class="wizard-icon flaticon-user"></i>
-															<h3 class="wizard-title">Información de Usuario</h3>
+															<h3 class="wizard-title">Información de usuario</h3>
 														</div>
 														<span class="svg-icon svg-icon-xl wizard-arrow">
 															<!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg-->
@@ -69,7 +69,7 @@
 													<div class="wizard-step" data-wizard-type="step">
 														<div class="wizard-label">
 															<i class="wizard-icon flaticon-list"></i>
-															<h3 class="wizard-title">Asignación de Grado</h3>
+															<h3 class="wizard-title">Asignación de grado</h3>
 														</div>
 													</div>
 													<!--end::Wizard Step 3 Nav-->
@@ -111,7 +111,7 @@
 																	</div>
 																</div>
 																<div class="form-group row">
-																	<label class="col-3">Direccion</label>
+																	<label class="col-3">Dirección</label>
 																	<div class="col-9">
 																		<div class="input-group input-group-solid">
 																			<div class="input-group-prepend">
@@ -137,7 +137,7 @@
 																	</div>
 																</div>
 																<div class="form-group row">
-																	<label class="col-3">Fecha de Nacimiento</label>
+																	<label class="col-3">Fecha de nacimiento</label>
 																	<div class="col-9">
 																		<div class="input-group input-group-solid">
 																			<div class="input-group-prepend">
@@ -156,7 +156,7 @@
 														<div class="pb-5" data-wizard-type="step-content">
 															<div class="my-5">
 																<div class="form-group row">
-																	<label class="col-3">Nombre de Usuario</label>
+																	<label class="col-3">Nombre de usuario</label>
 																	<div class="col-9">
 																		<div class="input-group input-group-solid">
 																			<div class="input-group-prepend">
@@ -169,7 +169,7 @@
 																	</div>
 																</div>
 																<div class="form-group row">
-																	<label class="col-3">Correo Electronico</label>
+																	<label class="col-3">Correo electrónico</label>
 																	<div class="col-9">
 																		<div class="input-group input-group-solid">
 																			<div class="input-group-prepend">
@@ -237,7 +237,7 @@
 					                                                </div>
 																</div>
 																<div class="form-group row">
-																	<label class="col-form-label text-right col-lg-1 col-sm-12">Seccion</label>
+																	<label class="col-form-label text-right col-lg-1 col-sm-12">Sección</label>
 					                                                <div class="col-md-2 my-2 my-md-0">
 					                                                    <select class="form-control" id="Seccion" name="Seccion">
 					                                                        @foreach($section as $seccion)

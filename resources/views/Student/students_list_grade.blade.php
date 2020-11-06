@@ -36,10 +36,7 @@
                                 <div class="card card-custom">
                                     <div class="card-header">
                                         <div class="card-title">
-                                            <span class="card-icon">
-                                                <i class="flaticon2-favourite text-primary"></i>
-                                            </span>
-                                            <h3 class="card-label">Listado de Estudiantes</h3>
+                                            <h3 class="card-label">Listado de estudiantes</h3>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -49,7 +46,7 @@
                                                 <!--begin::Dropdown Menu-->
                                                 <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                                                     <ul class="nav flex-column nav-hover">
-                                                        <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opcion:</li>
+                                                        <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opción:</li>
                                                         <li class="nav-item">
                                                             <a href="#" class="nav-link">
                                                                 <i class="nav-icon la la-print"></i>
@@ -87,17 +84,18 @@
                                             <!--end::Dropdown-->
                                             <!--begin::Button-->
                                             <a href="{{url('administration/student/create')}}" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-plus"></i>Añadir Estudiante</a>
+                                            <i class="la la-plus"></i>Añadir estudiante</a>
                                             <!--end::Button-->
                                         </div>
                                     </div>
-<!-------------------------------------------------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------------------------------------->
                                     <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
                                         <div class="my-5">
                                             <div class="form-group row">
-                                                <label class="col-form-label text-right col-lg-1 col-sm-12">Jornada</label>
+                                                <label class="col-form-label text-right col-lg-1 col-sm-12"></label>
                                                 <div class="col-md-2 my-2 my-md-0">
                                                     <select class="form-control" id="Jornada" name="Jornada">
+                                                        <option value="" >Jornadas</option>
                                                         @foreach($period as $jornada)
                                                             <option value="{{$jornada->id}}">
                                                                 {{$jornada->Name}}
@@ -105,9 +103,9 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <label class="col-form-label text-right col-lg-1 col-sm-12">Nivel</label>
                                                 <div class="col-md-2 my-2 my-md-0">
                                                     <select class="form-control" id="Nivel" name="Nivel">
+                                                        <option value="" >Niveles</option>
                                                         @foreach($level as $nivel)
                                                             <option value="{{$nivel->id}}">
                                                                 {{$nivel->Name}}
@@ -115,9 +113,9 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <label class="col-form-label text-right col-lg-1 col-sm-12">Grado</label>
                                                 <div class="col-md-2 my-2 my-md-0">
                                                     <select class="form-control" id="Grado" name="Grado">
+                                                        <option value="" >Grados</option>
                                                         @foreach($grade as $grado)
                                                             <option value="{{$grado->id}}">
                                                                 {{$grado->Name}}
@@ -125,9 +123,9 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <label class="col-form-label text-right col-lg-1 col-sm-12">Seccion</label>
-                                                <div class="col-md-1 my-2 my-md-0">
+                                                <div class="col-md-2 my-2 my-md-0">
                                                     <select class="form-control" id="Seccion" name="Seccion">
+                                                        <option value="" >Secciones</option>
                                                         @foreach($section as $seccion)
                                                             <option value="">
                                                                 {{$seccion->Seccion}}
@@ -135,18 +133,16 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                            </div>
-                                            <div class="form-group row col-lg-1 col-sm-12">
-                                                <div class="col-md-1 my-2 my-md-0">
+                                                <!--div class="col-md-1 my-2 my-md-0">
                                                     <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Buscar</button>
-                                                </div>
+                                                </div-->
                                             </div>
                                         </div>
                                     </div>
-<!-------------------------------------------------------------------------------------------------------------------->
+<!------------------------------------------------------------------------------------------------------------>
                                     <div class="card-body">
                                         <!--begin: Datatable-->
-                                        <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
+                                        <table class="table table-bordered table-hover table-checkable" id="" style="margin-top: 13px !important">
                                             <thead>
                                                 <tr>
                                                     @foreach($Titles as $t)

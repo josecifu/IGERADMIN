@@ -142,11 +142,16 @@
 																	<a class="btn btn-clean font-weight-bold btn-sm"  style="width: 100%" href="{{ url($button['Link'])}}">
 																	<i class="ki ki-plus icon-sm"></i>{{$button['Name']}}</a>
 																</li>
+															@elseif($button['Type']=='addFunction')
+																<li class="navi-footer py-4">
+																	<a class="btn btn-clean font-weight-bold btn-sm"  style="width: 100%" href="#" onclick="{{$button['Link']}}">
+																	<i class="ki ki-plus icon-sm"></i>{{$button['Name']}}</a>
+																</li>
 															@elseif ($button['Type']=='btn1')
 															<li class="navi-item">
-																<a href="#" class="navi-link">
+																<a href="{{ url($button['Link'])}}" class="navi-link">
 																	<span class="navi-text">
-																		<span class="label label-xl label-inline " style="width: 100%">{{$button['Name']}}</span>
+																		<span class="label label-xl label-inline"  style="width: 100%">{{$button['Name']}}</span>
 																	</span>
 																</a>
 															</li>

@@ -38,8 +38,8 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/list',$route.'\Student@list')->name('listStudent');
 		Route::get('/create',$route.'\Student@create')->name('CreateStudent');
 		Route::post('/save', $route.'\Student@save')->name('SaveStudent');
-		Route::get('/edit/{model}',$route.'\Student@edit')->name('EditTeacher');
-		Route::post('/update', $route.'\Student@update')->name('UpdateTeacher');
+		Route::get('/edit/{model}',$route.'\Student@edit')->name('EditStudent');
+		Route::post('/update', $route.'\Student@update')->name('UpdateStudent');
 		Route::get('/list/grade',$route.'\Student@list_grade')->name('ListGradeStudent');
 		Route::get('/score',$route.'\Student@score')->name('ScoreStudent');
 		Route::get('/logs',$route.'\Student@logs')->name('LogsStudent');
@@ -48,7 +48,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	Route::group([ 'prefix' => 'teacher'], function(){
 		$route = "App\Http\Controllers";
 		Route::get('/list',$route.'\Teacher@list')->name('ListTeacher');
-		Route::get('/list/workspace',$route.'\Teacher@workspace')->name('WorkspaceTeacher');
+		Route::get('/list/workspace',$route.'\Teacher@workspace')->name('workTeacher');
 		Route::get('/create',$route.'\Teacher@create')->name('CreateTeacher');
 		Route::post('/save', $route.'\Teacher@save')->name('SaveTeacher');
 		Route::get('/edit/{model}',$route.'\Teacher@edit')->name('EditTeacher');
@@ -56,14 +56,17 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/score',$route.'\Teacher@score')->name('ScoreTeacher');
 		Route::get('/logs',$route.'\Teacher@logs')->name('LogsTeacher');
 		Route::get('/delete/{model}', $route.'\Teacher@delete')->name('DeleteTeacher');
-		Route::get('/delete/{model}', $route.'\Teacher@delete')->name('DeleteTeacher');
-	Route::get('/search',$route.'\Teacher@formScore')->name('ScoreTeacher');
-	Route::get('/workspace',$route.'\Teacher@workspace')->name('WorkspaceTeacher');
+		Route::get('/search',$route.'\Teacher@seach')->name('SceachTeacher');
+		Route::get('/workspace',$route.'\Teacher@workspace')->name('WorkspaceTeacher');
 	});
 	Route::group([ 'prefix' => 'configurations'], function(){
 		$route = "App\Http\Controllers";
 		Route::get('level/list',$route.'\Administration@LevelList')->name('LevelList');
-		
+		Route::get('level/list/deletes',$route.'\Administration@LevelListDelete')->name('LevelListDelete');
+		Route::get('level/list/change/{id}/{type}',$route.'\Administration@ChangePeriod')->name('ChangePeriod');
+		Route::get('level/list/grades/level/{id}',$route.'\Administration@ViewGradesLvl')->name('ViewGradesLvl');
+		Route::post('period/save', $route.'\Administration@PeriodSave')->name('PeriodSave');
+		Route::post('period/update', $route.'\Administration@PeriodUpdate')->name('PeriodUpdate');
 	});
 });
 
