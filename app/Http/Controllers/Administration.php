@@ -314,7 +314,7 @@ class Administration extends Controller
             array_push($Models,$m);
         }
         $type="Delete";
-        return view('Administration.Grades.Level_List',compact('Titles','Models','','buttons','type'));
+        return view('Administration.Grades.Level_List',compact('Titles','Models','buttons','type'));
     }
     public function PeriodSave(Request $request)
     {

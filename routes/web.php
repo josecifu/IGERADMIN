@@ -43,6 +43,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/list/grade',$route.'\Student@list_grade')->name('ListGradeStudent');
 		Route::get('/score',$route.'\Student@score')->name('ScoreStudent');
 		Route::get('/logs',$route.'\Student@logs')->name('LogsStudent');
+		Route::get('/test',$route.'\Student@test')->name('TestStudent');
 	});
 	#Voluntarios
 	Route::group([ 'prefix' => 'teacher'], function(){
