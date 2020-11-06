@@ -36,10 +36,7 @@
                                 <div class="card card-custom">
                                     <div class="card-header">
                                         <div class="card-title">
-                                            <span class="card-icon">
-                                                <i class="flaticon2-favourite text-primary"></i>
-                                            </span>
-                                            <h3 class="card-label">Listado de Estudiantes</h3>
+                                            <h3 class="card-label">Listado de estudiantes</h3>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -49,7 +46,7 @@
                                                 <!--begin::Dropdown Menu-->
                                                 <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                                                     <ul class="nav flex-column nav-hover">
-                                                        <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opcion:</li>
+                                                        <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opción:</li>
                                                         <li class="nav-item">
                                                             <a href="#" class="nav-link">
                                                                 <i class="nav-icon la la-print"></i>
@@ -87,7 +84,7 @@
                                             <!--end::Dropdown-->
                                             <!--begin::Button-->
                                             <a href="{{url('administration/student/create')}}" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-plus"></i>Añadir Estudiante</a>
+                                            <i class="la la-plus"></i>Añadir estudiante</a>
                                             <!--end::Button-->
                                         </div>
                                     </div>
