@@ -34,7 +34,7 @@ class Student extends Controller
     {
         $buttons =[];
         $button = [
-            "Name" => 'Estudiante deshibilitados',
+            "Name" => 'Estudiantes deshibilitados',
             "Link" => 'administration/home/dashboard',
             "Type" => "btn1"
         ];
