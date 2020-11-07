@@ -7,7 +7,7 @@
     Estudiante
     @stop
     @section('breadcrumb2')
-    Notas de cursos
+    Notas
     @stop
     {{-- Page content --}}
     @section('content')

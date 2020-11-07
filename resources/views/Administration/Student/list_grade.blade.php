@@ -7,7 +7,7 @@
     Estudiante
     @stop
     @section('breadcrumb2')
-    Listado por grado
+    Listado
     @stop
     {{-- Page content --}}
     @section('content')
