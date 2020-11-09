@@ -38,8 +38,8 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            @if($curso && $grado && $jornada)
-                                            <h3 class="card-label">Listado de {{$curso->Name}} de {{$grado->Name}} jornada {{$jornada->Name}}</h3>
+                                            @if($course && $grado)
+                                            <h3 class="card-label">Listado de {{$course->Name}} de {{$grado}}</h3>
                                             @endif
                                         </div>
                                         <div class="card-toolbar">
@@ -99,17 +99,17 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Williams Alexander Escobar Juárez</td>
-                                                    <td>Fernando Jose Alexander Ordoñez Tupul</td>
-                                                    <td>Matematica</td>
-                                                    <td>0</td>
-                                                    <td>0</td>
-                                                    <td>0</td>
-                                                    <td>0</td>
-                                                    <td nowrap="nowrap"></td>
-                                                </tr>
+                                                @foreach($Models as $model)
+                                                    <tr>
+                                                        <td>{{$model['Nombre']}} {{$model['Apellido']}}</td>
+                                                        <td>J</td>
+                                                        <td>{{$model['P1']}}</td>
+                                                        <td>{{$model['P2']}}</td>
+                                                        <td>{{$model['P3']}}</td>
+                                                        <td>{{$model['P4']}}</td>
+                                                        <td nowrap="nowrap"></td>
+                                                    </tr>
+                                                @endforeach
                                             </tbody>
                                         </table>
                                         <!--end: Datatable-->

@@ -232,6 +232,21 @@ class Administration extends Controller
             "Periods" => $periods,
             ]);
     }
+    public function LoadCourses(Request $request)
+    {
+        $CoursesData = course::where('Grade_id',$request['GradeId'])->get();
+        $courses =[];
+        foreach ($CoursesData as $value) {
+            $course = [
+                "Id" =>$value->id,
+                "Name" =>$value->Name,
+            ];
+            array_push($courses,$course);
+         } 
+        return response()->json([
+            "Courses" => $courses,
+            ]);
+    }
     public function LevelList()
     {
         $buttons =[];
