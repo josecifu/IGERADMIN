@@ -3,17 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
+use App\Models\logs;
 use App\Models\Rol;
 use App\Models\Assign_user_rol;
 use App\Models\User;
 use App\Models\Person;
 use App\Models\Assign_student_grade;
 use App\Models\Note;
-use App\Models\Assign_period_grade;
 use App\Models\Classroom;
 use App\Models\Period;
-use App\Models\Assign_level_grade;
 use App\Models\Grade;
 use App\Models\Level;
 use App\Models\Asing_answer_test_student;
@@ -22,7 +21,7 @@ use App\Models\Schedule;
 use App\Models\Test;
 use App\Models\Information;
 use App\Models\Assign_course_grade;
-use App\Models\Assign_teacher_course;
+use App\Models\Asign_teacher_course;
 use App\Models\Course;
 
 class Student extends Controller
@@ -65,13 +64,6 @@ class Student extends Controller
     //lista de todos los estudiantes con opciones por: jornada, nivel, grados
     public function list_grade($id)
     {
-        //$models = [];
-        $titles = ['Curso'];
-        $grade = grade::find($id);
-        $models = Course::where('Grade_id',$id)->get('Name');
-        return view('Administration/Student/tests',compact('models','titles'));
-
-        /*
         $models = [];
         $titles = [ 'Nombre del estudiante',
                     'No. Teléfono',
@@ -94,25 +86,24 @@ class Student extends Controller
             ];
             array_push($models,$query);
         }
-        return view('Administration/Student/list_grade',compact('models','titles'));*/
+        return view('Administration/Student/list_grade',compact('models','titles'));
     }
 
     //visualizacion de notas con filtro: jornada, grado, nivel, curso
-    public function score()
+    public function score($id)
     {
     }
 
-    //visualizacion de examenes
+    //visualizacion de examenes con respuestas de cada alumno por grado-seccion
     public function tests($id)
     {
+        /*
+        $titles = ['Curso'];
+        $grade = grade::find($id);
+        $models = Course::where('Grade_id',$id)->get('Name');
+        return view('Administration/Student/tests',compact('models','titles'));
+        */
     }
-
-
-
-
-
-
-
 
 
 
@@ -120,126 +111,102 @@ class Student extends Controller
 
     public function create()
     {
-        $period = Period::all();
-        $level = Level::all();
-        $grade = Grade::all();
-        $section = DB::table('assign_period_grades')->select('Seccion')->groupby('Seccion')->get();
-        return view('Administration/Student/create_form',compact('period','level','grade','section'));
+        $buttons =[];
+        $button = [
+            "Name" => 'Listado de estudiantes',
+            "Link" => 'administration/student/list',
+            "Type" => "add"
+        ];
+        return view('Administration/Student/create_form',compact('buttons'));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     //estudiante con asignacion de grado
     public function save(Request $request)
     {
         $id = $request->session()->get('User_id'); 
         $data = $request->data[0];
-        $name = $data['Nombre'];
-        $last_name = $data['Apellido'];
-        $address = $data['Direccion'];
-        $phone = $data['Telefono'];
-        $birth_date = $data['FechaNacimiento'];
-        $user = $data['Usuario'];
-        $email = $data['Email'];
+        $names= $data['Nombre'];
+        $lastnames= $data['Apellido'];
+        $address= $data['Direccion'];
+        $phone= $data['Telefono'];
+        $birthdate= $data['Nacimiento'];
+        $username= $data['Usuario'];
+        $email= $data['Correo'];
         $password = $data['Contraseña'];
         $grade = $data['Grado'];
-        $level = $data['Nivel'];
-        $period = $data['Jornada'];
-        $level_grade = Assign_level_grade::where('Level_id',$level)->where('Grade_id',$grade)->first();
-        $period_grade = Assign_period_grade::where('grade_level_id',$level_grade->id)->where('Period_id',$period)->first();
-        //LOGICA
+        //$grades = Grade::find($data['Grado']);
+        dd($grade);
         try {
               DB::beginTransaction();
-                //perona
-                $person = new Person;
-                $person->Names = $name;
-                $person->LastNames = $last_name;
-                $person->Address = $address;
-                $person->Phone = $phone;
-                $person->BirthDate = $birth_date;
-                $person->save();
-                //usuario
+                $student = new Person;
+                $student->Names = $names;
+                $student->LastNames = $lastnames;
+                $student->Address = $address;
+                $student->Phone = $phone;
+                $student->BirthDate = $birthdate;
+                $student->save();
                 $user = new User;
-                $user->name = $user;
+                $user->name = $username;
                 $user->email = $email;
                 $user->password = bcrypt($password);
                 $user->State = "Active";
-                $user->Person_id =  $person->id;
+                $user->Person_id = $student->id;
                 $user->save();
-                //asignacion usuario de rol
                 $user_rol = new Assign_user_rol;
-                $user_rol->rol_id = 3;
+                $user_rol->rol_id = 2;
                 $user_rol->user_id = $user->id;
                 $user_rol->State = "Active";
                 $user_rol->save();
-                //asignacion de grado
 
-
-                //logs
+                /*$student_grades = new Assign_student_grades;
+                $student_grades->user_id = $user->id;
+                $student_grades->Grade_id = $grade;
+                $student_grades->save();*/
+                
                 $log = new logs;
-                $log->Table = "People";
+                $log->Table = "Estudiante";
                 $log->User_ID = $id;
-                $log->Description = "Se creo nuevo estudiante con el id: ".$person->id;
+                $log->Description = "Se registro un nuevo estudiante con indentificación: ".$student->id;
                 $log->Type = "Create";
                 $log->save();
                 $log = new logs;
-                $log->Table = "users";
+                $log->Table = "Usuario";
                 $log->User_ID = $id;
-                $log->Description = "Se creo nuevo usuario con nombre: ".$user->name." y correo: ".$user->email;
-                $log->Type = "Create";
+                $log->Description = "Se registro un nuevo usuario con nombre: ".$user->username;
                 $log->Type = "Create";
                 $log->save();
                 $log = new logs;
-                $log->save();
-                $log = new logs;
-                $log->Table = "Assign_user_rol";
+                $log->Table = "Rol";
                 $log->User_ID = $id;
-                $log->Description = "ID: ".$user_rol->id." de la Asignacion de rol estudiante al usuario: ".$user->id;
-                $log->Type = "Create";
+                $log->Description = "Se ha asignado el rol ¨Estudiante¨ al usuario: ".$user->name;
+                $log->Type = "Assign";
                 $log->save();
+                /*$log = new logs;
+                $log->Table = "Grado";
+                $log->User_ID = $id;
+                $log->Description = "El estudiante: ".$student->Names." ".$student->LastNames."se le ha asignado a: ".$grade->Name;
+                $log->Type = "Assign";
+                $log->save();*/
                 DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
         }
-        return response()->json(["Accion completada"]);
+        return response()->json(["Accion exitosa"]);
     }
 
     //actualizar estudiante
     public function edit($id)
     {
-        $person_models = Person::find($id);
-        $User = User::where('Person_id',$id)->first();
-        $user_models = [
-                'Usuario' => $User->name,
-                'Email' => $User->email,
-            ];
-        return view('Administration/Student/edit_form',compact('person_models','user_models'));
+        $student = Person::find($id);
+        $user = User::where('Person_id',$id)->first();
+        $models = ['Usuario'=>$user->name,'Email'=>$user->email];
+        return view('Administration/Student/edit_form',compact('student','models'));
     }
 
     //Funciones de Actualizar
     public function update($id, Request $request)
     {
+        $id = $request->session()->get('User_id');
         $data = $request->data[0];
         $Nombres= $data['Nombre'];
         $Apellidos= $data['Apellido'];
@@ -249,29 +216,31 @@ class Student extends Controller
         $Usuario = $data['Usuario'];
         $Email= $data['Email'];
         $PersonaID = $data['Persona'];
-        //LOGICA Usuario
-        $dataU=array(
+        $data_user=array(
             'name' => $Usuario,
             'email' => $Email,
-            'Person_id' => $PersonaID ,
         );
-        User::where('Person_id', $id)->update($dataU);
-        //LOGICA Persona
-        $dataP=array(
+        User::where('Person_id', $PersonaID)->update($dataU);
+        $data_student=array(
             'Names' => $Nombres,
             'LastNames' => $Apellidos,
             'Address' => $Direccion,
             'Phone' => $Telefono,
             'BirthDate' =>$FechaNacimiento,
         );
-        Person::where('id',$id)->update($dataP);
+        Person::where('id',$PersonaID)->update($dataP);
         $log = new logs;
         $log->Table = "people y users";
         $log->User_ID = $id;
-        $log->Description = "Se actualizo una persona con el id: ".$id." y correo ".$Email;
-        $log->save(); 
+        $log->Description = "Se actualizaron los datos del estudiante con indentificación: ".$PersonaID." y correo ".$Email;
+        $log->Type = "Update";
+        $log->save();
         return response()->json(["Accion completada"]);
     }
+
+
+
+
 
 
 
@@ -306,24 +275,6 @@ class Student extends Controller
     }
     public function view_tests(Request $request)
     {
-        $id = $request->session()->get('User_id');
-        $titles = ['Dia','Inicia','Finaliza','Tipo','Curso'];
-        $models = DB::table('users')
-            ->select('','')
-            ->join('assign_student_grades','assign_student_grades.user_id','=','users.id')
-            ->join('assign_answer_test_students','assign_answer_test_students.Student_id','=','assign_student_grades.id')
-            ->join('assign_question_tests','assign_question_tests.id','=','assign_answer_test_students.Question_id')
-            ->join('tests','tests.id','=','assign_question_tests.Test_id')
-            ->join('assign_period_grades','assign_period_grades.id','=','assign_student_grades.Grade_id')
-            ->join('periods','periods.id','=','assign_period_grades.Period_id')
-            ->join('assign_level_grades','assign_level_grades.id','=','assign_period_grades.grade_level_id')
-            ->join('grades','grades.id','=','assign_level_grades.Grade_id')
-            ->join('levels','levels.id','=','assign_level_grades.Level_id')
-            ->join('assign_course_grades','assign_course_grades.Grade_id','=','assign_period_grades.id')
-            ->join('courses','courses.id','=','assign_course_grades.Course_id')
-            ->where('users.id',$id)
-            ->get();
-        return view('Student/tests',compact('models','titles'));
     }
     public function create_test_answer()
     {
@@ -333,23 +284,6 @@ class Student extends Controller
     }
     public function view_schedule(Request $request)
     {
-        $id = $request->session()->get('User_id');
-        $titles = ['Dia','Inicia','Finaliza','Tipo','Curso'];
-        $models = DB::table('users')
-            ->select('schedules.Day','schedules.StartHour','schedules.EndHour','schedules.Type','courses.Name')
-            ->join('assign_student_grades','assign_student_grades.user_id','=','users.id')
-            ->join('assign_period_grades','assign_period_grades.id','=','assign_student_grades.Grade_id')
-            ->join('periods','periods.id','=','assign_period_grades.Period_id')
-            ->join('assign_level_grades','assign_level_grades.id','=','assign_period_grades.grade_level_id')
-            ->join('grades','grades.id','=','assign_level_grades.Grade_id')
-            ->join('levels','levels.id','=','assign_level_grades.Level_id')
-            ->join('assign_course_grades','assign_course_grades.Grade_id','=','assign_period_grades.id')
-            ->join('courses','courses.id','=','assign_course_grades.Course_id')
-            ->join('assign_schedule_courses','assign_schedule_courses.Course_id','=','assign_course_grades.id')
-            ->join('schedules','schedules.id','=','assign_schedule_courses.Schedule_id')
-            ->where('users.id',$id)
-            ->get();
-        return view('Student/schedule',compact('models','titles'));
     }
     public function view_forms()
     {
