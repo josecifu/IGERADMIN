@@ -102,7 +102,7 @@
                                                 @foreach($Models as $model)
                                                     <tr>
                                                         <td>{{$model['Nombre']}} {{$model['Apellido']}}</td>
-                                                        <td>J</td>
+                                                        <td>{{$model['VN']}} {{$model['VA']}}</td>
                                                         <td>{{$model['P1']}}</td>
                                                         <td>{{$model['P2']}}</td>
                                                         <td>{{$model['P3']}}</td>

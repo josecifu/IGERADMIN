@@ -135,7 +135,7 @@ class Student extends Controller
         $password = $data['Contraseña'];
         $grade = $data['Grado'];
         //$grades = Grade::find($data['Grado']);
-        dd($grade);
+        
         try {
               DB::beginTransaction();
                 $student = new Person;
@@ -157,12 +157,10 @@ class Student extends Controller
                 $user_rol->user_id = $user->id;
                 $user_rol->State = "Active";
                 $user_rol->save();
-
-                /*$student_grades = new Assign_student_grades;
+                $student_grades = new Assign_student_grade;
                 $student_grades->user_id = $user->id;
                 $student_grades->Grade_id = $grade;
-                $student_grades->save();*/
-                
+                $student_grades->save();
                 $log = new logs;
                 $log->Table = "Estudiante";
                 $log->User_ID = $id;

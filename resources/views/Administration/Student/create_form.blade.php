@@ -523,7 +523,7 @@
 					type: 'POST',
 					data: {
 						"_token": "{{ csrf_token() }}",
-						"LevelId"      : Level,
+						"LvlId"      : Level,
 					},
 					success: (e) => {
 						$('#Grado').empty();
