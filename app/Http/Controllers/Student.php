@@ -22,9 +22,8 @@ use App\Models\Schedule;
 use App\Models\Test;
 use App\Models\Information;
 use App\Models\Assign_course_grade;
-use App\Models\Asign_teacher_course;
+use App\Models\Assign_teacher_course;
 use App\Models\Course;
-use DB;
 
 class Student extends Controller
 {
@@ -66,65 +65,58 @@ class Student extends Controller
     //lista de todos los estudiantes con opciones por: jornada, nivel, grados
     public function list_grade($id)
     {
+        //$models = [];
+        $titles = ['Curso'];
         $grade = grade::find($id);
-        $models = Assign_student_grade::where('Grade_id',$id)->get();
-        $titles ="";
-        return view('Administration/Student/list_grade',compact('models','titles'));
+        $models = Course::where('Grade_id',$id)->get('Name');
+        return view('Administration/Student/tests',compact('models','titles'));
+
+        /*
+        $models = [];
+        $titles = [ 'Nombre del estudiante',
+                    'No. Teléfono',
+                    'Fecha de nacimiento',
+                    'Nombre de usuario',
+                    'Correo electrónico',
+                    'Ultima cesión'];
+        $grade = grade::find($id);
+        $assign = Assign_student_grade::where('Grade_id',$id)->get('user_id');
+        foreach ($assign as $i)
+        {
+            $user = User::find($i->user_id);
+            $student = Person::find($user->Person_id);
+            $query = [
+                'name' => $student->Names . ' ' . $student->LastNames,
+                'phone' => $student->Phone,
+                'birthdate' => $student->BirthDate,
+                'user' => $user->name,
+                'email' => $user->email
+            ];
+            array_push($models,$query);
+        }
+        return view('Administration/Student/list_grade',compact('models','titles'));*/
     }
 
     //visualizacion de notas con filtro: jornada, grado, nivel, curso
     public function score()
     {
-        $period = Period::all();
-        $level = Level::all();
-        $grade = Grade::all();
-        $section = DB::table('assign_period_grades')->select('Seccion')->groupby('Seccion')->get();
-        $titles = ['Nombre del estudiante','Profesor','Curso','I','II','III','IV'];
-        $models = DB::table('assign_user_rols')
-            ->select('people.Names','people.LastNames','courses.Name as course')
-            ->join('users','users.id','=','assign_user_rols.user_id')
-            ->join('people','people.id','=','users.Person_id')
-            ->join('assign_student_grades','assign_student_grades.user_id','=','users.id')
-            ->join('assign_period_grades','assign_period_grades.id','=','assign_student_grades.Grade_id')
-            ->join('periods','periods.id','=','assign_period_grades.Period_id')
-            ->join('assign_level_grades','assign_level_grades.id','=','assign_period_grades.grade_level_id')
-            ->join('grades','grades.id','=','assign_level_grades.Grade_id')
-            ->join('levels','levels.id','=','assign_level_grades.Level_id')
-            ->join('assign_course_grades','assign_course_grades.Grade_id','=','assign_period_grades.id')
-            ->join('courses','courses.id','=','assign_course_grades.Course_id')
-            ->where('assign_user_rols.rol_id',2)
-            ->get();
-        return view('Administration/Student/course_notes',compact('period','level','grade','section','models','titles'));
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
     //visualizacion de examenes
-    public function tests()
+    public function tests($id)
     {
-        $period = Period::all();
-        $level = Level::all();
-        $grade = Grade::all();
-        $section = DB::table('assign_period_grades')->select('Seccion')->groupby('Seccion')->get();
-        $titles = ['Curso','Profesor'];
-        $models = DB::table('assign_user_rols')
-            ->select('courses.Name as course','people.Names','people.LastNames')
-            ->join('users','users.id','=','assign_user_rols.user_id')
-            ->join('people','people.id','=','users.Person_id')
-            ->where('assign_user_rols.rol_id',3)
-            ->get();
-        return view('Administration/Student/tests',compact('period','level','grade','section','models','titles'));
     }
+
+
+
+
+
+
+
+
+
+
+
 
     public function create()
     {
@@ -134,6 +126,12 @@ class Student extends Controller
         $section = DB::table('assign_period_grades')->select('Seccion')->groupby('Seccion')->get();
         return view('Administration/Student/create_form',compact('period','level','grade','section'));
     }
+
+
+
+
+
+
 
 
 

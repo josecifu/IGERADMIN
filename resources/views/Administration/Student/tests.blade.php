@@ -69,21 +69,19 @@
                     <table class="table table-bordered table-hover table-checkable" id="" style="margin-top: 13px !important">
                         <thead>
                             <tr>
-                                @foreach($Titles as $t)
+                                @foreach($titles as $t)
                                 <th>{{ $t }}</th>
                                 @endforeach
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($Models as $m)
+                            @foreach($models as $m)
                             <tr>
-                                <td>{{$m->course}}</td>
-                                <td>{{$m->Names}} {{$m->LastNames}}</td>
                                 <td>
                                     <a href="#" class="nav-link">
                                         <i class="nav-icon la la-file-pdf-o"></i>
-                                        <span class="nav-text">Ver Examen</span>
-                                    </a><!--{{$m->test}}-->
+                                        <span class="nav-text">{{$m->Name}}</span>
+                                    </a>
                                 </td>
                                 <td nowrap="nowrap"></td>
                             </tr>
