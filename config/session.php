@@ -31,9 +31,9 @@ return [
     |
     */
 
-    'lifetime' => env('SESSION_LIFETIME', 120),
-
-    'expire_on_close' => false,
+    'lifetime' => 1,
+    'expire_on_close' => true,
+    'expired-session-redirect' => url(env('APP_URL')),
 
     /*
     |--------------------------------------------------------------------------

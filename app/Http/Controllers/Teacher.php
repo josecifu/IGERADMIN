@@ -22,7 +22,7 @@ use App\Models\Assign_student_grade;
 //tabla de Asignacion cursos a grados
 use App\Models\Assign_course_grade;
 //tabla de Asignacion cursos a grados
-use App\Models\Asign_teacher_course;
+use App\Models\Assign_teacher_course;
 //tabla de Asignacion usuario rol
 use App\Models\Assign_user_rol;
 //tabla de Asignacion nivel grado
@@ -205,7 +205,7 @@ class Teacher extends Controller
                 $log->Type = "Assign";
                 $log->save();
                 for ($i=0; $i < count($Cursos) ; $i++) { 
-                    $usuario_curso = new Asign_teacher_course;
+                    $usuario_curso = new Assign_teacher_course;
                     $curso = course::find($Cursos[$i]);
                     $usuario_curso->user_id = $user->id;
                     $usuario_curso->Course_id = $Cursos[$i];
