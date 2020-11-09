@@ -16,7 +16,7 @@ class CreateAsignTestCoursesTable extends Migration
         Schema::create('assign_test_courses', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('Teacher_id'); 
-            $table->foreign('Teacher_id')->references('id')->on('assign_teacher_courses');
+            $table->foreign('Teacher_id')->references('id')->on('asign_teacher_courses');
             $table->unsignedInteger('Test_id'); 
             $table->foreign('Test_id')->references('id')->on('tests');
             $table->timestamps();
