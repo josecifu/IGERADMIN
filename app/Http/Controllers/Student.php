@@ -32,8 +32,16 @@ class Student extends Controller
     //lista de todos los estudiantes
     public function list()
     {
+        $buttons =[];
+        $button = [
+            "Name" => 'Estudiantes deshibilitados',
+            "Link" => 'administration/home/dashboard',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
         $titles = [ 'Nombre del estudiante',
                     'No. Teléfono',
+                    'Fecha de nacimiento',
                     'Nombre de usuario',
                     'Correo electrónico',
                     'Ultima cesión'];
@@ -46,15 +54,16 @@ class Student extends Controller
             $query = [
                 'name' => $student->Names . ' ' . $student->LastNames,
                 'phone' => $student->Phone,
+                'birthdate' => $student->BirthDate,
                 'user' => $user->name,
-                'email' => $user->email,
+                'email' => $user->email
             ];
             array_push($models,$query);
         }
-        return view('Student/list',compact('models','titles'));
+        return view('Administration/Student/list',compact('models','titles','buttons'));
     }
 
-    //lista de todos los estudiantes con opciones por: nivel-grados-seccion
+    //lista de todos los estudiantes con opciones por: jornada, nivel, grados
     public function list_grade($id)
     {
         $grade = grade::find($id);
