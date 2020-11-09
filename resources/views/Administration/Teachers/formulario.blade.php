@@ -206,7 +206,6 @@
 														<label class="col-form-label text-right col-lg-3 col-sm-12">Jornada</label>
 														<div class="col-lg-9 col-md-9 col-sm-12">
 															<select class="form-control selectpicker" data-size="10" title="Ninguna jornada ha sido seleccionada" data-live-search="true" id="Jornada">
-																	<option value="" >--Seleccione una opcion</option>
 															</select>
 														</div>
 													</div>
@@ -214,10 +213,6 @@
 														<label class="col-form-label text-right col-lg-3 col-sm-12">Nivel</label>
 														<div class="col-lg-9 col-md-9 col-sm-12">
 															<select class="form-control" id="Nivel" name="Nivel">
-																	<option value="" >--Seleccione una opcion</option>
-																	@foreach($Niveles as $nivel)
-																		<option value="{{$nivel->id}}" >{{$nivel->Name}}</option>
-																	@endforeach
 															</select>
 														</div>
 													</div>	
@@ -225,10 +220,6 @@
 														<label class="col-form-label text-right col-lg-3 col-sm-12">Grado</label>
 														<div class="col-lg-9 col-md-9 col-sm-12">
 															<select class="form-control" id="Grado" name="Grado">
-																	<option value="" >--Seleccione una opcion</option>
-																	@foreach($Grados as $grado)
-																		<option value="{{$grado->id}}" >{{$grado->Name}}</option>
-																	@endforeach
 															</select>
 														</div>
 													</div>
@@ -237,13 +228,6 @@
 														<div class="col-lg-9 col-md-9 col-sm-12">
 															<select class="form-control" id="Curso" name="Curso" multiple="multiple">
 																<optgroup Label="Cursos">
-																	<option value="1" >curso1</option>
-																
-																	<option value="2" >curso2</option>
-																
-																@foreach($Cursos as $curso)
-																	<option value="{{$curso->id}}" >{{$curso->Name}}</option>
-																@endforeach
 																</optgroup>
 															</select>
 														</div>
@@ -282,7 +266,7 @@
 			"use strict";
 		// multi select
 		$('#Curso').select2({
-         placeholder: "Select a state"
+         placeholder: "Seleccione los cursos a asignar"
         });
 
 // Class definition
@@ -502,14 +486,10 @@ var KTWizard1 = function () {
             var EmailPersona = $('#Email').val();
 			var Curso = $('#Curso').val();
 			var Grado = $('#Grado').val();
-			var Nivel = $('#Nivel').val();
-			var Jornada = $('#Jornada').val();
             var data = [{
                 //Persona
 				Curso: Curso,
 				Grado: Grado,
-				Nivel: Nivel,
-				Jornada: Jornada,
                 Nombre: NombrePersona,
                 Apellido: ApellidosPersona,
                 Direccion: DireccionPersona,
@@ -537,7 +517,13 @@ var KTWizard1 = function () {
                      
                 },
                 error: function(e){
-                    console.log(e);
+					console.log(e);
+					swal.fire({
+						title: 'Ocurrio un error!',
+						text:  'Los datos no han sido registrados!, verifique los campos',
+						icon: 'error',
+						confirmButtonText: 'Aceptar',
+                    })
                 }
             });
 		 }
@@ -553,12 +539,71 @@ var KTWizard1 = function () {
 				$('#Jornada').selectpicker('refresh');
 			}
 		});
+		function ListLevel(Period)
+		{
+			$.ajax ({
+				url: '{{route('LoadLevels')}}',
+				type: 'POST',
+				data: {
+					"_token": "{{ csrf_token() }}",
+					"PeriodId"      : Period,
+				},
+				success: (e) => {
+					$('#Nivel').empty();
+					$('#Nivel').append('<option value="" >--Seleccione una opcion</option>');
+					$.each(e['Levels'], function(fetch, data){
+						$('#Nivel').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
+					});
+					$('#Nivel').selectpicker('refresh');
+				}
+			});	
+		}
+		function ListGrades(Level)
+		{
+			$.ajax ({
+				url: '{{route('LoadGrades')}}',
+				type: 'POST',
+				data: {
+					"_token": "{{ csrf_token() }}",
+					"LvlId"      : Level,
+				},
+				success: (e) => {
+					$('#Grado').empty();
+					$('#Grado').append('<option value="" >--Seleccione una opcion</option>');
+					$.each(e['Grades'], function(fetch, data){
+					$('#Grado').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
+					});
+					$('#Grado').selectpicker('refresh');
+				}
+			});
+		}
+		function ListCourses(Grade)
+		{
+			$.ajax ({
+				url: '{{route('LoadCourses')}}',
+				type: 'POST',
+				data: {
+					"_token": "{{ csrf_token() }}",
+					"GradeId"      : Grade,
+				},
+				success: (e) => {
+					$('#Curso').empty();
+					$('#Curso').append('<option value="" >--Seleccione una opcion</option>');
+					$.each(e['Courses'], function(fetch, data){
+					$('#Curso').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
+					});
+					$('#Curso').selectpicker('refresh');
+				}
+			});
+		}
 		$('#Jornada').on('change', function() {
 			ListLevel($('#Jornada').val());
-		  });
-		  $('#Curso').on('change', function() {
-			alert($('#Curso').val());
-		  });
-		  
+		});
+		$('#Nivel').on('change', function() {
+			ListGrades($('#Nivel').val());
+		});
+		$('#Grado').on('change', function() {
+			ListCourses($('#Grado').val());
+		});
     </script>
 	@stop

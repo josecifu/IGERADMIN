@@ -185,7 +185,7 @@
 											 </button>
 										 </div>
 										 <form class="form">
-											 <div class="modal-body">
+											 <div class="modal-body" id="bdModal">
 												<div class="form-group row">
 													<label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione la jornada:</label>
 													<div class="col-lg-9 col-md-9 col-sm-12">
@@ -210,13 +210,21 @@
 														<select class="form-control selectpicker" title="Ningun grado ha sido seleccionado" data-size="10" data-live-search="true" id="gradeselect1">
 														   
 														</select>
-														<span class="form-text text-muted" id="Title2">Visualice el listado de alumnos por grados del nivel y jornada seleccionado</span>
+													</div>
+												</div>
+												<div class="form-group row" id="SelectCourse" style="visibility: hidden;">
+													<label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el curso:</label>
+													<div class="col-lg-9 col-md-9 col-sm-12">
+														<select class="form-control selectpicker" title="Ningun grado ha sido seleccionado" data-size="10" data-live-search="true" id="courseselect1">
+														   
+														</select>
+														<span class="form-text text-muted" id="Title3">Visualice el listado de alumnos por grados del nivel y jornada seleccionado</span>
 													</div>
 												</div>
 											 </div>
 											 <div class="modal-footer">
 												 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-												 <button type="button" class="btn btn-primary mr-2" onclick="save();">Visualizar</button>
+												 <button type="button" class="btn btn-primary mr-2" onclick="save();" id="btnModal">Visualizar</button>
 											 </div>
 										 </form>
 									 </div>
@@ -987,8 +995,8 @@
 					$('#Title2').html("Visualice el listado de examenes por grados del nivel y jornada seleccionado");
 				}
 				else if(pos==4)
-				{
-					$('#Title1').html("Visualizacion de examenes por grado");
+				{			
+					$('#Title1').text("Visualización de examenes por grado y Voluntarios");
 					$('#Title2').html("Visualice el listado de examenes por grados del nivel y jornada seleccionado");
 				}
 				
@@ -1005,6 +1013,11 @@
 				});
 				
 			}
+			function otro() {
+				var Id = $('#gradeselect1').val();
+				var $url_path = '{!! url('/') !!}';
+				window.location.href = $url_path+"/administration/teacher/list";
+			}
 			function save()
 			{
 			
@@ -1016,7 +1029,7 @@
 				}
 				if(posGrade==4)
 				{
-					var Id = $('#gradeselect1').val();
+					var Id = $('#courseselect1').val();
 					var $url_path = '{!! url('/') !!}';
                     window.location.href = $url_path+"/administration/teacher/test/"+Id;
 				}
@@ -1042,6 +1055,7 @@
 			}
 			$('#periodselect1').on('change', function() {
 				$('#SelectLvl').css("visibility", "visible");
+				$('#courseSelect').css("visibility", "visible");
 				ListLevel($('#periodselect1').val());
 			  });
 			  function ListGrades(Level)
@@ -1067,6 +1081,29 @@
 				  $('#SelectGrd').css("visibility", "visible");
 				  ListGrades($('#lvlmodalselect1').val());
 				});
+			function ListCourse(Grade)
+			  {
+				  $.ajax ({
+					  url: '{{route('LoadCourses')}}',
+					  type: 'POST',
+					  data: {
+						  "_token": "{{ csrf_token() }}",
+						  "GradeId"      : Grade,
+					  },
+					  success: (e) => {
+						  $('#courseselect1').empty();
+						  $.each(e['Courses'], function(fetch, data){
+							$('#courseselect1').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
+						  });
+						  $('#courseselect1').selectpicker('refresh');
+					  }
+				  });
+				  
+			  }
+			$('#gradeselect1').on('change', function() {
+				$('#SelectCourse').css("visibility", "visible");
+				ListCourse($('#gradeselect1').val());
+			});
 
 			
 

@@ -84,9 +84,11 @@ class Teacher extends Controller
         $Titles = ['Id','Nombre del Estudiante','Curso','Grado','P1','P2','P3','P4','Final','Acciones'];
         return view('Administration/Teachers/NotasEstudiantes',compact('Titles'));
     }
-    public function TestTeacher(Request $request,$id)
+    public function View_Student_Teacher_Score_Admin()
     {
-        dd(grade::find($id));
+        $NIVELES = grade::find(5)->Level();
+        $Titles = ['Id','Nombre del Estudiante','Curso','Grado','P1','P2','P3','P4','Final','Acciones'];
+        return view('Administration/Teachers/NotasEstudiantes',compact('Titles'));
     }
     public function list() //Visualizcion tabla Voluntarios con usuario
     {
@@ -155,14 +157,9 @@ class Teacher extends Controller
         $FechaNacimiento= $data['FechaNacimiento'];
         $Usuario= $data['Usuario'];
         $Email= $data['Email'];
-        $Contraseña= $data['Contraseña'];
-        $C= $data['Curso'];
-        $G= $data['Grado'];
-        $N= $data['Nivel'];
-        $J= $data['Jornada'];
-        $NG = Assign_level_grade::where('Level_id',$N)->where('Grade_id',$G)->first();
-        $JNG = Assign_period_grade::where('grade_level_id',$NG->id)->where('Period_id',$J)->first();
-        $CJNG = Assign_course_grade::where('Course_id',$C)->where('Grade_id',$JNG->id)->first();
+        $Contraseña = $data['Contraseña'];
+        $Cursos = $data['Curso'];
+        $grado = grade::find($data['Grado'])->GradeName();
         //LOGICA
         try {
               DB::beginTransaction();
@@ -189,10 +186,6 @@ class Teacher extends Controller
                 $usuario_rol->State = "Active";
                 $usuario_rol->save();
                 #Tabla logs
-                $usuario_curso = new Asign_teacher_course;
-                $usuario_curso->user_id = $user->id;
-                $usuario_curso->Course_id = $CJNG->id;
-                $usuario_curso->save();
                 $log = new logs;
                 $log->Table = "Voluntario";
                 $log->User_ID = $id;
@@ -209,14 +202,23 @@ class Teacher extends Controller
                 $log->Table = "Voluntario";
                 $log->User_ID = $id;
                 $log->Description = "ID: ".$usuario_rol->id." de la Asignacion de rol voluntario al usuario: ".$user->id;
-                $log->Type = "Create";
+                $log->Type = "Assign";
                 $log->save();
-                $log = new logs;
-                $log->Table = "Voluntario";
-                $log->User_ID = $id;
-                $log->Description = "ID: ".$usuario_curso->id." de la Asignacion de curso al usuario: ".$user->id;
-                $log->Type = "Create";
-                $log->save();
+                for ($i=0; $i < count($Cursos) ; $i++) { 
+                    $usuario_curso = new Asign_teacher_course;
+                    $curso = course::find($Cursos[$i]);
+                    $usuario_curso->user_id = $user->id;
+                    $usuario_curso->Course_id = $Cursos[$i];
+                    $usuario_curso->save();
+                    #logs registro de asignación
+                    $log = new logs;
+                    $log->Table = "Voluntario";
+                    $log->User_ID = $id;
+                    $log->Description = "ID: ".$usuario_curso->id." de la Asignacion del usuario: ".$user->name. 
+                    "al curso de ".$curso->Name." del grado de ".$grado;
+                    $log->Type = "Assign";
+                    $log->save();
+                }
                 DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
@@ -296,28 +298,13 @@ class Teacher extends Controller
         Assign_user_rol::where('user_id',$id)->update($dataU);
         return redirect()->route('ListTeacher');
     }
-    public function formScore()
+    public function score()
     {
         $buttons =[];
         $button = [
             "Name" => 'Listado Voluntarios',
             "Link" => 'administration/teacher/list',
-            "Type" => "add"
-        ];
-        $cursos = course::all();
-        $grados = grade::all();
-        $niveles = level::all();
-        $jornadas = period::all();
-        array_push($buttons,$button);
-        return view('Administration/Teachers/formScores',compact('buttons','cursos','niveles','grados','jornadas'));
-    }
-    public function score()
-    {
-        $buttons =[];
-        $button = [
-            "Name" => 'Añadir un voluntario',
-            "Link" => 'administration/home/dashboard',
-            "Type" => "add"
+            "Type" => "btn1"
         ];
         array_push($buttons,$button);
         $curso = course::find(1);
@@ -341,156 +328,53 @@ class Teacher extends Controller
         //     ];
         //     array_push($estudiantes, $data);
         // }
-        $Titles = ['Id','Alumno','Voluntario','Curso','P1','P2','P3','P4','Acciones'];
+        $Titles = ['Alumno','Voluntario','Curso','P1','P2','P3','P4','Acciones'];
         return view('Administration/Teachers/listadoNotas',compact('buttons','Titles','curso','grado','jornada'));
     }
-    public function llenaN(Request $request)
+    public function TestTeacher(Request $request,$id)
     {
-        $jornada = Input::get('ciudad_id');
-        $jornadaN = Assign_period_grade::where('Period_id',$jornada)->get();
-        $niveles = [];
-        $grados = [];
-        foreach ($jornadaN as $value) {
-            $gradelevel = Assign_level_grade::find($value->grade_level_id);
-            $nivel = level::find($gradelevel->level_id);
-            // for ($i=0; $i < $niveles.length() ; $i++) { 
-                // if($niveles[i] != $nivel->Name){
-            $dataN = [
-                'id' => $nivel->id,
-                'Nivel' => $nivel->Name
+        $Models = [];
+        $course = course::find($id);
+        $p1 = $p2 = $p3 = $p4 = 0;
+        $assignS = Assign_student_grade::where('Grade_id',$course->Grade_id)->get();
+        foreach ($assignS as $value) {
+            $notas = Note::where('Course_id',$id)->where('Studen_id',$value->id)->get();
+            $user = user::find($value->user_id);
+            $student = Person::find($user->Person_id);
+            foreach ($notas as $valueN) {
+                if($valueN->Unity == 1){
+                    $p1 = $valueN->Score;
+                }
+                elseif ($valueN->Unity == 2) {
+                    $p2 = $valueN->Score;
+                }
+                elseif ($valueN->Unity == 3) {
+                    $p3 = $valueN->Score;
+                }
+                elseif ($valueN->Unity == 4) {
+                    $p4 = $valueN->Score;
+                }
+            }
+            $data = [
+                "Nombre" => $student->Names,
+                "Apellido" => $student->LastNames,
+                'Curso' => $course->Name,
+                'P1' => $p1,
+                'P2' => $p2,
+                'P3' => $p3,
+                'P4' => $p4,
             ];
-            array_push($niveles, $nivel);
-                // }
-            // }
+            array_push($Models,$data);
+            $p1 = $p2 = $p3 = $p4 = 0;
         }
-        return response()->json($niveles);
-    }
-    //Ingreso de notas
-    public function Edit_Note()
-    {
-        
-    }
-    public function Save_Note()
-    {
-        
-    }
-	//publicacion de informacion
-    public function Create_Information()
-    {
-    }
-    public function Create_Assistance()
-    {
-    }
-    public function Create_Reports()
-    {
-    }
-
-	public function Store_Information()
-    {
-    }
-
-    public function Show_Information()
-    {
-    }
-
-    public function Edit_Information()
-    {
-    }
-
-    public function Update_Information()
-    {
-    }
-
-	public function Store_Note()
-    {
-    }
-
-    public function Show_Note()
-    {
-    }
-
-    //planificacion de evaluaciones
-    public function Create_Test()
-    {
-    }
-
-	public function Store_Test()
-    {
-    }
-
-    public function Show_Test()
-    {
-    }
-
-    public function Edit_Test()
-    {
-    }
-
-    public function Update_Test()
-    {
-    }
-
-    //preguntas de examen
-    public function Create_Question()
-    {
-    }
-
-	public function Store_Question()
-    {
-    }
-
-    public function Show_Question()
-    {
-    }
-
-    public function Edit_Question()
-    {
-    }
-
-    public function Update_Question()
-    {
-    }
-
-    //asignar de preguntas a examen
-    public function Create_Assign_question_test()
-    {
-    }
-
-	public function Store_Assign_question_test()
-    {
-    }
-
-    public function Show_Assign_question_test()
-    {
-    }
-
-    public function Edit_Assign_question_test()
-    {
-    }
-
-    public function Update_Assign_question_test()
-    {
-    }
-
-    //asignacion de examen a curso
-    public function Create_Assign_test_course()
-    {
-    }
-
-	public function Store_Assign_test_course()
-    {
-    }
-
-    public function Show_Assign_test_course()
-    {
-    }
-
-    public function Edit_Assign_test_course()
-    {
-    }
-
-    public function Update_Assign_test_course()
-    {
+        $buttons =[];
+        $button = [
+            "Name" => 'Listado Voluntarios',
+            "Link" => 'administration/teacher/list',
+            "Type" => "btn1"
+        ];
+        $grado = grade::find($course->Grade_id)->GradeName();
+        $Titles = ['Alumno','Voluntario','P1','P2','P3','P4','Acciones'];
+        return view('Administration/Teachers/listadoNotas',compact('buttons','Titles','Models','course','grado'));
     }
 }
-

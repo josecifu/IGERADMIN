@@ -28,6 +28,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	Route::get('/load/periods', $route.'\Administration@LoadPeriods')->name('LoadPeriods');
 	Route::post('/load/levels', $route.'\Administration@LoadLevels')->name('LoadLevels');
 	Route::post('/load/grades', $route.'\Administration@LoadGrades')->name('LoadGrades');
+	Route::post('/load/courses', $route.'\Administration@LoadCourses')->name('LoadCourses');
 	#Inicio
 	Route::group([ 'prefix' => 'home'], function(){
 		$route = "App\Http\Controllers";
