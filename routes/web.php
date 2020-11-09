@@ -64,6 +64,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/search',$route.'\Teacher@seach')->name('SceachTeacher');
 		Route::get('/workspace',$route.'\Teacher@workspace')->name('WorkspaceTeacher');
 	});
+	//Comentario
 	Route::group([ 'prefix' => 'configurations'], function(){
 		$route = "App\Http\Controllers";
 		Route::get('level/list',$route.'\Administration@LevelList')->name('LevelList');
