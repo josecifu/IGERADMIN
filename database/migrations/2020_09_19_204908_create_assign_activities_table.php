@@ -20,10 +20,10 @@ class CreateAssignActivitiesTable extends Migration
             $table->integer('Unity');
             $table->unsignedInteger('Course_id'); 
             $table->foreign('Course_id')->references('id')->on('courses');
+            $table->string('State');
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *

@@ -15,10 +15,9 @@ class CreateAsignQuestionTestsTable extends Migration
     {
         Schema::create('assign_question_tests', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('Teacher_id'); 
-            $table->foreign('Teacher_id')->references('id')->on('asign_teacher_courses');
             $table->unsignedInteger('Test_id'); 
             $table->foreign('Test_id')->references('id')->on('tests');
+            
             $table->timestamps();
         });
     }

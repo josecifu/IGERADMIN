@@ -20,8 +20,9 @@ class CreateNotesTable extends Migration
             $table->unsignedInteger('Course_id'); 
             $table->foreign('Course_id')->references('id')->on('courses');
             $table->string('Activity');
-            $table->string('Score');
+            $table->string('Score')->nullable();
             $table->integer('Unity');
+            $table->string('State');
             $table->timestamps();
         });
     }

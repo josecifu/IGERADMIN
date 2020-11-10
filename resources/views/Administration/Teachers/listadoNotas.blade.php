@@ -38,9 +38,9 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            @if($course && $grado)
-                                            <h3 class="card-label">Listado de {{$course->Name}} de {{$grado}}</h3>
-                                            @endif
+                                            @isset($course)
+                                            <h3 class="card-label">Listado de {{$course->Name ?? ''}} de {{$grado ?? ''}}</h3>
+                                            @endisset
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -99,6 +99,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                @isset($Models)
                                                 @foreach($Models as $model)
                                                     <tr>
                                                         <td>{{$model['Nombre']}} {{$model['Apellido']}}</td>
@@ -110,6 +111,7 @@
                                                         <td nowrap="nowrap"></td>
                                                     </tr>
                                                 @endforeach
+                                                @endisset
                                             </tbody>
                                         </table>
                                         <!--end: Datatable-->

@@ -19,8 +19,10 @@ class CreateQuestionsTable extends Migration
             $table->string('Content');
             $table->string('Score');
             $table->string('Type');
-            $table->string('Rate');
-            $table->string('RateAwsers');
+            $table->string('Answers')->nullable();
+            $table->string('CorrectAnswers')->nullable();
+            $table->unsignedInteger('Test_id'); 
+            $table->foreign('Test_id')->references('id')->on('tests');
             $table->timestamps();
         });
     }
