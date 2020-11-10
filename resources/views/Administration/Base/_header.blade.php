@@ -909,7 +909,7 @@
 								<!--begin::Header Nav-->
 								<ul class="menu-nav">
 
-									   @foreach ($Menus as $key => $item)
+									   @foreach ($menus as $key => $item)
 					                    @if ($item["menu_id"] != 0)
 					                        @break
 					                    @endif
