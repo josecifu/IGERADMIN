@@ -10,7 +10,7 @@ class menu extends Model
    use HasFactory;
    public function rols()
     {
-        return $this->belongsToMany(Rol::class, 'assign_menu_rols');
+        return $this->belongsToMany(rol::class, 'assign_menu_rols');
     }
 
     public function getHijos($padres, $line)
