@@ -393,7 +393,7 @@
 						// Submit event
 						_wizardObj.on('submit', function (wizard) {
 							Swal.fire({
-								text: "Por favor complete el registro!.",
+								text: "Por favor complete el registro!",
 								icon: "success",
 								showCancelButton: true,
 								buttonsStyling: false,

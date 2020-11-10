@@ -57,7 +57,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::post('/save', $route.'\Teacher@save')->name('SaveTeacher');
 		Route::get('/edit/{model}',$route.'\Teacher@edit')->name('EditTeacher');
 		Route::post('/update', $route.'\Teacher@update')->name('UpdateTeacher');
-		Route::get('/score',$route.'\Teacher@score')->name('ScoreTeacher');
+		Route::get('/score/{model}',$route.'\Teacher@score')->name('ScoreTeacher');
 		Route::get('/logs',$route.'\Teacher@logs')->name('LogsTeacher');
 		Route::get('/test/{model}', $route.'\Teacher@TestTeacher')->name('TestTeacher');
 		Route::get('/delete/{model}', $route.'\Teacher@delete')->name('DeleteTeacher');
