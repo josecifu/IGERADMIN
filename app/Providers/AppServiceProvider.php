@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer("Administration.Base._header", function ($view) {
 
             $menus = menu::getMenu(true);
-            $view->with('Menus', $menus);
+            $view->with('menus', $menus);
         });
         View::share('Base');
     }
