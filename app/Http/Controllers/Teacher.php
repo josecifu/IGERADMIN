@@ -298,40 +298,7 @@ class Teacher extends Controller
         Assign_user_rol::where('user_id',$id)->update($dataU);
         return redirect()->route('ListTeacher');
     }
-    public function score()
-    {
-        $buttons =[];
-        $button = [
-            "Name" => 'Listado Voluntarios',
-            "Link" => 'administration/teacher/list',
-            "Type" => "btn1"
-        ];
-        array_push($buttons,$button);
-        $curso = course::find(1);
-        $grado = grade::find(3);
-        $jornada = period::find(1);
-        // // $data = $request->data[0];
-        // $curso = course::find($data['Curso']);
-        // $grado = grade::find($data['Grado']);
-        // $nivel = course::find($data['Nivel']);
-        // $jornada = course::find($data['Jornada']);
-        // $NG = Assign_level_grade::where('Level_id',$curso->id)->where('Grade_id',$grado->id)->first();
-        // $JNG = Assign_period_grade::where('grade_level_id',$NG->id)->where('Period_id',$jornada->id)->first();
-        // // $CJNG = Assign_course_grade::where('Course_id',$curso->id)->where('Grade_id',$JNG->id)->first();
-        // $AsignacionEstudiante = Assign_student_grade::where('Grade_id',$JNG->id)->first();
-        // $estudiantes = [];
-        // foreach ($AsignacionEstudiante as $value) {
-        //     $e = student::find($value->user_id);
-        //     $data = [
-        //         'Nombre' => $e->Names,
-        //         'Apellidos' =>$e->LastNames,
-        //     ];
-        //     array_push($estudiantes, $data);
-        // }
-        $Titles = ['Alumno','Voluntario','Curso','P1','P2','P3','P4','Acciones'];
-        return view('Administration/Teachers/listadoNotas',compact('buttons','Titles','curso','grado','jornada'));
-    }
-    public function TestTeacher(Request $request,$id)
+    public function score($id)
     {
         $Models = [];
         $course = course::find($id);
@@ -379,7 +346,12 @@ class Teacher extends Controller
             "Type" => "btn1"
         ];
         $grado = grade::find($course->Grade_id)->GradeName();
+        
         $Titles = ['Alumno','Voluntario','P1','P2','P3','P4','Acciones'];
         return view('Administration/Teachers/listadoNotas',compact('buttons','Titles','Models','course','grado'));
+    }
+    public function TestTeacher(Request $request,$id)
+    {
+        
     }
 }

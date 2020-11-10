@@ -1026,7 +1026,7 @@
 				{
 					var Id = $('#courseselect1').val();
 					var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/teacher/test/"+Id;
+                    window.location.href = $url_path+"/administration/teacher/score/"+Id;
 				}
 			}
 			function ListLevel(Period)
