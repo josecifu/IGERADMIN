@@ -96,7 +96,8 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([
             'Name' => 'Visualización de notas',
             'State' => '1',
-            'Url' => 'administration/teacher/score',  
+            'Type' => '4',
+            'Url' => 'ListGrade(3)', 
             'menu_id' => '10'          
         ]);
         DB::table('menus')->insert([

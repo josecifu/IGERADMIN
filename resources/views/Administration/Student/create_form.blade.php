@@ -198,55 +198,30 @@
 									<!--end::Wizard Step 2-->
 									<!--begin::Wizard Step 3-->
 									<div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+										<!------------------------>
 										<div class="my-5">
 											<div class="form-group row">
-												<label class="col-form-label text-right col-lg-1 col-sm-12">Jornada</label>
-	                                            <div class="col-md-2 my-2 my-md-0">
-	                                                <select class="form-control" id="Jornada" name="Jornada">
-	                                                    @foreach($period as $jornada)
-	                                                        <option value="{{$jornada->id}}">
-	                                                            {{$jornada->Name}}
-	                                                        </option>
-	                                                    @endforeach
-	                                                </select>
-	                                            </div>
+												<label class="col-form-label text-right col-lg-3 col-sm-12">Jornada</label>
+												<div class="col-lg-9 col-md-9 col-sm-12">
+													<select class="form-control selectpicker" data-size="10" title="Seleccione una opción" data-live-search="true" id="Jornada">
+													</select>
+												</div>
 											</div>
 											<div class="form-group row">
-												<label class="col-form-label text-right col-lg-1 col-sm-12">Nivel</label>
-	                                            <div class="col-md-2 my-2 my-md-0">
-	                                                <select class="form-control" id="Nivel" name="Nivel">
-	                                                    @foreach($level as $nivel)
-	                                                        <option value="{{$nivel->id}}">
-	                                                            {{$nivel->Name}}
-	                                                        </option>
-	                                                    @endforeach
-	                                                </select>
-	                                            </div>
-											</div>
+												<label class="col-form-label text-right col-lg-3 col-sm-12">Nivel</label>
+												<div class="col-lg-9 col-md-9 col-sm-12">
+													<select class="form-control" id="Nivel" name="Nivel">
+													</select>
+												</div>
+											</div>	
 											<div class="form-group row">
-												<label class="col-form-label text-right col-lg-1 col-sm-12">Grado</label>
-	                                            <div class="col-md-2 my-2 my-md-0">
-	                                                <select class="form-control" id="Grado" name="Grado">
-	                                                    @foreach($grade as $grado)
-	                                                        <option value="{{$grado->id}}">
-	                                                            {{$grado->Name}}
-	                                                        </option>
-	                                                    @endforeach
-	                                                </select>
-	                                            </div>
+												<label class="col-form-label text-right col-lg-3 col-sm-12">Grado</label>
+												<div class="col-lg-9 col-md-9 col-sm-12">
+													<select class="form-control" id="Grado" name="Grado">
+													</select>
+												</div>
 											</div>
-											<div class="form-group row">
-												<label class="col-form-label text-right col-lg-1 col-sm-12">Sección</label>
-	                                            <div class="col-md-2 my-2 my-md-0">
-	                                                <select class="form-control" id="Seccion" name="Seccion">
-	                                                    @foreach($section as $seccion)
-	                                                        <option value="">
-	                                                            {{$seccion->Seccion}}
-	                                                        </option>
-	                                                    @endforeach
-	                                                </select>
-	                                            </div>
-											</div>
+											<!------------------------>
 										</div>
 									</div>
 									<!--end::Wizard Step 3-->
@@ -274,260 +249,297 @@
 		</div>
 	@stop
     @section('scripts')
-		<script>var HOST_URL = "https://preview.keenthemes.com/metronic/theme/html/tools/preview";</script>
-		<!--begin::Global Config(global config for global JS scripts)-->
-		<script>var KTAppSettings = { "breakpoints": { "sm": 576, "md": 768, "lg": 992, "xl": 1200, "xxl": 1200 }, "colors": { "theme": { "base": { "white": "#ffffff", "primary": "#8950FC", "secondary": "#E5EAEE", "success": "#1BC5BD", "info": "#6993FF", "warning": "#FFA800", "danger": "#F64E60", "light": "#F3F6F9", "dark": "#212121" }, "light": { "white": "#ffffff", "primary": "#EEE5FF", "secondary": "#ECF0F3", "success": "#C9F7F5", "info": "#E1E9FF", "warning": "#FFF4DE", "danger": "#FFE2E5", "light": "#F3F6F9", "dark": "#D6D6E0" }, "inverse": { "white": "#ffffff", "primary": "#ffffff", "secondary": "#212121", "success": "#ffffff", "info": "#ffffff", "warning": "#ffffff", "danger": "#ffffff", "light": "#464E5F", "dark": "#ffffff" } }, "gray": { "gray-100": "#F3F6F9", "gray-200": "#ECF0F3", "gray-300": "#E5EAEE", "gray-400": "#D6D6E0", "gray-500": "#B5B5C3", "gray-600": "#80808F", "gray-700": "#464E5F", "gray-800": "#1B283F", "gray-900": "#212121" } }, "font-family": "Poppins" };</script>
-		<!--end::Global Config-->
-		<!--begin::Global Theme Bundle(used by all pages)-->
-		<script src="{{ asset('assets/plugins/global/plugins.bundle.js')}}"></script>
-		<script src="{{ asset('assets/plugins/custom/prismjs/prismjs.bundle.js')}}"></script>
-		<script src="{{ asset('assets/js/scripts.bundle.js')}}"></script>
-		<!--end::Global Theme Bundle-->
 		<!--begin::Page Scripts(used by this page)-->
 		<script type="text/javascript">
 			"use strict";
-		// multi select
-		$('#Curso').select2({
-         placeholder: "Select a state"
-        });
-// Class definition
-var KTWizard1 = function () {
-	// Base elements
-	var _wizardEl;
-	var _formEl;
-	var _wizardObj;
-	var _validations = [];
-	// Private functions
-	var _initValidation = function () {
-			// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
-			// Step 1
-			_validations.push(FormValidation.formValidation(
-				_formEl,
-				{
-					fields: {
-						Nombres: {
-							validators: {
-								notEmpty: {
-									message: 'Los nombres son requeridos'
+			// Class definition
+			var KTWizard1 = function () {
+				// Base elements
+				var _wizardEl;
+				var _formEl;
+				var _wizardObj;
+				var _validations = [];
+				// Private functions
+				var _initValidation = function () {
+						// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
+						// Step 1
+						_validations.push(FormValidation.formValidation(
+							_formEl,
+							{
+								fields: {
+									Nombre: {
+										validators: {
+											notEmpty: {
+												message: 'Es un campo obligatorio'
+											}
+										}
+									},
+									Apellido: {
+										validators: {
+											notEmpty: {
+												message: 'Es un campo obligatorio'
+											}
+										}
+									},
+									Direccion: {
+										validators: {
+											notEmpty: {
+												message: 'Es un campo obligatorio'
+											}
+										}
+									},
+									Telefono: {
+										validators: {
+											notEmpty: {
+												message: 'Es un campo obligatorio'
+											}
+										}
+									},
+									FechaNacimiento: {
+										validators: {
+											notEmpty: {
+												message: 'Es un campo obligatorio'
+											}
+										}
+									},
+								},
+								plugins: {
+									trigger: new FormValidation.plugins.Trigger(),
+									// Bootstrap Framework Integration
+									bootstrap: new FormValidation.plugins.Bootstrap({
+										//eleInvalidClass: '',
+										eleValidClass: '',
+									})
 								}
 							}
-						},
-						Apellidos: {
-							validators: {
-								notEmpty: {
-									message: 'Los apellidos son requeridos'
+						));
+						// Step 2
+						_validations.push(FormValidation.formValidation(
+							_formEl,
+							{
+								fields: {
+									Usuario: {
+										validators: {
+											notEmpty: {
+												message: 'Es un campo obligatorio'
+											}
+										}
+									},
+									Email: {
+										validators: {
+											notEmpty: {
+												message: 'Es un campo obligatorio'
+											}
+										}
+									},						
+									Contraseña: {
+										validators: {
+											notEmpty: {
+												message: 'Es un campo obligatorio'
+											}
+										}
+									},
+								},
+								plugins: {
+									trigger: new FormValidation.plugins.Trigger(),
+									// Bootstrap Framework Integration
+									bootstrap: new FormValidation.plugins.Bootstrap({
+										//eleInvalidClass: '',
+										eleValidClass: '',
+									})
 								}
 							}
-						},
-						Direccion: {
-							validators: {
-								notEmpty: {
-									message: 'La direccion es requerida'
-								}
-							}
-						},
-						Telefono: {
-							validators: {
-								notEmpty: {
-									message: 'El telefono es requerido'
-								}
-							}
-						},
-						FechaNacimiento: {
-							validators: {
-								notEmpty: {
-									message: 'La fecha es requerida'
-								}
-							}
-						},
-					},
-					plugins: {
-						trigger: new FormValidation.plugins.Trigger(),
-						// Bootstrap Framework Integration
-						bootstrap: new FormValidation.plugins.Bootstrap({
-							//eleInvalidClass: '',
-							eleValidClass: '',
-						})
+						));
 					}
-				}
-			));
-			// Step 2
-			_validations.push(FormValidation.formValidation(
-				_formEl,
-				{
-					fields: {
-						Usuario: {
-							validators: {
-								notEmpty: {
-									message: 'El usuario es requerido'
-								}
+					var _initWizard = function () {
+						// Initialize form wizard
+						_wizardObj = new KTWizard(_wizardEl, {
+							startStep: 1, // initial active step number
+							clickableSteps: false  // allow step clicking
+						});
+						// Validation before going to next page
+						_wizardObj.on('change', function (wizard) {
+							if (wizard.getStep() > wizard.getNewStep()) {
+								return; // Skip if stepped back
 							}
-						},
-						Contraseña: {
-							validators: {
-								notEmpty: {
-									message: 'La contraseña es requerida'
-								}
+							// Validate form before change wizard step
+							var validator = _validations[wizard.getStep() - 1]; // get validator for currnt step
+							if (validator) {
+								validator.validate().then(function (status) {
+									if (status == 'Valid') {
+										wizard.goTo(wizard.getNewStep());
+										KTUtil.scrollTop();
+									} else {
+										Swal.fire({
+											text: "Porfavor completar los campos requeridos",
+											icon: "error",
+											buttonsStyling: false,
+											confirmButtonText: "Ok, lo tengo!",
+											customClass: {
+												confirmButton: "btn font-weight-bold btn-light"
+											}
+										}).then(function () {
+											KTUtil.scrollTop();
+										});
+									}
+								});
 							}
-						},
-						Email: {
-							validators: {
-								notEmpty: {
-									message: 'El correo es requerido'
-								}
-							}
-						},
-					},
-					plugins: {
-						trigger: new FormValidation.plugins.Trigger(),
-						// Bootstrap Framework Integration
-						bootstrap: new FormValidation.plugins.Bootstrap({
-							//eleInvalidClass: '',
-							eleValidClass: '',
-						})
-					}
-				}
-			));
-		}
-		var _initWizard = function () {
-			// Initialize form wizard
-			_wizardObj = new KTWizard(_wizardEl, {
-				startStep: 1, // initial active step number
-				clickableSteps: false  // allow step clicking
-			});
-			// Validation before going to next page
-			_wizardObj.on('change', function (wizard) {
-				if (wizard.getStep() > wizard.getNewStep()) {
-					return; // Skip if stepped back
-				}
-				// Validate form before change wizard step
-				var validator = _validations[wizard.getStep() - 1]; // get validator for currnt step
-				if (validator) {
-					validator.validate().then(function (status) {
-						if (status == 'Valid') {
-							wizard.goTo(wizard.getNewStep());
+							return false;  // Do not change wizard step, further action will be handled by he validator
+						});
+						// Change event
+						_wizardObj.on('changed', function (wizard) {
 							KTUtil.scrollTop();
-						} else {
+						});
+						// Submit event
+						_wizardObj.on('submit', function (wizard) {
 							Swal.fire({
-								text: "Porfavor completar los campos requeridos",
-								icon: "error",
+								text: "Por favor complete el registro!.",
+								icon: "success",
+								showCancelButton: true,
 								buttonsStyling: false,
-								confirmButtonText: "Ok, lo tengo!",
+								confirmButtonText: "Guardar",
+								cancelButtonText: "Cancelar",
 								customClass: {
-									confirmButton: "btn font-weight-bold btn-light"
+									confirmButton: "btn font-weight-bold btn-primary",
+									cancelButton: "btn font-weight-bold btn-default"
 								}
-							}).then(function () {
-								KTUtil.scrollTop();
+							}).then(function (result) {
+								if (result.value) {
+									crearDatos(); // Submit form
+								} else if (result.dismiss === 'cancel') {
+									Swal.fire({
+										text: "Los datos no fueron registrados!.",
+										icon: "error",
+										buttonsStyling: false,
+										confirmButtonText: "Ok, lo tengo!",
+										customClass: {
+											confirmButton: "btn font-weight-bold btn-primary",
+										}
+									});
+								}
 							});
-						}
-					});
-				}
-				return false;  // Do not change wizard step, further action will be handled by he validator
-			});
-			// Change event
-			_wizardObj.on('changed', function (wizard) {
-				KTUtil.scrollTop();
-			});
-			// Submit event
-			_wizardObj.on('submit', function (wizard) {
-				Swal.fire({
-					text: "Todo esta bien! por favor confirme el registro.",
-					icon: "success",
-					showCancelButton: true,
-					buttonsStyling: false,
-					confirmButtonText: "Si, Enviar!",
-					cancelButtonText: "No, Cancelar",
-					customClass: {
-						confirmButton: "btn font-weight-bold btn-primary",
-						cancelButton: "btn font-weight-bold btn-default"
-					}
-				}).then(function (result) {
-					if (result.value) {
-						crearDatos(); // Submit form
-					} else if (result.dismiss === 'cancel') {
-						Swal.fire({
-							text: "Los datos no fueron registrados!.",
-							icon: "error",
-							buttonsStyling: false,
-							confirmButtonText: "Ok, lo tengo!",
-							customClass: {
-								confirmButton: "btn font-weight-bold btn-primary",
-							}
 						});
 					}
+					return {
+						// public functions
+						init: function () {
+							_wizardEl = KTUtil.getById('kt_wizard');
+							_formEl = KTUtil.getById('kt_form');
+							_initValidation();
+							_initWizard();
+						}
+					};
+				}();
+				jQuery(document).ready(function (){
+					KTWizard1.init();
 				});
-			});
-		}
-		return {
-			// public functions
-			init: function () {
-				_wizardEl = KTUtil.getById('kt_wizard');
-				_formEl = KTUtil.getById('kt_form');
-				_initValidation();
-				_initWizard();
-			}
-		};
-	}();
-	jQuery(document).ready(function () {
-		KTWizard1.init();
-	});
 		</script>
         <script type="text/javascript">
-         $( document ).ready(function() {
-          $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            }); 
-         });
-         function crearDatos()
-         {
-            var NombrePersona = $('#Nombres').val(); 
-            var ApellidosPersona = $('#Apellidos').val();
-            var DireccionPersona = $('#Direccion').val();
-            var TelefonoPersona = $('#Telefono').val();
-            var FechaNacimientoPersona = $('#FechaNacimiento').val();
-            var UsuarioPersona = $('#Usuario').val(); 
-            var ContraseñaPersona = $('#Contraseña').val();
-            var EmailPersona = $('#Email').val();
-			var Curso = $('#Curso').val();
-			var Grado = $('#Grado').val();
-			var Nivel = $('#Nivel').val();
-			var Jornada = $('#Jornada').val();
-            var data = [{
-                //Persona
-				Curso: Curso,
-				Grado: Grado,
-				Nivel: Nivel,
-				Jornada: Jornada,
-                Nombre: NombrePersona,
-                Apellido: ApellidosPersona,
-                Direccion: DireccionPersona,
-                Telefono: TelefonoPersona,
-                FechaNacimiento: FechaNacimientoPersona,
-                //Usuario
-                Usuario: UsuarioPersona,
-                Email: EmailPersona,
-                Contraseña: ContraseñaPersona,
-            }];
-            $.ajax({
-                url:'/administration/teacher/save',
-                type:'POST',
-                data: {"_token":"{{ csrf_token() }}","data":data},
-                dataType: "JSON",
-                success: function(e){
-                swal.fire({ title: "Accion completada", 
-                  text: "Se ha guardado con exito el Voluntario!", 
-                  type: "success"
-                        }).then(function () {
-                          var $url_path = '{!! url('/') !!}';
-                          window.location.href = $url_path+"/administration/teacher/list";
-                        });
-                },
-                error: function(e){
-                    console.log(e);
-                }
-            });
-         }
-    </script>
+        	$( document ).ready(function(){
+          		$.ajaxSetup({
+                	headers: {
+                    	'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                	}
+            	}); 
+         	});
+	         function crearDatos(){
+	            var NombrePersona = $('#Nombres').val(); 
+	            var ApellidosPersona = $('#Apellidos').val();
+	            var DireccionPersona = $('#Direccion').val();
+	            var TelefonoPersona = $('#Telefono').val();
+	            var FechaNacimientoPersona = $('#FechaNacimiento').val();
+	            var UsuarioPersona = $('#Usuario').val(); 
+	            var EmailPersona = $('#Email').val();
+	            var ContraseñaPersona = $('#Contraseña').val();
+				var AsignarGrado = $('#Grado').val();
+	            var data = [{
+	                Nombre: NombrePersona,
+	                Apellido: ApellidosPersona,
+	                Direccion: DireccionPersona,
+	                Telefono: TelefonoPersona,
+	                Nacimiento: FechaNacimientoPersona,
+	                Usuario: UsuarioPersona,
+	                Correo: EmailPersona,
+	                Contraseña: ContraseñaPersona,
+	                Grado: AsignarGrado,
+	            }];
+	            $.ajax({
+	                url:'/administration/student/save',
+	                type:'POST',
+	                data: {"_token":"{{ csrf_token() }}","data":data},
+	                dataType: "JSON",
+	                success: function(e){
+	                swal.fire({ title: "Accion completada", 
+	                  text: "Se ha guardado con exito los datos del estudiante!", 
+	                  type: "success"
+	                        }).then(function () {
+	                          var $url_path = '{!! url('/') !!}';
+	                          window.location.href = $url_path+"/administration/student/list";
+	                        });
+	                },
+	                error: function(e){
+						console.log(e);
+						swal.fire({
+							title: 'Ocurrio un error!',
+							text:  'Los datos no han sido registrados!, verifique los campos',
+							icon: 'error',
+							confirmButtonText: 'Aceptar',
+	                    })
+	                }
+	            });
+			 }
+			 $.ajax ({
+				url: '{{route('LoadPeriods')}}',
+				type: 'GET',
+				success: (e) => {
+					$('#Jornada').empty();
+					$.each(e['Periods'], function(fetch, data){
+					  $('#Jornada').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
+					});
+					$('#Jornada').selectpicker('refresh');
+				}
+			});
+			function ListLevel(Period){
+				$.ajax ({
+					url: '{{route('LoadLevels')}}',
+					type: 'POST',
+					data: {
+						"_token": "{{ csrf_token() }}",
+						"PeriodId"      : Period,
+					},
+					success: (e) => {
+						$('#Nivel').empty();
+						$('#Nivel').append('<option value="" >--Seleccione una opción</option>');
+						$.each(e['Levels'], function(fetch, data){
+							$('#Nivel').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
+						});
+						$('#Nivel').selectpicker('refresh');
+					}
+				});	
+			}
+			function ListGrades(Level){
+				$.ajax ({
+					url: '{{route('LoadGrades')}}',
+					type: 'POST',
+					data: {
+						"_token": "{{ csrf_token() }}",
+						"LvlId"      : Level,
+					},
+					success: (e) => {
+						$('#Grado').empty();
+						$('#Grado').append('<option value="" >--Seleccione una opción</option>');
+						$.each(e['Grades'], function(fetch, data){
+						$('#Grado').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
+						});
+						$('#Grado').selectpicker('refresh');
+					}
+				});
+			}
+			$('#Jornada').on('change', function() {
+				ListLevel($('#Jornada').val());
+			});
+			$('#Nivel').on('change', function() {
+				ListGrades($('#Nivel').val());
+			});
+	    </script>
 	@stop

@@ -335,6 +335,9 @@ class Teacher extends Controller
     {
         $Models = [];
         $course = course::find($id);
+        $assignV = Asign_teacher_course::where('Course_id',$id)->get('user_id');
+        $userV = user::find($assignV);
+        $vol = Person::find($userV[0]->id);
         $p1 = $p2 = $p3 = $p4 = 0;
         $assignS = Assign_student_grade::where('Grade_id',$course->Grade_id)->get();
         foreach ($assignS as $value) {
@@ -358,6 +361,8 @@ class Teacher extends Controller
             $data = [
                 "Nombre" => $student->Names,
                 "Apellido" => $student->LastNames,
+                "VN" => $vol->Names,
+                "VA" => $vol->LastNames,
                 'Curso' => $course->Name,
                 'P1' => $p1,
                 'P2' => $p2,

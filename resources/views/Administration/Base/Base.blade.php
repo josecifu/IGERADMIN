@@ -987,12 +987,12 @@
 				posGrade=pos;
 				if(pos==1)
 				{
-
+					$('#Title1').text("Listado de alumnos por grado");
 				}
 				else if(pos==3)
 				{
-					$('#Title1').html("Visualizacion de examenes por grado");
-					$('#Title2').html("Visualice el listado de examenes por grados del nivel y jornada seleccionado");
+					$('#Title1').text("Visualizacion de Notas por grado");
+					$('#Title2').html("Visualice el listado de notas por la jornada, grados del nivel y curso seleccionado");
 				}
 				else if(pos==4)
 				{			
@@ -1013,11 +1013,6 @@
 				});
 				
 			}
-			function otro() {
-				var Id = $('#gradeselect1').val();
-				var $url_path = '{!! url('/') !!}';
-				window.location.href = $url_path+"/administration/teacher/list";
-			}
 			function save()
 			{
 			
@@ -1027,7 +1022,7 @@
 					var $url_path = '{!! url('/') !!}';
                     window.location.href = $url_path+"/administration/student/lists/grade/"+Id;
 				}
-				if(posGrade==4)
+				if(posGrade==3)
 				{
 					var Id = $('#courseselect1').val();
 					var $url_path = '{!! url('/') !!}';
@@ -1077,10 +1072,12 @@
 				  });
 				  
 			  }
-			  $('#lvlmodalselect1').on('change', function() {
+			  if(posGrade != 1){
+				$('#lvlmodalselect1').on('change', function() {
 				  $('#SelectGrd').css("visibility", "visible");
 				  ListGrades($('#lvlmodalselect1').val());
 				});
+			  }
 			function ListCourse(Grade)
 			  {
 				  $.ajax ({
