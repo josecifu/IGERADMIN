@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
-use App\models\menu;
+use App\Models\menu;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,7 +29,6 @@ class AppServiceProvider extends ServiceProvider
         View::composer("Administration.Base._header", function ($view) {
             
             $menus = menu::getMenu(true);
-            dd( $menus);
             $view->with('menus', $menus);
         });
         View::share('Base');
