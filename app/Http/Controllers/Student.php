@@ -109,6 +109,10 @@ class Student extends Controller
 
 
 
+
+
+
+
     public function create()
     {
         $buttons =[];
@@ -133,9 +137,7 @@ class Student extends Controller
         $username= $data['Usuario'];
         $email= $data['Correo'];
         $password = $data['Contraseña'];
-        $grade = $data['Grado'];
-        //$grades = Grade::find($data['Grado']);
-        
+        $grade = $data['Grado'];        
         try {
               DB::beginTransaction();
                 $student = new Person;
@@ -176,15 +178,15 @@ class Student extends Controller
                 $log = new logs;
                 $log->Table = "Rol";
                 $log->User_ID = $id;
-                $log->Description = "Se ha asignado el rol ¨Estudiante¨ al usuario: ".$user->name;
+                $log->Description = "Se ha asignado el rol Estudiante al usuario: ".$user->name;
                 $log->Type = "Assign";
                 $log->save();
-                /*$log = new logs;
+                $log = new logs;
                 $log->Table = "Grado";
                 $log->User_ID = $id;
                 $log->Description = "El estudiante: ".$student->Names." ".$student->LastNames."se le ha asignado a: ".$grade->Name;
                 $log->Type = "Assign";
-                $log->save();*/
+                $log->save();
                 DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
@@ -192,45 +194,44 @@ class Student extends Controller
         return response()->json(["Accion exitosa"]);
     }
 
-    //actualizar estudiante
     public function edit($id)
     {
         $student = Person::find($id);
         $user = User::where('Person_id',$id)->first();
-        $models = ['Usuario'=>$user->name,'Email'=>$user->email];
+        $models = ['Usuario' => $user->name, 'Email' => $user->email];
         return view('Administration/Student/edit_form',compact('student','models'));
     }
 
-    //Funciones de Actualizar
-    public function update($id, Request $request)
+    //actualizar estudiante con usuario
+    public function update(Request $request)
     {
         $id = $request->session()->get('User_id');
         $data = $request->data[0];
-        $Nombres= $data['Nombre'];
-        $Apellidos= $data['Apellido'];
-        $Direccion= $data['Direccion'];
-        $Telefono= $data['Telefono'];
-        $FechaNacimiento= $data['FechaNacimiento'];
-        $Usuario = $data['Usuario'];
-        $Email= $data['Email'];
-        $PersonaID = $data['Persona'];
+        $names= $data['Nombre'];
+        $lastnames= $data['Apellido'];
+        $address= $data['Direccion'];
+        $phone= $data['Telefono'];
+        $birthdate= $data['FechaNacimiento'];
+        $username = $data['Usuario'];
+        $email= $data['Email'];
+        $personid = $data['Persona'];
         $data_user=array(
-            'name' => $Usuario,
-            'email' => $Email,
+            'name' => $username,
+            'email' => $email,
         );
-        User::where('Person_id', $PersonaID)->update($dataU);
+        User::where('Person_id', $personid)->update($data_user);
         $data_student=array(
-            'Names' => $Nombres,
-            'LastNames' => $Apellidos,
-            'Address' => $Direccion,
-            'Phone' => $Telefono,
-            'BirthDate' =>$FechaNacimiento,
+            'Names' => $names,
+            'LastNames' => $lastnames,
+            'Address' => $address,
+            'Phone' => $phone,
+            'BirthDate' =>$birthdate,
         );
-        Person::where('id',$PersonaID)->update($dataP);
+        Person::where('id',$personid)->update($data_student);
         $log = new logs;
-        $log->Table = "people y users";
+        $log->Table = "peoples and users";
         $log->User_ID = $id;
-        $log->Description = "Se actualizaron los datos del estudiante con indentificación: ".$PersonaID." y correo ".$Email;
+        $log->Description = "Se actualizaron los datos del estudiante con indentificación: ".$personid;
         $log->Type = "Update";
         $log->save();
         return response()->json(["Accion completada"]);
@@ -247,8 +248,25 @@ class Student extends Controller
 
 
 
-
-
+    //deshabilitar usuario de estudiante
+    public function delete($id, Request $request)
+    {
+        $IID = $request->session()->get('User_id');
+        $usuarioLogueado = User::find($IID);
+        $r = User::find($id);
+        $dataU=array(
+            'State' => 'Desactivated',
+        );
+        $log = new logs;
+        $log->Table = "Voluntario";
+        $log->User_ID = $usuarioLogueado->name;
+        $log->Description = "Se desactivo un usuario con el nombre: ".$r->name." y el correo: ".$r->email;
+        $log->Type = "Delete";
+        $log->save();
+        User::where('Person_id', $id)->update($dataU);
+        Assign_user_rol::where('user_id',$id)->update($dataU);
+        return redirect()->route('ListTeacher');
+    }
 
 
 
