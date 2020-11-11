@@ -87,9 +87,10 @@
                                 <td>{{$m['id']}}</td>
                                 <td>{{$m['name']}}</td>
                                 <td>{{$m['phone']}}</td>
-                                <td>{{$m['birthdate']}}</td>
                                 <td>{{$m['user']}}</td>
                                 <td>{{$m['email']}}</td>
+                                <td>Primero & Segundo Primaria</td>
+                                <td>11/11/2020</td>
                                 <td nowrap="nowrap"></td>
                             </tr>
                             @endforeach
@@ -186,7 +187,6 @@
                             icon: 'success',
                             confirmButtonText: 'Aceptar',
                         }).then(function () {
-                            
                             var $url_path = '{!! url('/') !!}';
                             window.location.href = $url_path+"/administration/student/delete/"+$id;
                             });

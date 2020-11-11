@@ -19,7 +19,13 @@
                         <span class="card-icon">
                             <i class="flaticon2-favourite text-primary"></i>
                         </span>
-                        <h3 class="card-label">Listado de estudiantes por grado</h3>
+                        <h3 class="card-label">
+
+
+
+
+
+                        Listado de estudiantes por grado</h3>
                     </div>
                     <div class="card-toolbar">
                         <!--begin::Dropdown-->
@@ -84,11 +90,13 @@
                         <tbody>
                             @foreach($models as $m)
                             <tr>
+                                <td>{{$m['id']}}</td>
                                 <td>{{$m['name']}}</td>
                                 <td>{{$m['phone']}}</td>
-                                <td>{{$m['birthdate']}}</td>
                                 <td>{{$m['user']}}</td>
                                 <td>{{$m['email']}}</td>
+                                <td>Primero & Segundo Primaria</td>
+                                <td>11/11/2020</td>
                                 <td nowrap="nowrap"></td>
                             </tr>
                             @endforeach

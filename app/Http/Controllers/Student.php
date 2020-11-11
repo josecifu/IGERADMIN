@@ -27,7 +27,7 @@ use App\Models\Course;
 class Student extends Controller
 {
     //ADMINISTRACION
-    //lista de todos los estudiantes
+    //lista de todos los estudiantes////agregar grado
     public function list()
     {
         $buttons =[];
@@ -37,26 +37,25 @@ class Student extends Controller
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
+        $models = [];
         $titles = [ 'Id',
                     'Nombre del estudiante',
                     'No. Teléfono',
-                    'Fecha de nacimiento',
                     'Nombre de usuario',
                     'Correo electrónico',
-                    'Ultima cesión'];
+                    'Grado',
+                    'Ultima cesión',
+                    'Acciones'];
         $rol = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get('user_id');
         foreach ($rol as $i)
         {
             $user = User::find($i->user_id);
             $student = Person::find($user->Person_id);
-            $query = [
-                'id' => $student->id,
-                'name' => $student->Names . ' ' . $student->LastNames,
-                'phone' => $student->Phone,
-                'birthdate' => $student->BirthDate,
-                'user' => $user->name,
-                'email' => $user->email
-            ];
+            $query = [  'id' => $student->id,
+                        'name' => $student->Names . ' ' . $student->LastNames,
+                        'phone' => $student->Phone,
+                        'user' => $user->name,
+                        'email' => $user->email];
             array_push($models,$query);
         }
         return view('Administration/Student/list',compact('models','titles','buttons'));
@@ -72,26 +71,32 @@ class Student extends Controller
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
+        $periods = period::all();
+        $levels = level::all();
+        $grades = grade::all();
+        
+        //mostrar como encabezado el jornada-nivel-grado
+
         $models = [];
-        $titles = [ 'Nombre del estudiante',
+        $titles = [ 'Id',
+                    'Nombre del estudiante',
                     'No. Teléfono',
-                    'Fecha de nacimiento',
                     'Nombre de usuario',
                     'Correo electrónico',
-                    'Ultima cesión'];
+                    'Grado',
+                    'Ultima cesión',
+                    'Acciones'];
         $grade = grade::find($id);
         $rol = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get('user_id');
         foreach ($rol as $i)
         {
             $user = User::find($i->user_id);
             $student = Person::find($user->Person_id);
-            $query = [
-                'name' => $student->Names . ' ' . $student->LastNames,
-                'phone' => $student->Phone,
-                'birthdate' => $student->BirthDate,
-                'user' => $user->name,
-                'email' => $user->email
-            ];
+            $query = [  'id' => $student->Id,
+                        'name' => $student->Names . ' ' . $student->LastNames,
+                        'phone' => $student->Phone,
+                        'user' => $user->name,
+                        'email' => $user->email];
             array_push($models,$query);
         }
         return view('Administration/Student/list_grade',compact('models','titles','buttons'));
@@ -106,24 +111,22 @@ class Student extends Controller
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
-        $titles = [ 'Nombre del estudiante',
+        $titles = [ 'Id',
+                    'Nombre del estudiante',
                     'No. Teléfono',
-                    'Fecha de nacimiento',
                     'Nombre de usuario',
-                    'Correo electrónico',
-                    'Ultima cesión'];
+                    'Correo electrónico'];
         $models = [];
         $rol = Assign_user_rol::where('Rol_id',2)->where('State','Desactivated')->get('user_id');
         foreach ($rol as $i)
         {
             $user = User::find($i->user_id);
             $student = Person::find($user->Person_id);
-            $query = [
-                'name' => $student->Names . ' ' . $student->LastNames,
-                'phone' => $student->Phone,
-                'birthdate' => $student->BirthDate,
-                'user' => $user->name,
-                'email' => $user->email
+            $query = [  'id' => $student->Id,
+                        'name' => $student->Names . ' ' . $student->LastNames,
+                        'phone' => $student->Phone,
+                        'user' => $user->name,
+                        'email' => $user->email
             ];
             array_push($models,$query);
         }
@@ -209,7 +212,6 @@ class Student extends Controller
     {
         $student = Person::find($id);
         $user = User::where('Person_id',$id)->first();
-
         $models = ['Usuario' => $user->name, 'Email' => $user->email];
         return view('Administration/Student/edit_form',compact('student','models'));
     }
@@ -269,6 +271,18 @@ class Student extends Controller
         return redirect()->route('listStudent');
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
     //visualizacion de notas con filtro: jornada, grado, nivel, curso
     public function score($id)
     {
@@ -285,9 +299,27 @@ class Student extends Controller
         */
     }
 
-    //agregar estas rutas
-    //Route::get('/delete/{model}', $route.'\Teacher@delete')->name('DeleteTeacher');
-    //Route::get('/lists/eliminated',$route.'\Student@eliminated_students')->name('ListEliminatedStudents');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
