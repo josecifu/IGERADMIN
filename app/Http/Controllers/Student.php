@@ -28,9 +28,18 @@ class Student extends Controller
     public function list()
     {
         $buttons =[];
+<<<<<<< HEAD
         $button = [ "Name" => 'Estudiantes deshibilitados',
                     "Link" => 'administration/student/list/eliminated',
                     "Type" => "btn1"];
+=======
+        $models=[];
+        $button = [
+            "Name" => 'Estudiantes deshibilitados',
+            "Link" => 'administration/student/list/eliminated',
+            "Type" => "btn1"
+        ];
+>>>>>>> 0a1bb98e1e4251000da518b00469d22a586192cb
         array_push($buttons,$button);
         $models = [];
         $titles = [ 'Id',

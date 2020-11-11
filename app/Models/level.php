@@ -12,4 +12,8 @@ class level extends Model
     {
         return $this->hasMany('App\Models\grade')->get();
     }
+    public function Period()
+    {
+        return $this->hasOne('App\Models\period','id','Period_id')->first();
+    }
 }

@@ -306,6 +306,7 @@ class Teacher extends Controller
         // }
         $Models = [];
         $course = course::find($id);
+     
         $assignV = Asign_teacher_course::where('Course_id',$id)->get('user_id');
         $userV = user::find($assignV);
         $vol = Person::find($userV[0]->id);

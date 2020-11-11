@@ -14,6 +14,25 @@ class grade extends Model
     }
     public function GradeName()
     {
-        return $this->Name." ".$this->Section." ".$this->Level()->first()->Name;
+        return $this->Name." ".$this->Level()->first()->Name." ".$this->Section;
+    }
+    private function Courses()
+    {
+        return $this->hasMany(course::class)->get();
+    }
+    public function CoursesList()
+    {
+        $List="";
+        foreach ($this->Courses() as $value) {
+            if($List=="")
+            {
+                $List=$value->Name;
+            }
+            else
+            {
+                $List=$List.";".$value->Name;
+            }
+        }
+        return $List;
     }
 }
