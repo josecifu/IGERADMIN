@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\logs;
@@ -26,16 +25,12 @@ use App\Models\Course;
 
 class Student extends Controller
 {
-    //ADMINISTRACION
-    //lista de todos los estudiantes////agregar grado
     public function list()
     {
         $buttons =[];
-        $button = [
-            "Name" => 'Estudiantes deshibilitados',
-            "Link" => 'administration/student/list/eliminated',
-            "Type" => "btn1"
-        ];
+        $button = [ "Name" => 'Estudiantes deshibilitados',
+                    "Link" => 'administration/student/list/eliminated',
+                    "Type" => "btn1"];
         array_push($buttons,$button);
         $models = [];
         $titles = [ 'Id',
@@ -46,6 +41,53 @@ class Student extends Controller
                     'Grado',
                     'Ultima cesión',
                     'Acciones'];
+        $rol = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get('user_id');
+        foreach ($rol as $i)
+        {
+            $user = User::find($i->user_id);
+            $student = Person::find($user->Person_id);
+
+            //agregar grado
+
+            $query = [  'id' => $student->id,
+                        'name' => $student->Names . ' ' . $student->LastNames,
+                        'phone' => $student->Phone,
+                        'user' => $user->name,
+                        'email' => $user->email];
+            array_push($models,$query);
+        }
+        return view('Administration/Student/list',compact('models','titles','buttons'));
+    }
+
+    public function list_grade($id)
+    {
+        $buttons =[];
+        $button = [ "Name" => 'Estudiantes deshibilitados',
+                    "Link" => 'administration/student/list/eliminated',
+                    "Type" => "btn1"];
+        array_push($buttons,$button);
+        $models = [];
+        $titles = [ 'Id',
+                    'Nombre del estudiante',
+                    'No. Teléfono',
+                    'Nombre de usuario',
+                    'Correo electrónico',
+                    'Ultima cesión',
+                    'Acciones'];
+        $grade = Grade::find($id);
+
+
+
+
+        $levelid = Grade::where('id',$id)->get('Level_id');
+        $level = Level::find(1);
+        //dd($level);
+
+
+
+
+
+        $period = Period::find(1);
         $rol = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get('user_id');
         foreach ($rol as $i)
         {
@@ -58,65 +100,22 @@ class Student extends Controller
                         'email' => $user->email];
             array_push($models,$query);
         }
-        return view('Administration/Student/list',compact('models','titles','buttons'));
-    }
-
-    //lista de todos los estudiantes con opciones por: jornada, nivel, grados
-    public function list_grade($id)
-    {
-        $buttons =[];
-        $button = [
-            "Name" => 'Estudiantes deshibilitados',
-            "Link" => 'administration/student/list/eliminated',
-            "Type" => "btn1"
-        ];
-        array_push($buttons,$button);
-        $periods = period::all();
-        $levels = level::all();
-        $grades = grade::all();
-        
-        //mostrar como encabezado el jornada-nivel-grado
-
-        $models = [];
-        $titles = [ 'Id',
-                    'Nombre del estudiante',
-                    'No. Teléfono',
-                    'Nombre de usuario',
-                    'Correo electrónico',
-                    'Grado',
-                    'Ultima cesión',
-                    'Acciones'];
-        $grade = grade::find($id);
-        $rol = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get('user_id');
-        foreach ($rol as $i)
-        {
-            $user = User::find($i->user_id);
-            $student = Person::find($user->Person_id);
-            $query = [  'id' => $student->Id,
-                        'name' => $student->Names . ' ' . $student->LastNames,
-                        'phone' => $student->Phone,
-                        'user' => $user->name,
-                        'email' => $user->email];
-            array_push($models,$query);
-        }
-        return view('Administration/Student/list_grade',compact('models','titles','buttons'));
+        return view('Administration/Student/list_grade',compact('models','titles','buttons','grade','level','period'));
     }
 
     public function eliminated_students()
     {
         $buttons =[];
-        $button = [
-            "Name" => 'Estudiantes activos',
-            "Link" => 'administration/student/list',
-            "Type" => "btn1"
-        ];
+        $button = [ "Name" => 'Estudiantes activos',
+                    "Link" => 'administration/student/list',
+                    "Type" => "btn1"];
         array_push($buttons,$button);
+        $models = [];
         $titles = [ 'Id',
                     'Nombre del estudiante',
                     'No. Teléfono',
                     'Nombre de usuario',
                     'Correo electrónico'];
-        $models = [];
         $rol = Assign_user_rol::where('Rol_id',2)->where('State','Desactivated')->get('user_id');
         foreach ($rol as $i)
         {
@@ -137,16 +136,13 @@ class Student extends Controller
         return view('Administration/Student/create_form');
     }
 
-    //estudiante con asignacion de grado
     public function save(Request $request)
     {
         $id = $request->session()->get('User_id'); 
         $data = $request->data[0];
         $names= $data['Nombre'];
         $lastnames= $data['Apellido'];
-        $address= $data['Direccion'];
         $phone= $data['Telefono'];
-        $birthdate= $data['Nacimiento'];
         $username= $data['Usuario'];
         $email= $data['Correo'];
         $password = $data['Contraseña'];
@@ -156,9 +152,7 @@ class Student extends Controller
                 $student = new Person;
                 $student->Names = $names;
                 $student->LastNames = $lastnames;
-                $student->Address = $address;
                 $student->Phone = $phone;
-                $student->BirthDate = $birthdate;
                 $student->save();
                 $user = new User;
                 $user->name = $username;
@@ -179,13 +173,13 @@ class Student extends Controller
                 $log = new logs;
                 $log->Table = "Estudiante";
                 $log->User_ID = $id;
-                $log->Description = "Se registro un nuevo estudiante con indentificación: ".$student->id;
+                $log->Description = "Se registro nuevo estudiante: ".$student->Names." ".$student->LastNames;
                 $log->Type = "Create";
                 $log->save();
                 $log = new logs;
                 $log->Table = "Usuario";
                 $log->User_ID = $id;
-                $log->Description = "Se registro un nuevo usuario con nombre: ".$user->username;
+                $log->Description = "Se registro un nuevo usuario: ".$user->username;
                 $log->Type = "Create";
                 $log->save();
                 $log = new logs;
@@ -201,9 +195,7 @@ class Student extends Controller
                 $log->Type = "Assign";
                 $log->save();
                 DB::commit();
-        } catch (Exception $e) {
-            DB::rollBack();
-        }
+        } catch (Exception $e) { DB::rollBack(); }
         return response()->json(["Accion exitosa"]);
     }
 
@@ -211,54 +203,49 @@ class Student extends Controller
     {
         $student = Person::find($id);
         $user = User::where('Person_id',$id)->first();
-        $models = ['Usuario' => $user->name, 'Email' => $user->email];
+        $models = ['Usuario' => $user->name,'Email' => $user->email];
+        //$models = ['Usuario' => $user->name,'Email' => $user->email,'Contraseña' => $user->password];
         return view('Administration/Student/edit_form',compact('student','models'));
     }
 
-    //actualizar estudiante con usuario
     public function update(Request $request)
     {
         $id = $request->session()->get('User_id');
         $data = $request->data[0];
         $names= $data['Nombre'];
         $lastnames= $data['Apellido'];
-        $address= $data['Direccion'];
         $phone= $data['Telefono'];
-        $birthdate= $data['FechaNacimiento'];
         $username = $data['Usuario'];
         $email= $data['Email'];
+        //$password = $data['Contraseña'];
         $personid = $data['Persona'];
         $data_user=array(
             'name' => $username,
             'email' => $email,
+            //'password' => $password,
         );
         User::where('Person_id', $personid)->update($data_user);
         $data_student=array(
             'Names' => $names,
             'LastNames' => $lastnames,
-            'Address' => $address,
             'Phone' => $phone,
-            'BirthDate' =>$birthdate,
         );
         Person::where('id',$personid)->update($data_student);
         $log = new logs;
         $log->Table = "peoples and users";
         $log->User_ID = $id;
-        $log->Description = "Se actualizaron los datos del estudiante con indentificación: ".$personid;
+        $log->Description = "Se actualizaron los datos del estudiante: ".$names." ".$lastnames;
         $log->Type = "Update";
         $log->save();
         return response()->json(["Accion completada"]);
     }
 
-    //deshabilitar usuario de estudiante
     public function delete($id, Request $request)
     {
         $indentity = $request->session()->get('User_id');
         $user_logged = User::find($indentity);
         $user = User::find($id);
-        $data_user=array(
-            'State' => 'Desactivated',
-        );
+        $data_user=array('State' => 'Desactivated');
         $log = new logs;
         $log->Table = "Estudiante";
         $log->User_ID = $user_logged->name;

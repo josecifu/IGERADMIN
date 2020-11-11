@@ -89,7 +89,7 @@
                                 <td>{{$m['phone']}}</td>
                                 <td>{{$m['user']}}</td>
                                 <td>{{$m['email']}}</td>
-                                <td>Primero & Segundo Primaria</td>
+                                <td>Primero Básico</td>
                                 <td>11/11/2020</td>
                                 <td nowrap="nowrap"></td>
                             </tr>
