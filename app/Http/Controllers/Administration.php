@@ -300,34 +300,46 @@ class Administration extends Controller
     {
         $buttons =[];
         $button = [
-            "Name" => 'Añadir una jornada',
+            "Name" => 'Añadir un grado',
             "Link" => 'create()',
             "Type" => "addFunction"
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver grados de una jornada',
+            "Name" => 'Ver grados eliminados',
             "Link" => 'administration/home/dashboard',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver jornadas eliminadas',
+            "Name" => 'Ver cursos eliminados',
             "Link" => 'administration/configurations/level/list/deletes',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
-        $Titles =['Id','Jornada','Niveles','No de Grados','Acciones'];
+        $button = [
+            "Name" => 'Ver log de grados y cursos',
+            "Link" => 'administration/configurations/level/list/deletes',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $Titles =['Id','Grado','Sección','Nivel','Cursos','No. de Voluntarios','Acciones'];
         $lvl = level::find($id); 
+        $level = $lvl->Name;
+        $period = $lvl->Period()->Name;
         $Models = [];
         foreach ($lvl->Grades() as $key => $value) {
             $m =[
                 "Id" => $value->id,  
-                "Grade" => $value->Name." ".$lvl->Name,  
+                "Grade" => $value->Name,  
+                "Section" => $value->Section,  
+                "Lvl" => $lvl->Name,
+                "Curses" => $value->CoursesList(),
+                "NoTeachers" => "0"
             ];
             array_push($Models,$m);
         }
-        return view('Administration.Grades.List',compact('Titles','Models','buttons'));
+        return view('Administration.Grades.List',compact('Titles','Models', 'level','period','buttons'));
     }
   
     public function LevelListDelete()

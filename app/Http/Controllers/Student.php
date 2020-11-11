@@ -31,6 +31,7 @@ class Student extends Controller
     public function list()
     {
         $buttons =[];
+        $models=[];
         $button = [
             "Name" => 'Estudiantes deshibilitados',
             "Link" => 'administration/student/eliminated_students',
