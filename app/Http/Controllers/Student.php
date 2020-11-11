@@ -281,14 +281,14 @@ class Student extends Controller
     }
 
     //visualizacion de examenes con respuestas de cada alumno por grado-seccion
-    public function tests($id)
+    public function test($id)
     {
-        /*
+        
         $titles = ['Curso'];
         $grade = grade::find($id);
         $models = Course::where('Grade_id',$id)->get('Name');
         return view('Administration/Student/tests',compact('models','titles'));
-        */
+        
     }
 
 
