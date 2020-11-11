@@ -81,19 +81,12 @@ class Student extends Controller
                     'Ultima cesión',
                     'Acciones'];
         $grade = Grade::find($id);
-
-
-
-
         $levelid = Grade::where('id',$id)->get('Level_id');
-        $level = Level::find(1);
-        //dd($level);
-
-
-
-
-
-        $period = Period::find(1);
+        foreach ($levelid as $j)
+        {
+            $level = Level::find($j->Level_id);
+            $period = Period::find($level->Period_id);
+        }
         $rol = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get('user_id');
         foreach ($rol as $i)
         {
@@ -281,14 +274,13 @@ class Student extends Controller
     }
 
     //visualizacion de examenes con respuestas de cada alumno por grado-seccion
-    public function tests($id)
+    public function test($id)
     {
-        /*
         $titles = ['Curso'];
         $grade = grade::find($id);
         $models = Course::where('Grade_id',$id)->get('Name');
         return view('Administration/Student/tests',compact('models','titles'));
-        */
+        
     }
 
 

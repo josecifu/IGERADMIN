@@ -1011,7 +1011,11 @@
 					$('#Title1').text("Visualización de examenes por grado y Voluntarios");
 					$('#Title2').html("Visualice el listado de examenes por grados del nivel y jornada seleccionado");
 				}
-				
+				else if(pos==5)
+				{			
+					$('#Title1').text("Visualización de examenes por grado y curso");
+					$('#Title2').html("Visualice el listado de examenes por grados del nivel y jornada seleccionado");
+				}
 				$.ajax ({
 					url: '{{route('LoadPeriods')}}',
 					type: 'GET',
@@ -1026,8 +1030,7 @@
 				
 			}
 			function save()
-			{
-			
+			{			
 				if(posGrade==1)
 				{
 					var Id = $('#gradeselect1').val();
@@ -1039,6 +1042,12 @@
 					var Id = $('#courseselect1').val();
 					var $url_path = '{!! url('/') !!}';
                     window.location.href = $url_path+"/administration/teacher/score/"+Id;
+				}
+				if(posGrade==5)
+				{
+					var Id = $('#gradeselect1').val();
+					var $url_path = '{!! url('/') !!}';
+                    window.location.href = $url_path+"/administration/student/test/"+Id;
 				}
 			}
 			function ListLevel(Period)
