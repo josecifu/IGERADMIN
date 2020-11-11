@@ -33,18 +33,18 @@ class Student extends Controller
         $buttons =[];
         $button = [
             "Name" => 'Estudiantes deshibilitados',
-            "Link" => 'administration/home/dashboard',
+            "Link" => 'administration/student/eliminated_students',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
+        $models = [];
         $titles = [ 'Nombre del estudiante',
                     'No. Teléfono',
                     'Fecha de nacimiento',
                     'Nombre de usuario',
                     'Correo electrónico',
                     'Ultima cesión'];
-        $models = [];
-        $rol = Assign_user_rol::where('rol_id',2)->get('user_id');
+        $rol = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get('user_id');
         foreach ($rol as $i)
         {
             $user = User::find($i->user_id);
@@ -64,6 +64,13 @@ class Student extends Controller
     //lista de todos los estudiantes con opciones por: jornada, nivel, grados
     public function list_grade($id)
     {
+        $buttons =[];
+        $button = [
+            "Name" => 'Estudiantes deshibilitados',
+            "Link" => 'administration/student/eliminated_students',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
         $models = [];
         $titles = [ 'Nombre del estudiante',
                     'No. Teléfono',
@@ -72,8 +79,8 @@ class Student extends Controller
                     'Correo electrónico',
                     'Ultima cesión'];
         $grade = grade::find($id);
-        $assign = Assign_student_grade::where('Grade_id',$id)->get('user_id');
-        foreach ($assign as $i)
+        $rol = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get('user_id');
+        foreach ($rol as $i)
         {
             $user = User::find($i->user_id);
             $student = Person::find($user->Person_id);
@@ -86,42 +93,45 @@ class Student extends Controller
             ];
             array_push($models,$query);
         }
-        return view('Administration/Student/list_grade',compact('models','titles'));
+        return view('Administration/Student/list_grade',compact('models','titles','buttons'));
     }
 
-    //visualizacion de notas con filtro: jornada, grado, nivel, curso
-    public function score($id)
-    {
-    }
-
-    //visualizacion de examenes con respuestas de cada alumno por grado-seccion
-    public function tests($id)
-    {
-        /*
-        $titles = ['Curso'];
-        $grade = grade::find($id);
-        $models = Course::where('Grade_id',$id)->get('Name');
-        return view('Administration/Student/tests',compact('models','titles'));
-        */
-    }
-
-
-
-
-
-
-
-
-
-    public function create()
+    public function eliminated_students()
     {
         $buttons =[];
         $button = [
-            "Name" => 'Listado de estudiantes',
+            "Name" => 'Estudiantes activos',
             "Link" => 'administration/student/list',
-            "Type" => "add"
+            "Type" => "btn1"
         ];
-        return view('Administration/Student/create_form',compact('buttons'));
+        array_push($buttons,$button);
+        $titles = [ 'Nombre del estudiante',
+                    'No. Teléfono',
+                    'Fecha de nacimiento',
+                    'Nombre de usuario',
+                    'Correo electrónico',
+                    'Ultima cesión'];
+        $models = [];
+        $rol = Assign_user_rol::where('Rol_id',2)->where('State','Desactivated')->get('user_id');
+        foreach ($rol as $i)
+        {
+            $user = User::find($i->user_id);
+            $student = Person::find($user->Person_id);
+            $query = [
+                'name' => $student->Names . ' ' . $student->LastNames,
+                'phone' => $student->Phone,
+                'birthdate' => $student->BirthDate,
+                'user' => $user->name,
+                'email' => $user->email
+            ];
+            array_push($models,$query);
+        }
+        return view('Administration/Student/eliminated_students',compact('models','titles','buttons'));
+    }
+
+    public function create()
+    {
+        return view('Administration/Student/create_form');
     }
 
     //estudiante con asignacion de grado
@@ -237,36 +247,46 @@ class Student extends Controller
         return response()->json(["Accion completada"]);
     }
 
-
-
-
-
-
-
-
-
-
-
-
     //deshabilitar usuario de estudiante
     public function delete($id, Request $request)
     {
-        $IID = $request->session()->get('User_id');
-        $usuarioLogueado = User::find($IID);
-        $r = User::find($id);
-        $dataU=array(
+        $indentity = $request->session()->get('User_id');
+        $user_logged = User::find($indentity);
+        $user = User::find($id);
+        $data_user=array(
             'State' => 'Desactivated',
         );
         $log = new logs;
-        $log->Table = "Voluntario";
-        $log->User_ID = $usuarioLogueado->name;
-        $log->Description = "Se desactivo un usuario con el nombre: ".$r->name." y el correo: ".$r->email;
+        $log->Table = "Estudiante";
+        $log->User_ID = $user_logged->name;
+        $log->Description = "Se ha eliminado el usuario: ".$user->name;
         $log->Type = "Delete";
         $log->save();
-        User::where('Person_id', $id)->update($dataU);
-        Assign_user_rol::where('user_id',$id)->update($dataU);
-        return redirect()->route('ListTeacher');
+        User::where('Person_id', $id)->update($data_user);
+        Assign_user_rol::where('user_id',$id)->update($data_user);
+        return redirect()->route('listStudent');
     }
+
+    //visualizacion de notas con filtro: jornada, grado, nivel, curso
+    public function score($id)
+    {
+    }
+
+    //visualizacion de examenes con respuestas de cada alumno por grado-seccion
+    public function tests($id)
+    {
+        /*
+        $titles = ['Curso'];
+        $grade = grade::find($id);
+        $models = Course::where('Grade_id',$id)->get('Name');
+        return view('Administration/Student/tests',compact('models','titles'));
+        */
+    }
+
+    //agregar estas rutas
+    //Route::get('/delete/{model}', $route.'\Teacher@delete')->name('DeleteTeacher');
+    //Route::get('/lists/eliminated',$route.'\Student@eliminated_students')->name('ListEliminatedStudents');
+
 
 
 
