@@ -19,6 +19,8 @@ class CreateSchedulesTable extends Migration
             $table->string('EndHour');
             $table->string('Day');
             $table->string('Type');
+            $table->unsignedInteger('Course_id'); 
+            $table->foreign('Course_id')->references('id')->on('courses');
             $table->timestamps();
         });
     }

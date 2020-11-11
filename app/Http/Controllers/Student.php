@@ -37,7 +37,8 @@ class Student extends Controller
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
-        $titles = [ 'Nombre del estudiante',
+        $titles = [ 'Id',
+                    'Nombre del estudiante',
                     'No. Teléfono',
                     'Fecha de nacimiento',
                     'Nombre de usuario',
@@ -50,6 +51,7 @@ class Student extends Controller
             $user = User::find($i->user_id);
             $student = Person::find($user->Person_id);
             $query = [
+                'id' => $student->id,
                 'name' => $student->Names . ' ' . $student->LastNames,
                 'phone' => $student->Phone,
                 'birthdate' => $student->BirthDate,
@@ -137,7 +139,7 @@ class Student extends Controller
         $username= $data['Usuario'];
         $email= $data['Correo'];
         $password = $data['Contraseña'];
-        $grade = $data['Grado'];        
+        $grade = grade::find($data['Grado']);        
         try {
               DB::beginTransaction();
                 $student = new Person;
@@ -161,7 +163,7 @@ class Student extends Controller
                 $user_rol->save();
                 $student_grades = new Assign_student_grade;
                 $student_grades->user_id = $user->id;
-                $student_grades->Grade_id = $grade;
+                $student_grades->Grade_id = $grade->id;
                 $student_grades->save();
                 $log = new logs;
                 $log->Table = "Estudiante";
@@ -198,6 +200,7 @@ class Student extends Controller
     {
         $student = Person::find($id);
         $user = User::where('Person_id',$id)->first();
+
         $models = ['Usuario' => $user->name, 'Email' => $user->email];
         return view('Administration/Student/edit_form',compact('student','models'));
     }

@@ -18,7 +18,7 @@ class CreateAsignAnswerTestStudentsTable extends Migration
             $table->unsignedInteger('Studen_id'); 
             $table->foreign('Studen_id')->references('id')->on('assign_student_grades');
             $table->unsignedInteger('Question_id'); 
-            $table->foreign('Question_id')->references('id')->on('assign_question_tests');
+            $table->foreign('Question_id')->references('id')->on('questions');
             $table->string('Score');
             $table->string('Answers');
             $table->timestamps();

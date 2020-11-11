@@ -84,6 +84,7 @@
                         <tbody>
                             @foreach($models as $m)
                             <tr>
+                                <td>{{$m['id']}}</td>
                                 <td>{{$m['name']}}</td>
                                 <td>{{$m['phone']}}</td>
                                 <td>{{$m['birthdate']}}</td>

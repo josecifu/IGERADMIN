@@ -16,7 +16,7 @@ class CreateAsignFileQuestionTestsTable extends Migration
         Schema::create('assign_file_question_tests', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('Question_id'); 
-            $table->foreign('Question_id')->references('id')->on('assign_question_tests');
+            $table->foreign('Question_id')->references('id')->on('questions');
             $table->unsignedInteger('File_id'); 
             $table->foreign('File_id')->references('id')->on('files');
             $table->timestamps();

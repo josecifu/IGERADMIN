@@ -14,21 +14,21 @@ class PeriodSeeder extends Seeder
      */
     public function run()
     {
-        $periodsList = ["Matutina","Vespertina"];
+        $periodsList = ["Viernes","Sábados","Domingos A"];
         foreach ($periodsList as $value) {
             DB::table('periods')->insert([
                 'Name' => $value,
                 'State' => 'Active',       
             ]);
         }
-        $LevelList =["Primaria","Básico","Diversificado"];
+        $LevelList =["Básico"];
         foreach ($LevelList as $value) {
             $id = DB::table('levels')->insertGetId([
                 'Name' => $value,
                 'Period_id' => 1,
                 'State' => 'Active',       
             ]);
-            $GradesList = ["Primero","Segundo","Tercero","Cuarto","Quinto","Sexto"];
+            $GradesList = ["Primero","Segundo","Tercero"];
             foreach ($GradesList as $key => $value) {
                 if($id==1)
                 {
@@ -38,22 +38,8 @@ class PeriodSeeder extends Seeder
                         'Section'=>'A',
                         'State' => 'Active',       
                     ]);
-                    DB::table('grades')->insert([
-                        'Name' => $value,
-                        'Level_id' => $id,
-                        'Section'=>'B',
-                        'State' => 'Active',       
-                    ]);
+                
                 } 
-                if($id==2 && $key<3)
-                {
-                     DB::table('grades')->insert([
-                        'Name' => $value,
-                        'Level_id' => $id,
-                        'Section'=>'A',
-                        'State' => 'Active',       
-                    ]);
-                }
             }   
              
         }

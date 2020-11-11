@@ -39,7 +39,7 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            <h3 class="card-label">Listado de Asignaciones de Jornadas y niveles</h3>
+                                            <h3 class="card-label">Listado de asignaciones de dias,niveles y grados.</h3>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -87,7 +87,7 @@
                                             <!--end::Dropdown-->
                                             <!--begin::Button-->
                                             <a href="#" onclick="create();" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-plus"></i>Crear una jornada</a>
+                                            <i class="la la-plus"></i>Crear un dia de trabajo</a>
                                             <!--end::Button-->
                                         </div>
                                     </div>
@@ -109,9 +109,9 @@
                                                         <td>{{$Model['Jornada']}}</td>
                                                         <td>{{$Model['Niveles']}}</td>
                                                         @if($Model['Grados']!=0)
-                                                        <td><center><button type="button" class="btn btn-outline-info" data-toggle="tooltip" title="Ver grados asignados" data-placement="left">{{$Model['Grados']}}</button></center></td>
+                                                        <td><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" data-target="#kt_select_modal{{$Model['Id']}}">{{$Model['Grados']}}</button></center></td>
                                                         @else
-                                                        <td><center><button type="button" disabled class="btn btn-outline-info" data-toggle="tooltip" title="Ver grados asignados" data-placement="left">{{$Model['Grados']}}</button></center></td>
+                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver grados asignados" data-placement="left">{{$Model['Grados']}}</button></center></td>
                                                         @endif
                                                         <td nowrap="nowrap"></td>
                                                     </tr>
@@ -120,7 +120,7 @@
                                                         <div class="modal-dialog modal-lg" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title">Visualizar grados de la jornada {{$Model['Jornada']}}</h5>
+                                                                    <h5 class="modal-title">Visualizar grados del dia {{$Model['Jornada']}}</h5>
                                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                         <i aria-hidden="true" class="ki ki-close"></i>
                                                                     </button>
@@ -152,6 +152,7 @@
                                                         </div>
                                                     </div>
                                                     <!--end::Modal-->
+                                                  
                                                     @endforeach
                                                 @endif
                                             </tbody>
@@ -199,7 +200,6 @@
                                                 <ul class="nav nav-hoverable flex-column" >\
                                                     <li class="nav-item"><a class="nav-link" href="#" ><i class="nav-icon la la-mail-reply-all"></i><span class="nav-text" style="padding-left:10px;"> Agregar un nivel a la jornada</span></a></li>\
                                                     <li class="nav-item"><a class="nav-link" href="#" ><i class="nav-icon la la-plus-square-o"></i><span class="nav-text" style="padding-left:10px;"> Agregar un grado a un nivel de la jornada</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="#" class="btn btn-light-success font-weight-bold" data-toggle="modal" data-target="#kt_select_modal'+full[0]+'"><i class="nav-icon la la-search"></i><span class="nav-text" style="padding-left:10px;"> Ver grados asignados</span></a></li>\
                                                 </ul>\
                                             </div>\
                                         </div>\
@@ -249,8 +249,8 @@
                 buttonsStyling: false
               })
             swalWithBootstrapButtons.fire({
-                title: '¿Está seguro de eliminar la jornada?',
-                text: "El nombre de la jornada: "+$name,
+                title: '¿Está seguro de eliminar la dia?',
+                text: "El nombre del dia: "+$name,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Si, eliminar!',
@@ -278,7 +278,7 @@
                 ) {
                   swalWithBootstrapButtons.fire({
                     title: 'Cancelado!',
-                    text:  'La jornada no ha sido eliminada!',
+                    text:  'La dia no ha sido eliminada!',
                     icon: 'error',
                     confirmButtonText: 'Aceptar',
                 })
@@ -295,8 +295,8 @@
                 buttonsStyling: false
               })
             swalWithBootstrapButtons.fire({
-                title: '¿Está seguro de activar la jornada?',
-                text: "El nombre de la jornada: "+$name,
+                title: '¿Está seguro de activar la dia?',
+                text: "El nombre del dia: "+$name,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Si, activar!',

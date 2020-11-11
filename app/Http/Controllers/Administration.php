@@ -268,7 +268,7 @@ class Administration extends Controller
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
-        $Titles =['Id','Jornada','Niveles','No de Grados','Acciones'];
+        $Titles =['Id','Dia','Niveles','No de Grados','Acciones'];
         $Models = [];
         $model = period::where("State","Active")->get();
         foreach ($model as $value) {

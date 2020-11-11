@@ -187,7 +187,7 @@
 										 <form class="form">
 											 <div class="modal-body" id="bdModal">
 												<div class="form-group row">
-													<label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione la jornada:</label>
+													<label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el dia:</label>
 													<div class="col-lg-9 col-md-9 col-sm-12">
 														<select class="form-control selectpicker" data-size="10" title="Ninguna jornada ha sido seleccionada" data-live-search="true" id="periodselect1">
 														   
@@ -218,7 +218,7 @@
 														<select class="form-control selectpicker" title="Ningun grado ha sido seleccionado" data-size="10" data-live-search="true" id="courseselect1">
 														   
 														</select>
-														<span class="form-text text-muted" id="Title3">Visualice el listado de alumnos por grados del nivel y jornada seleccionado</span>
+														<span class="form-text text-muted" id="Title3">Visualice el listado de alumnos por grados del nivel y dia seleccionado</span>
 													</div>
 												</div>
 											 </div>
@@ -982,12 +982,24 @@
 		<script src="{{ asset('assets/js/pages/widgets.js')}}"></script>
 		<script type="text/javascript">
 			var posGrade;
+			function clearLvls()
+			{
+				$('#SelectLvl').css("visibility", "hidden");
+				$('#SelectGrd').css("visibility", "hidden");
+				$('#SelectCourse').css("visibility", "hidden");
+			}
 			function ListGrade(pos)
 			{
+				clearLvls();
 				posGrade=pos;
 				if(pos==1)
 				{
 					$('#Title1').text("Listado de alumnos por grado");
+				}
+				else if(pos==2)
+				{
+					$('#Title1').text("Visualizacion de Notas por grado");
+					$('#Title2').html("Visualice el listado de notas por la jornada, grados del nivel y curso seleccionado");
 				}
 				else if(pos==3)
 				{
@@ -1050,7 +1062,6 @@
 			}
 			$('#periodselect1').on('change', function() {
 				$('#SelectLvl').css("visibility", "visible");
-				$('#courseSelect').css("visibility", "visible");
 				ListLevel($('#periodselect1').val());
 			  });
 			  function ListGrades(Level)
@@ -1072,12 +1083,10 @@
 				  });
 				  
 			  }
-			  if(posGrade != 1){
-				$('#lvlmodalselect1').on('change', function() {
-				  $('#SelectGrd').css("visibility", "visible");
-				  ListGrades($('#lvlmodalselect1').val());
-				});
-			  }
+			  $('#lvlmodalselect1').on('change', function() {
+				$('#SelectGrd').css("visibility", "visible");
+				ListGrades($('#lvlmodalselect1').val());
+			  });
 			function ListCourse(Grade)
 			  {
 				  $.ajax ({
@@ -1098,8 +1107,12 @@
 				  
 			  }
 			$('#gradeselect1').on('change', function() {
-				$('#SelectCourse').css("visibility", "visible");
-				ListCourse($('#gradeselect1').val());
+				if(posGrade==3 || posGrade==4 )
+				{
+					$('#SelectCourse').css("visibility", "visible");
+					ListCourse($('#gradeselect1').val());
+				}
+				
 			});
 
 			
