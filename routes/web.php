@@ -38,7 +38,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	#Estudiantes
 	Route::group([ 'prefix' => 'student'], function(){
 		$route = "App\Http\Controllers";
-		Route::get('/list',$route.'\Student@list')->name('listStudent');
+		Route::get('/list',$route.'\Student@list')->name('ListStudent');
 		Route::get('/create',$route.'\Student@create')->name('CreateStudent');
 		Route::post('/save', $route.'\Student@save')->name('SaveStudent');
 		Route::get('/edit/{model}',$route.'\Student@edit')->name('EditStudent');
@@ -48,7 +48,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/logs',$route.'\Student@logs')->name('LogsStudent');
 		Route::get('/test',$route.'\Student@test')->name('TestStudent');
 		Route::get('/lists/eliminated',$route.'\Student@eliminated_students')->name('ListEliminatedStudents');
-		Route::get('/delete/{model}', $route.'\Teacher@delete')->name('DeleteTeacher');
+		Route::get('/delete/{model}', $route.'\Student@delete')->name('DeleteStudent');
 	});
 	#Voluntarios
 	Route::group([ 'prefix' => 'teacher'], function(){
