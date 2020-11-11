@@ -52,14 +52,18 @@ class Student extends Controller
         {
             $user = User::find($i->user_id);
             $student = Person::find($user->Person_id);
-
-            //agregar grado
-
+            //$student_grades = Assign_student_grade::where('User_id',$user->id)->get('Grade_id');
+            //$grade = Grade::find($student_grades);
+            //$levelid = Grade::where('id',$grade->id)->get('Level_id');
+            //$level = Level::find($grade);
+            //dd($grade);
             $query = [  'id' => $student->id,
                         'name' => $student->Names . ' ' . $student->LastNames,
                         'phone' => $student->Phone,
                         'user' => $user->name,
-                        'email' => $user->email];
+                        'email' => $user->email,
+                        //'grade' => $grade->Name
+                    ];
             array_push($models,$query);
         }
         return view('Administration/Student/list',compact('models','titles','buttons'));
