@@ -127,12 +127,9 @@
                                                                         <div class="form-group row">
                                                                             <label class="col-form-label text-right col-lg-3 col-sm-12">Ingrese el nombre de los cursos</label>
                                                                             <div class="col-lg-9 col-md-9 col-sm-12">
-                                                                             <select class="form-control select2" id="kt_select2_11" multiple name="param">
+                                                                             <select class="form-control select2" id="CoursesList{{$Model['Id']}}" multiple name="param">
                                                                               <option label="Label"></option>
-                                                                              <optgroup label="Alaskan/Hawaiian Time Zone">
-                                                                               <option value="AK">Alaska</option>
-                                                                               <option value="HI">Hawaii</option>
-                                                                              </optgroup>
+                                                                           
                                                                            
                                                                              </select>
                                                                             </div>
@@ -141,21 +138,14 @@
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                                        <button type="button" class="btn btn-primary mr-2" onclick="ViewGrades({{$Model['Id']}});">Agregar cursos</button>
+                                                                        <button type="button" class="btn btn-primary mr-2" onclick="AddCourses({{$Model['Id']}});">Agregar cursos</button>
                                                                     </div>
                                                                 </form>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <!--end::Modal-->
-                                                    <script type="text/javascript">
-                                                        $('#CoursesModal{{$Model['Id']}}').on('shown.bs.modal', function () {
-                                                            $('#kt_select2_11').select2({
-                                                                placeholder: "Añada los cursos para el grado",
-                                                                tags: true
-                                                            });  
-                                                      });
-                                                    </script>
+                                                   
                                                     <!--begin::Modal-->
                                                     <div class="modal fade" id="EditModal{{$Model['Id']}}" role="dialog" aria-hidden="true">
                                                         <div class="modal-dialog modal-lg" role="document">
@@ -475,9 +465,52 @@
               })
         }
        
-
+@foreach ($Models as $Model)
+$('#CoursesModal{{$Model['Id']}}').on('shown.bs.modal', function () {
+    $('#CoursesList{{$Model['Id']}}').select2({
+        placeholder: "Añada los cursos para el grado",
+        tags: true,
+        "language": {
+            "noResults": function(){
+                return "Agrege cursos precionando la tecla enter";
+            }
+        },
+    });  
+});
+@endforeach
           
-         
+         function AddCourses(id)
+         {
+            var courses = $('#CoursesList'+id).val();
+            $.ajax({
+                url:'/administration/configurations/level/list/grades/courses/save',
+                type:'POST',
+                data: {"_token":"{{ csrf_token() }}","data":courses,'Id':id},
+                dataType: "JSON",
+                success: function(e){
+                    swal.fire({
+                        title: 'Creado!',
+                        text: 'Se ha creado con exito!',
+                        icon: 'success',
+                        confirmButtonText: 'Aceptar',
+                    }).then(function () {
+                           
+                          var $url_path = '{!! url('/') !!}';
+                          window.location.href = $url_path+"/administration/configurations/level/list";
+                        });
+                     
+                },
+                error: function(e){
+                    swal.fire({
+                        title: 'Cancelado!',
+                        text:   e.responseJSON['error'],
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar',
+                    })
+                   
+                }
+            });
+         }
        </script>
         <!--end::Page Scripts-->
       
