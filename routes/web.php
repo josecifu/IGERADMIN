@@ -63,6 +63,9 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/delete/{model}', $route.'\Teacher@delete')->name('DeleteTeacher');
 		Route::get('/search',$route.'\Teacher@seach')->name('SceachTeacher');
 		Route::get('/workspace',$route.'\Teacher@workspace')->name('WorkspaceTeacher');
+
+		Route::get('/statistics',$route.'\Teacher@statistics')->name('Statistics');
+		Route::post('/load/courses', $route.'\Teacher@LoadCourses')->name('LoadCoursesTeacher');
 	});
 	//Comentario
 	Route::group([ 'prefix' => 'configurations'], function(){

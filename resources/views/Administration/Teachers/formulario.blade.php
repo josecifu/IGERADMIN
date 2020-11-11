@@ -580,7 +580,7 @@ var KTWizard1 = function () {
 		function ListCourses(Grade)
 		{
 			$.ajax ({
-				url: '{{route('LoadCourses')}}',
+				url: '{{route('LoadCoursesTeacher')}}',
 				type: 'POST',
 				data: {
 					"_token": "{{ csrf_token() }}",
