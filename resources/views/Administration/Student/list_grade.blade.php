@@ -20,7 +20,7 @@
                             <i class="flaticon2-favourite text-primary"></i>
                         </span>
                         <h3 class="card-label">
-                            Listado de estudiantes de: {{$grade['Name']}} {{$level['Name']}} - {{$period['Name']}}
+                            Listado de estudiantes de: {{$grade}}
                         </h3>
                     </div>
                     <div class="card-toolbar">

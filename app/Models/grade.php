@@ -10,7 +10,11 @@ class grade extends Model
     use HasFactory;
     public function Level()
     {
-        return $this->hasOne(level::class,'id','Level_id')->get();
+        return $this->hasOne(level::class,'id','Level_id')->first();
+    }
+    public function Period()
+    {
+        return $this->Level()->Period();
     }
     public function GradeName()
     {
@@ -19,6 +23,10 @@ class grade extends Model
     private function Courses()
     {
         return $this->hasMany(course::class)->get();
+    }
+    public function Students()
+    {
+        return $this->belongsToMany('App\Models\User', 'App\Models\Assign_student_grade')->get();
     }
     public function CoursesList()
     {

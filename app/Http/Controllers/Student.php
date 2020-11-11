@@ -85,16 +85,8 @@ class Student extends Controller
                     'Ultima cesión',
                     'Acciones'];
         $grade = Grade::find($id);
-        $levelid = Grade::where('id',$id)->get('Level_id');
-        foreach ($levelid as $j)
+        foreach ($grade->Students() as $user)
         {
-            $level = Level::find($j->Level_id);
-            $period = Period::find($level->Period_id);
-        }
-        $rol = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get('user_id');
-        foreach ($rol as $i)
-        {
-            $user = User::find($i->user_id);
             $student = Person::find($user->Person_id);
             $query = [  'id' => $student->id,
                         'name' => $student->Names . ' ' . $student->LastNames,
@@ -103,8 +95,9 @@ class Student extends Controller
                         'email' => $user->email];
             array_push($models,$query);
         }
-        dd($rol);
-        return view('Administration/Student/list_grade',compact('models','titles','buttons','grade','level','period'));
+        $grade = $grade->GradeName()." del dia ".$grade->Period()->Name;
+      
+        return view('Administration/Student/list_grade',compact('models','titles','buttons','grade'));
     }
 
     public function eliminated_students()
