@@ -1011,11 +1011,7 @@
 					$('#Title1').text("Visualización de examenes por grado y Voluntarios");
 					$('#Title2').html("Visualice el listado de examenes por grados del nivel y jornada seleccionado");
 				}
-				else if(pos==5)
-				{			
-					$('#Title1').text("Visualización de examenes por grado y curso");
-					$('#Title2').html("Visualice el listado de examenes por grados del nivel y jornada seleccionado");
-				}
+				
 				$.ajax ({
 					url: '{{route('LoadPeriods')}}',
 					type: 'GET',
@@ -1030,7 +1026,8 @@
 				
 			}
 			function save()
-			{			
+			{
+			
 				if(posGrade==1)
 				{
 					var Id = $('#gradeselect1').val();
@@ -1042,6 +1039,12 @@
 					var Id = $('#courseselect1').val();
 					var $url_path = '{!! url('/') !!}';
                     window.location.href = $url_path+"/administration/teacher/score/"+Id;
+				}
+				if(posGrade==4)
+				{
+					var Id = $('#courseselect1').val();
+					var $url_path = '{!! url('/') !!}';
+                    window.location.href = $url_path+"/administration/teacher/test/"+Id;
 				}
 				if(posGrade==5)
 				{
@@ -1116,7 +1119,7 @@
 				  
 			  }
 			$('#gradeselect1').on('change', function() {
-				if( posGrade==2 ||posGrade==3 || posGrade==4 || posGrade==5 )
+				if(posGrade==3 || posGrade==4 )
 				{
 					$('#SelectCourse').css("visibility", "visible");
 					ListCourse($('#gradeselect1').val());

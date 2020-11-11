@@ -19,6 +19,7 @@ class CreateAsignTeacherCoursesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedInteger('Course_id'); 
             $table->foreign('Course_id')->references('id')->on('courses');
+            $table->string('State');
             $table->timestamps();
         });
     }

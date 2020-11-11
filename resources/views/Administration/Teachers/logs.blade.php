@@ -38,7 +38,7 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            <h3 class="card-label">Listado de Voluntarios</h3>
+                                            <h3 class="card-label">Registro de actividad de la tabla Voluntarios</h3>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -100,11 +100,10 @@
                                                 @foreach($Models as $Model)
                                                 <tr>
                                                     <td>{{$Model['Id']}}</td>
-                                                    <td>{{$Model['Name']}}</td>
-                                                    <td>{{$Model['Apellido']}}</td>
-                                                    <td>{{$Model['Telefono']}}</td>
                                                     <td>{{$Model['Usuario']}}</td>
-                                                    <td>{{$Model['Correo']}}</td>
+                                                    <td>{{$Model['Descripcion']}}</td>
+                                                    <td>{{$Model['Tipo']}}</td>
+                                                    <td>{{$Model['HF']}}</td>
                                                     <td nowrap="nowrap"></td>
                                                 </tr>
                                                 @endforeach

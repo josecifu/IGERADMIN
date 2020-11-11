@@ -1,13 +1,13 @@
 @extends('Administration.Base/Base')
 {{-- Page title --}}
     @section('title')
-    Inicio
+    Voluntario
     @stop
     @section('breadcrumb1')
-    Tablero
+    Registro
     @stop
     @section('breadcrumb2')
-    Principal
+    Ingreso de datos
     @stop
     {{-- Page content --}}
     @section('content')
@@ -111,19 +111,6 @@
 														</div>
 													</div>
 													<div class="form-group row">
-														<label class="col-3">Direccion</label>
-														<div class="col-9">
-															<div class="input-group input-group-solid">
-																<div class="input-group-prepend">
-																	<span class="input-group-text">
-																		<i class="la la-address-book"></i>
-																	</span>
-																</div>
-																<input type="text" name="Direccion" id="Direccion" class="form-control form-control-solid" placeholder="Dirección" />
-															</div>
-														</div>
-													</div>
-													<div class="form-group row">
 														<label class="col-3">Teléfono</label>
 														<div class="col-9">
 															<div class="input-group input-group-solid">
@@ -133,19 +120,6 @@
 																	</span>
 																</div>
 																<input type="text" name="Telefono" id="Telefono" class="form-control form-control-solid" placeholder="Phone" />
-															</div>
-														</div>
-													</div>
-													<div class="form-group row">
-														<label class="col-3">Fecha de nacimiento</label>
-														<div class="col-9">
-															<div class="input-group input-group-solid">
-																<div class="input-group-prepend">
-																	<span class="input-group-text">
-																		<i class="la la-calendar"></i>
-																	</span>
-																</div>
-																<input type="date" name="FechaNacimiento" id="FechaNacimiento" class="form-control form-control-solid" placeholder="Phone" />
 															</div>
 														</div>
 													</div>
@@ -203,9 +177,9 @@
 												<h1>Detalle Asignación:</h1>
 												<div class="my-5">
 													<div class="form-group row">
-														<label class="col-form-label text-right col-lg-3 col-sm-12">Jornada</label>
+														<label class="col-form-label text-right col-lg-3 col-sm-12">Día</label>
 														<div class="col-lg-9 col-md-9 col-sm-12">
-															<select class="form-control selectpicker" data-size="10" title="Ninguna jornada ha sido seleccionada" data-live-search="true" id="Jornada">
+															<select class="form-control selectpicker" data-size="10" title="No se ha seleccionado ningún día" data-live-search="true" id="Jornada">
 															</select>
 														</div>
 													</div>
@@ -299,24 +273,10 @@ var KTWizard1 = function () {
 								}
 							}
 						},
-						Direccion: {
-							validators: {
-								notEmpty: {
-									message: 'La direccion es requerida'
-								}
-							}
-						},
 						Telefono: {
 							validators: {
 								notEmpty: {
 									message: 'El telefono es requerido'
-								}
-							}
-						},
-						FechaNacimiento: {
-							validators: {
-								notEmpty: {
-									message: 'La fecha es requerida'
 								}
 							}
 						},
@@ -478,9 +438,7 @@ var KTWizard1 = function () {
          {
             var NombrePersona = $('#Nombres').val(); 
             var ApellidosPersona = $('#Apellidos').val();
-            var DireccionPersona = $('#Direccion').val();
             var TelefonoPersona = $('#Telefono').val();
-            var FechaNacimientoPersona = $('#FechaNacimiento').val();
             var UsuarioPersona = $('#Usuario').val(); 
             var ContraseñaPersona = $('#Contraseña').val();
             var EmailPersona = $('#Email').val();
@@ -492,9 +450,7 @@ var KTWizard1 = function () {
 				Grado: Grado,
                 Nombre: NombrePersona,
                 Apellido: ApellidosPersona,
-                Direccion: DireccionPersona,
                 Telefono: TelefonoPersona,
-                FechaNacimiento: FechaNacimientoPersona,
                 //Usuario
                 Usuario: UsuarioPersona,
                 Email: EmailPersona,

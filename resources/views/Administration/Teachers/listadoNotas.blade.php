@@ -108,6 +108,7 @@
                                                         <td>{{$model['P2']}}</td>
                                                         <td>{{$model['P3']}}</td>
                                                         <td>{{$model['P4']}}</td>
+                                                        <td>{{$model['Final']}}</td>
                                                         <td nowrap="nowrap"></td>
                                                     </tr>
                                                 @endforeach

@@ -39,7 +39,9 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            <h3 class="card-label">Estudiantes Asignados</h3>
+                                            @isset($course)
+                                            <h3 class="card-label">Examen de {{$course->Name ?? ''}} de {{$grado ?? ''}}</h3>
+                                            @endisset
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -85,37 +87,175 @@
                                                 <!--end::Dropdown Menu-->
                                             </div>
                                             <!--end::Dropdown-->
-                                            <!--begin::Button-->
-                                            <a href="{{url('insertar/persona')}}" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-plus"></i>Añadir Un Cliente</a>
-                                            <!--end::Button-->
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <!--begin: Datatable-->
-                                        <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
-                                            <thead>
-                                                <tr>
-                                                    @foreach($Titles as $Title)
-                                                    <th>{{ $Title }}</th>
-                                                    @endforeach
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach($Models as $Model)
-                                                <tr>
-                                                    <td>{{$Model['Id']}}</td>
-                                                    <td>{{$Model['Nombre']}}</td>
-                                                    <td>{{$Model['Apellido']}}</td>
-                                                    <td>{{$Model['Correo']}}</td>
-                                                    <td>{{$Model['Telefono']}}</td>
-                                                    <td>{{$Model['Grado']}}</td>
-                                                    <td nowrap="nowrap"></td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                        <!--end: Datatable-->
+                                        <!--begin::Card-->
+										<div class="card card-custom gutter-b example-hover">
+											<div class="card-header">
+												<div class="card-title">
+													<h3 class="card-label">Primer Examen Parcial</h3>
+												</div>
+											</div>
+											<div class="card-body">
+												<!--begin::Accordion-->
+												<div class="accordion accordion-toggle-arrow" id="accordionExample1">
+													<div class="card">
+														<div class="card-header">
+															<div class="card-title" data-toggle="collapse" data-target="#collapseOne1">Pregunta?</div>
+														</div>
+														<div id="collapseOne1" class="collapse show" data-parent="#accordionExample1">
+															<div class="card-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</div>
+														</div>
+													</div>
+													<div class="card">
+														<div class="card-header">
+															<div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo1">¿Primera Pregunta?</div>
+														</div>
+														<div id="collapseTwo1" class="collapse" data-parent="#accordionExample1">
+															<div class="card-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</div>
+														</div>
+													</div>
+													<div class="card">
+														<div class="card-header">
+															<div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree1">¿Tercera</div>
+														</div>
+														<div id="collapseThree1" class="collapse" data-parent="#accordionExample1">
+															<div class="card-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</div>
+														</div>
+													</div>
+												</div>
+												<!--end::Accordion-->
+												<!--begin::Code example-->
+												<div class="example example-compact mt-5">
+													<div class="example-tools">
+														<span class="example-toggle" data-toggle="tooltip" title="View code"></span>
+														<span class="example-copy" data-toggle="tooltip" title="Copy code"></span>
+													</div>
+													<div class="example-code">
+														<div class="example-highlight">
+															<pre style="height:300px">
+                                                                <code class="language-html">
+                                                                    &lt;div class="accordion accordion-toggle-arrow" id="accordionExample1"&gt;
+                                                                        &lt;div class="card"&gt;
+                                                                            &lt;div class="card-header"&gt;
+                                                                                &lt;div class="card-title" data-toggle="collapse" data-target="#collapseOne1"&gt;
+                                                                                    Latest Orders
+                                                                                &lt;/div&gt;
+                                                                            &lt;/div&gt;
+                                                                            &lt;div id="collapseOne1" class="collapse show" data-parent="#accordionExample1"&gt;
+                                                                                &lt;div class="card-body"&gt;
+                                                                                    ...
+                                                                                &lt;/div&gt;
+                                                                            &lt;/div&gt;
+                                                                        &lt;/div&gt;
+                                                                        &lt;div class="card"&gt;
+                                                                            &lt;div class="card-header"&gt;
+                                                                                &lt;div class="card-title collapsed" data-toggle="collapse" data-target="#collapseTwo1"&gt;
+                                                                                    Product Updates
+                                                                                &lt;/div&gt;
+                                                                            &lt;/div&gt;
+                                                                            &lt;div id="collapseTwo1" class="collapse" data-parent="#accordionExample1"&gt;
+                                                                                &lt;div class="card-body"&gt;
+                                                                                    ...
+                                                                                &lt;/div&gt;
+                                                                            &lt;/div&gt;
+                                                                        &lt;/div&gt;
+                                                                        &lt;div class="card"&gt;
+                                                                            &lt;div class="card-header"&gt;
+                                                                                &lt;div class="card-title collapsed" data-toggle="collapse" data-target="#collapseThree1"&gt;
+                                                                                    ...
+                                                                                &lt;/div&gt;
+                                                                            &lt;/div&gt;
+                                                                            &lt;div id="collapseThree1" class="collapse" data-parent="#accordionExample1"&gt;
+                                                                                &lt;div class="card-body"&gt;
+                                                                                    ...
+                                                                                &lt;/div&gt;
+                                                                            &lt;/div&gt;
+                                                                        &lt;/div&gt;
+                                                                    &lt;/div&gt;
+                                                                </code>
+                                                            </pre>
+														</div>
+													</div>
+												</div>
+												<!--end::Code example-->
+											</div>
+										</div>
+                                        <!--end::Card-->
+                                        <div class="card card-custom bg-white gutter-b">
+													<!--begin::Header-->
+													<div class="card-header border-0 pt-5">
+														<h3 class="card-title align-items-start flex-column">
+															<span class="card-label font-weight-bold font-size-h4 text-dark-75">Primer Examen Parcial</span>
+															<span class="text-muted mt-3 font-weight-bold font-size-sm">Punteo
+															<span class="text-primary font-weight-bolder">20 pts</span></span>
+														</h3>
+														<div class="card-toolbar">
+															<ul class="nav nav-pills nav-pills-sm nav-dark">
+																<li class="nav-item ml-0">
+																	<a class="nav-link py-2 px-4 font-weight-bolder font-size-sm" data-toggle="tab" href="#kt_tab_pane_7_1">Active Cases</a>
+																</li>
+																<li class="nav-item">
+																	<a class="nav-link py-2 px-4 active font-weight-bolder font-size-sm" data-toggle="tab" href="#kt_tab_pane_7_2">Create</a>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<!--end::Header-->
+													<!--begin::Body-->
+													<div class="card-body pt-1">
+														<div class="tab-content mt-5" id="myTabContent">
+															<!--begin::Tap pane-->
+															<div class="tab-pane fade" id="kt_tab_pane_7_1" role="tabpanel" aria-labelledby="kt_tab_pane_7_1">
+																<!--begin::Form-->
+																<form class="form" id="kt_form_7_1">
+																	<div class="form-group">
+																		<input type="text" class="form-control form-control-solid border-0" name="name" placeholder="Name" />
+																	</div>
+																	<div class="form-group">
+																		<input type="text" class="form-control form-control-solid border-0" name="email" placeholder="Email" />
+																	</div>
+																	<div class="form-group">
+																		<textarea class="form-control form-control-solid border-0" name="memo" rows="4" placeholder="Message" id="kt_forms_widget_7_1_input"></textarea>
+																	</div>
+																	<div class="mt-10">
+																		<button class="btn btn-primary font-weight-bold">Send</button>
+																	</div>
+																</form>
+																<!--end::Form-->
+															</div>
+															<!--end::Tap pane-->
+															<!--begin::Tap pane-->
+															<div class="tab-pane fade show active" id="kt_tab_pane_7_2" role="tabpanel" aria-labelledby="kt_tab_pane_7_2">
+																<!--begin::Form-->
+																<form class="form" id="kt_form_7_2">
+																	<div class="form-group mb-6">
+																		<input type="text" class="form-control border-0 form-control-solid pl-6 min-h-50px font-size-lg font-weight-bolder" name="name" placeholder="¿Preguntas?" />
+																	</div>
+																	<div class="form-group mb-6">
+																		<select class="form-control border-0 form-control-solid text-muted font-size-lg font-weight-bolder pl-5 min-h-50px" id="exampleSelects">
+																			<option>Select Category</option>
+																			<option>2</option>
+																			<option>3</option>
+																			<option>4</option>
+																			<option>5</option>
+																		</select>
+																	</div>
+																	<div class="form-group mb-6">
+																		<textarea class="form-control border-0 form-control-solid pl-6 font-size-lg font-weight-bolder min-h-130px" name="memo" rows="4" placeholder="Area de respuesta" id="kt_forms_widget_7_2_input"></textarea>
+																	</div>
+																	<div>
+																		<button class="btn btn-primary font-weight-bold">Enviar Examen</button>
+																	</div>
+																</form>
+																<!--end::Form-->
+															</div>
+															<!--end::Tap pane-->
+														</div>
+													</div>
+													<!--end::Body-->
+												</div>
                                     </div>
                                 </div>
                                 <!--end::Card-->
