@@ -33,7 +33,7 @@ class Student extends Controller
         $buttons =[];
         $button = [
             "Name" => 'Estudiantes deshibilitados',
-            "Link" => 'administration/student/eliminated_students',
+            "Link" => 'administration/student/list/eliminated',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
@@ -67,7 +67,7 @@ class Student extends Controller
         $buttons =[];
         $button = [
             "Name" => 'Estudiantes deshibilitados',
-            "Link" => 'administration/student/eliminated_students',
+            "Link" => 'administration/student/list/eliminated',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
@@ -126,8 +126,7 @@ class Student extends Controller
                         'name' => $student->Names . ' ' . $student->LastNames,
                         'phone' => $student->Phone,
                         'user' => $user->name,
-                        'email' => $user->email
-            ];
+                        'email' => $user->email];
             array_push($models,$query);
         }
         return view('Administration/Student/eliminated_students',compact('models','titles','buttons'));
@@ -268,7 +267,7 @@ class Student extends Controller
         $log->save();
         User::where('Person_id', $id)->update($data_user);
         Assign_user_rol::where('user_id',$id)->update($data_user);
-        return redirect()->route('listStudent');
+        return redirect()->route('ListStudent');
     }
 
 
