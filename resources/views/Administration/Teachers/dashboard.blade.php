@@ -12,18 +12,148 @@
     {{-- Page content --}}
     @section('content')
 
-    <div class="content flex-column-fluid" id="kt_content">
+    						<div class="content flex-column-fluid" id="kt_content">
 								<!--begin::Teachers-->
 								<div class="d-flex flex-row">
 									<!--begin::Aside-->
 									<div class="flex-md-row-auto w-md-275px w-xl-325px">
-										<!--begin::List Widget 17-->
+									<div class="card card-custom gutter-b">
+											<!--begin::Body-->
+											<div class="card-body">
+												<!--begin::Wrapper-->
+												<div class="d-flex justify-content-between flex-column h-100">
+													<!--begin::Container-->
+													<div class="h-100">
+														<!--begin::Header-->
+														<div class="d-flex flex-column flex-center">
+															<!--begin::Image-->
+															<!--end::Image-->
+															<!--begin::Title-->
+															<a href="#" class="card-title font-weight-bolder text-dark-75 text-hover-primary font-size-h4 m-0 pt-7 pb-1">Curso Matematicas</a>
+															<!--end::Title-->
+															<!--begin::Text-->
+															<div class="font-weight-bold text-dark-50 font-size-sm pb-7">Viernes, Pedro Lopez</div>
+															<!--end::Text-->
+														</div>
+														<!--end::Header-->
+														<!--begin::Body-->
+														<div class="pt-1">
+															<!--begin::Item-->
+															<div class="d-flex align-items-center pb-9">
+																<!--begin::Symbol-->
+																<div class="symbol symbol-45 symbol-light mr-4">
+																	<span class="symbol-label">
+																		<span class="svg-icon svg-icon-2x svg-icon-dark-50">
+																			<!--begin::Svg Icon | path:assets/media/svg/icons/Media/Equalizer.svg-->
+																			<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+																				<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																					<rect x="0" y="0" width="24" height="24" />
+																					<rect fill="#000000" opacity="0.3" x="13" y="4" width="3" height="16" rx="1.5" />
+																					<rect fill="#000000" x="8" y="9" width="3" height="11" rx="1.5" />
+																					<rect fill="#000000" x="18" y="11" width="3" height="9" rx="1.5" />
+																					<rect fill="#000000" x="3" y="13" width="3" height="7" rx="1.5" />
+																				</g>
+																			</svg>
+																			<!--end::Svg Icon-->
+																		</span>
+																	</span>
+																</div>
+																<!--end::Symbol-->
+																<!--begin::Text-->
+																<div class="d-flex flex-column flex-grow-1">
+																	<a href="#" class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder">Tareas</a>
+																	<span class="text-muted font-weight-bold">Good Fellas</span>
+																</div>
+																<!--end::Text-->
+																<!--begin::label-->
+																<span class="font-weight-bolder label label-xl label-light-success label-inline px-3 py-5 min-w-45px">14</span>
+																<!--end::label-->
+															</div>
+															<!--end::Item-->
+															<!--begin::Item-->
+															<div class="d-flex align-items-center pb-9">
+																<!--begin::Symbol-->
+																<div class="symbol symbol-45 symbol-light mr-4">
+																	<span class="symbol-label">
+																		<span class="svg-icon svg-icon-2x svg-icon-dark-50">
+																			<!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Group.svg-->
+																			<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+																				<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																					<polygon points="0 0 24 0 24 24 0 24" />
+																					<path d="M18,14 C16.3431458,14 15,12.6568542 15,11 C15,9.34314575 16.3431458,8 18,8 C19.6568542,8 21,9.34314575 21,11 C21,12.6568542 19.6568542,14 18,14 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+																					<path d="M17.6011961,15.0006174 C21.0077043,15.0378534 23.7891749,16.7601418 23.9984937,20.4 C24.0069246,20.5466056 23.9984937,21 23.4559499,21 L19.6,21 C19.6,18.7490654 18.8562935,16.6718327 17.6011961,15.0006174 Z M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z" fill="#000000" fill-rule="nonzero" />
+																				</g>
+																			</svg>
+																			<!--end::Svg Icon-->
+																		</span>
+																	</span>
+																</div>
+																<!--end::Symbol-->
+																<!--begin::Text-->
+																<div class="d-flex flex-column flex-grow-1">
+																	<a href="#" class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder">Estudiantes</a>
+																	<span class="text-muted font-weight-bold">Successful Fellas</span>
+																</div>
+																<!--end::Text-->
+																<!--begin::label-->
+																<span class="font-weight-bolder label label-xl label-light-danger label-inline px-3 py-5 min-w-45px">37</span>
+																<!--end::label-->
+															</div>
+															<!--end::Item-->
+															<!--begin::Item-->
+															<div class="d-flex align-items-center pb-9">
+																<!--begin::Symbol-->
+																<div class="symbol symbol-45 symbol-light mr-4">
+																	<span class="symbol-label">
+																		<span class="svg-icon svg-icon-2x svg-icon-dark-50">
+																			<!--begin::Svg Icon | path:assets/media/svg/icons/Home/Globe.svg-->
+																			<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+																				<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+																					<rect x="0" y="0" width="24" height="24" />
+																					<path d="M13,18.9450712 L13,20 L14,20 C15.1045695,20 16,20.8954305 16,22 L8,22 C8,20.8954305 8.8954305,20 10,20 L11,20 L11,18.9448245 C9.02872877,18.7261967 7.20827378,17.866394 5.79372555,16.5182701 L4.73856106,17.6741866 C4.36621808,18.0820826 3.73370941,18.110904 3.32581341,17.7385611 C2.9179174,17.3662181 2.88909597,16.7337094 3.26143894,16.3258134 L5.04940685,14.367122 C5.46150313,13.9156769 6.17860937,13.9363085 6.56406875,14.4106998 C7.88623094,16.037907 9.86320756,17 12,17 C15.8659932,17 19,13.8659932 19,10 C19,7.73468744 17.9175842,5.65198725 16.1214335,4.34123851 C15.6753081,4.01567657 15.5775721,3.39010038 15.903134,2.94397499 C16.228696,2.49784959 16.8542722,2.4001136 17.3003976,2.72567554 C19.6071362,4.40902808 21,7.08906798 21,10 C21,14.6325537 17.4999505,18.4476269 13,18.9450712 Z" fill="#000000" fill-rule="nonzero" />
+																					<circle fill="#000000" opacity="0.3" cx="12" cy="10" r="6" />
+																				</g>
+																			</svg>
+																			<!--end::Svg Icon-->
+																		</span>
+																	</span>
+																</div>
+																<!--end::Symbol-->
+																<!--begin::Text-->
+																<div class="d-flex flex-column flex-grow-1">
+																	<a href="#" class="text-dark-75 text-hover-primary mb-1 font-size-lg font-weight-bolder">Periodos</a>
+																	<span class="text-muted font-weight-bold">Successful Fellas</span>
+																</div>
+																<!--end::Text-->
+																<!--begin::label-->
+																<span class="font-weight-bolder label label-xl label-light-primary label-inline py-5 min-w-45px">7-4</span>
+																<!--end::label-->
+															</div>
+															<!--end::Item-->
+														</div>
+														<!--end::Body-->
+													</div>
+													<!--eng::Container-->
+													<!--begin::Footer-->
+													<div class="d-flex flex-center" id="kt_sticky_toolbar_chat_toggler_3" data-toggle="tooltip" title="" data-placement="right" data-original-title="Chat Example">
+														<button class="btn btn-primary font-weight-bolder font-size-sm py-3 px-14" data-toggle="modal" data-target="#kt_chat_modal">Datos Voluntario</button>
+													</div>
+													<!--end::Footer-->
+												</div>
+												<!--end::Wrapper-->
+											</div>
+											<!--end::Body-->
+										</div>
+									</div>
+									<!--end::Aside-->
+									<!--begin::Content-->
+									<div class="flex-row-fluid ml-lg-8">
 										<div class="card card-custom gutter-b">
 											<!--begin::Header-->
 											<div class="card-header align-items-center border-0 mt-4">
 												<h3 class="card-title align-items-start flex-column">
-													<span class="font-weight-bolder text-dark">My Activity</span>
-													<span class="text-muted mt-3 font-weight-bold font-size-sm">890,344 Sales</span>
+													<span class="font-weight-bolder text-dark">Lista Actividades</span>
+													<span class="text-muted mt-3 font-weight-bold font-size-sm"></span>
 												</h3>
 												<div class="card-toolbar">
 													<div class="dropdown dropdown-inline">
@@ -92,7 +222,7 @@
 													<!--begin::Item-->
 													<div class="timeline-item align-items-start">
 														<!--begin::Label-->
-														<div class="timeline-label font-weight-bolder text-dark-75 font-size-lg">08:42</div>
+														<div class="timeline-label font-weight-bolder text-dark-75 font-size-lg">1</div>
 														<!--end::Label-->
 														<!--begin::Badge-->
 														<div class="timeline-badge">
@@ -100,14 +230,14 @@
 														</div>
 														<!--end::Badge-->
 														<!--begin::Text-->
-														<div class="font-weight-mormal font-size-lg timeline-content text-muted pl-3">Outlines keep you honest. And keep structure</div>
+														<div class="font-weight-mormal font-size-lg timeline-content text-muted pl-3">Primer examen</div>
 														<!--end::Text-->
 													</div>
 													<!--end::Item-->
 													<!--begin::Item-->
 													<div class="timeline-item align-items-start">
 														<!--begin::Label-->
-														<div class="timeline-label font-weight-bolder text-dark-75 font-size-lg">10:00</div>
+														<div class="timeline-label font-weight-bolder text-dark-75 font-size-lg">2</div>
 														<!--end::Label-->
 														<!--begin::Badge-->
 														<div class="timeline-badge">
@@ -116,7 +246,7 @@
 														<!--end::Badge-->
 														<!--begin::Content-->
 														<div class="timeline-content d-flex">
-															<span class="font-weight-bolder text-dark-75 pl-3 font-size-lg">AEOL meeting</span>
+															<span class="font-weight-bolder text-dark-75 pl-3 font-size-lg">Segundo Examen</span>
 														</div>
 														<!--end::Content-->
 													</div>
@@ -124,7 +254,7 @@
 													<!--begin::Item-->
 													<div class="timeline-item align-items-start">
 														<!--begin::Label-->
-														<div class="timeline-label font-weight-bolder text-dark-75 font-size-lg">14:37</div>
+														<div class="timeline-label font-weight-bolder text-dark-75 font-size-lg">3</div>
 														<!--end::Label-->
 														<!--begin::Badge-->
 														<div class="timeline-badge">
@@ -132,8 +262,8 @@
 														</div>
 														<!--end::Badge-->
 														<!--begin::Desc-->
-														<div class="timeline-content font-weight-bolder font-size-lg text-dark-75 pl-3">Make deposit
-														<a href="#" class="text-primary">USD 700</a>. to ESL</div>
+														<div class="timeline-content font-weight-bolder font-size-lg text-dark-75 pl-3">Lectura paginas
+														<a href="#" class="text-primary"> 7 y 9</a></div>
 														<!--end::Desc-->
 													</div>
 													<!--end::Item-->
@@ -188,208 +318,6 @@
 											</div>
 											<!--end: Card Body-->
 										</div>
-										<div class="card card-custom">
-									<div class="card-header">
-										<div class="card-title">
-											<h3 class="card-label">Basic Calendar</h3>
-										</div>
-										<div class="card-toolbar">
-											<a href="#" class="btn btn-light-primary font-weight-bold">
-											<i class="ki ki-plus icon-md mr-2"></i>Add Event</a>
-										</div>
-									</div>
-									<div class="card-body">
-										<div id="kt_calendar"></div>
-									</div>
-								</div>
-									</div>
-									<!--end::Aside-->
-									<!--begin::Content-->
-									<div class="flex-row-fluid ml-lg-8">
-										<!--begin::Card-->
-										<div class="card card-custom">
-											<!--begin::Header-->
-											<div class="card-header flex-wrap border-0 pt-6 pb-0">
-												<h3 class="card-title align-items-start flex-column">
-													<span class="card-label font-weight-bolder text-dark">Cursos <br> Estudiantes    </span>
-													<span class="text-muted mt-1 font-weight-bold font-size-sm">Manage over 2400 teachers</span>
-												</h3>
-												<div class="card-toolbar">
-													<div class="dropdown dropdown-inline" data-toggle="tooltip" title="" data-placement="left" data-original-title="Quick actions">
-														<!--begin::Trigger Modal-->
-														<a href="#" class="btn btn-success font-weight-bolder font-size-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#exampleModalCustomScrollable">New Teacher</a>
-														<!--end::Trigger Modal-->
-														<!--begin::Modal Content-->
-														<div class="modal fade" id="exampleModalCustomScrollable" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
-															<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
-																<div class="modal-content">
-																	<div class="modal-header">
-																		<h5 class="modal-title" id="exampleModalLabel">Add New Teacher</h5>
-																		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-																			<i aria-hidden="true" class="ki ki-close"></i>
-																		</button>
-																	</div>
-																	<div class="modal-body">
-																		<div data-scroll="true" data-height="600">
-																			<form class="form pt-9">
-																				<div class="form-group row">
-																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Name</label>
-																					<div class="col-lg-9 col-xl-6">
-																						<input class="form-control form-control-lg form-control-solid" type="text" value="Nick" />
-																					</div>
-																				</div>
-																				<div class="form-group row">
-																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Nickname</label>
-																					<div class="col-lg-9 col-xl-6">
-																						<input class="form-control form-control-lg form-control-solid" type="text" value="Bold" />
-																					</div>
-																				</div>
-																				<div class="form-group row">
-																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Organization</label>
-																					<div class="col-lg-9 col-xl-6">
-																						<input class="form-control form-control-lg form-control-solid" type="text" value="Loop Inc." />
-																						<span class="form-text text-muted">If you want your invoices addressed to a company. Leave blank to use your full name.</span>
-																					</div>
-																				</div>
-																				<div class="separator separator-dashed my-10"></div>
-																				<!--begin::Heading-->
-																				<div class="row">
-																					<div class="col-lg-9 col-xl-6 offset-xl-3">
-																						<h3 class="font-size-h6 mb-5">Contact Info:</h3>
-																					</div>
-																				</div>
-																				<!--end::Heading-->
-																				<div class="form-group row">
-																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Phone</label>
-																					<div class="col-lg-9 col-xl-6">
-																						<div class="input-group input-group-lg input-group-solid">
-																							<div class="input-group-prepend">
-																								<span class="input-group-text">
-																									<i class="la la-phone"></i>
-																								</span>
-																							</div>
-																							<input type="text" class="form-control form-control-lg form-control-solid" value="+35278953712" placeholder="Phone" />
-																						</div>
-																						<span class="form-text text-muted">We'll never share your email with anyone else.</span>
-																					</div>
-																				</div>
-																				<div class="form-group row">
-																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Email Address</label>
-																					<div class="col-lg-9 col-xl-6">
-																						<div class="input-group input-group-lg input-group-solid">
-																							<div class="input-group-prepend">
-																								<span class="input-group-text">
-																									<i class="la la-at"></i>
-																								</span>
-																							</div>
-																							<input type="text" class="form-control form-control-lg form-control-solid" value="nick.bold@loop.com" placeholder="Email" />
-																						</div>
-																					</div>
-																				</div>
-																				<div class="form-group row">
-																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Site</label>
-																					<div class="col-lg-9 col-xl-6">
-																						<div class="input-group input-group-lg input-group-solid">
-																							<input type="text" class="form-control form-control-lg form-control-solid" placeholder="Username" value="loop" />
-																							<div class="input-group-append">
-																								<span class="input-group-text">.com</span>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																				<div class="separator separator-dashed my-10"></div>
-																				<!--begin::Heading-->
-																				<div class="row">
-																					<div class="col-lg-9 col-xl-6 offset-xl-3">
-																						<h3 class="font-size-h6 mb-5">Contact Info:</h3>
-																					</div>
-																				</div>
-																				<!--end::Heading-->
-																				<div class="form-group row">
-																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Email Notification</label>
-																					<div class="col-lg-9 col-xl-6">
-																						<span class="switch">
-																							<label>
-																								<input type="checkbox" checked="checked" name="email_notification_1" />
-																								<span></span>
-																							</label>
-																						</span>
-																					</div>
-																				</div>
-																				<div class="form-group row">
-																					<label class="col-xl-3 col-lg-3 text-right col-form-label">Send Copy</label>
-																					<div class="col-lg-9 col-xl-6">
-																						<span class="switch">
-																							<label>
-																								<input type="checkbox" name="email_notification_2" />
-																								<span></span>
-																							</label>
-																						</span>
-																					</div>
-																				</div>
-																			</form>
-																		</div>
-																	</div>
-																	<div class="modal-footer">
-																		<button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Cancel</button>
-																		<button type="button" class="btn btn-primary font-weight-bold">Submit</button>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<!--end::Modal Content-->
-													</div>
-												</div>
-											</div>
-											<!--end::Header-->
-											<!--begin::Body-->
-											<div class="card-body">
-												<!--begin::Search Form-->
-												<!--begin::Search Form-->
-												<div class="mb-10">
-													<div class="row align-items-center">
-														<div class="col-lg-9 col-xl-8">
-															<div class="row align-items-center">
-																<div class="col-md-4 my-2 my-md-0">
-																	<div class="input-icon">
-																		<input type="text" class="form-control form-control-solid" placeholder="Search..." id="kt_datatable_search_query" />
-																		<span>
-																			<i class="flaticon2-search-1 text-muted"></i>
-																		</span>
-																	</div>
-																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_status">
-																		<option value="">Status</option>
-																		<option value="1">Pending</option>
-																		<option value="2">Delivered</option>
-																		<option value="3">Canceled</option>
-																	</select>
-																</div>
-																<div class="col-md-4 my-2 my-md-0">
-																	<select class="form-control form-control-solid" id="kt_datatable_search_type">
-																		<option value="">Type</option>
-																		<option value="4">Success</option>
-																		<option value="5">Info</option>
-																		<option value="6">Danger</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-														<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-															<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
-														</div>
-													</div>
-												</div>
-												<!--end::Search Form-->
-												<!--end: Search Form-->
-												<!--begin::Datatable-->
-												<div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable"></div>
-												<!--end::Datatable-->
-											</div>
-											<!--end::Body-->
-										</div>
-										<!--end::Card-->
 									</div>
 									<!--end::Content-->
 								</div>

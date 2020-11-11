@@ -38,7 +38,9 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            <h3 class="card-label">Listado de Voluntarios</h3>
+                                            @isset($course)
+                                                <h3 class="card-label">Listado de {{$course->Name ?? ''}} de {{$grado ?? ''}}</h3>
+                                            @endisset
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -99,12 +101,11 @@
                                             <tbody>
                                                 @foreach($Models as $Model)
                                                 <tr>
-                                                    <td>{{$Model['Id']}}</td>
-                                                    <td>{{$Model['Name']}}</td>
-                                                    <td>{{$Model['Apellido']}}</td>
-                                                    <td>{{$Model['Telefono']}}</td>
-                                                    <td>{{$Model['Usuario']}}</td>
-                                                    <td>{{$Model['Correo']}}</td>
+                                                    <td>{{$Model['VN']}} {{$Model['VA']}}</td>
+                                                    <td>{{$Model['P1']}}</td>
+                                                    <td>{{$Model['P2']}}</td>
+                                                    <td>{{$Model['P3']}}</td>
+                                                    <td>{{$Model['P4']}}</td>
                                                     <td nowrap="nowrap"></td>
                                                 </tr>
                                                 @endforeach

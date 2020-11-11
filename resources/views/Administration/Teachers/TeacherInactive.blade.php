@@ -7,7 +7,7 @@
     Voluntarios
     @stop
     @section('breadcrumb2')
-    Principal
+    Inactivos
     @stop
     {{-- Page content --}}
     @section('content')
@@ -38,7 +38,7 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            <h3 class="card-label">Listado de Voluntarios</h3>
+                                            <h3 class="card-label">Listado de Voluntarios inactivos</h3>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -152,17 +152,10 @@
                                             </a>\
                                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
                                                 <ul class="nav nav-hoverable flex-column">\
-                                                    <li class="nav-item"><a class="nav-link" href="/administration/teacher/edit/'+full[0]+'"><i class="nav-icon la la-edit"></i><span class="nav-text">Editar</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" href="#"><i class="nav-icon la la-edit"></i><span class="nav-text">Activar Usuario</span></a></li>\
                                                 </ul>\
                                             </div>\
                                         </div>\
-                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Detalle de asignación">\
-                                            <i class="la la-edit"></i>\
-                                        </a>\
-                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Borrar">\
-                                            <i class="la la-trash"></i>\
-                                        </a>\
                                     ';
                                 },
                             },
@@ -197,11 +190,11 @@
                     buttonsStyling: false
                 })
                 swalWithBootstrapButtons.fire({
-                    title: '¿Está seguro de eliminar el voluntario?',
+                    title: '¿Desea activar el voluntario?',
                     text: "El nombre del Voluntario: "+$name,
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Si, eliminar!',
+                    confirmButtonText: 'Si, Activar!',
                     cancelButtonText: 'No, cancelar!',
                     reverseButtons: true
                 }).then((result) => {
@@ -212,21 +205,21 @@
                             Name: result.value[0],
                         }];
                         swalWithBootstrapButtons.fire({
-                            title: 'Eliminado!',
-                            text: 'Se ha eliminado con exito!',
+                            title: 'Activado!',
+                            text: 'El voluntario ha sido activado con exito!',
                             icon: 'success',
                             confirmButtonText: 'Aceptar',
                         }).then(function () {
                             
                             var $url_path = '{!! url('/') !!}';
-                            window.location.href = $url_path+"/administration/teacher/delete/"+$id;
+                            window.location.href = $url_path+"/administration/teacher/activate/"+$id;
                             });
                     } else if (
                     result.dismiss === Swal.DismissReason.cancel
                     ) {
                     swalWithBootstrapButtons.fire({
                         title: 'Cancelado!',
-                        text:  'La Voluntario no ha sido eliminada!',
+                        text:  'La Voluntario no fue activado!',
                         icon: 'error',
                         confirmButtonText: 'Aceptar',
                     })
