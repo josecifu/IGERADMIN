@@ -1116,7 +1116,7 @@
 				  
 			  }
 			$('#gradeselect1').on('change', function() {
-				if(posGrade==3 || posGrade==4 )
+				if( posGrade==2 ||posGrade==3 || posGrade==4 || posGrade==5 )
 				{
 					$('#SelectCourse').css("visibility", "visible");
 					ListCourse($('#gradeselect1').val());

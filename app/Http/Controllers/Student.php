@@ -103,6 +103,7 @@ class Student extends Controller
                         'email' => $user->email];
             array_push($models,$query);
         }
+        dd($rol);
         return view('Administration/Student/list_grade',compact('models','titles','buttons','grade','level','period'));
     }
 
