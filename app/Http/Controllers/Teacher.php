@@ -300,6 +300,10 @@ class Teacher extends Controller
     }
     public function score($id)
     {
+        // if($assignV->isEmpty()){
+        //     $vol = ["Names"=>"","LastNames"=>""];
+        // }else{
+        // }
         $Models = [];
         $course = course::find($id);
         $assignV = Asign_teacher_course::where('Course_id',$id)->get('user_id');
@@ -353,5 +357,34 @@ class Teacher extends Controller
     public function TestTeacher(Request $request,$id)
     {
         
+    }
+    public function statistics()
+    {
+        return view('Administration/Teachers/statistics');
+    }
+
+    public function LoadCourses(Request $request)
+    {
+        $assignT = Asign_teacher_course::all();
+        if($assignT->isEmpty()){
+            $CoursesData = course::where('Grade_id',$request['GradeId'])->get();
+        }else{
+            $ids = [];
+            foreach ($assignT as $value) {
+                array_push($ids,$value->Course_id);
+            }
+            $CoursesData = course::where('Grade_id',$request['GradeId'])->get()->except($ids);
+        }
+        $courses =[];
+        foreach ($CoursesData as $value) {
+            $course = [
+                "Id" =>$value->id,
+                "Name" =>$value->Name,
+            ];
+            array_push($courses,$course);
+         } 
+        return response()->json([
+            "Courses" => $courses,
+            ]);
     }
 }

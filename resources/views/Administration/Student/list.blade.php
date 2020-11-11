@@ -166,12 +166,12 @@
                     buttonsStyling: false
                 })
                 swalWithBootstrapButtons.fire({
-                    title: '¿Está seguro de eliminar el estudiante?',
+                    title: '¿Está seguro de elimnar el estudiante?',
                     text: "El nombre del estudiante: "+$name,
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Si, eliminar!',
-                    cancelButtonText: 'No, cancelar!',
+                    confirmButtonText: 'Eliminar!',
+                    cancelButtonText: 'Cancelar!',
                     reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
