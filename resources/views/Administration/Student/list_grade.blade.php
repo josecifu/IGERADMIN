@@ -20,12 +20,8 @@
                             <i class="flaticon2-favourite text-primary"></i>
                         </span>
                         <h3 class="card-label">
-
-
-
-
-
-                        Listado de estudiantes por grado</h3>
+                            Listado de estudiantes de: {{$grade['Name']}} {{$level['Name']}} - {{$period['Name']}}
+                        </h3>
                     </div>
                     <div class="card-toolbar">
                         <!--begin::Dropdown-->
@@ -95,7 +91,6 @@
                                 <td>{{$m['phone']}}</td>
                                 <td>{{$m['user']}}</td>
                                 <td>{{$m['email']}}</td>
-                                <td>Primero & Segundo Primaria</td>
                                 <td>11/11/2020</td>
                                 <td nowrap="nowrap"></td>
                             </tr>
@@ -107,4 +102,106 @@
             </div>
             <!--end::Card-->
         </div>
+    @stop
+    @section('scripts')
+        <!--begin::Page Vendors(used by this page)-->
+        <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
+        <!--end::Page Vendors-->
+        <script type="text/javascript">
+            "use strict";
+            var KTDatatablesDataSourceHtml = function() {
+                var initTable1 = function() {
+                    var table = $('#kt_datatable');
+                    // begin first table
+                    table.DataTable({
+                        responsive: true,
+                        "language": {
+                            "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                        },
+                        columnDefs: [
+                            {
+                                targets: -1,
+                                title: 'Acciones',
+                                orderable: false,
+                                render: function(data, type, full, meta) {
+                                    return '\
+                                        <div class="dropdown dropdown-inline">\
+                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">\
+                                                <i class="la la-cog"></i>\
+                                            </a>\
+                                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
+                                                <ul class="nav nav-hoverable flex-column">\
+                                                    <li class="nav-item"><a class="nav-link" href="/administration/student/edit/'+full[0]+'"><i class="nav-icon la la-edit"></i><span class="nav-text">Editar</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
+                                                </ul>\
+                                            </div>\
+                                        </div>\
+                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
+                                            <i class="la la-edit"></i>\
+                                        </a>\
+                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Borrar">\
+                                            <i class="la la-trash"></i>\
+                                        </a>\
+                                    ';
+                                },
+                            },
+                        ],
+                    });
+                };
+                return {
+                    //main function to initiate the module
+                    init: function() {
+                        initTable1();
+                    },
+                };
+            }();
+            jQuery(document).ready(function() {
+                KTDatatablesDataSourceHtml.init();
+            });
+            function deletePeriod($id,$name)
+            {
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                })
+                swalWithBootstrapButtons.fire({
+                    title: '¿Está seguro de elimnar el estudiante?',
+                    text: "El nombre del estudiante: "+$name,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Eliminar!',
+                    cancelButtonText: 'Cancelar!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var Code = $id;
+                        var data = [{
+                            Code: Code,
+                            Name: result.value[0],
+                        }];
+                        swalWithBootstrapButtons.fire({
+                            title: 'Eliminado!',
+                            text: 'Se ha eliminado con exito!',
+                            icon: 'success',
+                            confirmButtonText: 'Aceptar',
+                        }).then(function () {
+                            var $url_path = '{!! url('/') !!}';
+                            window.location.href = $url_path+"/administration/student/delete/"+$id;
+                            });
+                    } else if (
+                    result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                    swalWithBootstrapButtons.fire({
+                        title: 'Cancelado!',
+                        text:  'El estudiante no ha sido eliminada!',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar',
+                    })
+                    }
+                })
+            }
+       </script>  
     @stop

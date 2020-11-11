@@ -18,6 +18,7 @@ class CreateCoursesTable extends Migration
             $table->string('Name');
             $table->unsignedInteger('Grade_id'); 
             $table->foreign('Grade_id')->references('id')->on('grades');
+            $table->string('State');
             $table->timestamps();
         });
     }

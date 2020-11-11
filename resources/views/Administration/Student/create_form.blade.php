@@ -110,19 +110,6 @@
 												</div>
 											</div>
 											<div class="form-group row">
-												<label class="col-3">Dirección</label>
-												<div class="col-9">
-													<div class="input-group input-group-solid">
-														<div class="input-group-prepend">
-															<span class="input-group-text">
-																<i class="la la-address-book"></i>
-															</span>
-														</div>
-														<input type="text" name="Direccion" id="Direccion" class="form-control form-control-solid" placeholder="Dirección" />
-													</div>
-												</div>
-											</div>
-											<div class="form-group row">
 												<label class="col-3">No. Teléfono</label>
 												<div class="col-9">
 													<div class="input-group input-group-solid">
@@ -132,19 +119,6 @@
 															</span>
 														</div>
 														<input type="text" name="Telefono" id="Telefono" class="form-control form-control-solid" placeholder="Phone" />
-													</div>
-												</div>
-											</div>
-											<div class="form-group row">
-												<label class="col-3">Fecha de nacimiento</label>
-												<div class="col-9">
-													<div class="input-group input-group-solid">
-														<div class="input-group-prepend">
-															<span class="input-group-text">
-																<i class="la la-calendar"></i>
-															</span>
-														</div>
-														<input type="date" name="FechaNacimiento" id="FechaNacimiento" class="form-control form-control-solid" placeholder="Phone" />
 													</div>
 												</div>
 											</div>
@@ -201,7 +175,7 @@
 										<!------------------------>
 										<div class="my-5">
 											<div class="form-group row">
-												<label class="col-form-label text-right col-lg-3 col-sm-12">Jornada</label>
+												<label class="col-form-label text-right col-lg-3 col-sm-12">Dia</label>
 												<div class="col-lg-9 col-md-9 col-sm-12">
 													<select class="form-control selectpicker" data-size="10" title="Seleccione una opción" data-live-search="true" id="Jornada">
 													</select>
@@ -281,21 +255,7 @@
 											}
 										}
 									},
-									Direccion: {
-										validators: {
-											notEmpty: {
-												message: 'Es un campo obligatorio'
-											}
-										}
-									},
 									Telefono: {
-										validators: {
-											notEmpty: {
-												message: 'Es un campo obligatorio'
-											}
-										}
-									},
-									FechaNacimiento: {
 										validators: {
 											notEmpty: {
 												message: 'Es un campo obligatorio'
@@ -445,9 +405,7 @@
 	         function crearDatos(){
 	            var NombrePersona = $('#Nombres').val(); 
 	            var ApellidosPersona = $('#Apellidos').val();
-	            var DireccionPersona = $('#Direccion').val();
 	            var TelefonoPersona = $('#Telefono').val();
-	            var FechaNacimientoPersona = $('#FechaNacimiento').val();
 	            var UsuarioPersona = $('#Usuario').val(); 
 	            var EmailPersona = $('#Email').val();
 	            var ContraseñaPersona = $('#Contraseña').val();
@@ -455,9 +413,7 @@
 	            var data = [{
 	                Nombre: NombrePersona,
 	                Apellido: ApellidosPersona,
-	                Direccion: DireccionPersona,
 	                Telefono: TelefonoPersona,
-	                Nacimiento: FechaNacimientoPersona,
 	                Usuario: UsuarioPersona,
 	                Correo: EmailPersona,
 	                Contraseña: ContraseñaPersona,

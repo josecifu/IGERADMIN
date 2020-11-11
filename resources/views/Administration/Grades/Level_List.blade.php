@@ -324,7 +324,7 @@
                 ) {
                   swalWithBootstrapButtons.fire({
                     title: 'Cancelado!',
-                    text:  'La jornada no ha sido activada!',
+                    text:  'El di no ha sido activada!',
                     icon: 'error',
                     confirmButtonText: 'Aceptar',
                 })
@@ -347,7 +347,7 @@
             }).queue([
                 
                 {
-                        title: 'Ingrese el nuevo nombre de la jornada:',
+                        title: 'Ingrese el nuevo nombre del dia:',
                         text: 'Nombre anterior:' + $Name
                 },
                 ]).then((result) => {
@@ -362,7 +362,7 @@
                       })
                       swalWithBootstrapButtons.fire({
                         title: '¿Está seguro de los datos?',
-                        text: "El nombre de la jornada: "+result.value[0],
+                        text: "El nombre del dia: "+result.value[0],
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonText: 'Si, modificar!',
@@ -408,7 +408,7 @@
                         ) {
                           swalWithBootstrapButtons.fire({
                             title: 'Cancelado!',
-                            text:  'La jornada no ha sido modificada!',
+                            text:  'El dia no ha sido modificado!',
                             icon: 'error',
                             confirmButtonText: 'Aceptar',
                         })
@@ -426,7 +426,7 @@
                 progressSteps: ['1']
               }).queue([
                 {
-                  title: 'Ingrese el nombre de la jornada:',
+                  title: 'Ingrese el nombre del dia:',
                  
                 }
               ]).then((result) => {
@@ -443,7 +443,7 @@
                   
                   swalWithBootstrapButtons.fire({
                     title: '¿Está seguro de los datos?',
-                    text: "El nombre de la jornada: "+result.value[0],
+                    text: "El nombre del dia: "+result.value[0],
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Si, crearlo!',
@@ -490,7 +490,7 @@
                     ) {
                       swalWithBootstrapButtons.fire({
                         title: 'Cancelado!',
-                        text:  'La jornada no ha sido creada!',
+                        text:  'El dia no ha sido creada!',
                         icon: 'error',
                         confirmButtonText: 'Aceptar',
                     })

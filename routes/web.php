@@ -67,6 +67,8 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/workspace',$route.'\Teacher@workspace')->name('WorkspaceTeacher');
 		Route::get('/statistics',$route.'\Teacher@statistics')->name('Statistics');
 		Route::post('/load/courses', $route.'\Teacher@LoadCourses')->name('LoadCoursesTeacher');
+		Route::get('/desactive', $route.'\Teacher@Desactive')->name('Desactive');
+		Route::get('/activate/{model}', $route.'\Teacher@Activate')->name('ActivateTeacher');
 	});
 	//Comentario
 	Route::group([ 'prefix' => 'configurations'], function(){
@@ -75,6 +77,8 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('level/list/deletes',$route.'\Administration@LevelListDelete')->name('LevelListDelete');
 		Route::get('level/list/change/{id}/{type}',$route.'\Administration@ChangePeriod')->name('ChangePeriod');
 		Route::get('level/list/grades/level/{id}',$route.'\Administration@ViewGradesLvl')->name('ViewGradesLvl');
+		
+		Route::post('level/list/grades/courses/save',$route.'\Administration@SaveCourses')->name('SaveCourses');
 		Route::post('period/save', $route.'\Administration@PeriodSave')->name('PeriodSave');
 		Route::post('period/update', $route.'\Administration@PeriodUpdate')->name('PeriodUpdate');
 	});

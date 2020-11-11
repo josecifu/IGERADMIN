@@ -1046,6 +1046,12 @@
 					var $url_path = '{!! url('/') !!}';
                     window.location.href = $url_path+"/administration/teacher/test/"+Id;
 				}
+				if(posGrade==5)
+				{
+					var Id = $('#gradeselect1').val();
+					var $url_path = '{!! url('/') !!}';
+                    window.location.href = $url_path+"/administration/student/test/"+Id;
+				}
 			}
 			function ListLevel(Period)
 			{

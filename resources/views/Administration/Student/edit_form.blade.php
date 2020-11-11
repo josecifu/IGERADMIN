@@ -91,19 +91,6 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-3">Direccion</label>
-                                                <div class="col-9">
-                                                    <div class="input-group input-group-solid">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text">
-                                                                <i class="la la-address-book"></i>
-                                                            </span>
-                                                        </div>
-                                                        <input type="text" name="Direccion" id="Direccion" value="{{$student->Address}}" class="form-control form-control-solid" placeholder="Dirección" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
                                                 <label class="col-3">Teléfono</label>
                                                 <div class="col-9">
                                                     <div class="input-group input-group-solid">
@@ -113,19 +100,6 @@
                                                             </span>
                                                         </div>
                                                         <input type="text" name="Telefono" id="Telefono" value="{{$student->Phone}}" class="form-control form-control-solid" placeholder="Phone" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-3">Fecha de nacimiento</label>
-                                                <div class="col-9">
-                                                    <div class="input-group input-group-solid">
-                                                        <div class="input-group-prepend">
-                                                            <span class="input-group-text">
-                                                                <i class="la la-calendar"></i>
-                                                            </span>
-                                                        </div>
-                                                        <input type="date" name="FechaNacimiento" id="FechaNacimiento" value="{{$student->BirthDate}}" class="form-control form-control-solid" placeholder="Phone" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -232,21 +206,7 @@ var KTWizard1 = function () {
                                 }
                             }
                         },
-                        Direccion: {
-                            validators: {
-                                notEmpty: {
-                                    message: 'Es un campo obligatorio'
-                                }
-                            }
-                        },
                         Telefono: {
-                            validators: {
-                                notEmpty: {
-                                    message: 'Es un campo obligatorio'
-                                }
-                            }
-                        },
-                        FechaNacimiento: {
                             validators: {
                                 notEmpty: {
                                     message: 'Es un campo obligatorio'
@@ -283,13 +243,13 @@ var KTWizard1 = function () {
                                 }
                             }
                         },
-                        Contraseña: {
+                        /*Contraseña: {
                             validators: {
                                 notEmpty: {
                                     message: 'Es un campo obligatorio'
                                 }
                             }
-                        },
+                        },*/
                     },
                     plugins: {
                         trigger: new FormValidation.plugins.Trigger(),
@@ -397,23 +357,19 @@ var KTWizard1 = function () {
          {
             var NombrePersona = $('#Nombres').val(); 
             var ApellidosPersona = $('#Apellidos').val();
-            var DireccionPersona = $('#Direccion').val();
             var TelefonoPersona = $('#Telefono').val();
-            var FechaNacimientoPersona = $('#FechaNacimiento').val();
             var NombreUsuario = $('#Usuario').val(); 
-            var ContraseñaUsuario = $('#Contraseña').val();
+            //var ContraseñaUsuario = $('#Contraseña').val();
             var EmailUsuario = $('#Email').val();
             var PersonaId = $('#Persona').val();
             var data = [{
                 Persona: PersonaId,
                 Nombre: NombrePersona,
                 Apellido: ApellidosPersona,
-                Direccion: DireccionPersona,
                 Telefono: TelefonoPersona,
-                FechaNacimiento: FechaNacimientoPersona,
                 Usuario: NombreUsuario,
                 Email: EmailUsuario,
-                Contraseña: ContraseñaUsuario,
+                //Contraseña: ContraseñaUsuario,
             }];
             $.ajax({
                 url:'/administration/student/update',

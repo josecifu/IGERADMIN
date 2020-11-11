@@ -58,14 +58,14 @@ class MenuSeeder extends Seeder
             'Name' => 'Visualización de notas',
             'State' => '1',
             'Type' => '2',
-            'Url' => 'ListScore()',  
+            'Url' => 'ListGrade(2)',  
             'menu_id' => '4'          
         ]);
         DB::table('menus')->insert([
             'Name' => 'Visualización de examenes',
             'State' => '1',
             'Type' => '3',
-            'Url' => 'ListTest()',  
+            'Url' => 'ListGrade(5)',  
             'menu_id' => '4'          
         ]);
         DB::table('menus')->insert([//9
