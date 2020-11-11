@@ -125,33 +125,37 @@
                                                                 <form class="form">
                                                                     <div class="modal-body">
                                                                         <div class="form-group row">
-                                                                            <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el nivel</label>
+                                                                            <label class="col-form-label text-right col-lg-3 col-sm-12">Ingrese el nombre de los cursos</label>
                                                                             <div class="col-lg-9 col-md-9 col-sm-12">
-                                                                                <select class="form-control selectpicker" data-size="10" data-live-search="true" id="lvlselect{{$Model['Id']}}">
-                                                                                  
-                                                                                </select>
-                                                                                <span class="form-text text-muted">Visualice los grados del nivel seleccionado</span>
+                                                                             <select class="form-control select2" id="kt_select2_11" multiple name="param">
+                                                                              <option label="Label"></option>
+                                                                              <optgroup label="Alaskan/Hawaiian Time Zone">
+                                                                               <option value="AK">Alaska</option>
+                                                                               <option value="HI">Hawaii</option>
+                                                                              </optgroup>
+                                                                           
+                                                                             </select>
                                                                             </div>
-                                                                        </div>
-                                                                        <div class="form-group row">
-                                                                            <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el nivel</label>
-                                                                            <div class="col-lg-9 col-md-9 col-sm-12">
-                                                                                <select class="form-control selectpicker" data-size="10" data-live-search="true" id="lvlselect{{$Model['Id']}}">
-                                                                                  
-                                                                                </select>
-                                                                                <span class="form-text text-muted">Visualice los grados del nivel seleccionado</span>
-                                                                            </div>
-                                                                        </div>
+                                                                           </div>
+                                                                        
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                                        <button type="button" class="btn btn-primary mr-2" onclick="ViewGrades({{$Model['Id']}});">Editar</button>
+                                                                        <button type="button" class="btn btn-primary mr-2" onclick="ViewGrades({{$Model['Id']}});">Agregar cursos</button>
                                                                     </div>
                                                                 </form>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <!--end::Modal-->
+                                                    <script type="text/javascript">
+                                                        $('#CoursesModal{{$Model['Id']}}').on('shown.bs.modal', function () {
+                                                            $('#kt_select2_11').select2({
+                                                                placeholder: "Añada los cursos para el grado",
+                                                                tags: true
+                                                            });  
+                                                      });
+                                                    </script>
                                                     <!--begin::Modal-->
                                                     <div class="modal fade" id="EditModal{{$Model['Id']}}" role="dialog" aria-hidden="true">
                                                         <div class="modal-dialog modal-lg" role="document">
@@ -470,7 +474,10 @@
                 }
               })
         }
+       
 
+          
+         
        </script>
         <!--end::Page Scripts-->
       
