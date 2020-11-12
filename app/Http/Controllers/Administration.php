@@ -257,7 +257,6 @@ class Administration extends Controller
     }
     public function SaveCourses(Request $request)
     {
-        
         $courses =$request->data;
         $grade =$request->Id;
         foreach($courses as $Course)
