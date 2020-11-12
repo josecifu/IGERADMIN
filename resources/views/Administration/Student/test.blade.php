@@ -17,12 +17,10 @@
                 <div class="card-header">
                     <div class="card-title">
                         <h3 class="card-label">
-                            Nombre del estudiante: Vicente Carillo
-                        </h3>
-                    </div>
-                    <div class="card-title">
-                        <h3 class="card-label">
-                            Curso: Matematicas
+                            Unidad: 1<br><br/>
+                            Nombre del estudiante: Gonzalo Inzunza<br><br/>
+                            Curso: Matemáticas<br><br/>
+                            Nombre del voluntario: Raúl Meza
                         </h3>
                     </div>
                     <div class="card-toolbar">
@@ -84,10 +82,12 @@
                         <tbody>
                             @foreach($models as $m)
                             <tr>
-                                <td>Id</td>
-                                <td>Pregunta</td>
-                                <td>Respuesta</td>
-                                <td>Respuesta Correcta</td>
+                                <td>1</td>
+                                <td>5X5</td>
+                                <td>Calculo</td>
+                                <td>25</td>
+                                <td>25</td>
+                                <td>1</td>
                                 <td nowrap="nowrap"></td>
                             </tr>
                             @endforeach

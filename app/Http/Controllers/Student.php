@@ -266,14 +266,14 @@ class Student extends Controller
     //visualizacion de examenes con respuestas de cada alumno por grado-seccion
     public function test($id)
     {
-        $titles = ['Id','Preguntas','Respuestas','Respuestas Correctas'];
+        $titles = ['Id','Preguntas/Problemas','Tipo de Pregunta/Problema','Respuestas del estudiante','Respuestas Correctas','Punteo Obtenido'];
         $models = Course::all();
         return view('Administration/Student/test',compact('models','titles'));
     }
 
     public function list_test($id)
     {
-        $titles = ['Id','Nombre del Estudiante','Acciones'];
+        $titles = ['Id','Nombre del Estudiante','Unidades'];
         $models = Course::all();
         return view('Administration/Student/list_test',compact('models','titles'));
     }

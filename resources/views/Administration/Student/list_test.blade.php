@@ -79,8 +79,8 @@
                         <tbody>
                             @foreach($models as $m)
                             <tr>
-                                <td>1</td>
-                                <td>Vicente Carillo</td>
+                                <td>5</td>
+                                <td>Gonzalo Inzunza</td>
                                 <td nowrap="nowrap"></td>
                             </tr>
                             @endforeach
@@ -110,11 +110,17 @@
                         columnDefs: [
                             {
                                 targets: -1,
-                                title: 'Acciones',
+                                title: 'Unidades',
                                 orderable: false,
                                 render: function(data, type, full, meta) {
                                     return '\
-                                        <a href="/administration/student/test/'+full[0]+'"><i class="nav-icon la la-list"></i><span class="nav-text"> Ver examen</span></a></li>\
+                                        <a href="/administration/student/test/'+full[0]+'"><i class="nav-icon la la-list"></i><span class="nav-text">Primera </span></a></li>\
+                                        </a>\
+                                        <a href="/administration/student/test/'+full[0]+'"><i class="nav-icon la la-list"></i><span class="nav-text"> Segunda </span></a></li>\
+                                        </a>\
+                                        <a href="/administration/student/test/'+full[0]+'"><i class="nav-icon la la-list"></i><span class="nav-text"> Tercera </span></a></li>\
+                                        </a>\
+                                        <a href="/administration/student/test/'+full[0]+'"><i class="nav-icon la la-list"></i><span class="nav-text"> Cuarta</span></a></li>\
                                         </a>\
                                     ';
                                 },
