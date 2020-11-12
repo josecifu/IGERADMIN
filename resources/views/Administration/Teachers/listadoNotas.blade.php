@@ -100,18 +100,18 @@
                                             </thead>
                                             <tbody>
                                                 @isset($Models)
-                                                @foreach($Models as $model)
-                                                    <tr>
-                                                        <td>{{$model['Nombre']}} {{$model['Apellido']}}</td>
-                                                        <td>{{$model['VN']}} {{$model['VA']}}</td>
-                                                        <td>{{$model['P1']}}</td>
-                                                        <td>{{$model['P2']}}</td>
-                                                        <td>{{$model['P3']}}</td>
-                                                        <td>{{$model['P4']}}</td>
-                                                        <td>{{$model['Final']}}</td>
-                                                        <td nowrap="nowrap"></td>
-                                                    </tr>
-                                                @endforeach
+                                                    @foreach($Models as $model)
+                                                        <tr>
+                                                            <td>{{$model['Nombre']}}</td>
+                                                            <td>{{$model['Vol']}}</td>
+                                                            <td>{{$model['P1']}}</td>
+                                                            <td>{{$model['P2']}}</td>
+                                                            <td>{{$model['P3']}}</td>
+                                                            <td>{{$model['P4']}}</td>
+                                                            <td>{{$model['Final']}}</td>
+                                                            <td nowrap="nowrap"></td>
+                                                        </tr>
+                                                    @endforeach
                                                 @endisset
                                             </tbody>
                                         </table>
@@ -128,6 +128,8 @@
         <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
         <!--end::Page Vendors-->
         <!--begin::Page Scripts(used by this page)-->
+        <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
         
         <!--end::Page Scripts-->
         <script type="text/javascript">
@@ -190,6 +192,10 @@
                 KTDatatablesDataSourceHtml.init();
             });
 
+            $.fn.editable.defaults.mode = 'inline';
+            $(document).ready(function() {
+                $('#username').editable();
+            });
 
        </script>
 
