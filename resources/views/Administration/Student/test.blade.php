@@ -17,8 +17,10 @@
                 <div class="card-header">
                     <div class="card-title">
                         <h3 class="card-label">
-                            Nombre del estudiante: Vicente Carillo
-                            Curso: Matematicas
+                            Unidad: 1<br><br/>
+                            Nombre del estudiante: Gonzalo Inzunza<br><br/>
+                            Curso: Matemáticas<br><br/>
+                            Nombre del voluntario: Raúl Meza
                         </h3>
                     </div>
                     <div class="card-toolbar">
@@ -69,8 +71,8 @@
                 </div>
                 <div class="card-body">
                     <!--begin: Datatable-->
-                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
-                        <!--thead>
+                    <table class="table table-bordered table-hover table-checkable" id="" style="margin-top: 13px !important">
+                        <thead>
                             <tr>
                                 @foreach($titles as $t)
                                 <th>{{ $t }}</th>
@@ -80,13 +82,16 @@
                         <tbody>
                             @foreach($models as $m)
                             <tr>
-                                <td>Pregunta:</td>
-                                <td>Respuesta:</td>
-                                <td>Respuesta Correcta:</td>
+                                <td>1</td>
+                                <td>5X5</td>
+                                <td>Calculo</td>
+                                <td>25</td>
+                                <td>25</td>
+                                <td>1</td>
                                 <td nowrap="nowrap"></td>
                             </tr>
                             @endforeach
-                        </tbody-->
+                        </tbody>
                     </table>
                     <!--end: Datatable-->
                 </div>

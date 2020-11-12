@@ -4,13 +4,14 @@
     Inicio
     @stop
     @section('breadcrumb1')
-    Voluntarios
+    Tablero
     @stop
     @section('breadcrumb2')
     Principal
     @stop
     {{-- Page content --}}
     @section('content')
+
     <div class="content flex-column-fluid" id="kt_content">
                                 <!--begin::Notice-->
                                 <!--<div class="alert alert-custom alert-white alert-shadow gutter-b" role="alert">
@@ -38,9 +39,7 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            @isset($course)
-                                                <h3 class="card-label">Listado de {{$course->Name ?? ''}} de {{$grado ?? ''}}</h3>
-                                            @endisset
+                                            <h3 class="card-label">Preguntas de {{$test->Title}}</h3>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -89,45 +88,32 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <!--begin: Datatable-->
-                                        <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
-                                            <thead>
-                                                <tr>
-                                                    @foreach($Titles as $Title)
-                                                    <th>{{ $Title }}</th>
+                                        <!--begin::Card-->
+										<div class="card card-custom gutter-b example-hover">
+											<div class="card-header">
+												<div class="card-title">
+													<h3 class="card-label">{{$test->Title}}</h3>
+												</div>
+											</div>
+											<div class="card-body">
+												<!--begin::Accordion-->
+												<div class="accordion accordion-toggle-arrow" id="accordionExample1">
+                                                    @foreach($questions as $q)
+                                                        <div class="card">
+                                                            <div class="card-header">
+                                                                <div class="card-title" data-toggle="collapse" data-target="#collapseOne1">{{$q->Title}}</div>
+                                                            </div>
+                                                            <div id="collapseOne1" class="collapse show" data-parent="#accordionExample1">
+                                                                <div class="card-body">{{$q->Content}}</div>
+                                                            </div>
+                                                        </div>
                                                     @endforeach
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach($Models as $Model)
-                                                <tr>
-                                                    <td>{{$Model['VN']}} {{$Model['VA']}}</td>
-                                                    @if($Model['P1']!=0)
-                                                        <td><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="hola({{$Model['P1']}});">{{$Model['P1']}}</button></center></td>
-                                                    @else
-                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver grados asignados" data-placement="left">{{$Model['P1']}}</button></center></td>
-                                                    @endif
-                                                    @if($Model['P2']!=0)
-                                                        <td><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="hola({{$Model['P2']}});">{{$Model['P2']}}</button></center></td>
-                                                    @else
-                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver grados asignados" data-placement="left">{{$Model['P2']}}</button></center></td>
-                                                    @endif
-                                                    @if($Model['P3']!=0)
-                                                        <td><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="hola({{$Model['P3']}});">{{$Model['P3']}}</button></center></td>
-                                                    @else
-                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver grados asignados" data-placement="left">{{$Model['P3']}}</button></center></td>
-                                                    @endif
-                                                    @if($Model['P4']!=0)
-                                                        <td><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="hola({{$Model['P4']}});">{{$Model['P4']}}</button></center></td>
-                                                    @else
-                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver grados asignados" data-placement="left">{{$Model['P4']}}</button></center></td>
-                                                    @endif
-                                                    <td nowrap="nowrap"></td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                        <!--end: Datatable-->
+												</div>
+												<!--end::Accordion-->
+											</div>
+										</div>
+                                        <!--end::Card-->
+                                        
                                     </div>
                                 </div>
                                 <!--end::Card-->
@@ -153,9 +139,6 @@
                     // begin first table
                     table.DataTable({
                         responsive: true,
-                        "language": {
-                            "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-                        },
                         columnDefs: [
                             {
                                 targets: -1,
@@ -174,8 +157,11 @@
                                                 </ul>\
                                             </div>\
                                         </div>\
-                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Detalle de asignación">\
+                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
                                             <i class="la la-edit"></i>\
+                                        </a>\
+                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Delete">\
+                                            <i class="la la-trash"></i>\
                                         </a>\
                                     ';
                                 },
@@ -201,58 +187,7 @@
             jQuery(document).ready(function() {
                 KTDatatablesDataSourceHtml.init();
             });
-            function hola($id) {
-                var $url_path = '{!! url('/') !!}';
-                window.location.href = $url_path+"/administration/teacher/question/"+$id;
-            }
-            function deletePeriod($id,$name)
-            {
-                const swalWithBootstrapButtons = Swal.mixin({
-                    customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                    },
-                    buttonsStyling: false
-                })
-                swalWithBootstrapButtons.fire({
-                    title: '¿Está seguro de eliminar el voluntario?',
-                    text: "El nombre del Voluntario: "+$name,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Si, eliminar!',
-                    cancelButtonText: 'No, cancelar!',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        var Code = $id;
-                        var data = [{
-                            Code: Code,
-                            Name: result.value[0],
-                        }];
-                        swalWithBootstrapButtons.fire({
-                            title: 'Eliminado!',
-                            text: 'Se ha eliminado con exito!',
-                            icon: 'success',
-                            confirmButtonText: 'Aceptar',
-                        }).then(function () {
-                            
-                            var $url_path = '{!! url('/') !!}';
-                            window.location.href = $url_path+"/administration/teacher/delete/"+$id;
-                            });
-                    } else if (
-                    result.dismiss === Swal.DismissReason.cancel
-                    ) {
-                    swalWithBootstrapButtons.fire({
-                        title: 'Cancelado!',
-                        text:  'La Voluntario no ha sido eliminada!',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar',
-                    })
-                    }
-                })
-            }
+
 
        </script>
-
-      
 	@stop

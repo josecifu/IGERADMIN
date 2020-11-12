@@ -215,7 +215,7 @@
 												<div class="form-group row" id="SelectCourse" style="visibility: hidden;">
 													<label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el curso:</label>
 													<div class="col-lg-9 col-md-9 col-sm-12">
-														<select class="form-control selectpicker" title="Ningun grado ha sido seleccionado" data-size="10" data-live-search="true" id="courseselect1">
+														<select class="form-control selectpicker" title="Ningun curso ha sido seleccionado" data-size="10" data-live-search="true" id="courseselect1">
 														   
 														</select>
 														<span class="form-text text-muted" id="Title3">Visualice el listado de alumnos por grados del nivel y dia seleccionado</span>
@@ -1011,6 +1011,11 @@
 					$('#Title1').text("Visualización de examenes por grado y Voluntarios");
 					$('#Title2').html("Visualice el listado de examenes por grados del nivel y jornada seleccionado");
 				}
+				else if(pos==5)
+				{			
+					$('#Title1').text("Visualización de examenes por grado y curso");
+					$('#Title2').html("Visualice el listado de examenes por curso, grados, nivel y dia seleccionado");
+				}
 				
 				$.ajax ({
 					url: '{{route('LoadPeriods')}}',
@@ -1050,7 +1055,7 @@
 				{
 					var Id = $('#courseselect1').val();
 					var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/student/test/"+Id;
+                    window.location.href = $url_path+"/administration/student/lists/test/"+Id;
 				}
 			}
 			function ListLevel(Period)
@@ -1119,7 +1124,12 @@
 				  
 			  }
 			$('#gradeselect1').on('change', function() {
+<<<<<<< HEAD
 				if(posGrade==2 ||posGrade==3 || posGrade==4 || posGrade==5 )
+=======
+
+				if( posGrade==2 ||posGrade==3 || posGrade==4 || posGrade==5 )
+>>>>>>> 7bbaec1bf45dd886a39bd3917e781000e4158e05
 				{
 					$('#SelectCourse').css("visibility", "visible");
 					ListCourse($('#gradeselect1').val());

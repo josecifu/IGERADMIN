@@ -47,10 +47,14 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/score',$route.'\Student@score')->name('ScoreStudent');
 		Route::get('/logs',$route.'\Student@logs')->name('LogsStudent');
 		Route::get('/test/{model}',$route.'\Student@test')->name('TestStudent');
-		Route::get('/list/test/{model}',$route.'\Student@list_test')->name('ListTest');
+		Route::get('/lists/test/{model}',$route.'\Student@list_test')->name('ListTest');
 		Route::get('/list/eliminated',$route.'\Student@eliminated_students')->name('ListEliminatedStudents');
 		Route::get('/delete/{model}', $route.'\Student@delete')->name('DeleteStudent');
+<<<<<<< HEAD
 		Route::get('/statistics',$route.'\Student@statistics')->name('StudentStatistics');
+=======
+		Route::get('/statistics',$route.'\Student@statistics')->name('StatisticsStudent');
+>>>>>>> 7bbaec1bf45dd886a39bd3917e781000e4158e05
 
 	});
 	#Voluntarios

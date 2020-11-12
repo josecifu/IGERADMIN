@@ -52,17 +52,12 @@ class Student extends Controller
         {
             $user = User::find($i->user_id);
             $student = Person::find($user->Person_id);
-            //$student_grades = Assign_student_grade::where('User_id',$user->id)->get('Grade_id');
-            //$grade = Grade::find($student_grades);
-            //$levelid = Grade::where('id',$grade->id)->get('Level_id');
-            //$level = Level::find($grade);
-            //dd($grade);
             $query = [  'id' => $student->id,
                         'name' => $student->Names . ' ' . $student->LastNames,
                         'phone' => $student->Phone,
                         'user' => $user->name,
                         'email' => $user->email,
-                        //'grade' => $grade->Name
+                        //'grade' => $grade->Name . ' ' . $level->Name
                     ];
             array_push($models,$query);
         }
@@ -266,25 +261,32 @@ class Student extends Controller
 
 
 
-    //visualizacion de notas con filtro: jornada, grado, nivel, curso
-    public function score($id)
-    {
-    }
+
 
     //visualizacion de examenes con respuestas de cada alumno por grado-seccion
     public function test($id)
     {
-        $titles = ['Curso'];
-        $grade = grade::find($id);
-        $models = Course::where('Grade_id',$id)->get('Name');
-        return view('Administration/Student/tests',compact('models','titles'));
-        
+        $titles = ['Id','Preguntas/Problemas','Tipo de Pregunta/Problema','Respuestas del estudiante','Respuestas Correctas','Punteo Obtenido'];
+        $models = Course::all();
+        return view('Administration/Student/test',compact('models','titles'));
     }
 
+    public function list_test($id)
+    {
+        $titles = ['Id','Nombre del Estudiante','Unidades'];
+        $models = Course::all();
+        return view('Administration/Student/list_test',compact('models','titles'));
+    }
+    
+    public function statistics()
+    {
+        return view('Administration/Student/statistics');
+    }
 
-
-
-
+    //visualizacion de notas con filtro: jornada, grado, nivel, curso
+    public function score($id)
+    {
+    }
 
 
 
