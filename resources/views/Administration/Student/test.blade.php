@@ -18,6 +18,10 @@
                     <div class="card-title">
                         <h3 class="card-label">
                             Nombre del estudiante: Vicente Carillo
+                        </h3>
+                    </div>
+                    <div class="card-title">
+                        <h3 class="card-label">
                             Curso: Matematicas
                         </h3>
                     </div>
@@ -69,8 +73,8 @@
                 </div>
                 <div class="card-body">
                     <!--begin: Datatable-->
-                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
-                        <!--thead>
+                    <table class="table table-bordered table-hover table-checkable" id="" style="margin-top: 13px !important">
+                        <thead>
                             <tr>
                                 @foreach($titles as $t)
                                 <th>{{ $t }}</th>
@@ -80,13 +84,14 @@
                         <tbody>
                             @foreach($models as $m)
                             <tr>
-                                <td>Pregunta:</td>
-                                <td>Respuesta:</td>
-                                <td>Respuesta Correcta:</td>
+                                <td>Id</td>
+                                <td>Pregunta</td>
+                                <td>Respuesta</td>
+                                <td>Respuesta Correcta</td>
                                 <td nowrap="nowrap"></td>
                             </tr>
                             @endforeach
-                        </tbody-->
+                        </tbody>
                     </table>
                     <!--end: Datatable-->
                 </div>
