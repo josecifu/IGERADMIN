@@ -341,7 +341,6 @@ class Teacher extends Controller
             'P3' => $p3,
             'P4' => $p4,
         ];
-        
         array_push($Models,$data);
         $buttons =[];
         $button = [
@@ -352,6 +351,13 @@ class Teacher extends Controller
         $grado = grade::find($course->Grade_id)->GradeName();
         $Titles = ['Voluntario','Primer Examen','Segundo Examen','Tercer Examen','Cuarto Examen','Acciones'];
         return view('Administration/Teachers/ViewTests',compact('Titles','Models','course','grado'));
+    }
+    public function QuestionTest($id)
+    {
+        $test = test::find($id);
+        $questions = Question::where('Test_id',$id)->get();
+        
+        return view('Administration/Teachers/QuestionTest',compact('test','questions'));
     }
     public function Desactive() //vista usuarios desactivados
     {
