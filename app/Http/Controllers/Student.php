@@ -261,10 +261,7 @@ class Student extends Controller
 
 
 
-    //visualizacion de notas con filtro: jornada, grado, nivel, curso
-    public function score($id)
-    {
-    }
+
 
     //visualizacion de examenes con respuestas de cada alumno por grado-seccion
     public function test($id)
@@ -280,9 +277,16 @@ class Student extends Controller
         $models = Course::all();
         return view('Administration/Student/list_test',compact('models','titles'));
     }
+    
+    public function statistics()
+    {
+        return view('Administration/Student/statistics');
+    }
 
-
-
+    //visualizacion de notas con filtro: jornada, grado, nivel, curso
+    public function score($id)
+    {
+    }
 
 
 

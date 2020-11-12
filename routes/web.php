@@ -50,7 +50,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/lists/test/{model}',$route.'\Student@list_test')->name('ListTest');
 		Route::get('/list/eliminated',$route.'\Student@eliminated_students')->name('ListEliminatedStudents');
 		Route::get('/delete/{model}', $route.'\Student@delete')->name('DeleteStudent');
-		Route::get('/statistics',$route.'\Teacher@statistics')->name('Statistics');
+		Route::get('/statistics',$route.'\Student@statistics')->name('StatisticsStudent');
 
 	});
 	#Voluntarios

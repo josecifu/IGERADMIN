@@ -215,7 +215,7 @@
 												<div class="form-group row" id="SelectCourse" style="visibility: hidden;">
 													<label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el curso:</label>
 													<div class="col-lg-9 col-md-9 col-sm-12">
-														<select class="form-control selectpicker" title="Ningun grado ha sido seleccionado" data-size="10" data-live-search="true" id="courseselect1">
+														<select class="form-control selectpicker" title="Ningun curso ha sido seleccionado" data-size="10" data-live-search="true" id="courseselect1">
 														   
 														</select>
 														<span class="form-text text-muted" id="Title3">Visualice el listado de alumnos por grados del nivel y dia seleccionado</span>
@@ -1010,6 +1010,11 @@
 				{			
 					$('#Title1').text("Visualización de examenes por grado y Voluntarios");
 					$('#Title2').html("Visualice el listado de examenes por grados del nivel y jornada seleccionado");
+				}
+				else if(pos==5)
+				{			
+					$('#Title1').text("Visualización de examenes por grado y curso");
+					$('#Title2').html("Visualice el listado de examenes por curso, grados, nivel y dia seleccionado");
 				}
 				
 				$.ajax ({
