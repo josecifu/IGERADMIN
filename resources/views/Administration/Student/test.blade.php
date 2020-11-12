@@ -7,7 +7,7 @@
     Estudiante
     @stop
     @section('breadcrumb2')
-    Examenes
+    Evaluación
     @stop
     {{-- Page content --}}
     @section('content')
@@ -16,7 +16,10 @@
             <div class="card card-custom">
                 <div class="card-header">
                     <div class="card-title">
-                        <h3 class="card-label">Examenes por grado</h3>
+                        <h3 class="card-label">
+                            Nombre del estudiante: Vicente Carillo
+                            Curso: Matematicas
+                        </h3>
                     </div>
                     <div class="card-toolbar">
                         <!--begin::Dropdown-->
@@ -66,8 +69,8 @@
                 </div>
                 <div class="card-body">
                     <!--begin: Datatable-->
-                    <table class="table table-bordered table-hover table-checkable" id="" style="margin-top: 13px !important">
-                        <thead>
+                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
+                        <!--thead>
                             <tr>
                                 @foreach($titles as $t)
                                 <th>{{ $t }}</th>
@@ -77,16 +80,13 @@
                         <tbody>
                             @foreach($models as $m)
                             <tr>
-                                <td>
-                                    <a href="#" class="nav-link">
-                                        <i class="nav-icon la la-file-pdf-o"></i>
-                                        <span class="nav-text">{{$m->Name}}</span>
-                                    </a>
-                                </td>
+                                <td>Pregunta:</td>
+                                <td>Respuesta:</td>
+                                <td>Respuesta Correcta:</td>
                                 <td nowrap="nowrap"></td>
                             </tr>
                             @endforeach
-                        </tbody>
+                        </tbody-->
                     </table>
                     <!--end: Datatable-->
                 </div>
