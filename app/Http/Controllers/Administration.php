@@ -165,19 +165,19 @@ class Administration extends Controller
     {
         $buttons =[];
         $button = [
-            "Name" => 'Añadir una jornada',
+            "Name" => 'Añadir un dia de trabajo',
             "Link" => 'create()',
             "Type" => "addFunction"
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver grados de una jornada',
+            "Name" => 'Ver grados de un dia',
             "Link" => 'administration/home/dashboard',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver jornadas eliminadas',
+            "Name" => 'Ver dias eliminados',
             "Link" => 'administration/configurations/level/list/deletes',
             "Type" => "btn1"
         ];
@@ -288,7 +288,7 @@ class Administration extends Controller
         ];
         array_push($buttons,$button);
 
-        $Titles =['Id','Jornada','Niveles','No de Grados','Acciones'];
+        $Titles =['Id','Dia','Niveles','No de Grados','Acciones'];
         $Models = [];
         $model = period::where("State","Delete")->get();
        
@@ -318,6 +318,27 @@ class Administration extends Controller
         }
         $type="Delete";
         return view('Administration.Grades.Level_List',compact('Titles','Models','buttons','type'));
+    }
+    public function addGrade(Request $request)
+    {
+        $Grade = new Grade;
+        $data = $request->data[0];
+        $Grade->Name = $data['Name'];
+        $Grade->State = "Section";
+        $Grade->State = "Active";
+        $Grade->Level_id =  $data['id'];
+        $Grade->save();
+        return response()->json(["Accion completada"]);
+    }
+    public function LevelSave(Request $request)
+    {
+        $level = new level;
+        $data = $request->data[0];
+        $level->Name = $data['Name'];
+        $level->State = "Active";
+        $level->Period_id =  $data['id'];
+        $level->save();
+        return response()->json(["Accion completada"]);
     }
     public function PeriodSave(Request $request)
     {
@@ -502,11 +523,7 @@ class Administration extends Controller
             'Type' => $Tipo,
         );
         schedule::where('id',$id)->update($dataH);
-        $logs = new Log;
-        $logs->Table = "Horarios";
-        $logs->User_Id = $request->session()->get('User_Id');
-        $logs->Description = "Se guardo horario ID = ".$horario->id." Dia = ".$horario->Day;
-        $logs->save();
+       
         return response()->json(["Accion completada"]);
     }
     
