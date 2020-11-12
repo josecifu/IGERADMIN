@@ -1050,7 +1050,7 @@
 				{
 					var Id = $('#gradeselect1').val();
 					var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/student/test/"+Id;
+                    window.location.href = $url_path+"/administration/student/lists/test/"+Id;
 				}
 			}
 			function ListLevel(Period)
@@ -1119,7 +1119,8 @@
 				  
 			  }
 			$('#gradeselect1').on('change', function() {
-				if(posGrade==3 || posGrade==4 )
+
+				if( posGrade==2 ||posGrade==3 || posGrade==4 || posGrade==5 )
 				{
 					$('#SelectCourse').css("visibility", "visible");
 					ListCourse($('#gradeselect1').val());
