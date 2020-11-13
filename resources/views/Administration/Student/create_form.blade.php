@@ -141,10 +141,6 @@
 													</div>
 												</div>
 											</div>
-
-
-
-
 											<div class="form-group row">
 												<label class="col-3">Correo electrónico</label>
 												<div class="col-9">
@@ -158,9 +154,6 @@
 													</div>
 												</div>
 											</div>
-
-
-
 											<div class="form-group row">
 												<label class="col-3">Contraseña</label>
 												<div class="col-9">

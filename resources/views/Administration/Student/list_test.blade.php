@@ -16,9 +16,14 @@
             <div class="card card-custom">
                 <div class="card-header">
                     <div class="card-title">
-                        <h3 class="card-label">
-                            Evaluación de: Primero Basico · Matematicas
-                        </h3>
+                        <span class="card-icon">
+                            <i class="flaticon2-favourite text-primary"></i>
+                        </span>
+                            @isset($course)
+                                <h3 class="card-label">
+                                    Listado de evaluaciones de: {{$grade ?? ''}} del curso de {{$course->Name ?? ''}}
+                                </h3>
+                            @endisset
                     </div>
                     <div class="card-toolbar">
                         <!--begin::Dropdown-->
@@ -72,17 +77,36 @@
                         <thead>
                             <tr>
                                 @foreach($titles as $t)
-                                <th>{{ $t }}</th>
+                                    <th>{{ $t }}</th>
                                 @endforeach
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($models as $m)
-                            <tr>
-                                <td>5</td>
-                                <td>Gonzalo Inzunza</td>
-                                <td nowrap="nowrap"></td>
-                            </tr>
+                                <tr>
+                                    <td>{{$m['id']}}</td>
+                                    <td>{{$m['name']}}</td>
+                                    <td>
+                                        <center>
+                                            <button type="button" class="btn btn-outline-info"  data-toggle="modal" data-target="">I</button>
+                                        </center>
+                                    </td>
+                                    <td>
+                                        <center>
+                                            <button type="button" class="btn btn-outline-info"  data-toggle="" data-target="">II</button>
+                                        </center>
+                                    </td>
+                                    <td>
+                                        <center>
+                                            <button type="button" class="btn btn-outline-info"  data-toggle="" data-target="">III</button>
+                                        </center>
+                                    </td>
+                                    <td>
+                                        <center>
+                                            <button type="button" class="btn btn-outline-info"  data-toggle="" data-target="">IV</button>
+                                        </center>
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>

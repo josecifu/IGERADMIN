@@ -77,22 +77,22 @@
                         <thead>
                             <tr>
                                 @foreach($titles as $t)
-                                <th>{{ $t }}</th>
+                                    <th>{{ $t }}</th>
                                 @endforeach
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($models as $m)
-                            <tr>
-                                <td>{{$m['id']}}</td>
-                                <td>{{$m['name']}}</td>
-                                <td>{{$m['phone']}}</td>
-                                <td>{{$m['user']}}</td>
-                                <td>{{$m['email']}}</td>
-                                <td>{{$m['grade']}}</td>
-                                <td>11/11/2020</td>
-                                <td nowrap="nowrap"></td>
-                            </tr>
+                                <tr>
+                                    <td>{{$m['id']}}</td>
+                                    <td>{{$m['name']}}</td>
+                                    <td>{{$m['phone']}}</td>
+                                    <td>{{$m['user']}}</td>
+                                    <td>{{$m['email']}}</td>
+                                    <td>{{$m['grade']}}</td>
+                                    <td>11/11/2020</td>
+                                    <td nowrap="nowrap"></td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>

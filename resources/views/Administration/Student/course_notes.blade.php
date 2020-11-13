@@ -15,6 +15,9 @@
             <!--begin::Card-->
             <div class="card card-custom">
                 <div class="card-header">
+                    <span class="card-icon">
+                        <i class="flaticon2-favourite text-primary"></i>
+                    </span>
                     <div class="card-title">
                         <h3 class="card-label">Visualización de notas</h3>
                     </div>

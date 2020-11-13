@@ -157,7 +157,7 @@ class Student extends Controller
         $lastnames= $data['Apellido'];
         $phone= $data['Telefono'];
         $username= $data['Usuario'];
-        $email= $data['Correo'];//opcional------------------------------------------------
+        $email= $data['Correo'];
         $password = $data['Contraseña'];
         $grade = grade::find($data['Grado']);
         try
@@ -275,10 +275,31 @@ class Student extends Controller
         return redirect()->route('ListStudent');
     }
 
-
-
-
-
+    public function list_test($id)
+    {
+        $models = [];
+        $titles = [
+            'Id',
+            'Nombre del Estudiante',
+            'Primera Unidad',
+            'Segunda Unidad',
+            'Tercera Unidad',
+            'Cuarta Unidad',
+        ];
+        $course = Course::find($id);
+        $grade = Grade::find($id);
+        foreach ($grade->Students() as $user)
+        {
+            $student = Person::find($user->Person_id);
+            $query = [
+                'id' => $student->id,
+                'name' => $student->Names . ' ' . $student->LastNames
+            ];
+            array_push($models,$query);
+        }
+        $grade = Grade::find($course->Grade_id)->GradeName();
+        return view('Administration/Student/list_test',compact('models','titles','course','grade'));
+    }
 
 
 
@@ -289,17 +310,18 @@ class Student extends Controller
     //visualizacion de examenes con respuestas de cada alumno por grado-seccion
     public function test($id)
     {
-        $titles = ['Id','Preguntas/Problemas','Tipo de Pregunta/Problema','Respuestas del estudiante','Respuestas Correctas','Punteo Obtenido'];
-        $models = Course::all();
+        $titles = [
+            'Id','Preguntas/Problemas',
+            'Tipo de Pregunta/Problema',
+            'Respuestas del estudiante',
+            'Respuestas Correctas',
+            'Punteo Obtenido'
+        ];
+        $models = [1];
         return view('Administration/Student/test',compact('models','titles'));
     }
 
-    public function list_test($id)
-    {
-        $titles = ['Id','Nombre del Estudiante','Unidades'];
-        $models = Course::all();
-        return view('Administration/Student/list_test',compact('models','titles'));
-    }
+
     
 
 

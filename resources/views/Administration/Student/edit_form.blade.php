@@ -122,11 +122,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
-
-
-
                                             <div class="form-group row">
                                                 <label class="col-3">Correo electrónico</label>
                                                 <div class="col-9">
@@ -140,12 +135,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
-
-
-
-                                            
                                             <div class="form-group row">
                                                 <input type="hidden" value="{{$student->id}}" id="Persona">
                                             </div>
