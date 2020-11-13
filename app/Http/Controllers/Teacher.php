@@ -95,7 +95,7 @@ class Teacher extends Controller
                 ];
                 array_push($Models,$data);
         }
-        return view('Administration/Teachers/ListadoVoluntarios',compact('Models','Titles','buttons'));
+        return view('Administration/Tests/1',compact('Models','Titles','buttons'));
     }
 
     public function create()
@@ -353,7 +353,7 @@ class Teacher extends Controller
         array_push($buttons,$button);
         $button = [
             "Name" => 'Crear Examen',
-            "Link" => 'administration/teacher/create/test',
+            "Link" => 'administration/teacher/create/test/'."$id",
             "Type" => "add"
         ];
         array_push($buttons,$button);
@@ -369,7 +369,7 @@ class Teacher extends Controller
         return view('Administration/Teachers/QuestionTest',compact('test','questions'));
     }
 
-    public function createExam()
+    public function createExam($id)
     {
         $buttons =[];
         $button = [
@@ -378,7 +378,7 @@ class Teacher extends Controller
             "Type" => "add"
         ];  
         array_push($buttons,$button);
-        return view('Administration/Teachers/CreateTest',compact('buttons'));
+        return view('Administration/Teachers/CreateTest',compact('buttons','id'));
     }
 
     public function saveExam(Request $request)
@@ -396,10 +396,11 @@ class Teacher extends Controller
         $examen = new test;
         $examen->Title = $Titulo;
         $examen->Score = $Punteo;
-        $examen->StartDate = $Fecha[0].' '.$HoraI;
-        $examen->EndDate = $Fecha[1].' '.$HoraF;
+        $examen->StartDate = $Fechas[0].' '.$HoraI;
+        $examen->EndDate = $Fechas[1].' '.$HoraF;
         $examen->Unity = $Unidad;
         $examen->save();
+        return response()->json(["Accion completada"]);
     }
 
     public function Desactive()         //vista usuarios desactivados

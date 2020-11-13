@@ -149,6 +149,7 @@
 				showMeridian: false,
 				snapToStep: true
 			});
+			
 // Class definition
 var KTWizard1 = function () {
 	// Base elements
