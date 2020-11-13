@@ -399,6 +399,7 @@ class Teacher extends Controller
         $examen->StartDate = $Fecha[0].' '.$HoraI;
         $examen->EndDate = $Fecha[1].' '.$HoraF;
         $examen->Unity = $Unidad;
+        $examen->save();
     }
 
     public function Desactive()         //vista usuarios desactivados
