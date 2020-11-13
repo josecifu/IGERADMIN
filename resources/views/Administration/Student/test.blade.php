@@ -91,8 +91,8 @@
                         <tbody>
                             @foreach($models as $m)
                             <tr>
-                                <td>1</td>
-                                <td>5X5</td>
+                                <td>{{$m['id']}}</td>
+                                <td>{{$m['question']}}</td>
                                 <td>Calculo</td>
                                 <td>25</td>
                                 <td>25</td>

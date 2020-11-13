@@ -87,7 +87,7 @@
                                     <td>{{$m['id']}}</td>
                                     <td>{{$m['name']}}</td>
                                     <td>
-                                        <a href="/administration/student/test/'+full[0]+'">
+                                        <a href="{{url('/administration/student/test/'.$id)}}">
                                             <center>
                                                 <button type="button" class="btn btn-outline-info"  data-toggle="" data-target="">Ver examen</button>
                                         </center>
