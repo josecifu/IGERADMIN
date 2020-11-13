@@ -50,12 +50,7 @@
 														<label class="col-3">Titulo del Examen</label>
 														<div class="col-9">
 															<div class="input-group input-group-solid">
-																<div class="input-group-prepend">
-																	<span class="input-group-text">
-																		<i class="fas fa-align-left"></i>
-																	</span>
-																</div>
-																<input type="text" name="Titulo" id="Titulo" class="form-control form-control-solid" placeholder="Nombre" />
+																<input type="text" name="Titulo" id="Titulo" class="form-control form-control-solid" placeholder="Titulo del Examen" />
 															</div>
 														</div>
 													</div>
@@ -63,51 +58,31 @@
 														<label class="col-3">Punteo</label>
 														<div class="col-9">
 															<div class="input-group input-group-solid">
-																<div class="input-group-prepend">
-																	<span class="input-group-text">
-																		<i class=""></i>
-																	</span>
-																</div>
-																<input type="number" name="Punteo" id="Punteo" class="form-control form-control-solid" placeholder="Apellido" />
+																<input type="number" name="Punteo" id="Punteo" class="form-control form-control-solid" placeholder="Punteo Total del examen" />
 															</div>
 														</div>
 													</div>
 													<div class="form-group row">
-														<label class="col-3">Hora</label>
+														<label class="col-3">Fecha de inicio y final</label>
 														<div class="col-9">
-															<div class="input-group input-group-solid">
-																<div class="input-group-prepend">
-																	<span class="input-group-text">
-																		<i class="la la-phone"></i>
-																	</span>
-																</div>
-																<input type="text" name="FI" id="FI" class="form-control form-control-solid" placeholder="Phone" />
+															<div class="">
+																<input class="form-control" id="Fechas" name="Fechas" readonly="readonly" placeholder="Select time" type="text" />
 															</div>
 														</div>
 													</div>
 													<div class="form-group row">
-														<label class="col-3">Fecha de inicio</label>
+														<label class="col-3">Hora de inicio</label>
 														<div class="col-9">
-															<div class="input-group input-group-solid">
-																<div class="input-group-prepend">
-																	<span class="input-group-text">
-																		<i class="fas fa-clock"></i>
-																	</span>
-																</div>
-																<input type="text" name="FI" id="FI" class="form-control form-control-solid" placeholder="Phone" />
+															<div class="">
+																<input class="form-control" name="HoraInicio" id="HoraInicio" readonly="readonly" placeholder="Select time" type="text" />
 															</div>
 														</div>
 													</div>
 													<div class="form-group row">
-														<label class="col-3">Fecha de Final</label>
+														<label class="col-3">Hora Final</label>
 														<div class="col-9">
-															<div class="input-group input-group-solid">
-																<div class="input-group-prepend">
-																	<span class="input-group-text">
-																		<i class="la la-phone"></i>
-																	</span>
-																</div>
-																<input type="text" name="FF" id="FF" class="form-control form-control-solid" placeholder="Phone" />
+															<div class="">
+																<input class="form-control" name="HoraFinal" id="HoraFinal" readonly="readonly" placeholder="Select time" type="text" />
 															</div>
 														</div>
 													</div>
@@ -115,12 +90,7 @@
 														<label class="col-3">Unidad</label>
 														<div class="col-9">
 															<div class="input-group input-group-solid">
-																<div class="input-group-prepend">
-																	<span class="input-group-text">
-																		<i class="la la-phone"></i>
-																	</span>
-																</div>
-																<input type="text" name="Unidad" id="Unidad" class="form-control form-control-solid" placeholder="Phone" />
+																<input type="number" name="Unidad" id="Unidad" class="form-control form-control-solid" placeholder="Unidad" />
 															</div>
 														</div>
 													</div>
@@ -128,12 +98,7 @@
 														<label class="col-3">Numero de Preguntas</label>
 														<div class="col-9">
 															<div class="input-group input-group-solid">
-																<div class="input-group-prepend">
-																	<span class="input-group-text">
-																		<i class="la la-phone"></i>
-																	</span>
-																</div>
-																<input type="text" name="Unidad" id="Unidad" class="form-control form-control-solid" placeholder="Phone" />
+																<input type="number" name="NoPreguntas" id="NoPreguntas" class="form-control form-control-solid" placeholder="Cantidad de preguntas" />
 															</div>
 														</div>
 													</div>
@@ -162,13 +127,28 @@
 						<!--end::Wizard-->
 					</div>
 				</div>
+				
 	@stop
     @section('scripts')
-	
-
 		<!--begin::Page Scripts(used by this page)-->
 		<script type="text/javascript">
 			"use strict";
+			$('#Fechas').daterangepicker({
+				buttonClasses: ' btn',
+				applyClass: 'btn-primary',
+				cancelClass: 'btn-secondary'
+			});
+			// minimum setup
+			$('#HoraInicio, #HoraFinal').timepicker();
+
+			// minimum setup
+			$('#HoraInicio, #HoraFinal').timepicker({
+				minuteStep: 1,
+				defaultTime: '',
+				showSeconds: true,
+				showMeridian: false,
+				snapToStep: true
+			});
 // Class definition
 var KTWizard1 = function () {
 	// Base elements
@@ -196,34 +176,6 @@ var KTWizard1 = function () {
 							validators: {
 								notEmpty: {
 									message: 'El punteo es requerido'
-								}
-							}
-						},
-						FechaInicio: {
-							validators: {
-								notEmpty: {
-									message: 'La Fecha es requerida'
-								}
-							}
-						},
-						FechaFinal: {
-							validators: {
-								notEmpty: {
-									message: 'La Fecha es requerida'
-								}
-							}
-						},
-						HoraInicio: {
-							validators: {
-								notEmpty: {
-									message: 'La hora es requerida'
-								}
-							}
-						},
-						HoraFinal: {
-							validators: {
-								notEmpty: {
-									message: 'La hora es requerida'
 								}
 							}
 						},
@@ -315,6 +267,7 @@ var KTWizard1 = function () {
 					}
 				}).then(function (result) {
 					if (result.value) {
+						console.log("hola");
 						crearDatos(); // Submit form
 					} else if (result.dismiss === 'cancel') {
 						Swal.fire({
@@ -360,29 +313,25 @@ var KTWizard1 = function () {
 
          function crearDatos()
          {
-            var NombrePersona = $('#Nombres').val(); 
-            var ApellidosPersona = $('#Apellidos').val();
-            var TelefonoPersona = $('#Telefono').val();
-            var UsuarioPersona = $('#Usuario').val(); 
-            var ContraseñaPersona = $('#Contraseña').val();
-            var EmailPersona = $('#Email').val();
-			var Curso = $('#Curso').val();
-			var Grado = $('#Grado').val();
+			console.log("asdf");
+			var Titulo = $('#Titulo').val(); 
+            var Punteo = $('#Punteo').val();
+            var Fechas = $('#Fechas').val();
+            var HoraI = $('#HoraInicio').val(); 
+            var HoraF = $('#HoraFinal').val();
+            var Unidad = $('#Unidad').val();
+			var Preguntas = $('#NoPreguntas').val();
             var data = [{
-                //Persona
-				Curso: Curso,
-				Grado: Grado,
-                Nombre: NombrePersona,
-                Apellido: ApellidosPersona,
-                Telefono: TelefonoPersona,
-                //Usuario
-                Usuario: UsuarioPersona,
-                Email: EmailPersona,
-                Contraseña: ContraseñaPersona,
+				Titulo: Titulo,
+				Punteo: Punteo,
+                Fechas: Fechas,
+                HoraI: HoraI,
+                HoraF: HoraF,
+                Unidad: Unidad,
+                Preguntas: Preguntas,
             }];
-
             $.ajax({
-                url:'/administration/teacher/save',
+                url:'/administration/teacher/save/test',
                 type:'POST',
                 data: {"_token":"{{ csrf_token() }}","data":data},
                 dataType: "JSON",
@@ -406,81 +355,9 @@ var KTWizard1 = function () {
                     })
                 }
             });
-		 }
-		 
-		 $.ajax ({
-			url: '{{route('LoadPeriods')}}',
-			type: 'GET',
-			success: (e) => {
-				$('#Jornada').empty();
-				$.each(e['Periods'], function(fetch, data){
-				  $('#Jornada').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
-				});
-				$('#Jornada').selectpicker('refresh');
-			}
-		});
-		function ListLevel(Period)
-		{
-			$.ajax ({
-				url: '{{route('LoadLevels')}}',
-				type: 'POST',
-				data: {
-					"_token": "{{ csrf_token() }}",
-					"PeriodId"      : Period,
-				},
-				success: (e) => {
-					$('#Nivel').empty();
-					$('#Nivel').append('<option value="" >--Seleccione una opcion</option>');
-					$.each(e['Levels'], function(fetch, data){
-						$('#Nivel').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
-					});
-					$('#Nivel').selectpicker('refresh');
-				}
-			});	
-		}
-		function ListGrades(Level)
-		{
-			$.ajax ({
-				url: '{{route('LoadGrades')}}',
-				type: 'POST',
-				data: {
-					"_token": "{{ csrf_token() }}",
-					"LvlId"      : Level,
-				},
-				success: (e) => {
-					$('#Grado').empty();
-					$('#Grado').append('<option value="" >--Seleccione una opcion</option>');
-					$.each(e['Grades'], function(fetch, data){
-					$('#Grado').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
-					});
-					$('#Grado').selectpicker('refresh');
-				}
-			});
-		}
-		function ListCourses(Grade)
-		{
-			$.ajax ({
-				url: '{{route('LoadCoursesTeacher')}}',
-				type: 'POST',
-				data: {
-					"_token": "{{ csrf_token() }}",
-					"GradeId"      : Grade,
-				},
-				success: (e) => {
-					$('#Curso').empty();
-					$('#Curso').append('<option value="" >--Seleccione una opcion</option>');
-					$.each(e['Courses'], function(fetch, data){
-					$('#Curso').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
-					});
-					$('#Curso').selectpicker('refresh');
-				}
-			});
-		}
-		$('#Nivel').on('change', function() {
-			ListGrades($('#Nivel').val());
-		});
-		$('#Grado').on('change', function() {
-			ListCourses($('#Grado').val());
+		} 
+		$('#HoraInicio').on('change', function() {
+			console.log($('#HoraInicio').val());
 		});
     </script>
 	@stop

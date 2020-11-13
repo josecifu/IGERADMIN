@@ -483,7 +483,6 @@ var KTWizard1 = function () {
                 }
             });
 		 }
-		 
 		 $.ajax ({
 			url: '{{route('LoadPeriods')}}',
 			type: 'GET',

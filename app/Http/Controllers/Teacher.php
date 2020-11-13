@@ -10,7 +10,7 @@ use App\Models\Assign_files_information;
 //tabla de notas
 use App\Models\note;
 //tabla de evaluaciones
-use App\Models\Test;
+use App\Models\test;
 //tabla de preguntas
 use App\Models\Question;
 //tabla de asignacion de preguntas a prueba
@@ -353,7 +353,7 @@ class Teacher extends Controller
         array_push($buttons,$button);
         $button = [
             "Name" => 'Crear Examen',
-            "Link" => 'administration/teacher/create/exam',
+            "Link" => 'administration/teacher/create/test',
             "Type" => "add"
         ];
         array_push($buttons,$button);
@@ -381,9 +381,24 @@ class Teacher extends Controller
         return view('Administration/Teachers/CreateTest',compact('buttons'));
     }
 
-    public function saveExam()
+    public function saveExam(Request $request)
     {
-        
+        $id = user::find($request->session()->get('User_id'));
+        $persona = Person::find($id->Person_id);
+        $data = $request->data[0];
+        $Titulo = $data['Titulo'];
+        $Punteo = $data['Punteo'];
+        $Fechas = explode(' - ',$data['Fechas']);
+        $HoraI = $data['HoraI'];
+        $HoraF = $data['HoraF'];
+        $Unidad = $data['Unidad'];
+        $Preguntas = $data['Preguntas'];
+        $examen = new test;
+        $examen->Title = $Titulo;
+        $examen->Score = $Punteo;
+        $examen->StartDate = $Fecha[0].' '.$HoraI;
+        $examen->EndDate = $Fecha[1].' '.$HoraF;
+        $examen->Unity = $Unidad;
     }
 
     public function Desactive()         //vista usuarios desactivados
