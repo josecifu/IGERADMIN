@@ -50,11 +50,8 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/lists/test/{model}',$route.'\Student@list_test')->name('ListTest');
 		Route::get('/list/eliminated',$route.'\Student@eliminated_students')->name('ListEliminatedStudents');
 		Route::get('/delete/{model}', $route.'\Student@delete')->name('DeleteStudent');
-<<<<<<< HEAD
 		Route::get('/statistics',$route.'\Student@statistics')->name('StudentStatistics');
-=======
 		Route::get('/statistics',$route.'\Student@statistics')->name('StatisticsStudent');
->>>>>>> 7bbaec1bf45dd886a39bd3917e781000e4158e05
 
 	});
 	#Voluntarios
@@ -68,7 +65,6 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::post('/update', $route.'\Teacher@update')->name('UpdateTeacher');
 		Route::get('/score/{model}',$route.'\Teacher@score')->name('ScoreTeacher');
 		Route::get('/logs',$route.'\Teacher@logs')->name('LogsTeacher');
-		Route::get('/test/{model}', $route.'\Teacher@TestTeacher')->name('TestTeacher');
 		Route::get('/delete/{model}', $route.'\Teacher@delete')->name('DeleteTeacher');
 		Route::get('/search',$route.'\Teacher@seach')->name('SceachTeacher');
 		Route::get('/workspace',$route.'\Teacher@workspace')->name('WorkspaceTeacher');
@@ -76,6 +72,8 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::post('/load/courses', $route.'\Teacher@LoadCourses')->name('LoadCoursesTeacher');
 		Route::get('/desactive', $route.'\Teacher@Desactive')->name('Desactive');
 		Route::get('/activate/{model}', $route.'\Teacher@Activate')->name('ActivateTeacher');
+		Route::get('/test/{model}', $route.'\Teacher@TestTeacher')->name('TestTeacher');
+		Route::get('/create/exam', $route.'\Teacher@createExam')->name('createExam');
 		Route::get('/question/{model}', $route.'\Teacher@QuestionTest')->name('QuestionsTest');
 	});
 	//Comentario
