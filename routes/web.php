@@ -50,6 +50,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/lists/test/{model}',$route.'\Student@list_test')->name('ListTest');
 		Route::get('/list/eliminated',$route.'\Student@eliminated_students')->name('ListEliminatedStudents');
 		Route::get('/delete/{model}', $route.'\Student@delete')->name('DeleteStudent');
+		Route::get('/statistics',$route.'\Student@statistics')->name('StudentStatistics');
 		Route::get('/statistics',$route.'\Student@statistics')->name('StatisticsStudent');
 
 	});
@@ -82,6 +83,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('level/list/deletes',$route.'\Administration@LevelListDelete')->name('LevelListDelete');
 		Route::get('level/list/change/{id}/{type}',$route.'\Administration@ChangePeriod')->name('ChangePeriod');
 		Route::get('level/list/grades/level/{id}',$route.'\Administration@ViewGradesLvl')->name('ViewGradesLvl');
+		Route::post('level/save', $route.'\Administration@LevelSave')->name('LevelSave');
 		Route::post('level/list/grades/courses/save',$route.'\Administration@SaveCourses')->name('SaveCourses');
 		Route::post('period/save', $route.'\Administration@PeriodSave')->name('PeriodSave');
 		Route::post('period/update', $route.'\Administration@PeriodUpdate')->name('PeriodUpdate');

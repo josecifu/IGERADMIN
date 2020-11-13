@@ -1053,7 +1053,7 @@
 				}
 				if(posGrade==5)
 				{
-					var Id = $('#gradeselect1').val();
+					var Id = $('#courseselect1').val();
 					var $url_path = '{!! url('/') !!}';
                     window.location.href = $url_path+"/administration/student/lists/test/"+Id;
 				}
@@ -1124,8 +1124,12 @@
 				  
 			  }
 			$('#gradeselect1').on('change', function() {
+<<<<<<< HEAD
+				if(posGrade==2 ||posGrade==3 || posGrade==4 || posGrade==5 )
+=======
 
 				if( posGrade==2 ||posGrade==3 || posGrade==4 || posGrade==5 )
+>>>>>>> 7bbaec1bf45dd886a39bd3917e781000e4158e05
 				{
 					$('#SelectCourse').css("visibility", "visible");
 					ListCourse($('#gradeselect1').val());

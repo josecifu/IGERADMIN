@@ -39,7 +39,7 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            <h3 class="card-label">Listado de asignaciones de dias,niveles y grados.</h3>
+                                            <h3 class="card-label">Listado de asignaciones de dias,niveles y grados .  </h3>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -170,9 +170,14 @@
         <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
         <!--end::Page Vendors-->
         <!--begin::Page Scripts(used by this page)-->
+        <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
 
-        <script type="text/javascript">
-           
+<script type="text/javascript">
+    $.fn.editable.defaults.mode = 'inline';
+    $(document).ready(function() {
+        $('#username').editable();
+    });
             "use strict";
             var KTDatatablesDataSourceHtml = function() {
 
@@ -198,20 +203,20 @@
                                             </a>\
                                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right" >\
                                                 <ul class="nav nav-hoverable flex-column" >\
-                                                    <li class="nav-item"><a class="nav-link" href="#" ><i class="nav-icon la la-mail-reply-all"></i><span class="nav-text" style="padding-left:10px;"> Agregar un nivel a la jornada</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="#" ><i class="nav-icon la la-plus-square-o"></i><span class="nav-text" style="padding-left:10px;"> Agregar un grado a un nivel de la jornada</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#" onclick="Addlevel(\''+full[0]+'\')"><i class="nav-icon la la-mail-reply-all"></i><span class="nav-text" style="padding-left:10px;"> Agregar un nivel a el dia</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#" ><i class="nav-icon la la-plus-square-o"></i><span class="nav-text" style="padding-left:10px;"> Agregar un grado a un nivel del dia</span></a></li>\
                                                 </ul>\
                                             </div>\
                                         </div>\
-                                        <a href="javascript:;" onclick="edit(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Editar jornada" data-placement="left">\
+                                        <a href="javascript:;" onclick="edit(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Editar dia de trabajo" data-placement="left">\
                                             <i class="la la-edit"></i>\
                                         </a>\
                                         @if($type=="Active")
-                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Eliminar jornada" data-placement="left">\
+                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Eliminar dia de trabajo" data-placement="left">\
                                         <i class="la la-trash"></i>\
                                         </a>\
                                         @else
-                                        <a href="javascript:;" onclick="ActivePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Activar jornada" data-placement="left">\
+                                        <a href="javascript:;" onclick="ActivePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Activar dia de trabajo" data-placement="left">\
                                         <i class="la la-check-circle"></i>\
                                         </a>\
                                         @endif';
@@ -417,6 +422,89 @@
                     }
                   })
         }
+        function Addlevel($id)
+        {
+            Swal.mixin({
+                input: 'text',
+                confirmButtonText: 'Siguiente  &rarr;',
+                showCancelButton: true,
+                progressSteps: ['1']
+              }).queue([
+                {
+                  title: 'Ingrese el nombre del nuevo nivel:',
+                 
+                }
+              ]).then((result) => {
+                if (result.value) {
+                  const answers = JSON.stringify(result.value)
+                  const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                      confirmButton: 'btn btn-success',
+                      cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                  })
+                  
+                  swalWithBootstrapButtons.fire({
+                    title: '¿Está seguro de los datos?',
+                    text: "El nombre del nivel : "+result.value[0],
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si, crearlo!',
+                    cancelButtonText: 'No, cancelar!',
+                    reverseButtons: true
+                  }).then((result2) => {
+                    if (result2.isConfirmed) {
+                        var data = [{
+                            //Usuario
+                            Name: result.value[0],
+                            id: $id,
+                        }];
+            
+                        $.ajax({
+                            url:'/administration/configurations/level/save',
+                            type:'POST',
+                            data: {"_token":"{{ csrf_token() }}","data":data},
+                            dataType: "JSON",
+                            success: function(e){
+                                swalWithBootstrapButtons.fire({
+                                    title: 'Creado!',
+                                    text: 'Se ha creado con exito!',
+                                    icon: 'success',
+                                    confirmButtonText: 'Aceptar',
+                                }).then(function () {
+                                       
+                                      var $url_path = '{!! url('/') !!}';
+                                      window.location.href = $url_path+"/administration/configurations/level/list";
+                                    });
+                                 
+                            },
+                            error: function(e){
+                                swalWithBootstrapButtons.fire({
+                                    title: 'Cancelado!',
+                                    text:   e.responseJSON['error'],
+                                    icon: 'error',
+                                    confirmButtonText: 'Aceptar',
+                                })
+                               
+                            }
+                        });
+                     
+                    } else if (
+                      result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                      swalWithBootstrapButtons.fire({
+                        title: 'Cancelado!',
+                        text:  'El dia no ha sido creada!',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar',
+                    })
+                    }
+                  })
+                }
+              })
+        }
+        
         function create()
         {
             Swal.mixin({
@@ -499,7 +587,8 @@
                 }
               })
         }
-
+        
+      
        </script>
         <!--end::Page Scripts-->
 	@stop

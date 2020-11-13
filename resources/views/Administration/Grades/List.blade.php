@@ -12,6 +12,12 @@
     {{-- Page content --}}
     @section('content')
     <div class="content flex-column-fluid" id="kt_content">
+        <div class="card-header">
+            <div class="card-toolbar">
+                <a href="{{url('administration/configurations/level/list')}}" class="btn btn-danger font-weight-bolder mr-2">
+                <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
+            </div>
+        </div>
         <!--begin::Card-->
         <div class="card card-custom">
             <div class="card-header">
@@ -66,7 +72,7 @@
                     </div>
                     <!--end::Dropdown-->
                     <!--begin::Button-->
-                    <a href="{{url('administration/student/create')}}" class="btn btn-primary font-weight-bolder">
+                    <a href="#" onclick="addGrade();"class="btn btn-primary font-weight-bolder">
                     <i class="la la-plus"></i>Añadir un grado</a>
                     <!--end::Button-->
                 </div>
@@ -381,6 +387,88 @@
                       })
                     }
                   })
+        }
+        function Addgrade($id)
+        {
+            Swal.mixin({
+                input: 'text',
+                confirmButtonText: 'Siguiente  &rarr;',
+                showCancelButton: true,
+                progressSteps: ['1']
+              }).queue([
+                {
+                  title: 'Ingrese el nombre del nuevo grado:',
+                 
+                }
+              ]).then((result) => {
+                if (result.value) {
+                  const answers = JSON.stringify(result.value)
+                  const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                      confirmButton: 'btn btn-success',
+                      cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                  })
+                  
+                  swalWithBootstrapButtons.fire({
+                    title: '¿Está seguro de los datos?',
+                    text: "El nombre del nivel : "+result.value[0],
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si, crearlo!',
+                    cancelButtonText: 'No, cancelar!',
+                    reverseButtons: true
+                  }).then((result2) => {
+                    if (result2.isConfirmed) {
+                        var data = [{
+                            //Usuario
+                            Name: result.value[0],
+                            id: $id,
+                        }];
+            
+                        $.ajax({
+                            url:'/administration/configurations/level/save',
+                            type:'POST',
+                            data: {"_token":"{{ csrf_token() }}","data":data},
+                            dataType: "JSON",
+                            success: function(e){
+                                swalWithBootstrapButtons.fire({
+                                    title: 'Creado!',
+                                    text: 'Se ha creado con exito!',
+                                    icon: 'success',
+                                    confirmButtonText: 'Aceptar',
+                                }).then(function () {
+                                       
+                                      var $url_path = '{!! url('/') !!}';
+                                      window.location.href = $url_path+"/administration/configurations/level/list";
+                                    });
+                                 
+                            },
+                            error: function(e){
+                                swalWithBootstrapButtons.fire({
+                                    title: 'Cancelado!',
+                                    text:   e.responseJSON['error'],
+                                    icon: 'error',
+                                    confirmButtonText: 'Aceptar',
+                                })
+                               
+                            }
+                        });
+                     
+                    } else if (
+                      result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                      swalWithBootstrapButtons.fire({
+                        title: 'Cancelado!',
+                        text:  'El dia no ha sido creada!',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar',
+                    })
+                    }
+                  })
+                }
+              })
         }
         function create()
         {
