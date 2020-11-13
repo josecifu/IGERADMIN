@@ -67,7 +67,7 @@
                         <!--end::Dropdown-->
                         <!--begin::Button-->
                         <a href="{{url('administration/student/create')}}" class="btn btn-primary font-weight-bolder">
-                        <i class="la la-plus"></i>Añadir estudiante</a>
+                        <i class="la la-plus"></i>Añadir nuevo estudiante</a>
                         <!--end::Button-->
                     </div>
                 </div>
@@ -124,13 +124,13 @@
                                 orderable: false,
                                 render: function(data, type, full, meta) {
                                     return '\
-                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Asistencia">\
+                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Ver asistencia del estudiante">\
                                             <i class="la la-list"></i>\
                                         </a>\
-                                        <a href="/administration/student/edit/'+full[0]+'" class="btn btn-sm btn-clean btn-icon" title="Editar">\
+                                        <a href="/administration/student/edit/'+full[0]+'" class="btn btn-sm btn-clean btn-icon" title="Actualizar datos del estudiante">\
                                             <i class="la la-edit"></i>\
                                         </a>\
-                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Borrar">\
+                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Eliminar estudiante">\
                                             <i class="la la-trash"></i>\
                                         </a>\
                                     ';
