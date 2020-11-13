@@ -95,7 +95,7 @@ class Teacher extends Controller
                 ];
                 array_push($Models,$data);
         }
-        return view('Administration/Tests/1',compact('Models','Titles','buttons'));
+        return view('Administration/Teachers/ListadoVoluntarios',compact('Models','Titles','buttons'));
     }
 
     public function create()
@@ -393,6 +393,9 @@ class Teacher extends Controller
         $HoraF = $data['HoraF'];
         $Unidad = $data['Unidad'];
         $Preguntas = $data['Preguntas'];
+        $curso = $data['curso'];
+        $c = course::find($curso);
+        $grado = grade::find($c->Grade_id)->GradeName();
         $examen = new test;
         $examen->Title = $Titulo;
         $examen->Score = $Punteo;
@@ -400,9 +403,23 @@ class Teacher extends Controller
         $examen->EndDate = $Fechas[1].' '.$HoraF;
         $examen->Unity = $Unidad;
         $examen->save();
+        $assignVol = Asign_teacher_course::where('Course_id',$curso)->first();
+        $assignTest = new Asign_test_course;
+        $assignTest->Teacher_id = $assignVol->id;
+        $assignTest->Test_id = $examen->id;
+        $assignTest->save();
+        $log = new logs;
+        $log->Table = "Voluntario";
+        $log->User_ID = $id->name;
+        $log->Description = "El usuario ".$id->name." creo un nuevo examen para el curso de ".$c->Name." de ".$grado;
+        $log->Type = "Create";
+        $log->save();
         return response()->json(["Accion completada"]);
     }
-
+    public function AssignQuestion($id,$preguntas)
+    {
+        return view('Administration/Tests/1',compact('id','preguntas'));
+    }
     public function Desactive()         //vista usuarios desactivados
     {
         $buttons =[];

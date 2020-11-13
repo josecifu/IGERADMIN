@@ -15,7 +15,7 @@
 				<div class="content flex-column-fluid" id="kt_content">
 						<div class="card-header">
 							<div class="card-toolbar">
-								<a href="{{url('administration/teacher/list')}}" class="btn btn-danger font-weight-bolder mr-2">
+								<a href="{{url('administration/teacher/test/'.$id)}}" class="btn btn-danger font-weight-bolder mr-2">
 								<i class="ki ki-long-arrow-back icon-sm"></i>Cancelar</a>
 							</div>
 						</div>
@@ -330,6 +330,7 @@ var KTWizard1 = function () {
                 HoraF: HoraF,
                 Unidad: Unidad,
                 Preguntas: Preguntas,
+				curso: {{$id}},
             }];
             $.ajax({
                 url:'/administration/teacher/save/test',
@@ -342,7 +343,7 @@ var KTWizard1 = function () {
                   type: "success"
                         }).then(function () {
                           var $url_path = '{!! url('/') !!}';
-                          window.location.href = $url_path+"/administration/teacher/list";
+                          window.location.href = $url_path+"/administration/teacher/assign/question/test/"+{{$id}}+"/"+Preguntas;
                         });
                      
                 },

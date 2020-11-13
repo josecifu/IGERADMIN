@@ -77,6 +77,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/create/exam', $route.'\Teacher@createExam')->name('createExam');
 		Route::get('/question/{model}', $route.'\Teacher@QuestionTest')->name('QuestionsTest');
 		Route::get('/create/test/{model}', $route.'\Teacher@createExam')->name('createExam');
+		Route::get('/assign/question/test/{model}/{no}', $route.'\Teacher@AssignQuestion')->name('AssignQuestion');
 		Route::post('/save/test', $route.'\Teacher@saveExam')->name('saveExam');
 	});
 	//Comentario

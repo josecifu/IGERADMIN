@@ -21,7 +21,7 @@
                     <div class="wizard-nav border-right py-8 px-8 py-lg-20 px-lg-10">
 
                         <div class="wizard-steps">
-                            @for ($i = 0; $i <= 15; $i++)
+                            @for ($i = 1; $i <= $preguntas; $i++)
                             <!--begin::Wizard Step 1 Nav-->
                             <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
                                 <div class="wizard-wrapper">
@@ -56,7 +56,7 @@
                         <div class="row">
                             <div class="offset-xxl-1 col-xxl-10">
                                 <form class="form" id="kt_form">
-                                    @for ($i = 1; $i <= 15; $i++)
+                                    @for ($i = 1; $i <= $preguntas; $i++)
                                     <!--begin: Wizard Step 1-->
                                     <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
 										<h1>Detalle preguntas:</h1>
