@@ -13,9 +13,11 @@ use App\Models\Period;
 use App\Models\Grade;
 use App\Models\Level;
 use App\Models\Course;
+use App\Models\Assign_answer_test_student;
+use App\Models\Question;
+use App\Models\Test;
 //
 use App\Models\Note;
-use App\Models\Test;
 use App\Models\Information;
 use App\Models\Asign_teacher_course;
 use App\Models\Schedule;
@@ -373,23 +375,10 @@ class Student extends Controller
         return view('Administration/Student/list_test',compact('models','titles','course','grade'));
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //visualizacion de examenes con respuestas de cada alumno por grado-seccion
+    //visualizacion de examen con respuestas del alumno
     public function test($id)
     {
+        $models = [3];
         $titles = [
             'Id','Preguntas',
             'Tipo de Pregunta',
@@ -398,7 +387,19 @@ class Student extends Controller
             'Punteo Obtenido',
             'Acciones'
         ];
-        $models = [1];
+        $answer = Assign_answer_test_student::where('Studen_id',$id)->get('Question_id');
+        dd($answer);
+        foreach ($answer as $a)
+        {
+            $question = Question::find($a->Question_id);
+            $query = [
+                'id' => $question->id,
+                'question' => $question->Content,
+                'answer' => $answer->Answers
+            ];
+            array_push($models,$query);
+        }
+        $test = Test::find($question->Test_id);
         return view('Administration/Student/test',compact('models','titles'));
     }
 
