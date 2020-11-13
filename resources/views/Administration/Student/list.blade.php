@@ -19,7 +19,7 @@
                         <span class="card-icon">
                             <i class="flaticon2-favourite text-primary"></i>
                         </span>
-                        <h3 class="card-label">Listado de estudiantes</h3>
+                        <h3 class="card-label">Listado general de estudiantes</h3>
                     </div>
                     <div class="card-toolbar">
                         <!--begin::Dropdown-->
@@ -89,7 +89,7 @@
                                 <td>{{$m['phone']}}</td>
                                 <td>{{$m['user']}}</td>
                                 <td>{{$m['email']}}</td>
-                                <td>Primero Básico</td>
+                                <td>{{$m['grade']}}</td>
                                 <td>11/11/2020</td>
                                 <td nowrap="nowrap"></td>
                             </tr>

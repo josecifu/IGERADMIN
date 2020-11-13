@@ -141,6 +141,10 @@
 													</div>
 												</div>
 											</div>
+
+
+
+
 											<div class="form-group row">
 												<label class="col-3">Correo electrónico</label>
 												<div class="col-9">
@@ -154,6 +158,9 @@
 													</div>
 												</div>
 											</div>
+
+
+
 											<div class="form-group row">
 												<label class="col-3">Contraseña</label>
 												<div class="col-9">
@@ -284,13 +291,6 @@
 												message: 'Es un campo obligatorio'
 											}
 										}
-									},
-									Email: {
-										validators: {
-											notEmpty: {
-												message: 'Es un campo obligatorio'
-											}
-										}
 									},						
 									Contraseña: {
 										validators: {
@@ -403,10 +403,10 @@
             	}); 
          	});
 	         function crearDatos(){
-	            var NombrePersona = $('#Nombres').val(); 
+	            var NombrePersona = $('#Nombres').val();
 	            var ApellidosPersona = $('#Apellidos').val();
 	            var TelefonoPersona = $('#Telefono').val();
-	            var UsuarioPersona = $('#Usuario').val(); 
+	            var UsuarioPersona = $('#Usuario').val();
 	            var EmailPersona = $('#Email').val();
 	            var ContraseñaPersona = $('#Contraseña').val();
 				var AsignarGrado = $('#Grado').val();
