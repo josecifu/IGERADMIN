@@ -16,16 +16,16 @@
             <div class="card card-custom">
                 <div class="card-header">
                     <div class="card-title">
-                        <table WIDTH=123 HEIGHT="55" class="table table-bordered table-hover table-checkable" id="" style="margin-top: 20px !important ">
+                        <table class="table table-bordered table-hover table-checkable" id="" style="margin-top: 20px !important ">
                             <thead>
                                 <tr>
                                     <th>
                                         <h4>
-                                            Evaluación I Unidad<br>
-                                            Nombre del estudiante: Gonzalo Inzunza<br>
-                                            Curso: Matemáticas<br>
-                                            Nombre del maestro: Mario Rodriguez<br>
-                                            Nota final: 20
+                                            {{$test[0]['Title']}}<br>
+                                            Nombre del estudiante: -<br>
+                                            Curso: -<br>
+                                            Nombre del maestro: -<br>
+                                            Nota final: {{$score[0]['Score']}}
                                         </h4>
                                     </th>
                                 </tr>
@@ -93,10 +93,11 @@
                             <tr>
                                 <td>{{$m['id']}}</td>
                                 <td>{{$m['question']}}</td>
-                                <td>Calculo</td>
-                                <td>25</td>
-                                <td>25</td>
+                                <td>{{$m['type']}}</td>
+                                <td>-</td>
+                                <td>{{$m['correct']}}</td>
                                 <td>1</td>
+                                <td><center><button type="button" disabled class="btn btn-outline-info" data-toggle="tooltip" title="Ver pregunta" data-placement="left">Ver pregunta</button></center></td>
                                 <td nowrap="nowrap"></td>
                             </tr>
                             @endforeach

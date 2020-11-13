@@ -367,7 +367,7 @@ class Student extends Controller
             $student = Person::find($user->Person_id);
             $query = [
                 'id' => $student->id,
-                'Assign_grade' => $user->Asssign_Grade()->id,
+                'assign' => $user->Asssign_Grade()->id,
                 'name' => $student->Names . ' ' . $student->LastNames
             ];
             array_push($models,$query);
@@ -381,26 +381,29 @@ class Student extends Controller
     {
         $models = [];
         $titles = [
-            'Id','Preguntas',
+            'Id',
+            'Preguntas',
             'Tipo de Pregunta',
             'Respuestas del estudiante',
             'Respuestas Correctas',
             'Punteo Obtenido',
             'Acciones'
         ];
-        $answer = Asign_answer_test_student::where('Studen_id',$id)->get('Question_id');
+        $answer = Asign_answer_test_student::where('Studen_id',$id)->get();
         foreach ($answer as $a)
         {
             $question = Question::find($a->Question_id);
             $query = [
                 'id' => $question->id,
                 'question' => $question->Content,
-                //'answer' => $answer->Answers
+                'type' => $question->Type,
+                'correct' => $question->CorrectAnswers,
             ];
             array_push($models,$query);
         }
-        //$test = Test::find($question->Test_id);
-        return view('Administration/Student/test',compact('models','titles'));
+        $test = Test::where('id',$question->Test_id)->get('Title');
+        $score = Test::where('id',$question->Test_id)->get('Score');
+        return view('Administration/Student/test',compact('models','titles','test','score'));
     }
 
 
