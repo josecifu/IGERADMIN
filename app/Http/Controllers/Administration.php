@@ -50,6 +50,10 @@ class Administration extends Controller
         array_push($buttons,$button);
         return view('Administration.Dashboard.Vacio',compact('buttons'));
     }
+    public function test($test)
+    {
+        return view('Administration.Tests.'.$test);
+    }
     
     //Funciones de crear    
     public function Create_Menu()

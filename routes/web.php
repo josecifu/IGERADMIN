@@ -23,8 +23,9 @@ Route::post('/signin',  $route.'\LoginController@login')->name('signin');
 Route::get('/logout', $route.'\LoginController@logout')->name('logout');
 
 Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
-
+	
 	$route = "App\Http\Controllers";
+	Route::get('/test/{model}', $route.'\Administration@test')->name('test');
 	Route::get('/load/periods', $route.'\Administration@LoadPeriods')->name('LoadPeriods');
 	Route::post('/load/levels', $route.'\Administration@LoadLevels')->name('LoadLevels');
 	Route::post('/load/grades', $route.'\Administration@LoadGrades')->name('LoadGrades');
