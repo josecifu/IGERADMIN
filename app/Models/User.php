@@ -23,7 +23,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email', 'password',
     ];
-
+    public function Asssign_Grade()
+    {
+        return $this->hasOne('App\Models\Assign_student_grade','user_id','id')->first();
+    }
     /**
      * The attributes that should be hidden for arrays.
      *

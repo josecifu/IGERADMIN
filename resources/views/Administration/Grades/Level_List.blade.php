@@ -152,7 +152,43 @@
                                                         </div>
                                                     </div>
                                                     <!--end::Modal-->
-                                                  
+                                                    <!--begin::Modal-->
+                                                    <div class="modal fade" id="kt_grades_modal{{$Model['Id']}}" role="dialog" aria-hidden="true">
+                                                        <div class="modal-dialog modal-lg" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">Visualizar grados del dia {{$Model['Jornada']}}</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <i aria-hidden="true" class="ki ki-close"></i>
+                                                                    </button>
+                                                                </div>
+                                                                <form class="form">
+                                                                    <div class="modal-body">
+                                                                        <div class="form-group row">
+                                                                            <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el nivel</label>
+                                                                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                                                                <select class="form-control selectpicker" data-size="10" data-live-search="true" id="lvlselect{{$Model['Id']}}">
+                                                                                    @php
+                                                                                    $lvls = explode(',',$Model['Niveles']);
+                                                                                    $idlvs = explode(',',$Model['idLvl']);  
+                                                                                    @endphp
+                                                                                    @foreach($lvls as $key => $lvl)
+                                                                                    <option value="{{ $idlvs[$key]}} ">{{$lvl}} </option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                                <span class="form-text text-muted">Visualice los grados del nivel seleccionado</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                                        <button type="button" class="btn btn-primary mr-2" onclick="ViewGrades({{$Model['Id']}});">Visualizar</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--end::Modal-->
                                                     @endforeach
                                                 @endif
                                             </tbody>
@@ -204,7 +240,7 @@
                                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right" >\
                                                 <ul class="nav nav-hoverable flex-column" >\
                                                     <li class="nav-item"><a class="nav-link" href="#" onclick="Addlevel(\''+full[0]+'\')"><i class="nav-icon la la-mail-reply-all"></i><span class="nav-text" style="padding-left:10px;"> Agregar un nivel a el dia</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="#" ><i class="nav-icon la la-plus-square-o"></i><span class="nav-text" style="padding-left:10px;"> Agregar un grado a un nivel del dia</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#kt_grades_modal{{$Model['Id']}}"><i class="nav-icon la la-plus-square-o"></i><span class="nav-text" style="padding-left:10px;"> Agregar un grado a un nivel del dia</span></a></li>\
                                                 </ul>\
                                             </div>\
                                         </div>\

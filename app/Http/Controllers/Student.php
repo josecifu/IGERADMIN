@@ -367,6 +367,7 @@ class Student extends Controller
             $student = Person::find($user->Person_id);
             $query = [
                 'id' => $student->id,
+                'Assign_grade' => $user->Asssign_Grade()->id,
                 'name' => $student->Names . ' ' . $student->LastNames
             ];
             array_push($models,$query);
