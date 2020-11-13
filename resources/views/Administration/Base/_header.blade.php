@@ -647,7 +647,7 @@
 									<div class="dropdown-menu p-0 m-0 dropdown-menu-right dropdown-menu-xl dropdown-menu-anim-up">
 										<form>
 											<!--begin::Header-->
-											<div class="d-flex align-items-center py-10 px-8 bgi-size-cover bgi-no-repeat rounded-top" style="background-image: url(assets/media/misc/bg-1.jpg)">
+											<div class="d-flex align-items-center py-10 px-8 bgi-size-cover bgi-no-repeat rounded-top" style="background-image: url({{asset('assets/media/misc/bg-1.jpg')}})">
 												<span class="btn btn-md btn-icon bg-white-o-15 mr-4">
 													<i class="flaticon2-shopping-cart-1 text-success"></i>
 												</span>
@@ -675,7 +675,7 @@
 														</div>
 													</div>
 													<a href="#" class="symbol symbol-70 flex-shrink-0">
-														<img src="assets/media/stock-600x400/img-1.jpg" title="" alt="" />
+														<img src="{{ asset('assets/media/stock-600x400/img-1.jpg')}}" title="" alt="" />
 													</a>
 												</div>
 												<!--end::Item-->
@@ -700,7 +700,7 @@
 														</div>
 													</div>
 													<a href="#" class="symbol symbol-70 flex-shrink-0">
-														<img src="assets/media/stock-600x400/img-2.jpg" title="" alt="" />
+														<img src="{{ asset('assets/media/stock-600x400/img-2.jpg')}}" title="" alt="" />
 													</a>
 												</div>
 												<!--end::Item-->
@@ -725,7 +725,7 @@
 														</div>
 													</div>
 													<a href="#" class="symbol symbol-70 flex-shrink-0">
-														<img src="assets/media/stock-600x400/img-3.jpg" title="" alt="" />
+														<img src="{{ asset('assets/media/stock-600x400/img-3.jpg')}}" title="" alt="" />
 													</a>
 												</div>
 												<!--end::Item-->
@@ -750,7 +750,7 @@
 														</div>
 													</div>
 													<a href="#" class="symbol symbol-70 flex-shrink-0">
-														<img src="assets/media/stock-600x400/img-4.jpg" title="" alt="" />
+														<img src="{{ asset('assets/media/stock-600x400/img-4.jpg')}}" title="" alt="" />
 													</a>
 												</div>
 												<!--end::Item-->
@@ -818,7 +818,7 @@
 										<div class="d-flex align-items-center p-8 rounded-top">
 											<!--begin::Symbol-->
 											<div class="symbol symbol-md bg-light-primary mr-3 flex-shrink-0">
-												<img src="assets/media/users/300_21.jpg" alt="" />
+												<img src="{{asset('assets/media/users/300_21.jpg')}}" alt="" />
 											</div>
 											<!--end::Symbol-->
 											<!--begin::Text-->

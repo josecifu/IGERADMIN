@@ -13,7 +13,7 @@ class CreateAsignAnswerTestStudentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('assign_answer_test_students', function (Blueprint $table) {
+        Schema::create('asign_answer_test_students', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('Studen_id'); 
             $table->foreign('Studen_id')->references('id')->on('assign_student_grades');
@@ -32,6 +32,6 @@ class CreateAsignAnswerTestStudentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('assign_answer_test_students');
+        Schema::dropIfExists('asign_answer_test_students');
     }
 }

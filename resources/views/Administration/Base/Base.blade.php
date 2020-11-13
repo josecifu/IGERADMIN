@@ -36,7 +36,7 @@
 					<div id="kt_header_mobile" class="header-mobile">
 						<!--begin::Logo-->
 						<a href="index.html">
-							<img alt="Logo" src="assets/media/logos/logo-default.png" class="max-h-30px" />
+							<img alt="Logo" src="{{ asset('assets/media/logos/logo-default.png')}}" class="max-h-30px" />
 						</a>
 						<!--end::Logo-->
 						<!--begin::Toolbar-->
@@ -291,9 +291,7 @@
 								</a>
 							</div>
 						</div>
-						<a href="#" class="symbol symbol-70 flex-shrink-0">
-							<img src="assets/media/stock-600x400/img-1.jpg" title="" alt="" />
-						</a>
+						
 					</div>
 					<!--end::Item-->
 					<!--begin::Separator-->
@@ -317,7 +315,7 @@
 							</div>
 						</div>
 						<a href="#" class="symbol symbol-70 flex-shrink-0">
-							<img src="assets/media/stock-600x400/img-2.jpg" title="" alt="" />
+							<img src="{{ asset('assets/media/stock-600x400/img-2.jpg')}}" title="" alt="" />
 						</a>
 					</div>
 					<!--end::Item-->
@@ -342,7 +340,7 @@
 							</div>
 						</div>
 						<a href="#" class="symbol symbol-70 flex-shrink-0">
-							<img src="assets/media/stock-600x400/img-3.jpg" title="" alt="" />
+							<img src="{{ asset('assets/media/stock-600x400/img-3.jpg')}}" title="" alt="" />
 						</a>
 					</div>
 					<!--end::Item-->
@@ -367,7 +365,7 @@
 							</div>
 						</div>
 						<a href="#" class="symbol symbol-70 flex-shrink-0">
-							<img src="assets/media/stock-600x400/img-4.jpg" title="" alt="" />
+							<img src="{{ asset('assets/media/stock-600x400/img-4.jpg')}}" title="" alt="" />
 						</a>
 					</div>
 					<!--end::Item-->
@@ -392,7 +390,7 @@
 							</div>
 						</div>
 						<a href="#" class="symbol symbol-70 flex-shrink-0">
-							<img src="assets/media/stock-600x400/img-8.jpg" title="" alt="" />
+							<img src="{{ asset('assets/media/stock-600x400/img-8.jpg')}}" title="" alt="" />
 						</a>
 					</div>
 					<!--end::Item-->
@@ -451,7 +449,7 @@
 							<div class="d-flex align-items-center flex-wrap mb-5">
 								<div class="symbol symbol-50 symbol-light mr-5">
 									<span class="symbol-label">
-										<img src="assets/media/svg/misc/006-plurk.svg" class="h-50 align-self-center" alt="" />
+										<img src="{{asset('assets/media/svg/misc/006-plurk.svg')}}" class="h-50 align-self-center" alt="" />
 									</span>
 								</div>
 								<div class="d-flex flex-column flex-grow-1 mr-2">
@@ -465,7 +463,7 @@
 							<div class="d-flex align-items-center flex-wrap mb-5">
 								<div class="symbol symbol-50 symbol-light mr-5">
 									<span class="symbol-label">
-										<img src="assets/media/svg/misc/015-telegram.svg" class="h-50 align-self-center" alt="" />
+										<img src="{{asset('assets/media/svg/misc/015-telegram.svg')}}" class="h-50 align-self-center" alt="" />
 									</span>
 								</div>
 								<div class="d-flex flex-column flex-grow-1 mr-2">
@@ -479,7 +477,7 @@
 							<div class="d-flex align-items-center flex-wrap mb-5">
 								<div class="symbol symbol-50 symbol-light mr-5">
 									<span class="symbol-label">
-										<img src="assets/media/svg/misc/003-puzzle.svg" class="h-50 align-self-center" alt="" />
+										<img src="{{asset('assets/media/svg/misc/003-puzzle.svg')}}" class="h-50 align-self-center" alt="" />
 									</span>
 								</div>
 								<div class="d-flex flex-column flex-grow-1 mr-2">
@@ -493,7 +491,7 @@
 							<div class="d-flex align-items-center flex-wrap mb-5">
 								<div class="symbol symbol-50 symbol-light mr-5">
 									<span class="symbol-label">
-										<img src="assets/media/svg/misc/005-bebo.svg" class="h-50 align-self-center" alt="" />
+										<img src="{{asset('assets/media/svg/misc/005-bebo.svg')}}" class="h-50 align-self-center" alt="" />
 									</span>
 								</div>
 								<div class="d-flex flex-column flex-grow-1 mr-2">
@@ -507,7 +505,7 @@
 							<div class="d-flex align-items-center flex-wrap">
 								<div class="symbol symbol-50 symbol-light mr-5">
 									<span class="symbol-label">
-										<img src="assets/media/svg/misc/014-kickstarter.svg" class="h-50 align-self-center" alt="" />
+										<img src="{{asset('assets/media/svg/misc/014-kickstarter.svg')}}" class="h-50 align-self-center" alt="" />
 									</span>
 								</div>
 								<div class="d-flex flex-column flex-grow-1 mr-2">

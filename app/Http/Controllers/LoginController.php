@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
+use Illuminate\Validation\ValidationException;
 class LoginController extends Controller
 {
  	use AuthenticatesUsers;
@@ -37,7 +37,12 @@ class LoginController extends Controller
             return redirect('login')->withErrors(['error' => 'Este usuario no tiene activo ningun rol...']);
         }
     }
-
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        throw ValidationException::withMessages([
+            'Error contraseña y/o usuario incorrectos'
+            ]);
+    }
     public function username()
     {
         return 'name';
