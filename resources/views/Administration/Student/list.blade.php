@@ -124,18 +124,10 @@
                                 orderable: false,
                                 render: function(data, type, full, meta) {
                                     return '\
-                                        <div class="dropdown dropdown-inline">\
-                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">\
-                                                <i class="la la-cog"></i>\
-                                            </a>\
-                                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
-                                                <ul class="nav nav-hoverable flex-column">\
-                                                    <li class="nav-item"><a class="nav-link" href="/administration/student/edit/'+full[0]+'"><i class="nav-icon la la-edit"></i><span class="nav-text">Editar</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
-                                                </ul>\
-                                            </div>\
-                                        </div>\
-                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
+                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Asistencia">\
+                                            <i class="la la-list"></i>\
+                                        </a>\
+                                        <a href="/administration/student/edit/'+full[0]+'" class="btn btn-sm btn-clean btn-icon" title="Editar">\
                                             <i class="la la-edit"></i>\
                                         </a>\
                                         <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Borrar">\

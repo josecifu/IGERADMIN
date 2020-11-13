@@ -30,18 +30,18 @@ class Student extends Controller
         $buttons =[];
         $button = [
             "Name" => 'Añadir nuevo estudiante',
-            "Link" => 'administration/student/create_form',
+            "Link" => 'administration/student/create',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Lista de estudiantes deshibilitados',
+            "Name" => 'Ver lista de estudiantes deshibilitados',
             "Link" => 'administration/student/list/eliminated',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Mostrar logs',
+            "Name" => 'Ver logs',
             "Link" => 'administration/student/logs',
             "Type" => "btn1"
         ];
@@ -84,11 +84,23 @@ class Student extends Controller
     {
         $buttons =[];
         $button = [
-            "Name" => 'Estudiantes deshibilitados',
+            "Name" => 'Añadir nuevo estudiante',
+            "Link" => 'administration/student/create',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $button = [
+            "Name" => 'Ver lista de estudiantes deshibilitados',
             "Link" => 'administration/student/list/eliminated',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
+        $button = [
+            "Name" => 'Ver logs',
+            "Link" => 'administration/student/logs',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button); 
         $models = [];
         $titles = [
             'Id',
@@ -112,7 +124,7 @@ class Student extends Controller
             ];
             array_push($models,$query);
         }
-        $grade = $grade->GradeName()." - Circulo de estudio: ".$grade->Period()->Name;
+        $grade = $grade->GradeName()." del circulo de estudio: ".$grade->Period()->Name;
         return view('Administration/Student/list_grade',compact('models','titles','buttons','grade'));
     }
 
@@ -120,7 +132,7 @@ class Student extends Controller
     {
         $buttons =[];
         $button = [
-            "Name" => 'Estudiantes activos',
+            "Name" => 'Ver lista de estudiantes activos',
             "Link" => 'administration/student/list',
             "Type" => "btn1"
         ];
@@ -141,7 +153,7 @@ class Student extends Controller
             $user = User::find($i->user_id);
             $student = Person::find($user->Person_id);
             $query = [
-                'id' => $student->Id,
+                'id' => $student->id,
                 'name' => $student->Names . ' ' . $student->LastNames,
                 'phone' => $student->Phone,
                 'user' => $user->name,
@@ -282,6 +294,27 @@ class Student extends Controller
         Assign_user_rol::where('user_id',$id)->update($data_user);
         return redirect()->route('ListStudent');
     }
+
+    public function activate($id, Request $request)
+    {
+        $indentity = $request->session()->get('User_id');
+        $user_logged = User::find($indentity);
+        $user = User::find($id);
+        $data_user=array('State' => 'Active');
+        $log = new logs;
+        $log->Table = "Estudiante";
+        $log->User_ID = $user_logged->name;
+        $log->Description = "Se ha habilitado el usuario: ".$user->name;
+        $log->Type = "Active";
+        $log->save();
+        User::where('Person_id', $id)->update($data_user);
+        Assign_user_rol::where('user_id',$id)->update($data_user);
+        return redirect()->route('ListStudent');
+    }
+
+
+
+
 
     public function list_test($id)
     {
