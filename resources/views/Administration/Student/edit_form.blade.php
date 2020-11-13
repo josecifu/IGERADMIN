@@ -122,6 +122,11 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+
+
+
+
                                             <div class="form-group row">
                                                 <label class="col-3">Correo electrónico</label>
                                                 <div class="col-9">
@@ -135,6 +140,12 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+
+
+
+
+                                            
                                             <div class="form-group row">
                                                 <input type="hidden" value="{{$student->id}}" id="Persona">
                                             </div>
@@ -236,20 +247,6 @@ var KTWizard1 = function () {
                                 }
                             }
                         },
-                        Email: {
-                            validators: {
-                                notEmpty: {
-                                    message: 'Es un campo obligatorio'
-                                }
-                            }
-                        },
-                        /*Contraseña: {
-                            validators: {
-                                notEmpty: {
-                                    message: 'Es un campo obligatorio'
-                                }
-                            }
-                        },*/
                     },
                     plugins: {
                         trigger: new FormValidation.plugins.Trigger(),
@@ -359,7 +356,6 @@ var KTWizard1 = function () {
             var ApellidosPersona = $('#Apellidos').val();
             var TelefonoPersona = $('#Telefono').val();
             var NombreUsuario = $('#Usuario').val(); 
-            //var ContraseñaUsuario = $('#Contraseña').val();
             var EmailUsuario = $('#Email').val();
             var PersonaId = $('#Persona').val();
             var data = [{
@@ -369,7 +365,6 @@ var KTWizard1 = function () {
                 Telefono: TelefonoPersona,
                 Usuario: NombreUsuario,
                 Email: EmailUsuario,
-                //Contraseña: ContraseñaUsuario,
             }];
             $.ajax({
                 url:'/administration/student/update',

@@ -16,12 +16,21 @@
             <div class="card card-custom">
                 <div class="card-header">
                     <div class="card-title">
-                        <h3 class="card-label">
-                            Unidad: 1<br><br/>
-                            Nombre del estudiante: Gonzalo Inzunza<br><br/>
-                            Curso: Matemáticas<br><br/>
-                            Nombre del voluntario: Raúl Meza
-                        </h3>
+                        <table WIDTH=123 HEIGHT="55" class="table table-bordered table-hover table-checkable" id="" style="margin-top: 20px !important ">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <h4>
+                                            Evaluación I Unidad<br>
+                                            Nombre del estudiante: Gonzalo Inzunza<br>
+                                            Curso: Matemáticas<br>
+                                            Nombre del maestro: Mario Rodriguez<br>
+                                            Nota final: 20
+                                        </h4>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
                     <div class="card-toolbar">
                         <!--begin::Dropdown-->

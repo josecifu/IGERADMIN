@@ -28,9 +28,11 @@ class Student extends Controller
     public function list()
     {
         $buttons =[];
-        $button = [ "Name" => 'Estudiantes deshibilitados',
-                    "Link" => 'administration/student/list/eliminated',
-                    "Type" => "btn1"];
+        $button = [
+            "Name" => 'Estudiantes deshibilitados',
+            "Link" => 'administration/student/list/eliminated',
+            "Type" => "btn1"
+        ];
         $models=[];
         $button = [
             "Name" => 'Estudiantes deshibilitados',
@@ -39,27 +41,35 @@ class Student extends Controller
         ];
         array_push($buttons,$button);
         $models = [];
-        $titles = [ 'Id',
-                    'Nombre del estudiante',
-                    'No. Teléfono',
-                    'Nombre de usuario',
-                    'Correo electrónico',
-                    'Grado',
-                    'Ultima cesión',
-                    'Acciones'];
-        $rol = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get('user_id');
-        foreach ($rol as $i)
+        $titles = [
+            'Id',
+            'Nombre del estudiante',
+            'No. Teléfono',
+            'Nombre de usuario',
+            'Correo electrónico',
+            'Grado',
+            'Ultima sesión',
+            'Acciones'
+        ];
+        $rol = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get();
+        foreach ($rol as $r)
         {
-            $user = User::find($i->user_id);
+            $user = User::find($r->user_id);
             $student = Person::find($user->Person_id);
-            $query = [  'id' => $student->id,
-                        'name' => $student->Names . ' ' . $student->LastNames,
-                        'phone' => $student->Phone,
-                        'user' => $user->name,
-                        'email' => $user->email,
-                        //'grade' => $grade->Name . ' ' . $level->Name
-                    ];
-            array_push($models,$query);
+            $Assign = Assign_student_grade::where('User_id',$user->id)->get('Grade_id');
+            foreach ($Assign as $a)
+            {
+                $grade = Grade::find($a->Grade_id);
+                $query = [
+                    'id' => $student->id,
+                    'name' => $student->Names . ' ' . $student->LastNames,
+                    'phone' => $student->Phone,
+                    'user' => $user->name,
+                    'email' => $user->email,
+                    'grade' => $grade->GradeName()
+                ];
+                array_push($models,$query);
+            }
         }
         return view('Administration/Student/list',compact('models','titles','buttons'));
     }
@@ -67,57 +77,68 @@ class Student extends Controller
     public function list_grade($id)
     {
         $buttons =[];
-        $button = [ "Name" => 'Estudiantes deshibilitados',
-                    "Link" => 'administration/student/list/eliminated',
-                    "Type" => "btn1"];
+        $button = [
+            "Name" => 'Estudiantes deshibilitados',
+            "Link" => 'administration/student/list/eliminated',
+            "Type" => "btn1"
+        ];
         array_push($buttons,$button);
         $models = [];
-        $titles = [ 'Id',
-                    'Nombre del estudiante',
-                    'No. Teléfono',
-                    'Nombre de usuario',
-                    'Correo electrónico',
-                    'Ultima cesión',
-                    'Acciones'];
+        $titles = [
+            'Id',
+            'Nombre del estudiante',
+            'No. Teléfono',
+            'Nombre de usuario',
+            'Correo electrónico',
+            'Ultima sesión',
+            'Acciones'
+        ];
         $grade = Grade::find($id);
         foreach ($grade->Students() as $user)
         {
             $student = Person::find($user->Person_id);
-            $query = [  'id' => $student->id,
-                        'name' => $student->Names . ' ' . $student->LastNames,
-                        'phone' => $student->Phone,
-                        'user' => $user->name,
-                        'email' => $user->email];
+            $query = [
+                'id' => $student->id,
+                'name' => $student->Names . ' ' . $student->LastNames,
+                'phone' => $student->Phone,
+                'user' => $user->name,
+                'email' => $user->email
+            ];
             array_push($models,$query);
         }
-        $grade = $grade->GradeName()." del dia ".$grade->Period()->Name;
-      
+        $grade = $grade->GradeName()." - Circulo de estudio: ".$grade->Period()->Name;
         return view('Administration/Student/list_grade',compact('models','titles','buttons','grade'));
     }
 
     public function eliminated_students()
     {
         $buttons =[];
-        $button = [ "Name" => 'Estudiantes activos',
-                    "Link" => 'administration/student/list',
-                    "Type" => "btn1"];
+        $button = [
+            "Name" => 'Estudiantes activos',
+            "Link" => 'administration/student/list',
+            "Type" => "btn1"
+        ];
         array_push($buttons,$button);
         $models = [];
-        $titles = [ 'Id',
-                    'Nombre del estudiante',
-                    'No. Teléfono',
-                    'Nombre de usuario',
-                    'Correo electrónico'];
+        $titles = [
+            'Id',
+            'Nombre del estudiante',
+            'No. Teléfono',
+            'Nombre de usuario',
+            'Correo electrónico'
+        ];
         $rol = Assign_user_rol::where('Rol_id',2)->where('State','Desactivated')->get('user_id');
         foreach ($rol as $i)
         {
             $user = User::find($i->user_id);
             $student = Person::find($user->Person_id);
-            $query = [  'id' => $student->Id,
-                        'name' => $student->Names . ' ' . $student->LastNames,
-                        'phone' => $student->Phone,
-                        'user' => $user->name,
-                        'email' => $user->email];
+            $query = [
+                'id' => $student->Id,
+                'name' => $student->Names . ' ' . $student->LastNames,
+                'phone' => $student->Phone,
+                'user' => $user->name,
+                'email' => $user->email
+            ];
             array_push($models,$query);
         }
         return view('Administration/Student/eliminated_students',compact('models','titles','buttons'));
@@ -130,64 +151,69 @@ class Student extends Controller
 
     public function save(Request $request)
     {
-        $id = $request->session()->get('User_id'); 
+        $id = $request->session()->get('User_id');
         $data = $request->data[0];
         $names= $data['Nombre'];
         $lastnames= $data['Apellido'];
         $phone= $data['Telefono'];
         $username= $data['Usuario'];
-        $email= $data['Correo'];
+        $email= $data['Correo'];//opcional------------------------------------------------
         $password = $data['Contraseña'];
-        $grade = grade::find($data['Grado']);        
-        try {
-              DB::beginTransaction();
-                $student = new Person;
-                $student->Names = $names;
-                $student->LastNames = $lastnames;
-                $student->Phone = $phone;
-                $student->save();
-                $user = new User;
-                $user->name = $username;
-                $user->email = $email;
-                $user->password = bcrypt($password);
-                $user->State = "Active";
-                $user->Person_id = $student->id;
-                $user->save();
-                $user_rol = new Assign_user_rol;
-                $user_rol->rol_id = 2;
-                $user_rol->user_id = $user->id;
-                $user_rol->State = "Active";
-                $user_rol->save();
-                $student_grades = new Assign_student_grade;
-                $student_grades->user_id = $user->id;
-                $student_grades->Grade_id = $grade->id;
-                $student_grades->save();
-                $log = new logs;
-                $log->Table = "Estudiante";
-                $log->User_ID = $id;
-                $log->Description = "Se registro nuevo estudiante: ".$student->Names." ".$student->LastNames;
-                $log->Type = "Create";
-                $log->save();
-                $log = new logs;
-                $log->Table = "Usuario";
-                $log->User_ID = $id;
-                $log->Description = "Se registro un nuevo usuario: ".$user->username;
-                $log->Type = "Create";
-                $log->save();
-                $log = new logs;
-                $log->Table = "Rol";
-                $log->User_ID = $id;
-                $log->Description = "Se ha asignado el rol Estudiante al usuario: ".$user->name;
-                $log->Type = "Assign";
-                $log->save();
-                $log = new logs;
-                $log->Table = "Grado";
-                $log->User_ID = $id;
-                $log->Description = "El estudiante: ".$student->Names." ".$student->LastNames."se le ha asignado a: ".$grade->Name;
-                $log->Type = "Assign";
-                $log->save();
-                DB::commit();
-        } catch (Exception $e) { DB::rollBack(); }
+        $grade = grade::find($data['Grado']);
+        try
+        {
+            DB::beginTransaction();
+            $student = new Person;
+            $student->Names = $names;
+            $student->LastNames = $lastnames;
+            $student->Phone = $phone;
+            $student->save();
+            $user = new User;
+            $user->name = $username;
+            $user->email = $email;
+            $user->password = bcrypt($password);
+            $user->State = "Active";
+            $user->Person_id = $student->id;
+            $user->save();
+            $user_rol = new Assign_user_rol;
+            $user_rol->rol_id = 2;
+            $user_rol->user_id = $user->id;
+            $user_rol->State = "Active";
+            $user_rol->save();
+            $student_grades = new Assign_student_grade;
+            $student_grades->user_id = $user->id;
+            $student_grades->Grade_id = $grade->id;
+            $student_grades->save();
+            $log = new logs;
+            $log->Table = "Estudiante";
+            $log->User_ID = $id;
+            $log->Description = "Se registro nuevo estudiante: ".$student->Names." ".$student->LastNames;
+            $log->Type = "Create";
+            $log->save();
+            $log = new logs;
+            $log->Table = "Usuario";
+            $log->User_ID = $id;
+            $log->Description = "Se registro un nuevo usuario: ".$user->username;
+            $log->Type = "Create";
+            $log->save();
+            $log = new logs;
+            $log->Table = "Rol";
+            $log->User_ID = $id;
+            $log->Description = "Se ha asignado el rol Estudiante al usuario: ".$user->name;
+            $log->Type = "Assign";
+            $log->save();
+            $log = new logs;
+            $log->Table = "Grado";
+            $log->User_ID = $id;
+            $log->Description = "El estudiante: ".$student->Names." ".$student->LastNames."se le ha asignado a: ".$grade->Name;
+            $log->Type = "Assign";
+            $log->save();
+            DB::commit();
+        }
+        catch (Exception $e)
+        {
+            DB::rollBack();
+        }
         return response()->json(["Accion exitosa"]);
     }
 
@@ -195,8 +221,10 @@ class Student extends Controller
     {
         $student = Person::find($id);
         $user = User::where('Person_id',$id)->first();
-        $models = ['Usuario' => $user->name,'Email' => $user->email];
-        //$models = ['Usuario' => $user->name,'Email' => $user->email,'Contraseña' => $user->password];
+        $models = [
+            'Usuario' => $user->name,
+            'Email' => $user->email
+        ];
         return view('Administration/Student/edit_form',compact('student','models'));
     }
 
@@ -209,18 +237,16 @@ class Student extends Controller
         $phone= $data['Telefono'];
         $username = $data['Usuario'];
         $email= $data['Email'];
-        //$password = $data['Contraseña'];
         $personid = $data['Persona'];
         $data_user=array(
             'name' => $username,
-            'email' => $email,
-            //'password' => $password,
+            'email' => $email
         );
         User::where('Person_id', $personid)->update($data_user);
         $data_student=array(
             'Names' => $names,
             'LastNames' => $lastnames,
-            'Phone' => $phone,
+            'Phone' => $phone
         );
         Person::where('id',$personid)->update($data_student);
         $log = new logs;
@@ -260,9 +286,6 @@ class Student extends Controller
 
 
 
-
-
-
     //visualizacion de examenes con respuestas de cada alumno por grado-seccion
     public function test($id)
     {
@@ -278,6 +301,34 @@ class Student extends Controller
         return view('Administration/Student/list_test',compact('models','titles'));
     }
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function statistics()
     {
         return view('Administration/Student/statistics');
@@ -286,17 +337,10 @@ class Student extends Controller
     //visualizacion de notas con filtro: jornada, grado, nivel, curso
     public function score($id)
     {
+        $titles = ['Id','Nombre del Estudiante','Unidades'];
+        $models = Course::all();
+        return view('Administration/Student/list_test',compact('models','titles'));
     }
-
-
-
-
-
-
-
-
-
-
 
 
 
