@@ -88,12 +88,12 @@
                                     <td>{{$m['name']}}</td>
                                     <td>
                                         <center>
-                                            <button type="button" class="btn btn-outline-info"  data-toggle="modal" data-target="">I</button>
+                                            <button type="button" class="btn btn-outline-info"  data-toggle="" data-target="">I</button>
                                         </center>
                                     </td>
                                     <td>
                                         <center>
-                                            <button type="button" class="btn btn-outline-info"  data-toggle="" data-target="">II</button>
+                                            <button  type="button" class="btn btn-outline-info"  data-toggle="" data-target=""><a href="/administration/student/test/'+full[0]+'">II</a></button>
                                         </center>
                                     </td>
                                     <td>

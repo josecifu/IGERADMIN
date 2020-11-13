@@ -29,17 +29,23 @@ class Student extends Controller
     {
         $buttons =[];
         $button = [
-            "Name" => 'Estudiantes deshibilitados',
-            "Link" => 'administration/student/list/eliminated',
+            "Name" => 'Añadir nuevo estudiante',
+            "Link" => 'administration/student/create_form',
             "Type" => "btn1"
         ];
-        $models=[];
+        array_push($buttons,$button);
         $button = [
-            "Name" => 'Estudiantes deshibilitados',
+            "Name" => 'Lista de estudiantes deshibilitados',
             "Link" => 'administration/student/list/eliminated',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
+        $button = [
+            "Name" => 'Mostrar logs',
+            "Link" => 'administration/student/logs',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);        
         $models = [];
         $titles = [
             'Id',
@@ -125,7 +131,9 @@ class Student extends Controller
             'Nombre del estudiante',
             'No. Teléfono',
             'Nombre de usuario',
-            'Correo electrónico'
+            'Correo electrónico',
+            'Ultima sesión',
+            'Acciones'
         ];
         $rol = Assign_user_rol::where('Rol_id',2)->where('State','Desactivated')->get('user_id');
         foreach ($rol as $i)
