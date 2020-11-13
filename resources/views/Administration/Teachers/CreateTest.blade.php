@@ -4,10 +4,10 @@
     Voluntario
     @stop
     @section('breadcrumb1')
-    Registro
+    Examenes
     @stop
     @section('breadcrumb2')
-    Ingreso de datos
+    Crear
     @stop
     {{-- Page content --}}
     @section('content')
@@ -30,48 +30,10 @@
 										<div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
 											<div class="wizard-label">
 												<i class="wizard-icon flaticon-list"></i>
-												<h3 class="wizard-title">1. Información de la persona</h3>
+												<h3 class="wizard-title">1. Datos generales del examen</h3>
 											</div>
-											<span class="svg-icon svg-icon-xl wizard-arrow">
-												<!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg-->
-												<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-													<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-														<polygon points="0 0 24 0 24 24 0 24" />
-														<rect fill="#000000" opacity="0.3" transform="translate(12.000000, 12.000000) rotate(-90.000000) translate(-12.000000, -12.000000)" x="11" y="5" width="2" height="14" rx="1" />
-														<path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
-													</g>
-												</svg>
-												<!--end::Svg Icon-->
-											</span>
 										</div>
 										<!--end::Wizard Step 1 Nav-->
-										<!--begin::Wizard Step 2 Nav-->
-										<div class="wizard-step" data-wizard-type="step">
-											<div class="wizard-label">
-												<i class="wizard-icon flaticon-user"></i>
-												<h3 class="wizard-title">2. Información Usuario</h3>
-											</div>
-											<span class="svg-icon svg-icon-xl wizard-arrow">
-												<!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg-->
-												<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-													<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-														<polygon points="0 0 24 0 24 24 0 24" />
-														<rect fill="#000000" opacity="0.3" transform="translate(12.000000, 12.000000) rotate(-90.000000) translate(-12.000000, -12.000000)" x="11" y="5" width="2" height="14" rx="1" />
-														<path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
-													</g>
-												</svg>
-												<!--end::Svg Icon-->
-											</span>
-										</div>
-										<!--end::Wizard Step 2 Nav-->
-										<!--begin::Wizard Step 3 Nav-->
-										<div class="wizard-step" data-wizard-type="step">
-											<div class="wizard-label">
-												<i class="wizard-icon flaticon-clipboard"></i>
-												<h3 class="wizard-title">3. Asginación de curso</h3>
-											</div>
-										</div>
-										<!--end::Wizard Step 3 Nav-->
 									</div>
 								</div>
 								<!--end::Wizard Nav-->
@@ -82,36 +44,36 @@
 										<form class="form" id="kt_form">
 											<!--begin::Wizard Step 1-->
 											<div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
-												<h1>Detalle Persona:</h1>
+												<h1>Detalle Examen:</h1>
 												<div class="my-5">
 													<div class="form-group row">
-														<label class="col-3">Nombre</label>
+														<label class="col-3">Titulo del Examen</label>
 														<div class="col-9">
 															<div class="input-group input-group-solid">
 																<div class="input-group-prepend">
 																	<span class="input-group-text">
-																		<i class="la la-user"></i>
+																		<i class="fas fa-align-left"></i>
 																	</span>
 																</div>
-																<input type="text"name="Nombres" id="Nombres" class="form-control form-control-solid" placeholder="Nombre" />
+																<input type="text" name="Titulo" id="Titulo" class="form-control form-control-solid" placeholder="Nombre" />
 															</div>
 														</div>
 													</div>
 													<div class="form-group row">
-														<label class="col-3">Apellidos</label>
+														<label class="col-3">Punteo</label>
 														<div class="col-9">
 															<div class="input-group input-group-solid">
 																<div class="input-group-prepend">
 																	<span class="input-group-text">
-																		<i class="la la-user"></i>
+																		<i class=""></i>
 																	</span>
 																</div>
-																<input type="text" name="Apellidos" id="Apellidos" class="form-control form-control-solid" placeholder="Apellido" />
+																<input type="number" name="Punteo" id="Punteo" class="form-control form-control-solid" placeholder="Apellido" />
 															</div>
 														</div>
 													</div>
 													<div class="form-group row">
-														<label class="col-3">Teléfono</label>
+														<label class="col-3">Hora</label>
 														<div class="col-9">
 															<div class="input-group input-group-solid">
 																<div class="input-group-prepend">
@@ -119,96 +81,65 @@
 																		<i class="la la-phone"></i>
 																	</span>
 																</div>
-																<input type="text" name="Telefono" id="Telefono" class="form-control form-control-solid" placeholder="Phone" />
+																<input type="text" name="FI" id="FI" class="form-control form-control-solid" placeholder="Phone" />
+															</div>
+														</div>
+													</div>
+													<div class="form-group row">
+														<label class="col-3">Fecha de inicio</label>
+														<div class="col-9">
+															<div class="input-group input-group-solid">
+																<div class="input-group-prepend">
+																	<span class="input-group-text">
+																		<i class="fas fa-clock"></i>
+																	</span>
+																</div>
+																<input type="text" name="FI" id="FI" class="form-control form-control-solid" placeholder="Phone" />
+															</div>
+														</div>
+													</div>
+													<div class="form-group row">
+														<label class="col-3">Fecha de Final</label>
+														<div class="col-9">
+															<div class="input-group input-group-solid">
+																<div class="input-group-prepend">
+																	<span class="input-group-text">
+																		<i class="la la-phone"></i>
+																	</span>
+																</div>
+																<input type="text" name="FF" id="FF" class="form-control form-control-solid" placeholder="Phone" />
+															</div>
+														</div>
+													</div>
+													<div class="form-group row">
+														<label class="col-3">Unidad</label>
+														<div class="col-9">
+															<div class="input-group input-group-solid">
+																<div class="input-group-prepend">
+																	<span class="input-group-text">
+																		<i class="la la-phone"></i>
+																	</span>
+																</div>
+																<input type="text" name="Unidad" id="Unidad" class="form-control form-control-solid" placeholder="Phone" />
+															</div>
+														</div>
+													</div>
+													<div class="form-group row">
+														<label class="col-3">Numero de Preguntas</label>
+														<div class="col-9">
+															<div class="input-group input-group-solid">
+																<div class="input-group-prepend">
+																	<span class="input-group-text">
+																		<i class="la la-phone"></i>
+																	</span>
+																</div>
+																<input type="text" name="Unidad" id="Unidad" class="form-control form-control-solid" placeholder="Phone" />
 															</div>
 														</div>
 													</div>
 												</div>
 											</div>
 											<!--end::Wizard Step 1-->
-											<!--begin::Wizard Step 2-->
-											<div class="pb-5" data-wizard-type="step-content">
-												<h1>Detalle Usuario:</h1>
-												<div class="my-5">
-													<div class="form-group row">
-														<label class="col-3">Usuario</label>
-														<div class="col-9">
-															<div class="input-group input-group-solid">
-																<div class="input-group-prepend">
-																	<span class="input-group-text">
-																		<i class="la la-user"></i>
-																	</span>
-																</div>
-																<input type="text" name="Usuario" id="Usuario" class="form-control form-control-solid" placeholder="Usuario" />
-															</div>
-														</div>
-													</div>
-													<div class="form-group row">
-														<label class="col-3">Correo Electronico</label>
-														<div class="col-9">
-															<div class="input-group input-group-solid">
-																<div class="input-group-prepend">
-																	<span class="input-group-text">
-																		<i class="la la-at"></i>
-																	</span>
-																</div>
-																<input type="email" name="Email" id="Email" class="form-control form-control-solid" placeholder="Correo electronico" />
-															</div>
-														</div>
-													</div>
-													<div class="form-group row">
-														<label class="col-3">Contraseña</label>
-														<div class="col-9">
-															<div class="input-group input-group-solid">
-																<div class="input-group-prepend">
-																	<span class="input-group-text">
-																		<i class="la la-key"></i>
-																	</span>
-																</div>
-																<input type="password" name="Contraseña" id="Contraseña" class="form-control form-control-solid" placeholder="Contraseña" />
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<!--end::Wizard Step 2-->
-											<!--begin::Wizard Step 3-->
-											<div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
-												<h1>Detalle Asignación:</h1>
-												<div class="my-5">
-													<div class="form-group row">
-														<label class="col-form-label text-right col-lg-3 col-sm-12">Circulo de estudio</label>
-														<div class="col-lg-9 col-md-9 col-sm-12">
-															<select class="form-control selectpicker" data-size="10" title="No se ha seleccionado ningún día" data-live-search="true" id="Jornada">
-															</select>
-														</div>
-													</div>
-													<div class="form-group row">
-														<label class="col-form-label text-right col-lg-3 col-sm-12">Nivel</label>
-														<div class="col-lg-9 col-md-9 col-sm-12">
-															<select class="form-control" id="Nivel" name="Nivel">
-															</select>
-														</div>
-													</div>	
-													<div class="form-group row">
-														<label class="col-form-label text-right col-lg-3 col-sm-12">Grado</label>
-														<div class="col-lg-9 col-md-9 col-sm-12">
-															<select class="form-control" id="Grado" name="Grado">
-															</select>
-														</div>
-													</div>
-													<div class="form-group row">
-														<label class="col-form-label text-right col-lg-3 col-sm-12">Curso</label>
-														<div class="col-lg-9 col-md-9 col-sm-12">
-															<select class="form-control" id="Curso" name="Curso" multiple="multiple">
-																<optgroup Label="Cursos">
-																</optgroup>
-															</select>
-														</div>
-													</div>															
-												</div>
-											</div>
-											<!--end::Wizard Step 3-->
 											<!--begin::Wizard Actions-->
 											<div class="d-flex justify-content-between border-top mt-5 pt-10">
 												<div class="mr-2">
@@ -238,11 +169,6 @@
 		<!--begin::Page Scripts(used by this page)-->
 		<script type="text/javascript">
 			"use strict";
-		// multi select
-		$('#Curso').select2({
-         placeholder: "Seleccione los cursos a asignar"
-        });
-
 // Class definition
 var KTWizard1 = function () {
 	// Base elements
@@ -259,61 +185,59 @@ var KTWizard1 = function () {
 				_formEl,
 				{
 					fields: {
-						Nombres: {
+						Titulo: {
 							validators: {
 								notEmpty: {
-									message: 'Los nombres son requeridos'
+									message: 'El Titulo es requerido'
 								}
 							}
 						},
-						Apellidos: {
+						Punteo: {
 							validators: {
 								notEmpty: {
-									message: 'Los apellidos son requeridos'
+									message: 'El punteo es requerido'
 								}
 							}
 						},
-						Telefono: {
+						FechaInicio: {
 							validators: {
 								notEmpty: {
-									message: 'El telefono es requerido'
+									message: 'La Fecha es requerida'
 								}
 							}
 						},
-					},
-					plugins: {
-						trigger: new FormValidation.plugins.Trigger(),
-						// Bootstrap Framework Integration
-						bootstrap: new FormValidation.plugins.Bootstrap({
-							//eleInvalidClass: '',
-							eleValidClass: '',
-						})
-					}
-				}
-			));
-			// Step 2
-			_validations.push(FormValidation.formValidation(
-				_formEl,
-				{
-					fields: {
-						Usuario: {
+						FechaFinal: {
 							validators: {
 								notEmpty: {
-									message: 'El usuario es requerido'
+									message: 'La Fecha es requerida'
 								}
 							}
 						},
-						Contraseña: {
+						HoraInicio: {
 							validators: {
 								notEmpty: {
-									message: 'La contraseña es requerida'
+									message: 'La hora es requerida'
 								}
 							}
 						},
-						Email: {
+						HoraFinal: {
 							validators: {
 								notEmpty: {
-									message: 'El correo es requerido'
+									message: 'La hora es requerida'
+								}
+							}
+						},
+						Unidad: {
+							validators: {
+								notEmpty: {
+									message: 'La Unidad es requerida'
+								}
+							}
+						},
+						NoPreguntas: {
+							validators: {
+								notEmpty: {
+									message: 'La cantidad de preguntas es requerida'
 								}
 							}
 						},
@@ -552,9 +476,6 @@ var KTWizard1 = function () {
 				}
 			});
 		}
-		$('#Jornada').on('change', function() {
-			ListLevel($('#Jornada').val());
-		});
 		$('#Nivel').on('change', function() {
 			ListGrades($('#Nivel').val());
 		});

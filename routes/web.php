@@ -64,7 +64,6 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::post('/update', $route.'\Teacher@update')->name('UpdateTeacher');
 		Route::get('/score/{model}',$route.'\Teacher@score')->name('ScoreTeacher');
 		Route::get('/logs',$route.'\Teacher@logs')->name('LogsTeacher');
-		Route::get('/test/{model}', $route.'\Teacher@TestTeacher')->name('TestTeacher');
 		Route::get('/delete/{model}', $route.'\Teacher@delete')->name('DeleteTeacher');
 		Route::get('/search',$route.'\Teacher@seach')->name('SceachTeacher');
 		Route::get('/workspace',$route.'\Teacher@workspace')->name('WorkspaceTeacher');
@@ -72,6 +71,8 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::post('/load/courses', $route.'\Teacher@LoadCourses')->name('LoadCoursesTeacher');
 		Route::get('/desactive', $route.'\Teacher@Desactive')->name('Desactive');
 		Route::get('/activate/{model}', $route.'\Teacher@Activate')->name('ActivateTeacher');
+		Route::get('/test/{model}', $route.'\Teacher@TestTeacher')->name('TestTeacher');
+		Route::get('/create/exam', $route.'\Teacher@createExam')->name('createExam');
 		Route::get('/question/{model}', $route.'\Teacher@QuestionTest')->name('QuestionsTest');
 	});
 	//Comentario
@@ -81,7 +82,6 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('level/list/deletes',$route.'\Administration@LevelListDelete')->name('LevelListDelete');
 		Route::get('level/list/change/{id}/{type}',$route.'\Administration@ChangePeriod')->name('ChangePeriod');
 		Route::get('level/list/grades/level/{id}',$route.'\Administration@ViewGradesLvl')->name('ViewGradesLvl');
-		
 		Route::post('level/list/grades/courses/save',$route.'\Administration@SaveCourses')->name('SaveCourses');
 		Route::post('period/save', $route.'\Administration@PeriodSave')->name('PeriodSave');
 		Route::post('period/update', $route.'\Administration@PeriodUpdate')->name('PeriodUpdate');

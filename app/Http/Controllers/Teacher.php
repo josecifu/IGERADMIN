@@ -97,6 +97,7 @@ class Teacher extends Controller
         }
         return view('Administration/Teachers/ListadoVoluntarios',compact('Models','Titles','buttons'));
     }
+
     public function create()
     {
         $buttons =[];
@@ -108,7 +109,8 @@ class Teacher extends Controller
         array_push($buttons,$button);
         return view('Administration/Teachers/formulario',compact('buttons'));
     }
-    public function save(Request $request)
+
+    public function save(Request $request)  #REGISTRO Y ASIGNACIÓN DE VOLUNTARIOS
     {
         $id = user::find($request->session()->get('User_id')); 
         $data = $request->data[0];
@@ -203,7 +205,7 @@ class Teacher extends Controller
         return view('Administration/Teachers/updateForm',compact('ModelsP','ModelsU','buttons'));
     }
 
-    public function update(Request $request)
+    public function update(Request $request)        #ACTUALIZAR VOLUNTARIO
     {
         $id = user::find($request->session()->get('User_id'));
         $data = $request->data[0];
@@ -235,7 +237,7 @@ class Teacher extends Controller
         return response()->json(["Accion completada"]);
     }
 
-    public function delete($id, Request $request)
+    public function delete($id, Request $request)   //ELIMINAR/DESACTIVAR VOLUNTARIO
     {
         $IID = user::find($request->session()->get('User_id'));
         $r = User::find($id);
@@ -253,7 +255,7 @@ class Teacher extends Controller
         Assign_user_rol::where('user_id',$id)->update($dataU);
         return redirect()->route('ListTeacher');
     }
-    public function score($id)
+    public function score($id)      //VISUALIZACIÓN DE NOTAS DE LAS UNIDADES
     {
         // if($assignV->isEmpty()){
         //     $vol = ["Names"=>"","LastNames"=>""];
@@ -306,7 +308,10 @@ class Teacher extends Controller
         $Titles = ['Alumno','Voluntario','Unidad 1','Unidad 2','Unidad 3','Unidad 4','Nota Final','Acciones'];
         return view('Administration/Teachers/listadoNotas',compact('buttons','Titles','Models','course','grado'));
     }
-    public function TestTeacher(Request $request,$id)
+
+            #===================    CRUD EXAMENES ================
+
+    public function TestTeacher(Request $request,$id)   //VISTA DE EXAMENES DE UN CURSO
     {
         $Models = [];
         $assign = Asign_teacher_course::where('Course_id',$id)->first();
@@ -345,18 +350,43 @@ class Teacher extends Controller
             "Link" => 'administration/teacher/list',
             "Type" => "btn1"
         ];
+        array_push($buttons,$button);
+        $button = [
+            "Name" => 'Crear Examen',
+            "Link" => 'administration/teacher/create/exam',
+            "Type" => "add"
+        ];
+        array_push($buttons,$button);
         $grado = grade::find($course->Grade_id)->GradeName();
         $Titles = ['Voluntario','Primer Examen','Segundo Examen','Tercer Examen','Cuarto Examen','Acciones'];
-        return view('Administration/Teachers/ViewTests',compact('Titles','Models','course','grado'));
+        return view('Administration/Teachers/ViewTests',compact('Titles','buttons','Models','course','grado'));
     }
-    public function QuestionTest($id)
+    public function QuestionTest($id)   #VER PREGUNTAS DE UN EXAMEN
     {
         $test = test::find($id);
         $questions = Question::where('Test_id',$id)->get();
         
         return view('Administration/Teachers/QuestionTest',compact('test','questions'));
     }
-    public function Desactive() //vista usuarios desactivados
+
+    public function createExam()
+    {
+        $buttons =[];
+        $button = [
+            "Name" => 'Listado Voluntarios',
+            "Link" => 'administration/teacher/list',
+            "Type" => "add"
+        ];  
+        array_push($buttons,$button);
+        return view('Administration/Teachers/CreateTest',compact('buttons'));
+    }
+
+    public function saveExam()
+    {
+        
+    }
+
+    public function Desactive()         //vista usuarios desactivados
     {
         $buttons =[];
         $button = [
@@ -413,7 +443,7 @@ class Teacher extends Controller
         Assign_user_rol::where('user_id',$id)->update($dataU);
         return redirect()->route('ListTeacher');
     }
-    public function logs() //Visualizcion tabla logs voluntarios
+    public function logs()      //Visualizcion tabla logs voluntarios
     {
         $buttons =[];
         $button = [
@@ -449,12 +479,12 @@ class Teacher extends Controller
         }
         return view('Administration/Teachers/logs',compact('Models','Titles','buttons'));
     }
-    public function statistics()
+    public function statistics()        #VISTA DE ESTADISTICAS
     {
         return view('Administration/Teachers/statistics');
     }
 
-    public function LoadCourses(Request $request)
+    public function LoadCourses(Request $request)       // CARGAR CURSOS FORMULARIO DE ASIGNACIÓN
     {
         $assignT = Asign_teacher_course::where('State','Active')->get();
         if($assignT->isEmpty()){
