@@ -21,7 +21,7 @@
                     <div class="wizard-nav border-right py-8 px-8 py-lg-20 px-lg-10">
 
                         <div class="wizard-steps">
-                            @for ($i = 0; $i < 15; $i++)
+                            @for ($i = 0; $i <= 15; $i++)
                             <!--begin::Wizard Step 1 Nav-->
                             <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
                                 <div class="wizard-wrapper">
@@ -39,7 +39,7 @@
                                         </span>
                                     </div>
                                     <a href="#"><div class="wizard-label" >
-                                        <h3 class="wizard-title">Pregunta No.{{$i+1}}</h3>
+                                        <h3 class="wizard-title">Pregunta No.{{$i}}</h3>
                                         <div class="wizard-desc">Sin clasificar!</div>
                                     </div>
                                 </a>
@@ -51,12 +51,12 @@
                     </div>
                     <!--end: Wizard Nav-->
                     <!--begin: Wizard Body-->
-                    <div class="wizard-body py-8 px-8 py-lg-20 px-lg-10">
+                    <div class="wizard-body py-9 px-9 py-lg-20 px-lg-10">
                         <!--begin: Wizard Form-->
                         <div class="row">
-                            <div class="offset-xxl-2 col-xxl-8">
+                            <div class="offset-xxl-1 col-xxl-10">
                                 <form class="form" id="kt_form">
-                                    @for ($i = 0; $i < 15; $i++)
+                                    @for ($i = 1; $i <= 15; $i++)
                                     <!--begin: Wizard Step 1-->
                                     <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
 										<h1>Detalle preguntas:</h1>
@@ -75,27 +75,23 @@
 												</div>
 											</div>
 											<div class="form-group row">
-												<label class="col-3">Contenido</label>
-												<div class="col-9">
+											<label class="col-3">Contenido</label>
+											</div>
+											<div class="form-group row">
+												
+											<div class="col-12">
 												<div class="card card-custom gutter-b example example-compact">
-											<div class="card-header">
-												<h3 class="card-title">Classic Demo with Videos</h3>
-												<div class="card-toolbar">
-													<div class="example-tools justify-content-center">
-														<span class="example-toggle" data-toggle="tooltip" title="View code"></span>
+										
+													<div class="card-body">
+														<textarea  id="kt-ckeditor-{{$i}}">
+															<h1>Easy Media Embeds</h1>
+															<figure class="symbol">
+																<oembed url="https://www.youtube.com/watch?v=gMUbZMdDRCo"></oembed>
+															</figure>
+															<p>Lorem ipsum dolor sit amet,consectetuer edipiscing elit,sed diam nonummy nibh euismod tinciduntut laoreet doloremagna aliquam erat volutpat.Ut wisi enim ad minim veniam,quis nostrud exerci tation ullamcorper. Lorem ipsum dolor sit amet,consectetuer edipiscing elit,sed diam nonummy nibh euismod tinciduntut laoreet doloremagna aliquam erat volutpat.Ut wisi enim ad minim veniam,quis nostrud exerci tation ullamcorper.</p>
+														</textarea>
 													</div>
 												</div>
-											</div>
-											<div class="card-body">
-												<textarea name="kt-ckeditor-4" id="kt-ckeditor-4">
-													<h1>Easy Media Embeds</h1>
-													<figure class="symbol">
-														<oembed url="https://www.youtube.com/watch?v=gMUbZMdDRCo"></oembed>
-													</figure>
-													<p>Lorem ipsum dolor sit amet,consectetuer edipiscing elit,sed diam nonummy nibh euismod tinciduntut laoreet doloremagna aliquam erat volutpat.Ut wisi enim ad minim veniam,quis nostrud exerci tation ullamcorper. Lorem ipsum dolor sit amet,consectetuer edipiscing elit,sed diam nonummy nibh euismod tinciduntut laoreet doloremagna aliquam erat volutpat.Ut wisi enim ad minim veniam,quis nostrud exerci tation ullamcorper.</p>
-												</textarea>
-											</div>
-										</div>
 												</div>	
 											</div>
 											<div class="form-group row">
@@ -115,7 +111,7 @@
 												<label class="col-3">Tipo de pregunta</label>
 												<div class="col-9">
 													<div class="input-group input-group-solid">
-														<select class="form-control select2" id="TipoPregunta" name="param">
+														<select class="form-control select2" id="TipoPregunta{{$i}}" name="param">
 															<option value="Multiple">Selección Múltiple</option>
 															<option value="Respuesta Abierta">Respuesta abierta</option>
 															<option value="V/F">Verdadero y Falso</option>
@@ -182,33 +178,42 @@
     <!--end::Content-->
 	@stop
 	@section('scripts')
+	<!--begin::Page Vendors(used by this page)-->
 
+		<script src="{{ asset ('assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js')}}"></script>
 	<script type="text/javascript">
-	var KTCkeditor = function () {
-			// Private functions
-			var demos = function () {
-				ClassicEditor
-					.create( document.querySelector( '#kt-ckeditor-4' ) )
-					.then( editor => {
-						console.log( editor );
-					} )
-					.catch( error => {
-						console.error( error );
-					} );
-			}
+	// Class definition
+	
+var KTCkeditor = function () {
+	// Private functions
+	
+    var demos = function () {
+		@for ($i = 1; $i <= 15; $i++)
+        ClassicEditor
+            .create( document.querySelector( '#kt-ckeditor-{{$i}}') )
+            .then( editor => {
+                console.log( editor );
+            } )
+            .catch( error => {
+                console.error( error );
+			} );
+			@endfor
+    }
 
-			return {
-				// public functions
-				init: function() {
-					demos();
-				}
-			};
-		}();
+    return {
+        // public functions
+        init: function() {
+            demos();
+        }
+	};
+	
+}();
 
-		// Initialization
-		jQuery(document).ready(function() {
-			KTCkeditor.init();
-		});
+// Initialization
+jQuery(document).ready(function() {
+    KTCkeditor.init();
+});
+
         "use strict";
 			$('#TipoPregunta').select2({
 				placeholder: "Seleccione los cursos a asignar"
