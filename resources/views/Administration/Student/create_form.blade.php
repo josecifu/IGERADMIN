@@ -4,10 +4,10 @@
     Estudiantes
     @stop
     @section('breadcrumb1')
-    Estudiante
+    Nuevo
     @stop
     @section('breadcrumb2')
-    Nuevo
+    Estudiante
     @stop
     {{-- Page content --}}
     @section('content')
@@ -175,7 +175,7 @@
 										<!------------------------>
 										<div class="my-5">
 											<div class="form-group row">
-												<label class="col-form-label text-right col-lg-3 col-sm-12">Dia</label>
+												<label class="col-form-label text-right col-lg-3 col-sm-12">Circulo de estudio</label>
 												<div class="col-lg-9 col-md-9 col-sm-12">
 													<select class="form-control selectpicker" data-size="10" title="Seleccione una opción" data-live-search="true" id="Jornada">
 													</select>

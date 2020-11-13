@@ -1,13 +1,13 @@
 @extends('Administration.Base/Base')
 {{-- Page title --}}
     @section('title')
-    Estudiantes
+    Inicio
     @stop
     @section('breadcrumb1')
-    Estudiante
+    Voluntarios
     @stop
     @section('breadcrumb2')
-    Listado
+    Principal
     @stop
     {{-- Page content --}}
     @section('content')
@@ -19,17 +19,17 @@
                         <span class="card-icon">
                             <i class="flaticon2-favourite text-primary"></i>
                         </span>
-                        <h3 class="card-label">Listado de estudiantes deshabilitados</h3>
+                        <h3 class="card-label">Registro de actividades del módulo estudiante</h3>
                     </div>
-                                        <div class="card-toolbar">
+                    <div class="card-toolbar">
                         <!--begin::Dropdown-->
-                        <div class="dropdown dropdown-inline mr-2" >
-                            <button style="color: white;" type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="la la-download" style="color: white;"></i>Exportar</button>
+                        <div class="dropdown dropdown-inline mr-2">
+                            <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="la la-download"></i>Exportar</button>
                             <!--begin::Dropdown Menu-->
                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                                 <ul class="nav flex-column nav-hover">
-                                    <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opción:</li>
+                                    <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opcion:</li>
                                     <li class="nav-item">
                                         <a href="#" class="nav-link">
                                             <i class="nav-icon la la-print"></i>
@@ -73,7 +73,7 @@
                         <thead>
                             <tr>
                                 @foreach($titles as $t)
-                                <th>{{ $t }}</th>
+                                <th>{{$t}}</th>
                                 @endforeach
                             </tr>
                         </thead>
@@ -81,11 +81,10 @@
                             @foreach($models as $m)
                             <tr>
                                 <td>{{$m['id']}}</td>
-                                <td>{{$m['name']}}</td>
-                                <td>{{$m['phone']}}</td>
                                 <td>{{$m['user']}}</td>
-                                <td>{{$m['email']}}</td>
-                                <td>11/11/2020</td>
+                                <td>{{$m['activity']}}</td>
+                                <td>{{$m['type']}}</td>
+                                <td>{{$m['datatime']}}</td>
                                 <td nowrap="nowrap"></td>
                             </tr>
                             @endforeach
@@ -96,16 +95,23 @@
             </div>
             <!--end::Card-->
         </div>
-    @stop
-    @section('scripts')
+	@stop
+	@section('scripts')
+
         <!--begin::Page Vendors(used by this page)-->
         <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
         <!--end::Page Vendors-->
+        <!--begin::Page Scripts(used by this page)-->
+        
+        <!--end::Page Scripts-->
         <script type="text/javascript">
+           
             "use strict";
             var KTDatatablesDataSourceHtml = function() {
+
                 var initTable1 = function() {
                     var table = $('#kt_datatable');
+
                     // begin first table
                     table.DataTable({
                         responsive: true,
@@ -119,26 +125,48 @@
                                 orderable: false,
                                 render: function(data, type, full, meta) {
                                     return '\
-                                        <a href="javascript:;" onclick="ActivePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Habilitar estudiante" data-placement="left">\
-                                        <i class="la la-check-circle"></i>\
+                                        <div class="dropdown dropdown-inline">\
+                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">\
+                                                <i class="la la-cog"></i>\
+                                            </a>\
+                                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
+                                                <ul class="nav nav-hoverable flex-column">\
+                                                    <li class="nav-item"><a class="nav-link" href="/administration/teacher/edit/'+full[0]+'"><i class="nav-icon la la-edit"></i><span class="nav-text">Editar</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
+                                                </ul>\
+                                            </div>\
+                                        </div>\
+                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Detalle de asignación">\
+                                            <i class="la la-edit"></i>\
+                                        </a>\
+                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Borrar">\
+                                            <i class="la la-trash"></i>\
                                         </a>\
                                     ';
                                 },
                             },
+                           
+                          
                         ],
                     });
+
                 };
+
                 return {
+
                     //main function to initiate the module
                     init: function() {
                         initTable1();
                     },
+
                 };
+
             }();
+
             jQuery(document).ready(function() {
                 KTDatatablesDataSourceHtml.init();
             });
-            function ActivePeriod($id,$name)
+            function deletePeriod($id,$name)
             {
                 const swalWithBootstrapButtons = Swal.mixin({
                     customClass: {
@@ -148,12 +176,12 @@
                     buttonsStyling: false
                 })
                 swalWithBootstrapButtons.fire({
-                    title: '¿Está seguro de habilitar el estudiante?',
-                    text: "El nombre del estudiante: "+$name,
+                    title: '¿Está seguro de eliminar el voluntario?',
+                    text: "El nombre del Voluntario: "+$name,
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Habilitar!',
-                    cancelButtonText: 'Cancelar!',
+                    confirmButtonText: 'Si, eliminar!',
+                    cancelButtonText: 'No, cancelar!',
                     reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
@@ -163,25 +191,29 @@
                             Name: result.value[0],
                         }];
                         swalWithBootstrapButtons.fire({
-                            title: 'Habilitado!',
-                            text: 'Se ha habilitado con exito!',
+                            title: 'Eliminado!',
+                            text: 'Se ha eliminado con exito!',
                             icon: 'success',
                             confirmButtonText: 'Aceptar',
                         }).then(function () {
+                            
                             var $url_path = '{!! url('/') !!}';
-                            window.location.href = $url_path+"/administration/student/activate/"+$id;
+                            window.location.href = $url_path+"/administration/teacher/delete/"+$id;
                             });
                     } else if (
                     result.dismiss === Swal.DismissReason.cancel
                     ) {
                     swalWithBootstrapButtons.fire({
                         title: 'Cancelado!',
-                        text:  'El estudiante no ha sido eliminada!',
+                        text:  'La Voluntario no ha sido eliminada!',
                         icon: 'error',
                         confirmButtonText: 'Aceptar',
                     })
                     }
                 })
             }
-       </script>  
-    @stop
+
+       </script>
+
+      
+	@stop

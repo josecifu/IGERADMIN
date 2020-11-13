@@ -52,7 +52,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/list/eliminated',$route.'\Student@eliminated_students')->name('ListEliminatedStudents');
 		Route::get('/delete/{model}', $route.'\Student@delete')->name('DeleteStudent');
 		Route::get('/statistics',$route.'\Student@statistics')->name('StudentStatistics');
-		Route::get('/statistics',$route.'\Student@statistics')->name('StatisticsStudent');
+		Route::get('/activate/{model}', $route.'\Student@activate')->name('ActivateStudent');
 
 	});
 	#Voluntarios

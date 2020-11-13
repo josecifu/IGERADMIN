@@ -87,25 +87,34 @@
                                     <td>{{$m['id']}}</td>
                                     <td>{{$m['name']}}</td>
                                     <td>
-                                        <center>
-                                            <button type="button" class="btn btn-outline-info"  data-toggle="modal" data-target="">I</button>
+                                        <a href="/administration/student/test/'+full[0]+'">
+                                            <center>
+                                                <button type="button" class="btn btn-outline-info"  data-toggle="" data-target="">Ver examen</button>
                                         </center>
+                                        </a>
                                     </td>
                                     <td>
-                                        <center>
-                                            <button type="button" class="btn btn-outline-info"  data-toggle="" data-target="">II</button>
+                                    <a href="/administration/student/test/">
+                                            <center>
+                                                <button type="button" class="btn btn-outline-info"  data-toggle="" data-target="">Ver examen</button>
                                         </center>
+                                        </a>
                                     </td>
                                     <td>
-                                        <center>
-                                            <button type="button" class="btn btn-outline-info"  data-toggle="" data-target="">III</button>
+                                        <a href="/administration/student/test/">
+                                            <center>
+                                                <button type="button" class="btn btn-outline-info"  data-toggle="" data-target="">Ver examen</button>
                                         </center>
+                                        </a>
                                     </td>
                                     <td>
-                                        <center>
-                                            <button type="button" class="btn btn-outline-info"  data-toggle="" data-target="">IV</button>
+                                        <a href="/administration/student/test/">
+                                            <center>
+                                                <button type="button" class="btn btn-outline-info"  data-toggle="" data-target="">Ver examen</button>
                                         </center>
+                                        </a>
                                     </td>
+
                                 </tr>
                             @endforeach
                         </tbody>
@@ -131,25 +140,6 @@
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                         },
-                        columnDefs: [
-                            {
-                                targets: -1,
-                                title: 'Unidades',
-                                orderable: false,
-                                render: function(data, type, full, meta) {
-                                    return '\
-                                        <a href="/administration/student/test/'+full[0]+'"><i class="nav-icon la la-list"></i><span class="nav-text">Primera </span></a></li>\
-                                        </a>\
-                                        <a href="/administration/student/test/'+full[0]+'"><i class="nav-icon la la-list"></i><span class="nav-text"> Segunda </span></a></li>\
-                                        </a>\
-                                        <a href="/administration/student/test/'+full[0]+'"><i class="nav-icon la la-list"></i><span class="nav-text"> Tercera </span></a></li>\
-                                        </a>\
-                                        <a href="/administration/student/test/'+full[0]+'"><i class="nav-icon la la-list"></i><span class="nav-text"> Cuarta</span></a></li>\
-                                        </a>\
-                                    ';
-                                },
-                            },
-                        ],
                     });
                 };
                 return {
