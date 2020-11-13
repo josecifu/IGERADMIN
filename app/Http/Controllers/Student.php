@@ -13,7 +13,7 @@ use App\Models\Period;
 use App\Models\Grade;
 use App\Models\Level;
 use App\Models\Course;
-use App\Models\Asign_answer_test_student;
+use App\Models\Assign_answer_test_student;
 use App\Models\Question;
 use App\Models\Test;
 //
@@ -387,7 +387,7 @@ class Student extends Controller
             'Punteo Obtenido',
             'Acciones'
         ];
-        $answer = Asign_answer_test_student::where('Studen_id',$id)->get('Question_id');
+        $answer = Assign_answer_test_student::where('Studen_id',$id)->get('Question_id');
         dd($answer);
         foreach ($answer as $a)
         {
