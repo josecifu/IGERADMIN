@@ -107,7 +107,6 @@
                                                                 <div class="card-body">
                                                                     {{$q->Content}}
                                                                 </div>
-                                                                
                                                             </div>
                                                         </div>
                                                     @endforeach
