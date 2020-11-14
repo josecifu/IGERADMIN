@@ -14,7 +14,7 @@ class PeriodSeeder extends Seeder
      */
     public function run()
     {
-        $periodsList = ["Viernes","Sábados","Domingos A"];
+        $periodsList = ["13-01-001 (Viernes IGER)","13-01-004 (Sábados IGER)","13-01-006 (Domingos MA)","13-01-019 (Domingos IGER)"];
         foreach ($periodsList as $value) {
             DB::table('periods')->insert([
                 'Name' => $value,
@@ -35,7 +35,6 @@ class PeriodSeeder extends Seeder
                     DB::table('grades')->insert([
                         'Name' => $value,
                         'Level_id' => $id,
-                        'Section'=>'A',
                         'State' => 'Active',       
                     ]);
                 

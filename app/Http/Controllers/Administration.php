@@ -54,7 +54,18 @@ class Administration extends Controller
     {
         return view('Administration.Tests.'.$test);
     }
-    
+    public function GradesPeriod(Request $request)
+    {
+        $data = $request->data[0];
+        foreach ($data['Grades'] as $Grade) {
+            $NewGrade = new Grade;
+            $NewGrade->Name = $Grade;
+            $NewGrade->Level_id =$data['Level'];
+            $NewGrade->State = "Active";
+            $NewGrade->save();
+        }
+        return response()->json(["Accion completada"]);
+    }
     //Funciones de crear    
     public function Create_Menu()
     {
@@ -325,6 +336,7 @@ class Administration extends Controller
     }
     public function addGrade(Request $request)
     {
+        
         $Grade = new Grade;
         $data = $request->data[0];
         $Grade->Name = $data['Name'];

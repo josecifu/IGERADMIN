@@ -168,7 +168,7 @@
 		<script src="{{ asset ('assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js')}}"></script>
 	<script type="text/javascript">
 	// Class definition
-	
+	var KTEDITORS =[];
 var KTCkeditor = function () {
 	// Private functions
 	
@@ -177,7 +177,7 @@ var KTCkeditor = function () {
         ClassicEditor
             .create( document.querySelector( '#kt-ckeditor-{{$i}}') )
             .then( editor => {
-                
+                KTEDITORS[{{$i-1}}]= editor;
             } )
             .catch( error => {
                 
@@ -406,7 +406,7 @@ jQuery(document).ready(function() {
 			var preguntas = [];
 			for (let i = 1; i <= p; i++) {
 				var Titulo = $('#Pregunta'+i).val(); 
-				var Contenido = CKEDITOR.instances['kt-ckeditor-'+i].getData();
+				var Contenido = KTEDITORS[(i-1)].getData();
 				console.log(Contenido);
 				var Punteo = $('#Punteo'+i).val();
 				var TipoPregunta = $('#TipoPregunta'+i).val(); 

@@ -157,7 +157,7 @@
                                                         <div class="modal-dialog modal-lg" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title">Visualizar grados del dia {{$Model['Jornada']}}</h5>
+                                                                    <h5 class="modal-title">Ingresar grados al circulo de estudio del dia {{$Model['Jornada']}}</h5>
                                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                         <i aria-hidden="true" class="ki ki-close"></i>
                                                                     </button>
@@ -167,7 +167,7 @@
                                                                         <div class="form-group row">
                                                                             <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el nivel</label>
                                                                             <div class="col-lg-9 col-md-9 col-sm-12">
-                                                                                <select class="form-control selectpicker" data-size="10" data-live-search="true" id="lvlselect{{$Model['Id']}}">
+                                                                                <select class="form-control selectpicker" data-size="10" data-live-search="true" id="lvlselectGrades{{$Model['Id']}}">
                                                                                     @php
                                                                                     $lvls = explode(',',$Model['Niveles']);
                                                                                     $idlvs = explode(',',$Model['idLvl']);  
@@ -176,13 +176,23 @@
                                                                                     <option value="{{ $idlvs[$key]}} ">{{$lvl}} </option>
                                                                                     @endforeach
                                                                                 </select>
-                                                                                <span class="form-text text-muted">Visualice los grados del nivel seleccionado</span>
+                                                                                <span class="form-text text-muted">Ingrese grados al nivel seleccionado</span>
                                                                             </div>
                                                                         </div>
+                                                                        <div class="form-group row">
+                                                                            <label class="col-form-label text-right col-lg-3 col-sm-12">Ingrese el nombre de los grados</label>
+                                                                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                                                             <select class="form-control select2" id="GradesList{{$Model['Id']}}" multiple name="param">
+                                                                              <option label="Label"></option>
+                                                                           
+                                                                           
+                                                                             </select>
+                                                                            </div>
+                                                                           </div>
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                                        <button type="button" class="btn btn-primary mr-2" onclick="ViewGrades({{$Model['Id']}});">Visualizar</button>
+                                                                        <button type="button" class="btn btn-primary mr-2" onclick="AddGrades({{$Model['Id']}},'{{$Model['Jornada']}}');">Ingresar grados</button>
                                                                     </div>
                                                                 </form>
                                                             </div>
@@ -210,10 +220,19 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
 
 <script type="text/javascript">
-    $.fn.editable.defaults.mode = 'inline';
-    $(document).ready(function() {
-        $('#username').editable();
-    });
+    @foreach ($Models as $Model)
+        $('#kt_grades_modal{{$Model['Id']}}').on('shown.bs.modal', function () {
+            $('#GradesList{{$Model['Id']}}').select2({
+                placeholder: "Añada los grados para el nivel",
+                tags: true,
+                "language": {
+                    "noResults": function(){
+                        return "Agrege grados precionando la tecla enter";
+                    }
+                },
+            });  
+        });
+        @endforeach
             "use strict";
             var KTDatatablesDataSourceHtml = function() {
 
@@ -240,7 +259,7 @@
                                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right" >\
                                                 <ul class="nav nav-hoverable flex-column" >\
                                                     <li class="nav-item"><a class="nav-link" href="#" onclick="Addlevel(\''+full[0]+'\')"><i class="nav-icon la la-mail-reply-all"></i><span class="nav-text" style="padding-left:10px;"> Agregar un nivel a el dia</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#kt_grades_modal{{$Model['Id']}}"><i class="nav-icon la la-plus-square-o"></i><span class="nav-text" style="padding-left:10px;"> Agregar un grado a un nivel del dia</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#kt_grades_modal'+full[0]+'"><i class="nav-icon la la-plus-square-o"></i><span class="nav-text" style="padding-left:10px;"> Agregar un grado a un nivel del dia</span></a></li>\
                                                 </ul>\
                                             </div>\
                                         </div>\
@@ -372,11 +391,73 @@
                 }
               })
         }
-        function ViewGrades($lvl)
+        function AddGrades($id,$lvl)
         {
-            var lvl = $('#lvlselect'+$lvl).val();
-            var $url_path = '{!! url('/') !!}';
-            window.location.href = $url_path+"/administration/configurations/level/list/grades/level/"+lvl;
+            var GradeList = $('#GradesList'+$id).val();
+            var Level = $('#lvlselectGrades'+$id).val();
+            
+            const swalWithBootstrapButtons = Swal.mixin({
+              customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+              },
+              buttonsStyling: false
+            })
+            swalWithBootstrapButtons.fire({
+              title: '¿Está seguro de los datos?',
+              text: "Desea ingresar los grados al circulo de estudio: "+$lvl,
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Si, crear!',
+              cancelButtonText: 'No, cancelar!',
+              reverseButtons: true
+            }).then((result2) => {
+              if (result2.isConfirmed) {
+                  
+                  var data = [{
+                      Id: $id,
+                      Grades: GradeList,
+                      Level: Level
+                  }];
+      
+                  $.ajax({
+                      url:'/administration/configurations/period/grades/add',
+                      type:'POST',
+                      data: {"_token":"{{ csrf_token() }}","data":data},
+                      dataType: "JSON",
+                      success: function(e){
+                          swalWithBootstrapButtons.fire({
+                              title: 'Guardado!',
+                              text: 'Se ha guardado con exito!',
+                              icon: 'success',
+                              confirmButtonText: 'Aceptar',
+                          }).then(function () {
+                                 
+                                var $url_path = '{!! url('/') !!}';
+                                window.location.href = $url_path+"/administration/configurations/level/list";
+                              });
+                      },
+                      error: function(e){
+                          swalWithBootstrapButtons.fire({
+                              title: 'Cancelado!',
+                              text:   e.responseJSON['error'],
+                              icon: 'error',
+                              confirmButtonText: 'Aceptar',
+                          })
+                         
+                      }
+                  });
+              } else if (
+                result.dismiss === Swal.DismissReason.cancel
+              ) {
+                swalWithBootstrapButtons.fire({
+                  title: 'Cancelado!',
+                  text:  'No se han creado los grados!',
+                  icon: 'error',
+                  confirmButtonText: 'Aceptar',
+              })
+              }
+            })
         }
         function edit($id,$Name)
         {

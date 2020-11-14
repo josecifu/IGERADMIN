@@ -18,7 +18,7 @@ class grade extends Model
     }
     public function GradeName()
     {
-        return $this->Name." ".$this->Level()->first()->Name." ".$this->Section;
+        return $this->Name." ".$this->Level()->first()->Name;
     }
     private function Courses()
     {
