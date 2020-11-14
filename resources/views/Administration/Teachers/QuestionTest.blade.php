@@ -104,7 +104,10 @@
                                                                 <div class="card-title" data-toggle="collapse" data-target="#collapseOne1">{{$q->Title}}</div>
                                                             </div>
                                                             <div id="collapseOne1" class="collapse show" data-parent="#accordionExample1">
-                                                                <div class="card-body">{{$q->Content}}</div>
+                                                                <div class="card-body">
+                                                                    {{$q->Content}}
+                                                                </div>
+                                                                
                                                             </div>
                                                         </div>
                                                     @endforeach

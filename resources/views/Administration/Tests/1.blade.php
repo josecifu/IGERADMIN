@@ -70,7 +70,7 @@
 																<i class="flaticon-questions-circular-button"></i>
 															</span>
 														</div>
-														<input type="text" name="Pregunta" id="Pregunta" class="form-control form-control-solid" placeholder="Pregunta" />
+														<input type="text" name="Pregunta{{$i}}" id="Pregunta{{$i}}" class="form-control form-control-solid" placeholder="Pregunta" />
 													</div>
 												</div>
 											</div>
@@ -78,20 +78,15 @@
 											<label class="col-3">Contenido</label>
 											</div>
 											<div class="form-group row">
-												
-											<div class="col-12">
-												<div class="card card-custom gutter-b example example-compact">
-										
-													<div class="card-body">
-														<textarea  id="kt-ckeditor-{{$i}}">
-															<h1>Easy Media Embeds</h1>
-															<figure class="symbol">
-																<oembed url="https://www.youtube.com/watch?v=gMUbZMdDRCo"></oembed>
-															</figure>
-															<p>Lorem ipsum dolor sit amet,consectetuer edipiscing elit,sed diam nonummy nibh euismod tinciduntut laoreet doloremagna aliquam erat volutpat.Ut wisi enim ad minim veniam,quis nostrud exerci tation ullamcorper. Lorem ipsum dolor sit amet,consectetuer edipiscing elit,sed diam nonummy nibh euismod tinciduntut laoreet doloremagna aliquam erat volutpat.Ut wisi enim ad minim veniam,quis nostrud exerci tation ullamcorper.</p>
-														</textarea>
+												<div class="col-12">
+													<div class="card card-custom gutter-b example example-compact">
+											
+														<div class="card-body">
+															<textarea  id="kt-ckeditor-{{$i}}">
+																<p>Lorem ipsum dolor sit amet,consectetuer edipiscing elit,sed diam nonummy nibh euismod tinciduntut laoreet doloremagna aliquam erat volutpat.Ut wisi enim ad minim veniam,quis nostrud exerci tation ullamcorper. Lorem ipsum dolor sit amet,consectetuer edipiscing elit,sed diam nonummy nibh euismod tinciduntut laoreet doloremagna aliquam erat volutpat.Ut wisi enim ad minim veniam,quis nostrud exerci tation ullamcorper.</p>
+															</textarea>
+														</div>
 													</div>
-												</div>
 												</div>	
 											</div>
 											<div class="form-group row">
@@ -103,7 +98,7 @@
 																<i class="flaticon-coins"></i>
 															</span>
 														</div>
-														<input type="number" name="Pregunta" id="Pregunta" class="form-control form-control-solid" placeholder="Punteo"/>
+														<input type="number" name="Punteo{{$i}}" id="Punteo{{$i}}" class="form-control form-control-solid" placeholder="Punteo"/>
 													</div>
 												</div>
 											</div>
@@ -112,39 +107,29 @@
 												<div class="col-9">
 													<div class="input-group input-group-solid">
 														<select class="form-control select2" id="TipoPregunta{{$i}}" name="param">
-															<option value="Multiple">Selección Múltiple</option>
+															<option value="">Seleccione una opcion</option>
 															<option value="Respuesta Abierta">Respuesta abierta</option>
-															<option value="V/F">Verdadero y Falso</option>
+															<option value="V/F">Verdadero ó Falso</option>
+															<option value="Multiple">Selección Múltiple</option>
 														</select>
 													</div>
 												</div>
 											</div>
-											<div class="form-group row">
+											<div class="form-group row" id="tipoVF{{$i}}" style="visibility: hidden;">
 												<label class="col-3">Respuesta Correcta</label>
 												<div class="col-9">
 													<div class="input-group input-group-solid">
-														<div class="input-group-prepend">
-															<span class="input-group-text">
-																<i class="flaticon2-check-mark"></i>
-															</span>
-														</div>
-														<input type="text" name="Respuesta" class="form-control form-control-solid" placeholder="Escriba la respuesta correcta" />
+														<input type="text" name="VF{{$i}}" id="VF{{$i}}" class="form-control form-control-solid" placeholder="Escriba la respuesta correcta"/>
 													</div>
 												</div>
 											</div>
-											<div class="form-group row" id="Varios" style="visibility: hidden;">
+											<div class="form-group row" id="Varios{{$i}}" style="visibility: hidden;">
 												<label class="col-3">Respuestas</label>
 												<div class="col-9">
 													<div class="input-group input-group-solid">
-														<div class="input-group-prepend">
-															<span class="input-group-text">
-																<i class="flaticon2-chat-2"></i>
-															</span>
-														</div>
-														<input type="text" name="P-respuestas" id="P-respuestas" class="form-control form-control-solid" placeholder="Escriba la posibles respuestas"/>
-														<!-- <select class="form-control select2" id="Curso" multiple name="param">
+															<select class="form-control select2" id="P-respuestas{{$i}}" multiple name="param">
 															<option label="Label"></option>
-														</select> -->
+															</select>
 													</div>
 												</div>
 											</div>
@@ -188,16 +173,16 @@ var KTCkeditor = function () {
 	// Private functions
 	
     var demos = function () {
-		@for ($i = 1; $i <= 15; $i++)
+		@for ($i = 1; $i <= $preguntas; $i++)
         ClassicEditor
             .create( document.querySelector( '#kt-ckeditor-{{$i}}') )
             .then( editor => {
-                console.log( editor );
+                
             } )
             .catch( error => {
-                console.error( error );
+                
 			} );
-			@endfor
+		@endfor
     }
 
     return {
@@ -208,16 +193,41 @@ var KTCkeditor = function () {
 	};
 	
 }();
-
 // Initialization
 jQuery(document).ready(function() {
     KTCkeditor.init();
 });
 
         "use strict";
-			$('#TipoPregunta').select2({
-				placeholder: "Seleccione los cursos a asignar"
+		for (let index = 1; index <= {{$preguntas}}; index++) {
+			$('#TipoPregunta'+index).select2({
+				placeholder: "Seleccione el tipo de pregunta"
 			});
+			$('#P-respuestas'+index).select2({
+				placeholder: "Añada las respuestas",
+				tags: true,
+				"language": {
+					"noResults": function(){
+						return "Agrege las posibles respuestas precionando la tecla enter";
+					}
+				},
+			});  
+			$('#TipoPregunta'+index).on('change', function() {
+				if($('#TipoPregunta'+index).val() == 'Multiple' ){
+					$('#tipoVF'+index).css("visibility", "visible");
+					$('#Varios'+index).css("visibility", "visible");
+				}
+				if($('#TipoPregunta'+index).val() == 'V/F' ){
+					$('#tipoVF'+index).css("visibility", "visible");
+					$('#Varios'+index).css("visibility", "hidden");
+				}
+				if($('#TipoPregunta'+index).val() == 'Respuesta Abierta'){
+					$('#Varios'+index).css("visibility", "hidden");
+					$('#tipoVF'+index).css("visibility", "hidden");
+				}
+				
+			});	
+		}
 		// Class definition
 		var KTWizard2 = function () {
 			// Base elements
@@ -288,7 +298,7 @@ jQuery(document).ready(function() {
 					}
 				}).then(function (result) {
 					if (result.value) {
-						_formEl.submit(); // Submit form
+						crearPreguntas({{$id}},{{$preguntas}});
 					} else if (result.dismiss === 'cancel') {
 						Swal.fire({
 							text: "Your form has not been submitted!.",
@@ -324,10 +334,11 @@ jQuery(document).ready(function() {
 
 			// Step 2
 			_validations.push(FormValidation.formValidation(
+				
 				_formEl,
 				{
 					fields: {
-						address1: {
+						Pregunta: {
 							validators: {
 								notEmpty: {
 									message: 'Address is required'
@@ -373,154 +384,6 @@ jQuery(document).ready(function() {
 					}
 				}
 			));
-
-			// Step 3
-			_validations.push(FormValidation.formValidation(
-				_formEl,
-				{
-					fields: {
-						delivery: {
-							validators: {
-								notEmpty: {
-									message: 'Delivery type is required'
-								}
-							}
-						},
-						packaging: {
-							validators: {
-								notEmpty: {
-									message: 'Packaging type is required'
-								}
-							}
-						},
-						preferreddelivery: {
-							validators: {
-								notEmpty: {
-									message: 'Preferred delivery window is required'
-								}
-							}
-						}
-					},
-					plugins: {
-						trigger: new FormValidation.plugins.Trigger(),
-						// Bootstrap Framework Integration
-						bootstrap: new FormValidation.plugins.Bootstrap({
-							//eleInvalidClass: '',
-							eleValidClass: '',
-						})
-					}
-				}
-			));
-
-			// Step 4
-			_validations.push(FormValidation.formValidation(
-				_formEl,
-				{
-					fields: {
-						locaddress1: {
-							validators: {
-								notEmpty: {
-									message: 'Address is required'
-								}
-							}
-						},
-						locpostcode: {
-							validators: {
-								notEmpty: {
-									message: 'Postcode is required'
-								}
-							}
-						},
-						loccity: {
-							validators: {
-								notEmpty: {
-									message: 'City is required'
-								}
-							}
-						},
-						locstate: {
-							validators: {
-								notEmpty: {
-									message: 'State is required'
-								}
-							}
-						},
-						loccountry: {
-							validators: {
-								notEmpty: {
-									message: 'Country is required'
-								}
-							}
-						}
-					},
-					plugins: {
-						trigger: new FormValidation.plugins.Trigger(),
-						// Bootstrap Framework Integration
-						bootstrap: new FormValidation.plugins.Bootstrap({
-							//eleInvalidClass: '',
-							eleValidClass: '',
-						})
-					}
-				}
-			));
-
-			// Step 5
-			_validations.push(FormValidation.formValidation(
-				_formEl,
-				{
-					fields: {
-						ccname: {
-							validators: {
-								notEmpty: {
-									message: 'Credit card name is required'
-								}
-							}
-						},
-						ccnumber: {
-							validators: {
-								notEmpty: {
-									message: 'Credit card number is required'
-								},
-								creditCard: {
-									message: 'The credit card number is not valid'
-								}
-							}
-						},
-						ccmonth: {
-							validators: {
-								notEmpty: {
-									message: 'Credit card month is required'
-								}
-							}
-						},
-						ccyear: {
-							validators: {
-								notEmpty: {
-									message: 'Credit card year is required'
-								}
-							}
-						},
-						cccvv: {
-							validators: {
-								notEmpty: {
-									message: 'Credit card CVV is required'
-								},
-								digits: {
-									message: 'The CVV value is not valid. Only numbers is allowed'
-								}
-							}
-						}
-					},
-					plugins: {
-						trigger: new FormValidation.plugins.Trigger(),
-						// Bootstrap Framework Integration
-						bootstrap: new FormValidation.plugins.Bootstrap({
-							//eleInvalidClass: '',
-							eleValidClass: '',
-						})
-					}
-				}
-			));
 		}
 
 			return {
@@ -538,14 +401,54 @@ jQuery(document).ready(function() {
 		jQuery(document).ready(function () {
 			KTWizard2.init();
 		});
-		$('#TipoPregunta').on('change', function() {
-			if($('#TipoPregunta').val() == 'Multiple' ){
-				$('#Varios').css("visibility", "visible");
+		function crearPreguntas(id,p)
+         {
+			var preguntas = [];
+			for (let i = 1; i <= p; i++) {
+				var Titulo = $('#Pregunta'+i).val(); 
+				var Contenido = CKEDITOR.instances['kt-ckeditor-'+i].getData();
+				console.log(Contenido);
+				var Punteo = $('#Punteo'+i).val();
+				var TipoPregunta = $('#TipoPregunta'+i).val(); 
+				var Respuesta = $('#VF'+i).val();
+				var PosibleR = $('#P-respuestas'+i).val();
+				
+				var data = [{
+					Titulo: Titulo,
+					Contenido: Contenido,
+					Punteo: Punteo,
+					TipoPregunta: TipoPregunta,
+					Respuesta: Respuesta,
+					PosibleR: PosibleR,
+				}];
+				preguntas.push(data);
 			}
-			else{
-				$('#Varios').css("visibility", "hidden");
-			}
-		});
+            $.ajax({
+                url:'/administration/teacher/save/question/test',
+                type:'POST',
+                data: {"_token":"{{ csrf_token() }}","data":preguntas,"ID":id},
+                dataType: "JSON",
+                success: function(e){
+                swal.fire({ title: "Accion completada", 
+                  text: "Las preguntas han sido asignadas!", 
+                  type: "success"
+                        }).then(function () {
+                          var $url_path = '{!! url('/') !!}';
+                          window.location.href = $url_path+"/administration/teacher/test/"+e.id;
+                        });
+                     
+                },
+                error: function(e){
+					console.log(e);
+					swal.fire({
+						title: 'Ocurrio un error!',
+						text:  'Los datos no han sido registrados!, verifique los campos',
+						icon: 'error',
+						confirmButtonText: 'Aceptar',
+                    })
+                }
+            });
+		 }//fin de la funcion
     </script>
       
     @stop

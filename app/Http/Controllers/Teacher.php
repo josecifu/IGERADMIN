@@ -257,15 +257,15 @@ class Teacher extends Controller
     }
     public function score($id)      //VISUALIZACIÓN DE NOTAS DE LAS UNIDADES
     {
-        // if($assignV->isEmpty()){
-        //     $vol = ["Names"=>"","LastNames"=>""];
-        // }else{
-        // }
         $Models = [];
         $course = course::find($id);
         $assignV = Asign_teacher_course::where('Course_id',$id)->get('user_id');
-        $userV = user::find($assignV);
-        $vol = Person::find($userV[0]->id);
+        if(isset($assignV->user_id)){
+            $userV = user::find($assignV);
+            $vol = Person::find($userV[0]->id);
+        }else{
+            return redirect('/administration/teacher/list')->withErrors(['msg', 'The Message']);
+        }
         $p1 = $p2 = $p3 = $p4 = 0;
         $assignS = Assign_student_grade::where('Grade_id',$course->Grade_id)->get();
         foreach ($assignS as $value) {
@@ -315,9 +315,13 @@ class Teacher extends Controller
     {
         $Models = [];
         $assign = Asign_teacher_course::where('Course_id',$id)->first();
+        if(isset($assign->user_id)){
+            $userV = user::find($assign->user_id);
+            $vol = Person::find($userV->Person_id);
+        }else{
+            return redirect('/administration/teacher/list')->withErrors(['msg', 'The Message']);
+        }
         $course = course::find($id);
-        $userV = user::find($assign->user_id);
-        $vol = Person::find($userV->Person_id);
         $p1 = $p2 = $p3 = $p4 = 0;
         $assignT = Asign_test_course::where('Teacher_id',$assign->id)->get();
         foreach ($assignT as $value) {
@@ -396,29 +400,65 @@ class Teacher extends Controller
         $curso = $data['curso'];
         $c = course::find($curso);
         $grado = grade::find($c->Grade_id)->GradeName();
-        $examen = new test;
-        $examen->Title = $Titulo;
-        $examen->Score = $Punteo;
-        $examen->StartDate = $Fechas[0].' '.$HoraI;
-        $examen->EndDate = $Fechas[1].' '.$HoraF;
-        $examen->Unity = $Unidad;
-        $examen->save();
-        $assignVol = Asign_teacher_course::where('Course_id',$curso)->first();
-        $assignTest = new Asign_test_course;
-        $assignTest->Teacher_id = $assignVol->id;
-        $assignTest->Test_id = $examen->id;
-        $assignTest->save();
-        $log = new logs;
-        $log->Table = "Voluntario";
-        $log->User_ID = $id->name;
-        $log->Description = "El usuario ".$id->name." creo un nuevo examen para el curso de ".$c->Name." de ".$grado;
-        $log->Type = "Create";
-        $log->save();
-        return response()->json(["Accion completada"]);
+        try {
+            DB::beginTransaction();
+            $examen = new test;
+            $examen->Title = $Titulo;
+            $examen->Score = $Punteo;
+            $examen->StartDate = $Fechas[0].' '.$HoraI;
+            $examen->EndDate = $Fechas[1].' '.$HoraF;
+            $examen->Unity = $Unidad;
+            $examen->save();
+            $assignVol = Asign_teacher_course::where('Course_id',$curso)->first();
+            $assignTest = new Asign_test_course;
+            $assignTest->Teacher_id = $assignVol->id;
+            $assignTest->Test_id = $examen->id;
+            $assignTest->save();
+            $log = new logs;
+            $log->Table = "Voluntario";
+            $log->User_ID = $id->name;
+            $log->Description = "El usuario ".$id->name." creo un nuevo examen para el curso de ".$c->Name." de ".$grado;
+            $log->Type = "Create";
+            $log->save();
+            DB::commit();
+        }catch (Exception $e) {
+            DB::rollBack();
+        }
+        return response()->json(["id"=>$examen->id]);
     }
     public function AssignQuestion($id,$preguntas)
     {
         return view('Administration/Tests/1',compact('id','preguntas'));
+    }
+    public function SaveAssignQuestion(Request $request)
+    {
+        
+        $data = $request->data;
+        dd($data);
+        $test = $request->ID;
+        $assignTest = Asign_test_course::where('Test_id',$test)->first();
+        $assign = Asign_teacher_course::find($assignTest->Teacher_id);
+        foreach ($data as $value) {
+            $value = $value[0];
+            $preguntas = new Question;
+            $preguntas->Title = $value['Titulo'];
+            $preguntas->Content = $value['Contenido'];
+            $preguntas->Score = $value['Punteo'];
+            $preguntas->Type = $value['TipoPregunta'];
+            $preguntas->Answers = $value['Respuesta'];
+            if ($value['TipoPregunta'] == 'Multiple') {
+                $temp = "";
+                for ($i=0; $i < count($value['PosibleR']) ; $i++) { 
+                    $temp = $temp . $value['PosibleR'][$i] . ',';
+                }
+                $preguntas->CorrectAnswers = $temp;   
+            }
+            $preguntas->Test_id = $test;
+            $preguntas->save();
+        }
+        
+        return response()->json(["id"=>$assign->Course_id]);
+        
     }
     public function Desactive()         //vista usuarios desactivados
     {

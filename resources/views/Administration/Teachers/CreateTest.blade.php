@@ -111,7 +111,7 @@
 													<button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev">Anterior</button>
 												</div>
 												<div>
-													<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Registrar</button>
+													<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Crear Examen</button>
 													<button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>*
 												</div>
 											</div>
@@ -339,11 +339,11 @@ var KTWizard1 = function () {
                 dataType: "JSON",
                 success: function(e){
                 swal.fire({ title: "Accion completada", 
-                  text: "Se ha guardado con exito el Voluntario!", 
+                  text: "Se ha creado el examen!", 
                   type: "success"
                         }).then(function () {
                           var $url_path = '{!! url('/') !!}';
-                          window.location.href = $url_path+"/administration/teacher/assign/question/test/"+{{$id}}+"/"+Preguntas;
+                          window.location.href = $url_path+"/administration/teacher/assign/question/test/"+e.id+"/"+Preguntas;
                         });
                      
                 },
