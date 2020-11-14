@@ -704,7 +704,12 @@
                 }
               })
         }
-        
+        function ViewGrades($id)
+        {
+            var $url_path = '{!! url('/') !!}';
+            window.location.href = $url_path+"/administration/configurations/level/list/grades/level/"+$id;
+                                    
+        }
       
        </script>
         <!--end::Page Scripts-->

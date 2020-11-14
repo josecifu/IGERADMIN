@@ -176,7 +176,9 @@ var KTCkeditor = function () {
         ClassicEditor
             .create( document.querySelector( '#kt-ckeditor-{{$i}}') )
             .then( editor => {
-                KTEDITORS[{{$i-1}}]= editor;
+				KTEDITORS[{{$i-1}}]= editor;
+				mediaEmbed: {previewsInData: true}
+
             } )
             .catch( error => {
                 
@@ -400,13 +402,21 @@ jQuery(document).ready(function() {
 		jQuery(document).ready(function () {
 			KTWizard2.init();
 		});
+		function getId(url) {
+			var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+			var match = url.match(regExp);
+			if (match && match[2].length == 11) {
+				return match[2];
+			} else {
+				return 'error';
+			}
+		}
 		function crearPreguntas(id,p)
          {
 			var preguntas = [];
 			for (let i = 1; i <= p; i++) {
 				var Titulo = $('#Pregunta'+i).val(); 
 				var Contenido = KTEDITORS[(i-1)].getData();
-				console.log(Contenido);
 				var Punteo = $('#Punteo'+i).val();
 				var TipoPregunta = $('#TipoPregunta'+i).val(); 
 				var Respuesta = $('#VF'+i).val();

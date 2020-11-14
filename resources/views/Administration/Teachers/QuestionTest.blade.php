@@ -98,12 +98,12 @@
 											<div class="card-body">
 												<!--begin::Accordion-->
 												<div class="accordion accordion-toggle-arrow" id="accordionExample1">
-                                                    @foreach($questions as $q)
+                                                    @foreach($questions as $key => $q)
                                                         <div class="card">
                                                             <div class="card-header">
-                                                                <div class="card-title" data-toggle="collapse" data-target="#collapseOne1">{{$q->Title}}</div>
+                                                                <div class="card-title" data-toggle="collapse" data-target="#collapseOne{{$key}}">{{$q->Title}}</div>
                                                             </div>
-                                                            <div id="collapseOne1" class="collapse show" data-parent="#accordionExample1">
+                                                            <div id="collapseOne{{$key}}" class="collapse" data-parent="#accordionExample1">
                                                                 <div class="card-body">
                                                                     {!! $q->Content !!}
                                                                 </div>
@@ -130,6 +130,7 @@
         <!--begin::Page Scripts(used by this page)-->
         
         <!--end::Page Scripts-->
+     
         <script type="text/javascript">
            
             "use strict";
@@ -188,8 +189,30 @@
 
             jQuery(document).ready(function() {
                 KTDatatablesDataSourceHtml.init();
+                document.querySelectorAll( 'oembed[url]' ).forEach( element => {
+                    
+                    var videoId = getId(element.getAttribute("url"));
+            
+                    var iframeMarkup = '<iframe width="560" height="315" src="//www.youtube.com/embed/' 
+                        + videoId + '" frameborder="0" allowfullscreen></iframe>';
+                        let div = document.createElement('div');
+                        div.innerHTML = iframeMarkup;
+                        element.parentNode.appendChild(div);
+                        element.parentNode.removeChild(element);
+                 } );
             });
 
-
+            function getId(url) {
+                var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+                var match = url.match(regExp);
+            
+                if (match && match[2].length == 11) {
+                    return match[2];
+                } else {
+                    return 'error';
+                }
+            }
+            
+           
        </script>
 	@stop
