@@ -434,7 +434,6 @@ class Teacher extends Controller
     {
         
         $data = $request->data;
-        dd($data);
         $test = $request->ID;
         $assignTest = Asign_test_course::where('Test_id',$test)->first();
         $assign = Asign_teacher_course::find($assignTest->Teacher_id);

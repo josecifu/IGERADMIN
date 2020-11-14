@@ -105,7 +105,7 @@
                                                             </div>
                                                             <div id="collapseOne1" class="collapse show" data-parent="#accordionExample1">
                                                                 <div class="card-body">
-                                                                    {{$q->Content}}
+                                                                    {!! $q->Content !!}
                                                                 </div>
                                                             </div>
                                                         </div>
