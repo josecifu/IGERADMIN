@@ -240,6 +240,8 @@ class Student extends Controller
             $student_grades = new Assign_student_grade;
             $student_grades->user_id = $user->id;
             $student_grades->Grade_id = $grade->id;
+            $student_grades->Year = "2020";
+            $student_grades->State ="Active";
             $student_grades->save();
             $log = new Logs;
             $log->Table = "Estudiante";
@@ -465,21 +467,41 @@ class Student extends Controller
         $models = [];
         $titles = [
             'Id',
-            'Cursos',
-            'Actividades',
-            'Notas',
+            'Curso',
+            'Unidad 1',
+            'Unidad 2',
+            'Unidad 3',
+            'Unidad 4',
+            'Nota final',
             'Acciones'
         ];
-        $note = Note::where('Studen_id',$id)->get();
-        foreach ($note as $n)
+        $grade = Assign_student_grade::find($id)->Grade();
+        $courses = $grade->Courses();
+        foreach ($courses as $course)
         {
-            $course = Course::find($n->Course_id);
+            $unity =[];
+            $finalNote = 0;
+            for ($i=1; $i <= 4; $i++) { 
+                $TotalActivities =0;
+                $notes = Note::where(['Studen_id'=>$id,'Course_id'=>$course->id,'Unity'=>$i])->get();
+                foreach ($notes as $note) {
+                    $TotalActivities = $TotalActivities+intval($note->Score);
+                }
+                $unity[$i] = $TotalActivities;
+                $finalNote = $finalNote+ $TotalActivities;
+            }
             $query = [
                 'id' => $course->id,
                 'course' => $course->Name,
+                'Unity1' => $unity[1],
+                'Unity2' => $unity[2],
+                'Unity3' => $unity[3],
+                'Unity4' => $unity[4],
+                'FinalNote' => $finalNote
             ];
             array_push($models,$query);
         }
+        
         return view('Administration/Student/course_scores',compact('models','titles'));
     }
 

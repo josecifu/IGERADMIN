@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Assign_student_grade extends Model
 {
     use HasFactory;
+    public function Grade()
+    {
+        return $this->hasOne('App\Models\grade','id','Grade_id')->first();
+    }
 }

@@ -91,9 +91,12 @@
                             <tr>
                                 <td>{{$m['id']}}</td>
                                 <td>{{$m['course']}}</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
+                                <td><center>{{$m['Unity1']}}</center></td>
+                                <td>{{$m['Unity2']}}</td>
+                                <td>{{$m['Unity3']}}</td>
+                                <td>{{$m['Unity4']}}</td>
+                                <td>{{$m['FinalNote']}}</td>
+                                <td nowrap="nowrap"></td>
                             </tr>
                             @endforeach
                         </tbody>

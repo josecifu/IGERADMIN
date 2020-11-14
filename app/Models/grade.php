@@ -20,7 +20,7 @@ class grade extends Model
     {
         return $this->Name." ".$this->Level()->first()->Name;
     }
-    private function Courses()
+    public function Courses()
     {
         return $this->hasMany(course::class)->get();
     }
