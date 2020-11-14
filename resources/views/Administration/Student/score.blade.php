@@ -7,7 +7,7 @@
     Estudiante
     @stop
     @section('breadcrumb2')
-    Notas
+    Listado
     @stop
     {{-- Page content --}}
     @section('content')
@@ -15,11 +15,13 @@
             <!--begin::Card-->
             <div class="card card-custom">
                 <div class="card-header">
-                    <span class="card-icon">
-                        <i class="flaticon2-favourite text-primary"></i>
-                    </span>
                     <div class="card-title">
-                        <h3 class="card-label">Visualización de notas</h3>
+                        <span class="card-icon">
+                            <i class="flaticon2-favourite text-primary"></i>
+                        </span>
+                        <h3 class="card-label">
+                            Listado de estudiantes de {{$grade}}
+                        </h3>
                     </div>
                     <div class="card-toolbar">
                         <!--begin::Dropdown-->
@@ -69,26 +71,26 @@
                 </div>
                 <div class="card-body">
                     <!--begin: Datatable-->
-                    <table class="table table-bordered table-hover table-checkable" id="" style="margin-top: 13px !important">
+                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
                             <tr>
-                                @foreach($Titles as $t)
-                                <th>{{ $t }}</th>
+                                @foreach($titles as $t)
+                                    <th>{{ $t }}</th>
                                 @endforeach
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($Models as $m)
-                            <tr>
-                                <td>{{$m->Names}} {{$m->LastNames}}</td>
-                                <td>Voluntario Voluntario<!--{{$m->teacher}}--></td>
-                                <td>{{$m->course}}</td>
-                                <td>64<!--{{$m->first_unit}}--></td>
-                                <td>71<!--{{$m->second_unity}}--></td>
-                                <td>70<!--{{$m->third_unit}}--></td>
-                                <td>68<!--{{$m->fourth_unit}}--></td>
-                                <td nowrap="nowrap"></td>
-                            </tr>
+                            @foreach($models as $m)
+                                <tr>
+                                    <td>{{$m['id']}}</td>
+                                    <td>{{$m['name']}}</td>
+                                    <td>11/11/2020</td>
+                                    <td>
+                                        <a href="/administration/student/score/course/">
+                                            <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver notas</button>
+                                        </a>
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -97,4 +99,33 @@
             </div>
             <!--end::Card-->
         </div>
+    @stop
+    @section('scripts')
+        <!--begin::Page Vendors(used by this page)-->
+        <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
+        <!--end::Page Vendors-->
+        <script type="text/javascript">
+            "use strict";
+            var KTDatatablesDataSourceHtml = function() {
+                var initTable1 = function() {
+                    var table = $('#kt_datatable');
+                    // begin first table
+                    table.DataTable({
+                        responsive: true,
+                        "language": {
+                            "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                        },
+                    });
+                };
+                return {
+                    //main function to initiate the module
+                    init: function() {
+                        initTable1();
+                    },
+                };
+            }();
+            jQuery(document).ready(function() {
+                KTDatatablesDataSourceHtml.init();
+            });
+       </script>
     @stop

@@ -53,7 +53,7 @@ class Student extends Controller
             'Nombre de usuario',
             'Correo electrónico',
             'Grado',
-            'Ultima sesión',
+            'Última conexión',
             'Acciones'
         ];
         $rol = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get();
@@ -107,7 +107,7 @@ class Student extends Controller
             'No. Teléfono',
             'Nombre de usuario',
             'Correo electrónico',
-            'Ultima sesión',
+            'Última conexión',
             'Acciones'
         ];
         $grade = Grade::find($id);
@@ -143,7 +143,7 @@ class Student extends Controller
             'No. Teléfono',
             'Nombre de usuario',
             'Correo electrónico',
-            'Ultima sesión',
+            'Última conexión',
             'Acciones'
         ];
         $rol = Assign_user_rol::where('Rol_id',2)->where('State','Desactivated')->get('user_id');
@@ -376,7 +376,20 @@ class Student extends Controller
         return view('Administration/Student/list_test',compact('models','titles','course','grade'));
     }
 
-    //visualizacion de examen con respuestas del alumno
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //visualizacion de examenes con preguntas y respuestas
     public function test($id)
     {
         $models = [];
@@ -406,20 +419,34 @@ class Student extends Controller
         return view('Administration/Student/test',compact('models','titles','test','score'));
     }
 
+    //visualizacion de notas con filtro: jornada, grado, nivel, curso
+    public function score($id)
+    {
+        $models = [];
+        $titles = [
+            'Id',
+            'Nombre del estudiante',
+            'Última conexión',
+            'Acciones'
+        ];
+        $grade = Grade::find(1);
+        foreach ($grade->Students() as $user)
+        {
+            $student = Person::find($user->Person_id);
+            $query = [
+                'id' => $student->id,
+                'name' => $student->Names . ' ' . $student->LastNames,
+            ];
+            array_push($models,$query);
+        }
+        $grade = $grade->GradeName();
+        return view('Administration/Student/score',compact('models','titles','grade'));
+    }
 
-    
-
-
-
-
-
-
-
-
-
-
-
-
+    public function course_scores()
+    {
+        return view('Administration/Student/course_scores');
+    }
 
 
 
@@ -440,30 +467,6 @@ class Student extends Controller
     {
         return view('Administration/Student/statistics');
     }
-
-    //visualizacion de notas con filtro: jornada, grado, nivel, curso
-    public function score($id)
-    {
-        $titles = ['Id','Nombre del Estudiante','Unidades'];
-        $models = Course::all();
-        return view('Administration/Student/list_test',compact('models','titles'));
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     //ESTUDIANTE
     public function edit_profile()

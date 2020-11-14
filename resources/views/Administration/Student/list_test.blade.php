@@ -88,30 +88,22 @@
                                     <td>{{$m['name']}}</td>
                                     <td>
                                         <a href="{{url('/administration/student/test/'.$m['assign'])}}">
-                                            <center>
-                                                <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver examen</button>
-                                        </center>
-                                        </a>
-                                    </td>
-                                    <td>
-                                    <a href="/administration/student/test/">
-                                            <center>
-                                                <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver examen</button>
-                                        </center>
+                                            <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver examen</button>
                                         </a>
                                     </td>
                                     <td>
                                         <a href="/administration/student/test/">
-                                            <center>
-                                                <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver examen</button>
-                                        </center>
+                                            <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver examen</button>
                                         </a>
                                     </td>
                                     <td>
                                         <a href="/administration/student/test/">
-                                            <center>
-                                                <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver examen</button>
-                                        </center>
+                                            <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver examen</button>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="/administration/student/test/">
+                                            <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver examen</button>
                                         </a>
                                     </td>
                                 </tr>

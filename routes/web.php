@@ -45,7 +45,8 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/edit/{model}',$route.'\Student@edit')->name('EditStudent');
 		Route::post('/update', $route.'\Student@update')->name('UpdateStudent');
 		Route::get('/lists/grade/{model}',$route.'\Student@list_grade')->name('ListGradeStudent');
-		Route::get('/score',$route.'\Student@score')->name('ScoreStudent');
+		Route::get('/score/{model}',$route.'\Student@score')->name('ListScoreStudent');
+		Route::get('/score/course/{model}',$route.'\Student@course_scores')->name('CourseScores');
 		Route::get('/logs',$route.'\Student@logs')->name('LogsStudent');
 		Route::get('/test/{model}',$route.'\Student@test')->name('TestStudent');
 		Route::get('/lists/test/{model}',$route.'\Student@list_test')->name('ListTest');
@@ -53,7 +54,6 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/delete/{model}', $route.'\Student@delete')->name('DeleteStudent');
 		Route::get('/statistics',$route.'\Student@statistics')->name('StudentStatistics');
 		Route::get('/activate/{model}', $route.'\Student@activate')->name('ActivateStudent');
-
 	});
 	#Voluntarios
 	Route::group([ 'prefix' => 'teacher'], function(){

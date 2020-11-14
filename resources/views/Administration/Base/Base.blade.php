@@ -996,8 +996,8 @@
 				}
 				else if(pos==2)
 				{
-					$('#Title1').text("Visualizacion de Notas por grado");
-					$('#Title2').html("Visualice el listado de notas por la jornada, grados del nivel y curso seleccionado");
+					$('#Title1').text("Visualizacion de notas por grado");
+					$('#Title2').html("Visualice el listado de notas por la jornada, nivel y grados");
 				}
 				else if(pos==3)
 				{
@@ -1029,13 +1029,18 @@
 				
 			}
 			function save()
-			{
-			
+			{			
 				if(posGrade==1)
 				{
 					var Id = $('#gradeselect1').val();
 					var $url_path = '{!! url('/') !!}';
                     window.location.href = $url_path+"/administration/student/lists/grade/"+Id;
+				}
+				if(posGrade==2)
+				{
+					var Id = $('#gradeselect1').val();
+					var $url_path = '{!! url('/') !!}';
+                    window.location.href = $url_path+"/administration/student/score/"+Id;
 				}
 				if(posGrade==3)
 				{
@@ -1122,7 +1127,7 @@
 				  
 			  }
 			$('#gradeselect1').on('change', function() {
-				if(posGrade==2 ||posGrade==3 || posGrade==4 || posGrade==5 )
+				if(posGrade==3 || posGrade==4 || posGrade==5 )
 				{
 					$('#SelectCourse').css("visibility", "visible");
 					ListCourse($('#gradeselect1').val());

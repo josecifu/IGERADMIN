@@ -96,7 +96,7 @@
                                 <td>{{$m['type']}}</td>
                                 <td>-</td>
                                 <td>{{$m['correct']}}</td>
-                                <td>1</td>
+                                <td>-</td>
                                 <td><center><button type="button" disabled class="btn btn-outline-info" data-toggle="tooltip" title="Ver pregunta" data-placement="left">Ver pregunta</button></center></td>
                                 <td nowrap="nowrap"></td>
                             </tr>
