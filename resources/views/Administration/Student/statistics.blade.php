@@ -4,10 +4,10 @@
     Estudiantes
     @stop
     @section('breadcrumb1')
-    Estudiante
+    Estadística
     @stop
     @section('breadcrumb2')
-    Estadísticas
+    Estudiante
     @stop
     {{-- Page content --}}
     @section('content')

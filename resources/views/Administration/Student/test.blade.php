@@ -4,10 +4,10 @@
     Estudiantes
     @stop
     @section('breadcrumb1')
-    Estudiante
+    Evaluación
     @stop
     @section('breadcrumb2')
-    Evaluación
+    Estudiante
     @stop
     {{-- Page content --}}
     @section('content')
@@ -33,6 +33,12 @@
                         </table>
                     </div>
                     <div class="card-toolbar">
+                        <div class="card-header">
+                            <div class="card-toolbar">
+                                <a href="{{url('administration/student/lists/test/1')}}" class="btn btn-danger font-weight-bolder mr-2">
+                                <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
+                            </div>
+                        </div>
                         <!--begin::Dropdown-->
                         <div class="dropdown dropdown-inline mr-2">
                             <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

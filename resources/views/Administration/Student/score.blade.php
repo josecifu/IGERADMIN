@@ -4,10 +4,10 @@
     Estudiantes
     @stop
     @section('breadcrumb1')
-    Estudiante
+    Listado/Notas
     @stop
     @section('breadcrumb2')
-    Listado
+    Estudiante
     @stop
     {{-- Page content --}}
     @section('content')
@@ -83,10 +83,10 @@
                             @foreach($models as $m)
                                 <tr>
                                     <td>{{$m['id']}}</td>
-                                    <td>{{$m['name']}}</td>
+                                    <td>{{$m['student']}}</td>
                                     <td>11/11/2020</td>
                                     <td>
-                                        <a href="/administration/student/score/course/">
+                                        <a href="{{url('/administration/student/score/course/'.$m['assign'])}}">
                                             <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver notas</button>
                                         </a>
                                     </td>

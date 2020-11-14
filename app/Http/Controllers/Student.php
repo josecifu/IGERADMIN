@@ -367,8 +367,8 @@ class Student extends Controller
             $student = Person::find($user->Person_id);
             $query = [
                 'id' => $student->id,
-                'assign' => $user->Asssign_Grade()->id,
-                'name' => $student->Names . ' ' . $student->LastNames
+                'student' => $student->Names . ' ' . $student->LastNames,
+                'assign' => $user->Asssign_Grade()->id
             ];
             array_push($models,$query);
         }
@@ -406,6 +406,7 @@ class Student extends Controller
         foreach ($answer as $a)
         {
             $question = Question::find($a->Question_id);
+            //dd($question);
             $query = [
                 'id' => $question->id,
                 'question' => $question->Content,
@@ -418,6 +419,15 @@ class Student extends Controller
         $score = Test::where('id',$question->Test_id)->get('Score');
         return view('Administration/Student/test',compact('models','titles','test','score'));
     }
+
+
+
+
+
+
+
+
+
 
     //visualizacion de notas con filtro: jornada, grado, nivel, curso
     public function score($id)
@@ -435,7 +445,8 @@ class Student extends Controller
             $student = Person::find($user->Person_id);
             $query = [
                 'id' => $student->id,
-                'name' => $student->Names . ' ' . $student->LastNames,
+                'student' => $student->Names . ' ' . $student->LastNames,
+                'assign' => $user->Asssign_Grade()->id
             ];
             array_push($models,$query);
         }
@@ -443,10 +454,53 @@ class Student extends Controller
         return view('Administration/Student/score',compact('models','titles','grade'));
     }
 
+
+
+
+
+
+
     public function course_scores($id)
     {
-        return view('Administration/Student/course_scores');
+        $models = [];
+        $titles = [
+            'Id',
+            'Cursos',
+            'Actividades',
+            'Notas',
+            'Acciones'
+        ];
+        $note = Note::where('Studen_id',$id)->get();
+        foreach ($note as $n)
+        {
+            $course = Course::find($n->Course_id);
+            $query = [
+                'id' => $course->id,
+                'course' => $course->Name,
+            ];
+            array_push($models,$query);
+        }
+        return view('Administration/Student/course_scores',compact('models','titles'));
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

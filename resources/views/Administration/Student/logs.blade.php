@@ -1,13 +1,13 @@
 @extends('Administration.Base/Base')
 {{-- Page title --}}
     @section('title')
-    Inicio
+    Estudiantes
     @stop
     @section('breadcrumb1')
-    Voluntarios
+    Listado/Logs
     @stop
     @section('breadcrumb2')
-    Principal
+    Estudiante
     @stop
     {{-- Page content --}}
     @section('content')
@@ -22,6 +22,12 @@
                         <h3 class="card-label">Registro de actividades del módulo estudiante</h3>
                     </div>
                     <div class="card-toolbar">
+                        <div class="card-header">
+                            <div class="card-toolbar">
+                                <a href="{{url('administration/student/list')}}" class="btn btn-danger font-weight-bolder mr-2">
+                                <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
+                            </div>
+                        </div>
                         <!--begin::Dropdown-->
                         <div class="dropdown dropdown-inline mr-2">
                             <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -4,10 +4,10 @@
     Estudiantes
     @stop
     @section('breadcrumb1')
-    Estudiante
+    Listado/Evaluaciones
     @stop
     @section('breadcrumb2')
-    Evaluación
+    Estudiante
     @stop
     {{-- Page content --}}
     @section('content')
@@ -85,7 +85,7 @@
                             @foreach($models as $m)
                                 <tr>
                                     <td>{{$m['id']}}</td>
-                                    <td>{{$m['name']}}</td>
+                                    <td>{{$m['student']}}</td>
                                     <td>
                                         <a href="{{url('/administration/student/test/'.$m['assign'])}}">
                                             <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver examen</button>

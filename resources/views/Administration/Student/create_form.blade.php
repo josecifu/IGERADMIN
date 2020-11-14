@@ -13,12 +13,12 @@
     @section('content')
     	<link href="{{ asset('assets/css/pages/wizard/wizard-1.css')}}" rel="stylesheet" type="text/css" />
         <div class="content flex-column-fluid" id="kt_content">
-				<div class="card-header">
-	                <div class="card-toolbar">
-	                    <a href="{{url('administration/student/list')}}" class="btn btn-danger font-weight-bolder mr-2">
-	                    <i class="ki ki-long-arrow-back icon-sm"></i>Cancelar</a>
-	                </div>
-            	</div>
+			<div class="card-header">
+                <div class="card-toolbar">
+                    <a href="{{url('administration/student/list')}}" class="btn btn-danger font-weight-bolder mr-2">
+                    <i class="ki ki-long-arrow-back icon-sm"></i>Cancelar</a>
+                </div>
+        	</div>
 			<div class="card card-custom">
 				<div class="card-body p-0">
 					<!--begin::Wizard-->
@@ -172,7 +172,6 @@
 									<!--end::Wizard Step 2-->
 									<!--begin::Wizard Step 3-->
 									<div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
-										<!------------------------>
 										<div class="my-5">
 											<div class="form-group row">
 												<label class="col-form-label text-right col-lg-3 col-sm-12">Circulo de estudio</label>
@@ -195,7 +194,6 @@
 													</select>
 												</div>
 											</div>
-											<!------------------------>
 										</div>
 									</div>
 									<!--end::Wizard Step 3-->

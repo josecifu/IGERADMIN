@@ -4,10 +4,10 @@
     Estudiantes
     @stop
     @section('breadcrumb1')
-    Estudiante
+    Actulización
     @stop
     @section('breadcrumb2')
-    Actulización
+    Estudiante
     @stop
     {{-- Page content --}}
     @section('content')
