@@ -16,8 +16,8 @@ use App\Models\Course;
 use App\Models\Asign_answer_test_student;
 use App\Models\Question;
 use App\Models\Test;
-//
 use App\Models\Note;
+//
 use App\Models\Information;
 use App\Models\Asign_teacher_course;
 use App\Models\Schedule;
@@ -429,7 +429,7 @@ class Student extends Controller
             'Última conexión',
             'Acciones'
         ];
-        $grade = Grade::find(1);
+        $grade = Grade::find($id);
         foreach ($grade->Students() as $user)
         {
             $student = Person::find($user->Person_id);
@@ -443,7 +443,7 @@ class Student extends Controller
         return view('Administration/Student/score',compact('models','titles','grade'));
     }
 
-    public function course_scores()
+    public function course_scores($id)
     {
         return view('Administration/Student/course_scores');
     }
