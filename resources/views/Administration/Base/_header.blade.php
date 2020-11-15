@@ -536,8 +536,8 @@
 									<div class="dropdown-menu p-0 m-0 dropdown-menu-right dropdown-menu-anim-up dropdown-menu-lg">
 										<!--begin:Header-->
 										<div class="d-flex flex-column flex-center py-10 bg-dark-o-5 rounded-top bg-light">
-											<h4 class="text-dark font-weight-bold">Quick Actions</h4>
-											<span class="btn btn-success btn-sm font-weight-bold font-size-sm mt-2">23 tasks pending</span>
+											<h4 class="text-dark font-weight-bold">Acciones rapidas</h4>
+											<span class="btn btn-success btn-sm font-weight-bold font-size-sm mt-2">Ver alumnos por grado</span>
 										</div>
 										<!--end:Header-->
 										<!--begin:Nav-->
@@ -556,8 +556,8 @@
 														</svg>
 														<!--end::Svg Icon-->
 													</span>
-													<span class="d-block text-dark-75 font-weight-bold font-size-h6 mt-2 mb-1">Accounting</span>
-													<span class="d-block text-dark-50 font-size-lg">eCommerce</span>
+													<span class="d-block text-dark-75 font-weight-bold font-size-h6 mt-2 mb-1">Circulos de estudio</span>
+													<span class="d-block text-dark-50 font-size-lg">Información de los circulos de estudio</span>
 												</a>
 											</div>
 											<!--end:Item-->
@@ -575,8 +575,8 @@
 														</svg>
 														<!--end::Svg Icon-->
 													</span>
-													<span class="d-block text-dark-75 font-weight-bold font-size-h6 mt-2 mb-1">Administration</span>
-													<span class="d-block text-dark-50 font-size-lg">Console</span>
+													<span class="d-block text-dark-75 font-weight-bold font-size-h6 mt-2 mb-1">Encargados</span>
+													<span class="d-block text-dark-50 font-size-lg">Encargados de circulos de estudio</span>
 												</a>
 											</div>
 											<!--end:Item-->
@@ -594,8 +594,8 @@
 														</svg>
 														<!--end::Svg Icon-->
 													</span>
-													<span class="d-block text-dark-75 font-weight-bold font-size-h6 mt-2 mb-1">Projects</span>
-													<span class="d-block text-dark-50 font-size-lg">Pending Tasks</span>
+													<span class="d-block text-dark-75 font-weight-bold font-size-h6 mt-2 mb-1">Notas</span>
+													<span class="d-block text-dark-50 font-size-lg">Ver notas por grado</span>
 												</a>
 											</div>
 											<!--end:Item-->
@@ -613,8 +613,8 @@
 														</svg>
 														<!--end::Svg Icon-->
 													</span>
-													<span class="d-block text-dark-75 font-weight-bold font-size-h6 mt-2 mb-1">Customers</span>
-													<span class="d-block text-dark-50 font-size-lg">Latest cases</span>
+													<span class="d-block text-dark-75 font-weight-bold font-size-h6 mt-2 mb-1">Listado de alumnos</span>
+													<span class="d-block text-dark-50 font-size-lg">Ver listado de alumnos por circulo de estudio</span>
 												</a>
 											</div>
 											<!--end:Item-->
@@ -628,17 +628,9 @@
 								<div class="dropdown">
 									<!--begin::Toggle-->
 									<div class="topbar-item mr-3" data-toggle="dropdown" data-offset="10px,0px">
-										<div class="btn btn-icon btn-clean h-40px w-40px btn-dropdown">
-											<span class="svg-icon svg-icon-lg">
-												<!--begin::Svg Icon | path:assets/media/svg/icons/Shopping/Cart3.svg-->
-												<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-													<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-														<rect x="0" y="0" width="24" height="24" />
-														<path d="M12,4.56204994 L7.76822128,9.6401844 C7.4146572,10.0644613 6.7840925,10.1217854 6.3598156,9.76822128 C5.9355387,9.4146572 5.87821464,8.7840925 6.23177872,8.3598156 L11.2317787,2.3598156 C11.6315738,1.88006147 12.3684262,1.88006147 12.7682213,2.3598156 L17.7682213,8.3598156 C18.1217854,8.7840925 18.0644613,9.4146572 17.6401844,9.76822128 C17.2159075,10.1217854 16.5853428,10.0644613 16.2317787,9.6401844 L12,4.56204994 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
-														<path d="M3.5,9 L20.5,9 C21.0522847,9 21.5,9.44771525 21.5,10 C21.5,10.132026 21.4738562,10.2627452 21.4230769,10.3846154 L17.7692308,19.1538462 C17.3034221,20.271787 16.2111026,21 15,21 L9,21 C7.78889745,21 6.6965779,20.271787 6.23076923,19.1538462 L2.57692308,10.3846154 C2.36450587,9.87481408 2.60558331,9.28934029 3.11538462,9.07692308 C3.23725479,9.02614384 3.36797398,9 3.5,9 Z M12,17 C13.1045695,17 14,16.1045695 14,15 C14,13.8954305 13.1045695,13 12,13 C10.8954305,13 10,13.8954305 10,15 C10,16.1045695 10.8954305,17 12,17 Z" fill="#000000" />
-													</g>
-												</svg>
-												<!--end::Svg Icon-->
+										<div class="btn btn-icon btn-clean h-40px w-40px btn-dropdown ">
+											<span class="svg-icon svg-icon-lg" >
+												<i class="flaticon-presentation-1 text-white" ></i>
 											</span>
 										</div>
 									</div>
@@ -649,7 +641,7 @@
 											<!--begin::Header-->
 											<div class="d-flex align-items-center py-10 px-8 bgi-size-cover bgi-no-repeat rounded-top" style="background-image: url({{asset('assets/media/misc/bg-1.jpg')}})">
 												<span class="btn btn-md btn-icon bg-white-o-15 mr-4">
-													<i class="flaticon-presentation-1 text-success"></i>
+													<i class="flaticon-presentation-1 text-white"></i>
 												</span>
 												<h4 class="text-white m-0 flex-grow-1 mr-3">Notas</h4>
 												
