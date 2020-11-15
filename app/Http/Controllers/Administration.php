@@ -39,7 +39,7 @@ use Illuminate\Support\Facades\DB;
 class Administration extends Controller
 {
     //Dashboard
-    public function Dashboard()
+    public function Dashboard(Request $request)
     {
         $buttons =[];
         $button = [
@@ -48,6 +48,7 @@ class Administration extends Controller
             "Type" => "add"
         ];
         array_push($buttons,$button);
+
         return view('Administration.Dashboard.Vacio',compact('buttons'));
     }
     public function test($test)

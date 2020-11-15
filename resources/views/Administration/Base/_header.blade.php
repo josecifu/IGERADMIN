@@ -649,125 +649,52 @@
 											<!--begin::Header-->
 											<div class="d-flex align-items-center py-10 px-8 bgi-size-cover bgi-no-repeat rounded-top" style="background-image: url({{asset('assets/media/misc/bg-1.jpg')}})">
 												<span class="btn btn-md btn-icon bg-white-o-15 mr-4">
-													<i class="flaticon2-shopping-cart-1 text-success"></i>
+													<i class="flaticon-presentation-1 text-success"></i>
 												</span>
-												<h4 class="text-white m-0 flex-grow-1 mr-3">My Cart</h4>
-												<button type="button" class="btn btn-success btn-sm">2 Items</button>
+												<h4 class="text-white m-0 flex-grow-1 mr-3">Notas</h4>
+												
 											</div>
 											<!--end::Header-->
 											<!--begin::Scroll-->
 											<div class="scroll scroll-push" data-scroll="true" data-height="250" data-mobile-height="200">
-												<!--begin::Item-->
-												<div class="d-flex align-items-center justify-content-between p-8">
-													<div class="d-flex flex-column mr-2">
-														<a href="#" class="font-weight-bold text-dark-75 font-size-lg text-hover-primary">iBlender</a>
-														<span class="text-muted">Best kichen gadget in 2020</span>
-														<div class="d-flex align-items-center mt-2">
-															<span class="font-weight-bold mr-1 text-dark-75 font-size-lg">$ 350</span>
-															<span class="text-muted mr-1">for</span>
-															<span class="font-weight-bold mr-2 text-dark-75 font-size-lg">5</span>
-															<a href="#" class="btn btn-xs btn-light-success btn-icon mr-2">
-																<i class="ki ki-minus icon-xs"></i>
-															</a>
-															<a href="#" class="btn btn-xs btn-light-success btn-icon">
-																<i class="ki ki-plus icon-xs"></i>
-															</a>
-														</div>
-													</div>
-													<a href="#" class="symbol symbol-70 flex-shrink-0">
-														<img src="{{ asset('assets/media/stock-600x400/img-1.jpg')}}" title="" alt="" />
-													</a>
-												</div>
-												<!--end::Item-->
+												
 												<!--begin::Separator-->
 												<div class="separator separator-solid"></div>
 												<!--end::Separator-->
 												<!--begin::Item-->
 												<div class="d-flex align-items-center justify-content-between p-8">
 													<div class="d-flex flex-column mr-2">
-														<a href="#" class="font-weight-bold text-dark-75 font-size-lg text-hover-primary">SmartCleaner</a>
-														<span class="text-muted">Smart tool for cooking</span>
+														<a href="#" class="font-weight-bold text-dark-75 font-size-lg text-hover-primary">Examen Parcial</a>
+														<span class="text-muted">Examen parcial 1 creado por Juan Lopez </span>
 														<div class="d-flex align-items-center mt-2">
-															<span class="font-weight-bold mr-1 text-dark-75 font-size-lg">$ 650</span>
-															<span class="text-muted mr-1">for</span>
-															<span class="font-weight-bold mr-2 text-dark-75 font-size-lg">4</span>
-															<a href="#" class="btn btn-xs btn-light-success btn-icon mr-2">
-																<i class="ki ki-minus icon-xs"></i>
-															</a>
-															<a href="#" class="btn btn-xs btn-light-success btn-icon">
-																<i class="ki ki-plus icon-xs"></i>
-															</a>
+															<span class="font-weight-bold mr-1 text-dark-75 font-size-lg">15/11/2020</span>
+															<span class="text-muted mr-1">Para</span>
+															<span class="font-weight-bold mr-2 text-dark-75 font-size-lg">4to Primaria- Matematicas</span>
+															
+														
 														</div>
 													</div>
-													<a href="#" class="symbol symbol-70 flex-shrink-0">
-														<img src="{{ asset('assets/media/stock-600x400/img-2.jpg')}}" title="" alt="" />
-													</a>
+													
 												</div>
 												<!--end::Item-->
 												<!--begin::Separator-->
 												<div class="separator separator-solid"></div>
 												<!--end::Separator-->
-												<!--begin::Item-->
-												<div class="d-flex align-items-center justify-content-between p-8">
-													<div class="d-flex flex-column mr-2">
-														<a href="#" class="font-weight-bold text-dark-75 font-size-lg text-hover-primary">CameraMax</a>
-														<span class="text-muted">Professional camera for edge cutting shots</span>
-														<div class="d-flex align-items-center mt-2">
-															<span class="font-weight-bold mr-1 text-dark-75 font-size-lg">$ 150</span>
-															<span class="text-muted mr-1">for</span>
-															<span class="font-weight-bold mr-2 text-dark-75 font-size-lg">3</span>
-															<a href="#" class="btn btn-xs btn-light-success btn-icon mr-2">
-																<i class="ki ki-minus icon-xs"></i>
-															</a>
-															<a href="#" class="btn btn-xs btn-light-success btn-icon">
-																<i class="ki ki-plus icon-xs"></i>
-															</a>
-														</div>
-													</div>
-													<a href="#" class="symbol symbol-70 flex-shrink-0">
-														<img src="{{ asset('assets/media/stock-600x400/img-3.jpg')}}" title="" alt="" />
-													</a>
-												</div>
-												<!--end::Item-->
-												<!--begin::Separator-->
-												<div class="separator separator-solid"></div>
-												<!--end::Separator-->
-												<!--begin::Item-->
-												<div class="d-flex align-items-center justify-content-between p-8">
-													<div class="d-flex flex-column mr-2">
-														<a href="#" class="font-weight-bold text-dark text-hover-primary">4DPrinter</a>
-														<span class="text-muted">Manufactoring unique objects</span>
-														<div class="d-flex align-items-center mt-2">
-															<span class="font-weight-bold mr-1 text-dark-75 font-size-lg">$ 1450</span>
-															<span class="text-muted mr-1">for</span>
-															<span class="font-weight-bold mr-2 text-dark-75 font-size-lg">7</span>
-															<a href="#" class="btn btn-xs btn-light-success btn-icon mr-2">
-																<i class="ki ki-minus icon-xs"></i>
-															</a>
-															<a href="#" class="btn btn-xs btn-light-success btn-icon">
-																<i class="ki ki-plus icon-xs"></i>
-															</a>
-														</div>
-													</div>
-													<a href="#" class="symbol symbol-70 flex-shrink-0">
-														<img src="{{ asset('assets/media/stock-600x400/img-4.jpg')}}" title="" alt="" />
-													</a>
-												</div>
-												<!--end::Item-->
+											
 											</div>
 											<!--end::Scroll-->
 											<!--begin::Summary-->
 											<div class="p-8">
 												<div class="d-flex align-items-center justify-content-between mb-4">
-													<span class="font-weight-bold text-muted font-size-sm mr-2">Total</span>
-													<span class="font-weight-bolder text-dark-50 text-right">$1840.00</span>
+													<span class="font-weight-bold text-muted font-size-sm mr-2">Notas finalizadas</span>
+													<span class="font-weight-bolder text-dark-50 text-right">0</span>
 												</div>
 												<div class="d-flex align-items-center justify-content-between mb-7">
-													<span class="font-weight-bold text-muted font-size-sm mr-2">Sub total</span>
-													<span class="font-weight-bolder text-primary text-right">$5640.00</span>
+													<span class="font-weight-bold text-muted font-size-sm mr-2">Examenes creados</span>
+													<span class="font-weight-bolder text-primary text-right">0</span>
 												</div>
 												<div class="text-right">
-													<button type="button" class="btn btn-primary text-weight-bold">Place Order</button>
+													<button type="button" class="btn btn-primary text-weight-bold">Ver listado de notas</button>
 												</div>
 											</div>
 											<!--end::Summary-->
@@ -822,8 +749,14 @@
 											</div>
 											<!--end::Symbol-->
 											<!--begin::Text-->
-											<div class="text-dark m-0 flex-grow-1 mr-3 font-size-h5">Sean Stone</div>
-											<span class="label label-light-success label-lg font-weight-bold label-inline">3 messages</span>
+											<div class="text-dark m-0 flex-grow-1 mr-3 font-size-h5">
+												@if(session()->has('Username'))
+													  {{session()->get('Username')}}
+												@endif
+											</div>
+											<span class="label label-light-warning label-lg font-weight-bold label-inline">@if(session()->has('Username'))
+												{{session()->get('rol_Name')}}
+										  @endif</span>
 											<!--end::Text-->
 										</div>
 										<div class="separator separator-solid"></div>
@@ -837,26 +770,14 @@
 														<i class="flaticon2-calendar-3 text-success"></i>
 													</div>
 													<div class="navi-text">
-														<div class="font-weight-bold">My Profile</div>
-														<div class="text-muted">Account settings and more
-														<span class="label label-light-danger label-inline font-weight-bold">update</span></div>
+														<div class="font-weight-bold">Mi perfil</div>
+														<div class="text-muted">Información de la cuenta y configuraciones
+														</div>
 													</div>
 												</div>
 											</a>
 											<!--end::Item-->
-											<!--begin::Item-->
-											<a href="custom/apps/user/profile-3.html" class="navi-item px-8">
-												<div class="navi-link">
-													<div class="navi-icon mr-2">
-														<i class="flaticon2-mail text-warning"></i>
-													</div>
-													<div class="navi-text">
-														<div class="font-weight-bold">My Messages</div>
-														<div class="text-muted">Inbox and tasks</div>
-													</div>
-												</div>
-											</a>
-											<!--end::Item-->
+										
 											<!--begin::Item-->
 											<a href="custom/apps/user/profile-2.html" class="navi-item px-8">
 												<div class="navi-link">
@@ -864,8 +785,8 @@
 														<i class="flaticon2-rocket-1 text-danger"></i>
 													</div>
 													<div class="navi-text">
-														<div class="font-weight-bold">My Activities</div>
-														<div class="text-muted">Logs and notifications</div>
+														<div class="font-weight-bold">Mis actividaes</div>
+														<div class="text-muted">Logs y registros de usuario</div>
 													</div>
 												</div>
 											</a>
@@ -877,8 +798,8 @@
 														<i class="flaticon2-hourglass text-primary"></i>
 													</div>
 													<div class="navi-text">
-														<div class="font-weight-bold">My Tasks</div>
-														<div class="text-muted">latest tasks and projects</div>
+														<div class="font-weight-bold">Tareas pendientes</div>
+														<div class="text-muted">Tareas que requieren atención</div>
 													</div>
 												</div>
 											</a>
@@ -886,8 +807,8 @@
 											<!--begin::Footer-->
 											<div class="navi-separator mt-3"></div>
 											<div class="navi-footer px-8 py-5">
-												<a href="{{ route('logout')}}"  class="btn btn-light-primary font-weight-bold">Salir de la sesion</a>
-												<a href="custom/user/login-v2.html" target="_blank" class="btn btn-clean font-weight-bold">Upgrade Plan</a>
+												<a href="{{ route('logout')}}" style="color:white;" class="btn btn-light-primary font-weight-bold">Salir de la sesion</a>
+												
 											</div>
 											<!--end::Footer-->
 										</div>

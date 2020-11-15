@@ -42,20 +42,20 @@ License: You must have a valid license purchased only from themeforest(the above
 		<div class="d-flex flex-column flex-root">
 			<!--begin::Login-->
 			<div class="login login-3 login-signin-on d-flex flex-row-fluid" id="kt_login">
-				<div class="d-flex flex-center bgi-size-cover bgi-no-repeat flex-row-fluid" style="background-image: url(assets/media/bg/bg-15.jpg);">
-					<div class="login-form text-center text-white p-7 position-relative overflow-hidden">
+				<div class="d-flex flex-center bgi-size-cover bgi-no-repeat flex-row-fluid" style="background-image: url(assets/media/bg/bg-20.jpg);">
+					<div class="login-form text-center text-white p-7 position-relative overflow-hidden" style="background-color: #EC7E35;">
 						<!--begin::Login Header-->
-						<div class="d-flex flex-center mb-15">
+						<!--<div class="d-flex flex-center mb-15">
 							<a href="{{url('/')}}">
 								<img src="{{ asset('assets/media/logos/Logo-Iger.png')}}" class="max-h-200px" alt="" />
 							</a>
-						</div>
+						</div>-->
 						<!--end::Login Header-->
 						<!--begin::Login Sign in form-->
-						<div class="login-signin">
+						<div class="login-signin" >
 							<div class="mb-20">
-								<h3>Iniciar sesión</h3>
-								<p class="opacity-100 font-weight-bold">Ingrese los datos que se le solicitan acontinuación:</p>
+								<h3 >Iniciar sesión</h3>
+								<p class="opacity-100 font-weight-bold" >Ingrese los datos que se le solicitan acontinuación:</p>
 								 @if($errors->any())
                                 <div class="alert alert-danger alert-dismissble">
                                     <div class="alert-text">

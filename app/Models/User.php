@@ -55,7 +55,7 @@ class User extends Authenticatable
                 'rol_id' => $rols[0]['id'],
                 'rol_Name' => $rols[0]['Name'],
                 'User_id' => $this->id,
-                'Username' =>$this->Username,
+                'Username' =>$this->name,
             ]);
         }
     }
