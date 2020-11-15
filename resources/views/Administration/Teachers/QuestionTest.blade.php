@@ -36,10 +36,12 @@
                                 <div class="card card-custom">
                                     <div class="card-header">
                                         <div class="card-title">
-                                            <span class="card-icon">
-                                                <i class="flaticon2-favourite text-primary"></i>
-                                            </span>
-                                            <h3 class="card-label">Preguntas de {{$test->Title}}</h3>
+                                            <div class="card-toolbar">
+                                                <!--begin::Dropdown-->
+                                                <a href="{{url('administration/teacher/test/'.$curso)}}" class="btn btn-danger font-weight-bolder mr-2">
+                                                <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
+                                                <!--end::Dropdown-->
+                                            </div>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -92,7 +94,10 @@
 										<div class="card card-custom gutter-b example-hover">
 											<div class="card-header">
 												<div class="card-title">
-													<h3 class="card-label">{{$test->Title}}</h3>
+                                                    <span class="card-icon">
+                                                        <i class="flaticon2-favourite text-primary"></i>
+                                                    </span>
+													<h3 class="card-label">{{$test->Title}} - Valor: {{$test->Score}} pts</h3>
 												</div>
 											</div>
 											<div class="card-body">
@@ -101,7 +106,7 @@
                                                     @foreach($questions as $key => $q)
                                                         <div class="card">
                                                             <div class="card-header">
-                                                                <div class="card-title" data-toggle="collapse" data-target="#collapseOne{{$key}}">{{$q->Title}}</div>
+                                                                    <div class="card-title" data-toggle="collapse" data-target="#collapseOne{{$key}}">{{$q->Title}}  - valor {{$q->Score}} pts</div>
                                                             </div>
                                                             <div id="collapseOne{{$key}}" class="collapse" data-parent="#accordionExample1">
                                                                 <div class="card-body">

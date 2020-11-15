@@ -74,7 +74,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/desactive', $route.'\Teacher@Desactive')->name('Desactive');
 		Route::get('/activate/{model}', $route.'\Teacher@Activate')->name('ActivateTeacher');
 		Route::get('/test/{model}', $route.'\Teacher@TestTeacher')->name('TestTeacher');
-		Route::get('/question/{model}', $route.'\Teacher@QuestionTest')->name('QuestionsTest');
+		Route::get('/question/{model}/{no}', $route.'\Teacher@QuestionTest')->name('QuestionsTest');
 		Route::get('/create/test/{model}', $route.'\Teacher@createExam')->name('createExam');
 		Route::get('/assign/question/test/{model}/{no}', $route.'\Teacher@AssignQuestion')->name('AssignQuestion');
 		Route::post('/save/question/test', $route.'\Teacher@SaveAssignQuestion')->name('SaveAssignQuestion');

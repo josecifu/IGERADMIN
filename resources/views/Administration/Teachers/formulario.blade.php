@@ -119,7 +119,7 @@
 																		<i class="la la-phone"></i>
 																	</span>
 																</div>
-																<input type="text" name="Telefono" id="Telefono" class="form-control form-control-solid" placeholder="Phone" />
+																<input type="number" name="Telefono" id="Telefono" class="form-control form-control-solid" placeholder="Phone" />
 															</div>
 														</div>
 													</div>

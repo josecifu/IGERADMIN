@@ -147,7 +147,7 @@
                                 render: function(data, type, full, meta) {
                                     return '\
                                         <div class="dropdown dropdown-inline">\
-                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">\
+                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title ="Ajustes" data-toggle="dropdown">\
                                                 <i class="la la-cog"></i>\
                                             </a>\
                                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
@@ -160,7 +160,7 @@
                                         <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Detalle de asignación">\
                                             <i class="la la-edit"></i>\
                                         </a>\
-                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Borrar">\
+                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Eliminar">\
                                             <i class="la la-trash"></i>\
                                         </a>\
                                     ';

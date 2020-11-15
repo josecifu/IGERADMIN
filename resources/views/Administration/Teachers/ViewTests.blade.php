@@ -99,32 +99,55 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($Models as $Model)
                                                 <tr>
-                                                    <td>{{$Model['VN']}} {{$Model['VA']}}</td>
-                                                    @if($Model['P1']!=0)
-                                                        <td><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="hola({{$Model['P1']}});">{{$Model['P1']}}</button></center></td>
+                                                    <td>{{$Nombre}}</td>
+                                                    @if($p1)
+                                                    <td>
+                                                        
+                                                            @foreach($p1 as $P)
+                                                                <center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="verNotas({{$P['id']}},{{$id}});">{{$P['NoP']}}</button></center>
+                                                            @endforeach
+                                                        
+                                                    </td>
                                                     @else
-                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver grados asignados" data-placement="left">{{$Model['P1']}}</button></center></td>
+                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver grados asignados" data-placement="left">0</button></center></td>
                                                     @endif
-                                                    @if($Model['P2']!=0)
-                                                        <td><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="hola({{$Model['P2']}});">{{$Model['P2']}}</button></center></td>
+                                                    @if($p2)
+                                                    <td>
+                                                        <ul>
+                                                            @foreach($p2 as $P)
+                                                                <li><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="verNotas({{$P['id']}},{{$id}});">{{$P['NoP']}}</button></center></li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </td>
                                                     @else
-                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver grados asignados" data-placement="left">{{$Model['P2']}}</button></center></td>
+                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver grados asignados" data-placement="left">0</button></center></td>
                                                     @endif
-                                                    @if($Model['P3']!=0)
-                                                        <td><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="hola({{$Model['P3']}});">{{$Model['P3']}}</button></center></td>
+                                                    @if($p3)
+                                                    <td>
+                                                        <ul>
+                                                            @foreach($p3 as $P)
+                                                                <li><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="verNotas({{$P['id']}},{{$id}});">{{$P['NoP']}}</button></center></li>    
+                                                            @endforeach
+                                                        </ul>
+                                                    </td>
                                                     @else
-                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver grados asignados" data-placement="left">{{$Model['P3']}}</button></center></td>
+                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver grados asignados" data-placement="left">0</button></center></td>
                                                     @endif
-                                                    @if($Model['P4']!=0)
-                                                        <td><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="hola({{$Model['P4']}});">{{$Model['P4']}}</button></center></td>
+                                                    @if($p4)
+                                                    <td>
+                                                        <ul>
+                                                            @foreach($p4 as $P)
+                                                                <li><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="verNotas({{$P['id']}},{{$id}});">{{$P['NoP']}}</button></center></li>    
+                                                            @endforeach
+                                                        </ul>
+                                                    </td>
                                                     @else
-                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver grados asignados" data-placement="left">{{$Model['P4']}}</button></center></td>
+                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver grados asignados" data-placement="left">0</button></center></td>
                                                     @endif
+                                                    
                                                     <td nowrap="nowrap"></td>
                                                 </tr>
-                                                @endforeach
                                             </tbody>
                                         </table>
                                         <!--end: Datatable-->
@@ -201,55 +224,9 @@
             jQuery(document).ready(function() {
                 KTDatatablesDataSourceHtml.init();
             });
-            function hola($id) {
+            function verNotas($id,$curso) {
                 var $url_path = '{!! url('/') !!}';
-                window.location.href = $url_path+"/administration/teacher/question/"+$id;
-            }
-            function deletePeriod($id,$name)
-            {
-                const swalWithBootstrapButtons = Swal.mixin({
-                    customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                    },
-                    buttonsStyling: false
-                })
-                swalWithBootstrapButtons.fire({
-                    title: '¿Está seguro de eliminar el voluntario?',
-                    text: "El nombre del Voluntario: "+$name,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Si, eliminar!',
-                    cancelButtonText: 'No, cancelar!',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        var Code = $id;
-                        var data = [{
-                            Code: Code,
-                            Name: result.value[0],
-                        }];
-                        swalWithBootstrapButtons.fire({
-                            title: 'Eliminado!',
-                            text: 'Se ha eliminado con exito!',
-                            icon: 'success',
-                            confirmButtonText: 'Aceptar',
-                        }).then(function () {
-                            
-                            var $url_path = '{!! url('/') !!}';
-                            window.location.href = $url_path+"/administration/teacher/delete/"+$id;
-                            });
-                    } else if (
-                    result.dismiss === Swal.DismissReason.cancel
-                    ) {
-                    swalWithBootstrapButtons.fire({
-                        title: 'Cancelado!',
-                        text:  'La Voluntario no ha sido eliminada!',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar',
-                    })
-                    }
-                })
+                window.location.href = $url_path+"/administration/teacher/question/"+$id+"/"+$curso;
             }
 
        </script>
