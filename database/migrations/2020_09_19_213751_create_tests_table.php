@@ -19,7 +19,8 @@ class CreateTestsTable extends Migration
             $table->string('Score');
             $table->string('StartDate');
             $table->string('EndDate');
-            $table->string('Unity');
+            $table->unsignedInteger('Activity_id'); 
+            $table->foreign('Activity_id')->references('id')->on('assign_activities');
             $table->timestamps();
         });
     }
