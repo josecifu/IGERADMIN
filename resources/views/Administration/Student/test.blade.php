@@ -22,9 +22,9 @@
                                     <th>
                                         <h4>
                                             {{$test[0]['Title']}}<br>
-                                            Nombre del estudiante: -<br>
-                                            Curso: -<br>
-                                            Nombre del maestro: -<br>
+                                            Nombre del estudiante: Javier Angulo<br>
+                                            Curso: Matemáticas<br>
+                                            Nombre del maestro: Rodrigo Castillo<br>
                                             Nota final: {{$score[0]['Score']}}
                                         </h4>
                                     </th>
@@ -100,9 +100,9 @@
                                 <td>{{$m['id']}}</td>
                                 <td>{{$m['question']}}</td>
                                 <td>{{$m['type']}}</td>
-                                <td>-</td>
+                                <td>5</td>
                                 <td>{{$m['correct']}}</td>
-                                <td>-</td>
+                                <td>0</td>
                                 <td><center><button type="button" disabled class="btn btn-outline-info" data-toggle="tooltip" title="Ver pregunta" data-placement="left">Ver pregunta</button></center></td>
                                 <td nowrap="nowrap"></td>
                             </tr>

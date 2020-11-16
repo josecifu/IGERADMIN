@@ -5,7 +5,7 @@
     Estudiantes
     @stop
     @section('breadcrumb1')
-    Notas/Curso
+    Curso/Notas
     @stop
     @section('breadcrumb2')
     Estudiante
@@ -21,7 +21,10 @@
                             <i class="flaticon2-favourite text-primary"></i>
                         </span>
                         <h3 class="card-label">
-                            Listado de cursos y notas de: Marvin Lopez
+                            Listado de cursos y notas de:
+                            @foreach($student as $s)
+                                {{$s['name']}}
+                            @endforeach
                         </h3>
                     </div>
                     <div class="card-toolbar">
@@ -78,26 +81,36 @@
                 </div>
                 <div class="card-body">
                     <!--begin: Datatable-->
-                    <table class="table table-bordered table-hover table-checkable" id="" style="margin-top: 13px !important">
+                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
                             <tr>
                                 @foreach($titles as $t)
-                                <th>{{ $t }}</th>
+                                    <th>{{ $t }}</th>
                                 @endforeach
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($models as $m)
-                            <tr>
-                                <td>{{$m['id']}}</td>
-                                <td>{{$m['course']}}</td>
-                                <td><center>{{$m['Unity1']}}</center></td>
-                                <td>{{$m['Unity2']}}</td>
-                                <td>{{$m['Unity3']}}</td>
-                                <td>{{$m['Unity4']}}</td>
-                                <td>{{$m['FinalNote']}}</td>
-                                <td nowrap="nowrap"></td>
-                            </tr>
+                                <tr>
+                                    <td>{{$m['id']}}</td>
+                                    <td>{{$m['course']}}</td>
+                                    <td>
+                                        <center>{{$m['first']}}</center>
+                                    </td>
+                                    <td>
+                                        <center>{{$m['second']}}</center>
+                                    </td>
+                                    <td>
+                                        <center>{{$m['third']}}</center>
+                                    </td>
+                                    <td>
+                                        <center>{{$m['fourth']}}</center>
+                                    </td>
+                                    <td>
+                                        <center>{{$m['final']}}</center>
+                                    </td>
+                                    <td nowrap="nowrap"></td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -106,4 +119,57 @@
             </div>
             <!--end::Card-->
         </div>
+    @stop
+    @section('scripts')
+        <!--begin::Page Vendors(used by this page)-->
+        <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
+        <!--end::Page Vendors-->
+        <script type="text/javascript">
+            "use strict";
+            var KTDatatablesDataSourceHtml = function() {
+                var initTable1 = function() {
+                    var table = $('#kt_datatable');
+                    // begin first table
+                    table.DataTable({
+                        responsive: true,
+                        "language": {
+                            "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                        },
+                        columnDefs: [
+                            {
+                                targets: -1,
+                                title: 'Actividades',
+                                orderable: false,
+                                render: function(data, type, full, meta) {
+                                    return '\
+                                        <div class="dropdown dropdown-inline">\
+                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title ="Actividades" data-toggle="dropdown">\
+                                                <i class="la la-cog"></i>\
+                                            </a>\
+                                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
+                                                <ul class="nav nav-hoverable flex-column">\
+                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-edit"></i><span class="nav-text">Unidad I</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-edit"></i><span class="nav-text">Unidad II</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-edit"></i><span class="nav-text">Unidad III</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-edit"></i><span class="nav-text">Unidad IV</span></a></li>\
+                                                </ul>\
+                                            </div>\
+                                        </div>\
+                                    ';
+                                },
+                            },
+                        ],
+                    });
+                };
+                return {
+                    //main function to initiate the module
+                    init: function() {
+                        initTable1();
+                    },
+                };
+            }();
+            jQuery(document).ready(function() {
+                KTDatatablesDataSourceHtml.init();
+            });
+       </script>
     @stop
