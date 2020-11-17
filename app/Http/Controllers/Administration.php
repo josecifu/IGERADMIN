@@ -48,7 +48,9 @@ class Administration extends Controller
             "Type" => "add"
         ];
         array_push($buttons,$button);
+        $course = course::find(1);
 
+        dd( $course->Tests()->where('Activity_id','1'));
         return view('Administration.Dashboard.Vacio',compact('buttons'));
     }
     public function test($test)

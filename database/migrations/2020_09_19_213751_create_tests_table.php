@@ -22,6 +22,8 @@ class CreateTestsTable extends Migration
             $table->unsignedInteger('Activity_id'); 
             $table->foreign('Activity_id')->references('id')->on('assign_activities');
             $table->string('State');
+            $table->unsignedInteger('Course_id'); 
+            $table->foreign('Course_id')->references('id')->on('courses');
             $table->timestamps();
         });
     }
