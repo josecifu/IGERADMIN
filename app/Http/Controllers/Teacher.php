@@ -268,39 +268,51 @@ class Teacher extends Controller
         }else{
             return redirect('/administration/teacher/list')->withErrors(['msg', 'No se ha asignado un voluntario al curso']);
         }
-        
-        $p1 = $p2 = $p3 = $p4 = 0;
-        $assignS = Assign_student_grade::where('Grade_id',$course->Grade_id)->get();
-        foreach ($assignS as $value) {
-            $notas = Note::where('Course_id',$id)->where('Studen_id',$value->id)->get();
-            $user = user::find($value->user_id);
-            $student = Person::find($user->Person_id);
-            foreach ($notas as $valueN) {
-                if($valueN->Unity == 1){
-                    $p1 = $valueN->Score;
-                }
-                elseif ($valueN->Unity == 2) {
-                    $p2 = $valueN->Score;
-                }
-                elseif ($valueN->Unity == 3) {
-                    $p3 = $valueN->Score;
-                }
-                elseif ($valueN->Unity == 4) {
-                    $p4 = $valueN->Score;
-                }
-            }
-            $Final = $p1 + $p2 + $p3 + $p4;
+        $activity = Assign_activity::where('Course_id',$id)->get();
+        $nombreActivity = [];
+        $actividades = [];
+        foreach ($activity as  $value) {
+            // $test = test::where('Activity_id',$value->id)->get();
             $data = [
-                "Nombre" => $student->Names." ".$student->LastNames,
-                'P1' => $p1,
-                'P2' => $p2,
-                'P3' => $p3,
-                'P4' => $p4,
-                'Final' => $Final,
+                'Nombre' => $value->Name,
+                'Punteo' => $value->Score,
+                'calificacion' => 0,
             ];
-            array_push($Models,$data);
-            $p1 = $p2 = $p3 = $p4 = 0;
+            array_push($nombreActivity,$data);
         }
+
+        // $p1 = $p2 = $p3 = $p4 = 0;
+        // $assignS = Assign_student_grade::where('Grade_id',$course->Grade_id)->get();
+        // foreach ($assignS as $value) {
+        //     $notas = Note::where('Course_id',$id)->where('Studen_id',$value->id)->get();
+        //     $user = user::find($value->user_id);
+        //     $student = Person::find($user->Person_id);
+        //     foreach ($notas as $valueN) {
+        //         if($valueN->Unity == 1){
+        //             $p1 = $valueN->Score;
+        //         }
+        //         elseif ($valueN->Unity == 2) {
+        //             $p2 = $valueN->Score;
+        //         }
+        //         elseif ($valueN->Unity == 3) {
+        //             $p3 = $valueN->Score;
+        //         }
+        //         elseif ($valueN->Unity == 4) {
+        //             $p4 = $valueN->Score;
+        //         }
+        //     }
+        //     $Final = $p1 + $p2 + $p3 + $p4;
+        //     $data = [
+        //         "Nombre" => $student->Names." ".$student->LastNames,
+        //         'P1' => $p1,
+        //         'P2' => $p2,
+        //         'P3' => $p3,
+        //         'P4' => $p4,
+        //         'Final' => $Final,
+        //     ];
+        //     array_push($Models,$data);
+        //     $p1 = $p2 = $p3 = $p4 = 0;
+        // }
         $buttons =[];
         $button = [
             "Name" => 'Crear Actividad',
@@ -313,19 +325,19 @@ class Teacher extends Controller
             "Link" => 'administration/teacher/list',
             "Type" => "btn1"
         ];
-        array_push($buttons,$button);
+        // array_push($buttons,$button);
         $Nombre = $vol->Names.' '.$vol->LastNames;
         $grado = grade::find($course->Grade_id)->GradeName();
-        $activity = Assign_activity::where('Course_id',$id)->get();
-        $actividades = [];
-        foreach ($activity as $value) {
-            $data=[
-                "Nombre" => $value->Name
-            ];
-            array_push($actividades,$data);
-        }
+        // $activity = Assign_activity::where('Course_id',$id)->get();
+        // $actividades = [];
+        // foreach ($activity as $value) {
+        //     $data=[
+        //         "Nombre" => $value->Name
+        //     ];
+        //     array_push($actividades,$data);
+        // }
         $Titles = ['Alumno','Nota Final','Acciones'];
-        return view('Administration/Teachers/listadoNotas',compact('buttons','actividades','Nombre','Titles','Models','course','grado'));
+        return view('Administration/Teachers/listadoNotas',compact('buttons','nombreActivity','Titles','Nombre','course','grado'));
     }
 
             #===================    CRUD EXAMENES ================
@@ -432,7 +444,7 @@ class Teacher extends Controller
         $Fechas = explode(' - ',$data['Fechas']);
         $HoraI = $data['HoraI'];
         $HoraF = $data['HoraF'];
-        $Unidad = $data['Unidad'];
+        $actividad = $data['actividad'];
         $Preguntas = $data['Preguntas'];
         $curso = $data['curso'];
         $c = course::find($curso);
@@ -444,7 +456,8 @@ class Teacher extends Controller
             $examen->Score = $Punteo;
             $examen->StartDate = $Fechas[0].' '.$HoraI;
             $examen->EndDate = $Fechas[1].' '.$HoraF;
-            $examen->Unity = $Unidad;
+            $examen->Activity_id = $actividad;
+            $examen->State = 'Active';
             $examen->save();
             $assignVol = Asign_teacher_course::where('Course_id',$curso)->first();
             $assignTest = new Asign_test_course;
