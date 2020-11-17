@@ -102,9 +102,9 @@
                                             <thead>
                                                 <tr>
                                                     <th>{{ $Titles[0] }}</th>
-                                                    @isset($Models)
-                                                        @foreach($actividades as $model)
-                                                            <th>{{ $model['Nombre'] }}</th>
+                                                    @isset($nombreActivity)
+                                                        @foreach($nombreActivity as $model)
+                                                            <th>{{ $model['Nombre'] }} - {{ $model['Punteo'] }}</th>
                                                         @endforeach
                                                     @endisset
                                                     <th>{{ $Titles[1] }}</th>
@@ -112,17 +112,16 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @isset($Models)
-                                                    @foreach($Models as $model)
-                                                        <tr>
-                                                            <td>{{$model['Nombre']}}</td>
-                                                            <td>{{$model['P1']}}</td>
-                                                            <td>{{$model['P2']}}</td>
-                                                            <td>{{$model['Final']}}</td>
-                                                            <td nowrap="nowrap"></td>
-                                                        </tr>
+                                                <tr>
+                                                    <td>Juan</td>
+                                                @isset($nombreActivity)
+                                                    @foreach($nombreActivity as $model)
+                                                            <td>{{$model['calificacion']}}</td>
                                                     @endforeach
                                                 @endisset
+                                                        <td>0</td>
+                                                    <td nowrap="nowrap"></td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                         <!--end: Datatable-->

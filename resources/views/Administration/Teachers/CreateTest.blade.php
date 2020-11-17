@@ -323,7 +323,7 @@ var KTWizard1 = function () {
             var Fechas = $('#Fechas').val();
             var HoraI = $('#HoraInicio').val(); 
             var HoraF = $('#HoraFinal').val();
-            var Unidad = $('#Unidad').val();
+            var actividad = $('#actividad').val();
 			var Preguntas = $('#NoPreguntas').val();
             var data = [{
 				Titulo: Titulo,
@@ -331,7 +331,7 @@ var KTWizard1 = function () {
                 Fechas: Fechas,
                 HoraI: HoraI,
                 HoraF: HoraF,
-                Unidad: Unidad,
+                actividad: actividad,
                 Preguntas: Preguntas,
 				curso: {{$id}},
             }];
