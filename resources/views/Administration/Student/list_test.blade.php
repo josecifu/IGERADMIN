@@ -92,17 +92,17 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="/administration/student/test/">
+                                        <a href="{{url('/administration/student/test/'.$m['assign'])}}">
                                             <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver examen</button>
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="/administration/student/test/">
+                                        <a href="{{url('/administration/student/test/'.$m['assign'])}}">
                                             <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver examen</button>
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="/administration/student/test/">
+                                        <a href="{{url('/administration/student/test/'.$m['assign'])}}">
                                             <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver examen</button>
                                         </a>
                                     </td>
