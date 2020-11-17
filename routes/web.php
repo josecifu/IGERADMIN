@@ -79,6 +79,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/assign/question/test/{model}/{no}', $route.'\Teacher@AssignQuestion')->name('AssignQuestion');
 		Route::post('/save/question/test', $route.'\Teacher@SaveAssignQuestion')->name('SaveAssignQuestion');
 		Route::post('/save/test', $route.'\Teacher@saveExam')->name('saveExam');
+		Route::post('/save/activity/{model}', $route.'\Teacher@saveActivity')->name('saveActivity');
 	});
 	//Comentario
 	Route::group([ 'prefix' => 'configurations'], function(){

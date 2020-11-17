@@ -42,9 +42,15 @@
                                             <h3 class="card-label">Listado de {{$course->Name ?? ''}} de {{$grado ?? ''}}</h3>
                                             @endisset
                                         </div>
+                                        <div class="card-title">
+                                            @isset($course)
+                                            <h4 class="card-label">Voluntario: {{$Nombre}}</h4>
+                                            @endisset
+                                        </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
                                             <div class="dropdown dropdown-inline mr-2">
+                                                
                                                 <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="la la-download"></i>Exportar</button>
                                                 <!--begin::Dropdown Menu-->
@@ -86,6 +92,8 @@
                                                 <!--end::Dropdown Menu-->
                                             </div>
                                             <!--end::Dropdown-->
+                                            <a href="#" onclick="create();" class="btn btn-primary font-weight-bolder">
+                                            <i class="la la-plus"></i>Crear Actividad</a>
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -93,9 +101,14 @@
                                         <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
                                             <thead>
                                                 <tr>
-                                                    @foreach($Titles as $Title)
-                                                    <th>{{ $Title }}</th>
-                                                    @endforeach
+                                                    <th>{{ $Titles[0] }}</th>
+                                                    @isset($Models)
+                                                        @foreach($actividades as $model)
+                                                            <th>{{ $model['Nombre'] }}</th>
+                                                        @endforeach
+                                                    @endisset
+                                                    <th>{{ $Titles[1] }}</th>
+                                                    <th>{{ $Titles[2] }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -103,11 +116,8 @@
                                                     @foreach($Models as $model)
                                                         <tr>
                                                             <td>{{$model['Nombre']}}</td>
-                                                            <td>{{$model['Vol']}}</td>
                                                             <td>{{$model['P1']}}</td>
                                                             <td>{{$model['P2']}}</td>
-                                                            <td>{{$model['P3']}}</td>
-                                                            <td>{{$model['P4']}}</td>
                                                             <td>{{$model['Final']}}</td>
                                                             <td nowrap="nowrap"></td>
                                                         </tr>
@@ -196,7 +206,92 @@
             $(document).ready(function() {
                 $('#username').editable();
             });
-
+            function create()
+        {
+            console.log({{$course->id}});
+            Swal.mixin({
+                input: 'text',
+                confirmButtonText: 'Siguiente  &rarr;',
+                showCancelButton: true,
+                progressSteps: ['1','2',]
+              }).queue([
+                {
+                  title: 'Ingrese nombre de la actividad:',
+                 
+                },
+                {
+                title: 'Ingrese Punteo total de la actividad:',
+                },
+              ]).then((result) => {
+                if (result.value) {
+                  const answers = JSON.stringify(result.value)
+                  console.log(result.value);
+                  const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                      confirmButton: 'btn btn-success',
+                      cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                  })
+                  
+                  swalWithBootstrapButtons.fire({
+                    title: '¿Está seguro de los datos?',
+                    text: "El nombre de la actividad: "+result.value[0]+" y el punteo: "+result.value[1],
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si, crearlo!',
+                    cancelButtonText: 'No, cancelar!',
+                    reverseButtons: true
+                  }).then((result2) => {
+                    if (result2.isConfirmed) {
+                        var data = [{
+                            Actividad: result.value[0],
+                            Punteo: result.value[1],
+                        }];
+            
+                        $.ajax({
+                            url:'/administration/teacher/save/activity/'+{{$course->id}},
+                            type:'POST',
+                            data: {"_token":"{{ csrf_token() }}","data":data},
+                            dataType: "JSON",
+                            success: function(e){
+                                swalWithBootstrapButtons.fire({
+                                    title: 'Creado!',
+                                    text: 'Se ha creado con exito!',
+                                    icon: 'success',
+                                    confirmButtonText: 'Aceptar',
+                                }).then(function () {
+                                       
+                                      var $url_path = '{!! url('/') !!}';
+                                      window.location.href = $url_path+"/administration/teacher/score/"+{{$course->id}};
+                                    });
+                                 
+                            },
+                            error: function(e){
+                                swalWithBootstrapButtons.fire({
+                                    title: 'Cancelado!',
+                                    text:   e.responseJSON['error'],
+                                    icon: 'error',
+                                    confirmButtonText: 'Aceptar',
+                                })
+                               
+                            }
+                        });
+                     
+                    } else if (
+                      result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                      swalWithBootstrapButtons.fire({
+                        title: 'Cancelado!',
+                        text:  'El dia no ha sido creada!',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar',
+                    })
+                    }
+                  })
+                }
+              })
+            }
        </script>
 
       

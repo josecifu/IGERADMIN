@@ -18,12 +18,15 @@ use App\Models\Question;
 use App\Models\Test;
 use App\Models\Note;
 //
+use App\Models\Asign_file_question_test;
+use App\Models\Assign_fields;
+use App\Models\field;
 use App\Models\Information;
-use App\Models\Asign_teacher_course;
 use App\Models\Schedule;
 
 class Student extends Controller
 {
+    #ADMINISTRACION
     public function list()
     {
         $buttons = [];
@@ -383,10 +386,10 @@ class Student extends Controller
         $titles = [
             'Id',
             'Curso',
-            'Unidad I',
-            'Unidad II',
-            'Unidad III',
-            'Unidad IV',
+            'Semestre I',
+            'Semestre II',
+            'Semestre III',
+            'Semestre IV',
             'Nota final',
             'Actividades'
         ];
@@ -462,24 +465,6 @@ class Student extends Controller
         return view('Administration/Student/list_test',compact('models','titles','course','grade'));
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     //conexion directa a examen
     //falta visualizar respuestas y modal ver pregunta
     public function test($id)
@@ -548,55 +533,52 @@ class Student extends Controller
 
 
 
-    public function statistics()
+
+
+    #ESTUDIANTE
+    public function test_view()
     {
-        return view('Administration/Student/statistics');
+        return view('Student/test_view');
     }
-
-    //ESTUDIANTE
-
-    public function create_test_answer()
+    public function question_answer()
     {
+        return view('Student/test_view');
     }
-    public function save_test_answer()
-    {
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function view_course_teachers_notes(Request $request)
-    {
-    }
-    public function view_tests(Request $request)
+    public function save_answer()
     {
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function view_course_teachers_notes()
+    {
+    }
     public function edit_profile($id)
     {
         $student = Person::find($id);
@@ -645,6 +627,9 @@ class Student extends Controller
     {
     }
     public function view_calendar()
+    {
+    }
+    public function statistics()
     {
     }
 }
