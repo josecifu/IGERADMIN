@@ -87,11 +87,14 @@
 														</div>
 													</div>
 													<div class="form-group row">
-														<label class="col-3">Unidad</label>
-														<div class="col-9">
-															<div class="input-group input-group-solid">
-																<input type="number" name="Unidad" id="Unidad" class="form-control form-control-solid" placeholder="Unidad" />
-															</div>
+														<label class="col-3">Actividad</label>
+														<div class="col-lg-4 col-md-9 col-sm-12">
+															<select class="form-control" id="actividad" name="param">
+																<option value="">--Seleccione una opción</option>
+																@foreach($actividades as $a)
+																	<option value="{{$a['id']}}">{{$a['Nombre']}}</option>
+																@endforeach
+															</select>
 														</div>
 													</div>
 													<div class="form-group row">
@@ -358,8 +361,8 @@ var KTWizard1 = function () {
                 }
             });
 		} 
-		$('#HoraInicio').on('change', function() {
-			console.log($('#HoraInicio').val());
+		$('#actividad').on('change', function() {
+			console.log($('#actividad').val());
 		});
     </script>
 	@stop
