@@ -17,13 +17,11 @@ class CreateTestsTable extends Migration
             $table->increments('id');
             $table->string('Title');
             $table->string('Score');
-            $table->string('StartDate');
-            $table->string('EndDate');
+            $table->string('StartDate')->nullable();
+            $table->string('EndDate')->nullable();
             $table->unsignedInteger('Activity_id'); 
             $table->foreign('Activity_id')->references('id')->on('assign_activities');
             $table->string('State');
-            $table->unsignedInteger('Course_id'); 
-            $table->foreign('Course_id')->references('id')->on('courses');
             $table->timestamps();
         });
     }

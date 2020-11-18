@@ -11,4 +11,7 @@ class course extends Model
     public function Tests(){
         return $this->hasMany(test::class)->get();
     }
+    public function Activities(){
+        return $this->hasMany(Assign_activity::class)->get();
+    }
 }

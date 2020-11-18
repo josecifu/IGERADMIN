@@ -353,42 +353,25 @@ class Teacher extends Controller
             return redirect('/administration/teacher/list')->withErrors(['msg', 'The Message']);
         }
         $course = course::find($id);
-        $p1 = $p2 = $p3 = $p4 = [];
-        $assignT = Asign_test_course::where('Teacher_id',$assign->id)->get();
-        foreach ($assignT as $value) {
-            $test = test::find($value->Test_id);
-            if($test->Unity == 1){
-                $quest = count(Question::where('Test_id',$value->id)->get());
-                $t = [
-                    'id' => $value->id,
-                    'NoP' => $quest,
+        $Titles = [];
+        $Models = [];
+        $Activities = Assign_activity::where('Course_id',$id)->get();
+        foreach($Activities as $Activity)
+        {
+            $act = [
+                "Name" =>$Activity->Name,
+                "No" =>count($Activity->Tests()),
+                "Test" => $Activity->Tests(),
+            ];
+            foreach($Activity->Tests() as $Test)
+            {
+                $model =[
+                    "Id" => $Test->id,
+                    "NoQuestions" => $Test->NoQuestions(),
                 ];
-                array_push($p1,$t);
+                array_push($Models,$model);
             }
-            elseif ($test->Unity == 2) {
-                    $quest = count(Question::where('Test_id',$value->id)->get());
-                    $t = [
-                        'id' => $value->id,
-                        'NoP' => $quest,
-                    ];
-                    array_push($p2,$t);
-            }
-            elseif ($test->Unity == 3) {
-                    $quest = count(Question::where('Test_id',$value->id)->get());
-                    $t = [
-                        'id' => $value->id,
-                        'NoP' => $quest,
-                    ];
-                    array_push($p3,$t);
-            }
-            elseif ($test->Unity == 4) {
-                    $quest = count(Question::where('Test_id',$value->id)->get());
-                    $t = [
-                        'id' => $value->id,
-                        'NoP' => $quest,
-                    ];
-                    array_push($p4,$t);
-            }
+            array_push($Titles,$act);
         }
         $buttons =[];
         $button = [
@@ -404,8 +387,8 @@ class Teacher extends Controller
         ];
         array_push($buttons,$button);
         $grado = grade::find($course->Grade_id)->GradeName();
-        $Titles = ['Voluntario','Unidad 1','Unidad 2','Unidad 3','Unidad 4'];
-        return view('Administration/Teachers/ViewTests',compact('Titles','buttons','Nombre','course','p1','p2','p3','p4','grado','id'));
+        
+        return view('Administration/Teachers/ViewTests',compact('Titles','buttons','Nombre','course','grado','Models','id'));
     }
     public function QuestionTest($id,$curso)   #VER PREGUNTAS DE UN EXAMEN
     {

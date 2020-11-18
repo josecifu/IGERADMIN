@@ -39,7 +39,7 @@
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
                                             @isset($course)
-                                                <h3 class="card-label">Listado de {{$course->Name ?? ''}} de {{$grado ?? ''}}</h3>
+                                                <h3 class="card-label">Listado de Examenes de {{$course->Name ?? ''}} de {{$grado ?? ''}} / Voluntario encargado: {{$Nombre}}</h3>
                                             @endisset
                                         </div>
                                         <div class="card-toolbar">
@@ -94,57 +94,22 @@
                                             <thead>
                                                 <tr>
                                                     @foreach($Titles as $Title)
-                                                    <th>{{ $Title }}</th>
+                                                    <th colspan="{{$Title['No']}}" >{{ $Title['Name'] }}</th>
                                                     @endforeach
                                                 </tr>
+                                                <tr>
+                                                    @foreach($Titles as $Title)
+                                                        @foreach($Title['Test'] as $title)
+                                                        <th>{{$title->Title}}</th>
+                                                        @endforeach
+                                                    @endforeach
+                                                  </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>{{$Nombre}}</td>
-                                                    @if($p1)
-                                                    <td>
-                                                        
-                                                            @foreach($p1 as $P)
-                                                                <center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="verNotas({{$P['id']}},{{$id}});">{{$P['NoP']}}</button></center>
-                                                            @endforeach
-                                                        
-                                                    </td>
-                                                    @else
-                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver grados asignados" data-placement="left">0</button></center></td>
-                                                    @endif
-                                                    @if($p2)
-                                                    <td>
-                                                        <ul>
-                                                            @foreach($p2 as $P)
-                                                                <li><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="verNotas({{$P['id']}},{{$id}});">{{$P['NoP']}}</button></center></li>
-                                                            @endforeach
-                                                        </ul>
-                                                    </td>
-                                                    @else
-                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver grados asignados" data-placement="left">0</button></center></td>
-                                                    @endif
-                                                    @if($p3)
-                                                    <td>
-                                                        <ul>
-                                                            @foreach($p3 as $P)
-                                                                <li><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="verNotas({{$P['id']}},{{$id}});">{{$P['NoP']}}</button></center></li>    
-                                                            @endforeach
-                                                        </ul>
-                                                    </td>
-                                                    @else
-                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver grados asignados" data-placement="left">0</button></center></td>
-                                                    @endif
-                                                    @if($p4)
-                                                    <td>
-                                                        <ul>
-                                                            @foreach($p4 as $P)
-                                                                <li><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="verNotas({{$P['id']}},{{$id}});">{{$P['NoP']}}</button></center></li>    
-                                                            @endforeach
-                                                        </ul>
-                                                    </td>
-                                                    @else
-                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver grados asignados" data-placement="left">0</button></center></td>
-                                                    @endif
+                                                    @foreach( $Models as $model)
+                                                        <td><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="verNotas( {{$model['Id']}},{{$id}});">{{$model['NoQuestions']}}</button></center></td>   
+                                                   @endforeach
                                                 </tr>
                                             </tbody>
                                         </table>
