@@ -702,43 +702,36 @@
 						  $('#gradeselect1').selectpicker('refresh');
 					  }
 				  });
-				  
 			  }
 			  $('#lvlmodalselect1').on('change', function() {
 				$('#SelectGrd').css("visibility", "visible");
 				ListGrades($('#lvlmodalselect1').val());
 			  });
-			function ListCourse(Grade)
-			  {
-				  $.ajax ({
-					  url: '{{route('LoadCourses')}}',
-					  type: 'POST',
-					  data: {
-						  "_token": "{{ csrf_token() }}",
-						  "GradeId"      : Grade,
-					  },
-					  success: (e) => {
-						  $('#courseselect1').empty();
-						  $.each(e['Courses'], function(fetch, data){
+			function ListCourse(Grade) {
+				$.ajax ({
+					url: '{{route('LoadCourses')}}',
+					type: 'POST',
+					data: {
+						"_token": "{{ csrf_token() }}",
+						"GradeId"      : Grade,
+					},
+					success: (e) => {
+						$('#courseselect1').empty();
+						$.each(e['Courses'], function(fetch, data) {
 							$('#courseselect1').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
-						  });
-						  $('#courseselect1').selectpicker('refresh');
-					  }
-				  });
-				  
-			  }
+						});
+						$('#courseselect1').selectpicker('refresh');
+					}
+				});
+			}
 			$('#gradeselect1').on('change', function() {
-				if(posGrade==3 || posGrade==4 || posGrade==5 )
-				{
+				if(posGrade==3 || posGrade==4 || posGrade==5 ) {
 					$('#SelectCourse').css("visibility", "visible");
 					ListCourse($('#gradeselect1').val());
 				}
-				
 			});
 
 			
-
-
 		</script>
 
 

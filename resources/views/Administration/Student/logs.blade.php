@@ -87,7 +87,7 @@
                             @foreach($models as $m)
                             <tr>
                                 <td>{{$m['id']}}</td>
-                                <td>{{$m['user']}}</td>
+                                <td>{{$m['responsible']}}</td>
                                 <td>{{$m['activity']}}</td>
                                 <td>{{$m['type']}}</td>
                                 <td>{{$m['datatime']}}</td>

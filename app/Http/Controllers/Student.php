@@ -126,7 +126,7 @@ class Student extends Controller
             ];
             array_push($models,$query);
         }
-        $grade = $grade->GradeName()." del circulo de estudio (".$grade->Period()->Name.")";
+        $grade = $grade->GradeName();
         return view('Administration/Student/list_grade',compact('models','titles','buttons','grade'));
     }
 
@@ -181,20 +181,20 @@ class Student extends Controller
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
+        $models = [];
         $titles = [
             'Id',
-            'Usuario responsable',
+            'Responsable',
             'Actividad',
             'Tipo',
             'Fecha y hora'
         ];
-        $logs = Logs::where('Table','Estudiante')->get();
-        $models = [];
+        $logs = Logs::where('Table','Estudiante')->orWhere('Table','Usuario')->orWhere('Table','Rol')->orWhere('Table','Grado')->get();
         foreach ($logs as $log)
         {
             $data = [
                 'id' => $log->id,
-                'user' => $log->User_Id,
+                'responsible' => $log->User_Id,
                 'activity' => $log->Description,
                 'type' => $log->Type,
                 'datatime' => $log->created_at
@@ -212,6 +212,7 @@ class Student extends Controller
     public function save(Request $request)
     {
         $id = $request->session()->get('User_id');
+        $responsible = User::find($id);
         $data = $request->data[0];
         $names = $data['Nombre'];
         $lastnames = $data['Apellido'];
@@ -248,27 +249,27 @@ class Student extends Controller
             $student_grades->save();
             $log = new Logs;
             $log->Table = "Estudiante";
-            $log->User_ID = $id;
-            $log->Description = "Se registro nuevo estudiante: ".$student->Names." ".$student->LastNames;
-            $log->Type = "Create";
+            $log->User_ID = $responsible->name;
+            $log->Description = "Se registro un nuevo estudiante: ".$student->Names." ".$student->LastNames;
+            $log->Type = "Crear";
             $log->save();
             $log = new Logs;
             $log->Table = "Usuario";
-            $log->User_ID = $id;
-            $log->Description = "Se registro un nuevo usuario: ".$user->username;
-            $log->Type = "Create";
+            $log->User_ID = $responsible->name;
+            $log->Description = "Se registro un nuevo usuario: ".$user->name;
+            $log->Type = "Crear";
             $log->save();
             $log = new Logs;
             $log->Table = "Rol";
-            $log->User_ID = $id;
+            $log->User_ID = $responsible->name;
             $log->Description = "Se ha asignado el rol Estudiante al usuario: ".$user->name;
-            $log->Type = "Assign";
+            $log->Type = "Asignación";
             $log->save();
             $log = new logs;
             $log->Table = "Grado";
-            $log->User_ID = $id;
-            $log->Description = "El estudiante: ".$student->Names." ".$student->LastNames."se le ha asignado a: ".$grade->Name;
-            $log->Type = "Assign";
+            $log->User_ID = $responsible->name;
+            $log->Description = "Al estudiante: ".$student->Names." ".$student->LastNames." se le ha asignado a: ".$grade->GradeName();
+            $log->Type = "Asignación";
             $log->save();
             DB::commit();
         }
@@ -293,6 +294,7 @@ class Student extends Controller
     public function update(Request $request)
     {
         $id = $request->session()->get('User_id');
+        $responsible = User::find($id);
         $data = $request->data[0];
         $names = $data['Nombre'];
         $lastnames = $data['Apellido'];
@@ -312,10 +314,10 @@ class Student extends Controller
         );
         Person::where('id',$personid)->update($data_student);
         $log = new logs;
-        $log->Table = "peoples and users";
-        $log->User_ID = $id;
+        $log->Table = "Estudiante";
+        $log->User_ID = $responsible->name;
         $log->Description = "Se actualizaron los datos del estudiante: ".$names." ".$lastnames;
-        $log->Type = "Update";
+        $log->Type = "Actualizar";
         $log->save();
         return response()->json(["Accion completada"]);
     }
@@ -323,14 +325,14 @@ class Student extends Controller
     public function delete($id, Request $request)
     {
         $indentity = $request->session()->get('User_id');
-        $user_logged = User::find($indentity);
+        $responsible = User::find($indentity);
         $user = User::find($id);
         $data_user = array('State' => 'Desactivated');
         $log = new logs;
         $log->Table = "Estudiante";
-        $log->User_ID = $user_logged->name;
+        $log->User_ID = $responsible->name;
         $log->Description = "Se ha eliminado el usuario: ".$user->name;
-        $log->Type = "Delete";
+        $log->Type = "Eliminar";
         $log->save();
         User::where('Person_id', $id)->update($data_user);
         Assign_user_rol::where('user_id',$id)->update($data_user);
@@ -340,14 +342,14 @@ class Student extends Controller
     public function activate($id, Request $request)
     {
         $indentity = $request->session()->get('User_id');
-        $user_logged = User::find($indentity);
+        $responsible = User::find($indentity);
         $user = User::find($id);
         $data_user = array('State' => 'Active');
         $log = new logs;
         $log->Table = "Estudiante";
-        $log->User_ID = $user_logged->name;
+        $log->User_ID = $responsible->name;
         $log->Description = "Se ha habilitado el usuario: ".$user->name;
-        $log->Type = "Active";
+        $log->Type = "Activar";
         $log->save();
         User::where('Person_id', $id)->update($data_user);
         Assign_user_rol::where('user_id',$id)->update($data_user);
@@ -386,12 +388,22 @@ class Student extends Controller
         $titles = [
             'Id',
             'Curso',
-            'Semestre I',
-            'Semestre II',
-            'Semestre III',
-            'Semestre IV',
+            'Primer Semestre',
+            'Segundo Semestre',
             'Nota final',
             'Actividades'
+        ];
+        $subtitle = [
+            '',
+            '',
+            '',
+            '',
+            'Parcial 1',
+            'Parcial 2',
+            'Parcial 3',
+            'Parcial 4',
+            '',
+            ''
         ];
         $assigns = Assign_student_grade::where('id',$id)->get('user_id');
         foreach ($assigns as $assign)
@@ -435,7 +447,7 @@ class Student extends Controller
             ];
             array_push($models,$query);
         }
-        return view('Administration/Student/course_scores',compact('models','titles','student'));
+        return view('Administration/Student/course_scores',compact('models','titles','student','subtitle'));
     }
 
     public function list_test($id)

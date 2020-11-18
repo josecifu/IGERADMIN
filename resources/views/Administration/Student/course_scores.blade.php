@@ -81,12 +81,38 @@
                 </div>
                 <div class="card-body">
                     <!--begin: Datatable-->
-                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
+                    <table class="table table-bordered table-hover table-checkable" id="" style="margin-top: 13px !important">
                         <thead>
                             <tr>
-                                @foreach($titles as $t)
-                                    <th>{{ $t }}</th>
-                                @endforeach
+                                <th rowspan="2">
+                                    <center>Id</center>
+                                </th>
+                                <th rowspan="2">
+                                    <center>Curso</center>
+                                </th>
+                                <th colspan="2">
+                                    <center>Primer Semestre</center>
+                                </th>
+                                <th colspan="2">
+                                    <center>Segundo Semestre</center>
+                                </th>
+                                <th rowspan="2">
+                                    <center>Nota Final</center>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <center>Parcial 1</center>
+                                </th>
+                                <th>
+                                    <center>Parcial 2</center>
+                                </th>
+                                <th>
+                                    <center>Parcial 3</center>
+                                </th>
+                                <th>
+                                    <center>Parcial 4</center>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -106,10 +132,9 @@
                                     <td>
                                         <center>{{$m['fourth']}}</center>
                                     </td>
-                                    <td>
+                                    <td >
                                         <center>{{$m['final']}}</center>
                                     </td>
-                                    <td nowrap="nowrap"></td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -148,10 +173,10 @@
                                             </a>\
                                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
                                                 <ul class="nav nav-hoverable flex-column">\
-                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-edit"></i><span class="nav-text">Unidad I</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-edit"></i><span class="nav-text">Unidad II</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-edit"></i><span class="nav-text">Unidad III</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-edit"></i><span class="nav-text">Unidad IV</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-edit"></i><span class="nav-text">Parcial 1</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-edit"></i><span class="nav-text">Parcial 2</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-edit"></i><span class="nav-text">Parcial 3</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-edit"></i><span class="nav-text">Parcial 4</span></a></li>\
                                                 </ul>\
                                             </div>\
                                         </div>\
