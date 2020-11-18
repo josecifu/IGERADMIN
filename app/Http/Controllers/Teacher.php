@@ -271,7 +271,7 @@ class Teacher extends Controller
         $Titles = [];
         $Models = [];
         $Activities = Assign_activity::where('Course_id',$id)->get();
-        $assignstudentgrade = Assign_student_grade::where([['Grade_id',$course->Grade_id],['State','Active']])->get();
+        $gradeStudents = grade::find($course->Grade_id)->Students();
         foreach($Activities as $Activity)
         {
             $act = [
@@ -279,18 +279,33 @@ class Teacher extends Controller
                 "No" =>count($Activity->Tests()),
                 "Test" => $Activity->Tests(),
             ];
-            foreach($Activity->Tests() as $Test)
-            {
-                $model =[
-                    'Alumno' => 'Juan',
-                    "Id" => $Test->id,
-                    "NotaExamen" => 0,
-                ];
-                array_push($Models,$model);
-            }
             array_push($Titles,$act);
             // dd($Titles);
         }
+        foreach($gradeStudents as $student)
+        {
+            $notas=[];
+            foreach($Activities as $Activity)
+            {
+                if(count($Activity->Tests())==0)
+                {
+                    array_push($notas," ");
+                }
+                else
+                {
+                    foreach($Activity->Tests() as $test)
+                    {
+                        array_push($notas,"0");
+                    }
+                }
+            }
+            $model =[
+                'Alumno' => $student->person()->Names." ".$student->person()->LastNames,
+                'Notas' =>$notas,
+            ];
+            array_push($Models,$model);
+        }
+        
 
         // $p1 = $p2 = $p3 = $p4 = 0;
         // $assignS = Assign_student_grade::where('Grade_id',$course->Grade_id)->get();
@@ -327,8 +342,8 @@ class Teacher extends Controller
         $buttons =[];
         $button = [
             "Name" => 'Crear Actividad',
-            "Link" => 'administration/teacher/create/activity/'.$id,
-            "Type" => "add"
+            "Link" => "create()",
+            "Type" => "addFunction"
         ];
         array_push($buttons,$button);
         $button = [

@@ -13,7 +13,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
     public function person()
     {
-        return $this->hasOne(Person::class,'id','Person_id');
+        return $this->hasOne(Person::class,'id','Person_id')->first();
     }
     /**
      * The attributes that are mass assignable.

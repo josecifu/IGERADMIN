@@ -152,7 +152,7 @@ class MenuSeeder extends Seeder
             'Order' => '4',      
         ]);
         DB::table('menus')->insert([ 
-            'Name' => 'Ver listado de asignacion de dias y grados',
+            'Name' => 'Ver asignaciones de circulos de estudio, niveles y grados',
             'State' => '1',
             'Url' => 'administration/configurations/level/list',  
             'menu_id' => '21'          

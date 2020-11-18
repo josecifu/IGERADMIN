@@ -85,6 +85,8 @@
                                                 </div>
                                                 <!--end::Dropdown Menu-->
                                             </div>
+                                            <a href="#" onclick="create();" class="btn btn-primary font-weight-bolder">
+                                                <i class="la la-plus"></i>Crear Actividad</a>
                                             <!--end::Dropdown-->
                                         </div>
                                     </div>
@@ -95,25 +97,35 @@
                                                 <tr>
                                                     <th></th>
                                                     @foreach($Titles as $Title)
-                                                        <th colspan="{{ $Title['No'] }}" >{{ $Title['Name'] }}</th>
+                                                        <th colspan="{{ $Title['No'] }}" ><center>{{ $Title['Name'] }}</center></th>
                                                     @endforeach
+                                                    <th></th>
                                                 </tr>
                                                 <tr>
                                                     <th>Nombre de los alumnos</th>
                                                     @foreach($Titles as $Title)
+                                                        @if($Title['No']==0)
+                                                        <th><center>No existen examenes asignados</center></th>
+                                                        @endif
                                                         @foreach($Title['Test'] as $title)
-                                                        <th>{{$title->Title}}</th>
+                                                        <th><center>{{$title->Title}}</center></th>
                                                         @endforeach
                                                     @endforeach
-                                                    
+                                                    <th>Acciones</th>
                                                   </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
+                                                
                                                     @foreach( $Models as $model)
-                                                        <td>{{$model['NotaExamen']}}</td>
+                                                    <tr>
+                                                        <td>{{$model['Alumno']}}</td>
+                                                        @foreach($model['Notas'] as $nota)
+                                                            <td><center>{{$nota}}</center></td>
+                                                        @endforeach
+                                                        <td nowrap="nowrap"></td>
+                                                    </tr>
                                                    @endforeach
-                                                </tr>
+                                                 
                                             </tbody>
                                         </table>
                                         <!--end: Datatable-->
@@ -199,7 +211,6 @@
             });
             function create()
         {
-            console.log({{$course->id}});
             Swal.mixin({
                 input: 'text',
                 confirmButtonText: 'Siguiente  &rarr;',
