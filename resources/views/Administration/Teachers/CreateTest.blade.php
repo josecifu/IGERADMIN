@@ -63,30 +63,6 @@
 														</div>
 													</div>
 													<div class="form-group row">
-														<label class="col-3">Fecha de inicio y final</label>
-														<div class="col-9">
-															<div class="">
-																<input class="form-control" id="Fechas" name="Fechas" readonly="readonly" placeholder="Select time" type="text" />
-															</div>
-														</div>
-													</div>
-													<div class="form-group row">
-														<label class="col-3">Hora de inicio</label>
-														<div class="col-9">
-															<div class="">
-																<input class="form-control" name="HoraInicio" id="HoraInicio" readonly="readonly" placeholder="Select time" type="text" />
-															</div>
-														</div>
-													</div>
-													<div class="form-group row">
-														<label class="col-3">Hora Final</label>
-														<div class="col-9">
-															<div class="">
-																<input class="form-control" name="HoraFinal" id="HoraFinal" readonly="readonly" placeholder="Select time" type="text" />
-															</div>
-														</div>
-													</div>
-													<div class="form-group row">
 														<label class="col-3">Actividad</label>
 														<div class="col-lg-4 col-md-9 col-sm-12">
 															<select class="form-control" id="actividad" name="param">
@@ -98,6 +74,41 @@
 														</div>
 													</div>
 													<div class="form-group row">
+														<label class="col-3 col-form-label">Crear examen virtual</label>
+														<div class="col-3">
+															<span class="switch switch-info">
+																<label>
+																	<input type="checkbox" id="virtual" name="virtual" />
+																	<span></span>
+																</label>
+															</span>
+														</div>
+													</div>
+													<div class="form-group row" id="virtualFecha" style="visibility: hidden;">
+														<label class="col-3">Fecha de inicio y final</label>
+														<div class="col-9">
+															<div class="">
+																<input class="form-control" id="Fechas" name="Fechas" readonly="readonly" placeholder="Select time" type="text" />
+															</div>
+														</div>
+													</div>
+													<div class="form-group row" id="virtualHI" style="visibility: hidden;">
+														<label class="col-3">Hora de inicio</label>
+														<div class="col-9">
+															<div class="">
+																<input class="form-control" name="HoraInicio" id="HoraInicio" readonly="readonly" placeholder="Select time" type="text" />
+															</div>
+														</div>
+													</div>
+													<div class="form-group row" id="virtualHF" style="visibility: hidden;">
+														<label class="col-3">Hora Final</label>
+														<div class="col-9">
+															<div class="">
+																<input class="form-control" name="HoraFinal" id="HoraFinal" readonly="readonly" placeholder="Select time" type="text" />
+															</div>
+														</div>
+													</div>
+													<div class="form-group row" id="virtualPreguntas" style="visibility: hidden;">
 														<label class="col-3">Numero de Preguntas</label>
 														<div class="col-9">
 															<div class="input-group input-group-solid">
@@ -325,6 +336,7 @@ var KTWizard1 = function () {
             var HoraF = $('#HoraFinal').val();
             var actividad = $('#actividad').val();
 			var Preguntas = $('#NoPreguntas').val();
+			var tipoexamen = $('#virtual').is(":checked")
             var data = [{
 				Titulo: Titulo,
 				Punteo: Punteo,
@@ -333,6 +345,7 @@ var KTWizard1 = function () {
                 HoraF: HoraF,
                 actividad: actividad,
                 Preguntas: Preguntas,
+				tipoexamen: tipoexamen,
 				curso: {{$id}},
             }];
             $.ajax({
@@ -346,7 +359,11 @@ var KTWizard1 = function () {
                   type: "success"
                         }).then(function () {
                           var $url_path = '{!! url('/') !!}';
-                          window.location.href = $url_path+"/administration/teacher/assign/question/test/"+e.id+"/"+Preguntas;
+						  if(e.id){
+							window.location.href = $url_path+"/administration/teacher/assign/question/test/"+e.id+"/"+Preguntas;
+						  }else{
+							window.location.href = $url_path+"/administration/teacher/test/"+{{$id}};
+						  }
                         });
                      
                 },
@@ -363,6 +380,21 @@ var KTWizard1 = function () {
 		} 
 		$('#actividad').on('change', function() {
 			console.log($('#actividad').val());
+			console.log($('#virtual').is(":checked"));
 		});
+		$('#virtual').on('change', function() {
+			if ($('#virtual').is(":checked")) {
+				$('#virtualFecha').css("visibility", "visible");
+				$('#virtualHI').css("visibility", "visible");
+				$('#virtualHF').css("visibility", "visible");
+				$('#virtualPreguntas').css("visibility", "visible");
+			}else{
+				$('#virtualFecha').css("visibility", "hidden");
+				$('#virtualHI').css("visibility", "hidden");
+				$('#virtualHF').css("visibility", "hidden");
+				$('#virtualPreguntas').css("visibility", "hidden");
+			}
+		});
+		
     </script>
 	@stop

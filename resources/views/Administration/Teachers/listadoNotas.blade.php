@@ -39,18 +39,12 @@
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
                                             @isset($course)
-                                            <h3 class="card-label">Listado de {{$course->Name ?? ''}} de {{$grado ?? ''}}</h3>
-                                            @endisset
-                                        </div>
-                                        <div class="card-title">
-                                            @isset($course)
-                                            <h4 class="card-label">Voluntario: {{$Nombre}}</h4>
+                                                <h3 class="card-label">Listado de Notas de {{$course->Name ?? ''}} de {{$grado ?? ''}} / Voluntario encargado: {{$Nombre}}</h3>
                                             @endisset
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
                                             <div class="dropdown dropdown-inline mr-2">
-                                                
                                                 <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="la la-download"></i>Exportar</button>
                                                 <!--begin::Dropdown Menu-->
@@ -92,8 +86,6 @@
                                                 <!--end::Dropdown Menu-->
                                             </div>
                                             <!--end::Dropdown-->
-                                            <a href="#" onclick="create();" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-plus"></i>Crear Actividad</a>
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -101,26 +93,26 @@
                                         <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
                                             <thead>
                                                 <tr>
-                                                    <th>{{ $Titles[0] }}</th>
-                                                    @isset($nombreActivity)
-                                                        @foreach($nombreActivity as $model)
-                                                            <th>{{ $model['Nombre'] }} - {{ $model['Punteo'] }}</th>
-                                                        @endforeach
-                                                    @endisset
-                                                    <th>{{ $Titles[1] }}</th>
-                                                    <th>{{ $Titles[2] }}</th>
+                                                    <th></th>
+                                                    @foreach($Titles as $Title)
+                                                        <th colspan="{{ $Title['No'] }}" >{{ $Title['Name'] }}</th>
+                                                    @endforeach
                                                 </tr>
+                                                <tr>
+                                                    <th>Nombre de los alumnos</th>
+                                                    @foreach($Titles as $Title)
+                                                        @foreach($Title['Test'] as $title)
+                                                        <th>{{$title->Title}}</th>
+                                                        @endforeach
+                                                    @endforeach
+                                                    
+                                                  </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>Juan</td>
-                                                @isset($nombreActivity)
-                                                    @foreach($nombreActivity as $model)
-                                                            <td>{{$model['calificacion']}}</td>
-                                                    @endforeach
-                                                @endisset
-                                                        <td>0</td>
-                                                    <td nowrap="nowrap"></td>
+                                                    @foreach( $Models as $model)
+                                                        <td>{{$model['NotaExamen']}}</td>
+                                                   @endforeach
                                                 </tr>
                                             </tbody>
                                         </table>

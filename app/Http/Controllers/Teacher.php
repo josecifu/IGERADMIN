@@ -268,17 +268,28 @@ class Teacher extends Controller
         }else{
             return redirect('/administration/teacher/list')->withErrors(['msg', 'No se ha asignado un voluntario al curso']);
         }
-        $activity = Assign_activity::where('Course_id',$id)->get();
-        $nombreActivity = [];
-        $actividades = [];
-        foreach ($activity as  $value) {
-            // $test = test::where('Activity_id',$value->id)->get();
-            $data = [
-                'Nombre' => $value->Name,
-                'Punteo' => $value->Score,
-                'calificacion' => 0,
+        $Titles = [];
+        $Models = [];
+        $Activities = Assign_activity::where('Course_id',$id)->get();
+        $assignstudentgrade = Assign_student_grade::where([['Grade_id',$course->Grade_id],['State','Active']])->get();
+        foreach($Activities as $Activity)
+        {
+            $act = [
+                "Name" =>$Activity->Name,
+                "No" =>count($Activity->Tests()),
+                "Test" => $Activity->Tests(),
             ];
-            array_push($nombreActivity,$data);
+            foreach($Activity->Tests() as $Test)
+            {
+                $model =[
+                    'Alumno' => 'Juan',
+                    "Id" => $Test->id,
+                    "NotaExamen" => 0,
+                ];
+                array_push($Models,$model);
+            }
+            array_push($Titles,$act);
+            // dd($Titles);
         }
 
         // $p1 = $p2 = $p3 = $p4 = 0;
@@ -336,8 +347,7 @@ class Teacher extends Controller
         //     ];
         //     array_push($actividades,$data);
         // }
-        $Titles = ['Alumno','Nota Final','Acciones'];
-        return view('Administration/Teachers/listadoNotas',compact('buttons','nombreActivity','Titles','Nombre','course','grado'));
+        return view('Administration/Teachers/listadoNotas',compact('buttons','Titles','Models','Nombre','course','grado'));
     }
 
             #===================    CRUD EXAMENES ================
@@ -424,40 +434,68 @@ class Teacher extends Controller
         $data = $request->data[0];
         $Titulo = $data['Titulo'];
         $Punteo = $data['Punteo'];
-        $Fechas = explode(' - ',$data['Fechas']);
-        $HoraI = $data['HoraI'];
-        $HoraF = $data['HoraF'];
         $actividad = $data['actividad'];
-        $Preguntas = $data['Preguntas'];
         $curso = $data['curso'];
         $c = course::find($curso);
         $grado = grade::find($c->Grade_id)->GradeName();
-        try {
-            DB::beginTransaction();
-            $examen = new test;
-            $examen->Title = $Titulo;
-            $examen->Score = $Punteo;
-            $examen->StartDate = $Fechas[0].' '.$HoraI;
-            $examen->EndDate = $Fechas[1].' '.$HoraF;
-            $examen->Activity_id = $actividad;
-            $examen->State = 'Active';
-            $examen->save();
-            $assignVol = Asign_teacher_course::where('Course_id',$curso)->first();
-            $assignTest = new Asign_test_course;
-            $assignTest->Teacher_id = $assignVol->id;
-            $assignTest->Test_id = $examen->id;
-            $assignTest->save();
-            $log = new logs;
-            $log->Table = "Voluntario";
-            $log->User_ID = $id->name;
-            $log->Description = "El usuario ".$id->name." creo un nuevo examen para el curso de ".$c->Name." de ".$grado;
-            $log->Type = "Create";
-            $log->save();
-            DB::commit();
-        }catch (Exception $e) {
-            DB::rollBack();
+        if ($data['tipoexamen'] == 'true') {
+            $Fechas = explode(' - ',$data['Fechas']);
+            $HoraI = $data['HoraI'];
+            $HoraF = $data['HoraF'];
+            $Preguntas = $data['Preguntas'];
+            try {
+                DB::beginTransaction();
+                $examen = new test;
+                $examen->Title = $Titulo;
+                $examen->Score = $Punteo;
+                $examen->StartDate = $Fechas[0].' '.$HoraI;
+                $examen->EndDate = $Fechas[1].' '.$HoraF;
+                $examen->Activity_id = $actividad;
+                $examen->State = 'Active';
+                $examen->save();
+                $assignVol = Asign_teacher_course::where('Course_id',$curso)->first();
+                $assignTest = new Asign_test_course;
+                $assignTest->Teacher_id = $assignVol->id;
+                $assignTest->Test_id = $examen->id;
+                $assignTest->save();
+                $log = new logs;
+                $log->Table = "Voluntario";
+                $log->User_ID = $id->name;
+                $log->Description = "El usuario ".$id->name." creo un nuevo examen virtual para el curso de ".$c->Name." de ".$grado;
+                $log->Type = "Create";
+                $log->save();
+                DB::commit();
+            }catch (Exception $e) {
+                DB::rollBack();
+            }
+            return response()->json(["id"=>$examen->id]);
+        } else {
+            try {
+                DB::beginTransaction();
+                $examen = new test;
+                $examen->Title = $Titulo;
+                $examen->Score = $Punteo;
+                $examen->Activity_id = $actividad;
+                $examen->State = 'Fisico';
+                $examen->save();
+                $assignVol = Asign_teacher_course::where('Course_id',$curso)->first();
+                $assignTest = new Asign_test_course;
+                $assignTest->Teacher_id = $assignVol->id;
+                $assignTest->Test_id = $examen->id;
+                $assignTest->save();
+                $log = new logs;
+                $log->Table = "Voluntario";
+                $log->User_ID = $id->name;
+                $log->Description = "El usuario ".$id->name." creo un nuevo examen fisico para el curso de ".$c->Name." de ".$grado;
+                $log->Type = "Create";
+                $log->save();
+                DB::commit();
+            }catch (Exception $e) {
+                DB::rollBack();
+            }
+            return response()->json(["Accion Completada"]);
         }
-        return response()->json(["id"=>$examen->id]);
+        
     }
     public function AssignQuestion($id,$preguntas)
     {
