@@ -4,7 +4,7 @@
     Inicio
     @stop
     @section('breadcrumb1')
-    Tablero
+    Voluntarios
     @stop
     @section('breadcrumb2')
     Principal
@@ -35,12 +35,17 @@
                                 <div class="card card-custom">
                                     <div class="card-header">
                                         <div class="card-title">
+                                            <div class="card-toolbar">
+                                                <a href="{{url('administration/teacher/score/'.$course->id)}}" class="btn btn-danger font-weight-bolder mr-2">
+                                                <i class="ki ki-long-arrow-back icon-sm"></i>Cancelar</a>
+                                            </div>
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            @isset($course)
-                                                <h3 class="card-label">Listado de Notas de {{$course->Name ?? ''}} de {{$grado ?? ''}} / Voluntario encargado: {{$Nombre}}</h3>
-                                            @endisset
+                                            @if($course)
+                                                <h3 class="card-label">Detalle de la actividad: {{$actividad->Name}} del curso {{$course->Name}}</h3>
+                                            @endif
+                                            
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -85,8 +90,6 @@
                                                 </div>
                                                 <!--end::Dropdown Menu-->
                                             </div>
-                                            <a href="#" onclick="create();" class="btn btn-primary font-weight-bolder">
-                                                <i class="la la-plus"></i>Crear Actividad</a>
                                             <!--end::Dropdown-->
                                         </div>
                                     </div>
@@ -95,37 +98,25 @@
                                         <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
                                             <thead>
                                                 <tr>
-                                                    <th></th>
                                                     @foreach($Titles as $Title)
-                                                        <th colspan="{{ $Title['No'] }}" ><center>{{ $Title['Name'] }}</center></th>
+                                                    <th>{{ $Title }}</th>
                                                     @endforeach
-                                                    <th></th>
                                                 </tr>
-                                                <tr>
-                                                    <th>Nombre de los alumnos</th>
-                                                    @foreach($Titles as $Title)
-                                                        @if($Title['No']==0)
-                                                        <th><center>No existen examenes asignados</center></th>
-                                                        @endif
-                                                        @foreach($Title['Test'] as $title)
-                                                        <th><center>{{$title->Title}}</center></th>
-                                                        @endforeach
-                                                    @endforeach
-                                                    <th>Acciones</th>
-                                                  </tr>
                                             </thead>
                                             <tbody>
-                                                
-                                                    @foreach( $Models as $model)
-                                                    <tr>
-                                                        <td>{{$model['Alumno']}}</td>
-                                                        @foreach($model['Notas'] as $nota)
-                                                            <td><center>{{$nota}}</center></td>
-                                                        @endforeach
-                                                        <td nowrap="nowrap"></td>
-                                                    </tr>
-                                                   @endforeach                                                    
-                                                </div>
+                                                <tr>
+                                                    <td>{{$actividad->id}}</td>
+                                                    <td>{{$actividad->Name}}</td>
+                                                    <td>
+                                                    @foreach($Models as $Model)
+                                                        <ul>
+                                                            <li>{{$Model['Test']}}</li> 
+                                                        </ul>
+                                                    @endforeach
+                                                    </td>
+                                                    <td>{{$actividad->Score}}</td>
+                                                    <td nowrap="nowrap"></td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                         <!--end: Datatable-->
@@ -133,48 +124,14 @@
                                 </div>
                                 <!--end::Card-->
                             </div>
-                            <div class="modal fade" id="kt_grades_modal1" role="dialog" aria-hidden="true">
-                                <div class="modal-dialog modal-lg" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Visualizar actividades del curso {{$course->Name}}</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <i aria-hidden="true" class="ki ki-close"></i>
-                                            </button>
-                                        </div>
-                                        <form class="form">
-                                            <div class="modal-body">
-                                                <div class="form-group row">
-                                                    <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el nivel</label>
-                                                    <div class="col-lg-9 col-md-9 col-sm-12">
-                                                        <select class="form-control selectpicker" data-size="10" data-live-search="true" id="detailA">
-                                                            @foreach($Modal as $m)
-                                                                <option value="{{ $m['id']}} ">{{$m['Name']}} </option>
-                                                            @endforeach
-                                                        </select>
-                                                        <span class="form-text text-muted">Visualice los detalles de la actividad seleccionada</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                <button type="button" class="btn btn-primary mr-2" onclick="detalleActividad();">Visualizar</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
 
-    @stop
-    
+	@stop
 	@section('scripts')
 
         <!--begin::Page Vendors(used by this page)-->
         <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
         <!--end::Page Vendors-->
         <!--begin::Page Scripts(used by this page)-->
-        <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
         
         <!--end::Page Scripts-->
         <script type="text/javascript">
@@ -199,17 +156,20 @@
                                 render: function(data, type, full, meta) {
                                     return '\
                                         <div class="dropdown dropdown-inline">\
-                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">\
+                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title ="Ajustes" data-toggle="dropdown">\
                                                 <i class="la la-cog"></i>\
                                             </a>\
                                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
                                                 <ul class="nav nav-hoverable flex-column">\
-                                                    <li class="nav-item"><a class="nav-link" href="/administration/teacher/edit/'+full[0]+'"><i class="nav-icon la la-edit"></i><span class="nav-text">Editar</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#" onclick="edit(\''+full[0]+'\',\''+full[1]+'\',\''+full[3]+'\')"><i class="nav-icon la la-edit"></i><span class="nav-text">Editar</span></a></li>\
                                                     <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
                                                 </ul>\
                                             </div>\
                                         </div>\
-                                        <a href="/administration/teacher/delete/'+full[0]+'" class="btn btn-sm btn-clean btn-icon" title="Borrar">\
+                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Detalle de asignación">\
+                                            <i class="la la-edit"></i>\
+                                        </a>\
+                                        <a href="javascript:;" onclick="deleteActivity(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Eliminar">\
                                             <i class="la la-trash"></i>\
                                         </a>\
                                     ';
@@ -236,25 +196,21 @@
             jQuery(document).ready(function() {
                 KTDatatablesDataSourceHtml.init();
             });
-
-            $.fn.editable.defaults.mode = 'inline';
-            $(document).ready(function() {
-                $('#username').editable();
-            });
-            function create()
+            function edit($id,$Name,$Punteo)
             {
-                Swal.mixin({
+               Swal.mixin({
                     input: 'text',
                     confirmButtonText: 'Siguiente  &rarr;',
                     showCancelButton: true,
                     progressSteps: ['1','2',]
                 }).queue([
                     {
-                    title: 'Ingrese nombre de la actividad:',
-                    
+                    title: 'Ingrese el nombre de la actividad:',
+                    text: 'Nombre anterior:' + $Name
                     },
                     {
-                    title: 'Ingrese Punteo total de la actividad:',
+                    title: 'Ingrese el Punteo total de la actividad:',
+                    text: 'Punteo anterior:' + $Punteo
                     },
                 ]).then((result) => {
                     if (result.value) {
@@ -278,13 +234,16 @@
                         reverseButtons: true
                     }).then((result2) => {
                         if (result2.isConfirmed) {
+                            var code = $id;
                             var data = [{
+                                code: code,
                                 Actividad: result.value[0],
                                 Punteo: result.value[1],
+                                curso: {{$course->id}},
                             }];
                 
                             $.ajax({
-                                url:'/administration/teacher/save/activity/'+{{$course->id}},
+                                url:'/administration/teacher/update/activity',
                                 type:'POST',
                                 data: {"_token":"{{ csrf_token() }}","data":data},
                                 dataType: "JSON",
@@ -326,17 +285,48 @@
                     }
                 })
             }
-            function modal() {
-                $("#kt_grades_modal1").modal("show");
+            function deleteActivity($id,$name)
+            {
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                })
+                swalWithBootstrapButtons.fire({
+                    title: '¿Está seguro de eliminar el voluntario?',
+                    text: "La actividad: "+$name,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si, eliminar!',
+                    cancelButtonText: 'No, cancelar!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        swalWithBootstrapButtons.fire({
+                            title: 'Eliminado!',
+                            text: 'Se ha eliminado con exito!',
+                            icon: 'success',
+                            confirmButtonText: 'Aceptar',
+                        }).then(function () {
+                            var $url_path = '{!! url('/') !!}';
+                            window.location.href = $url_path+"/administration/teacher/delete/activity/"+{{$course->id}}+"/"+$id;
+                            });
+                    } else if (
+                    result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                    swalWithBootstrapButtons.fire({
+                        title: 'Cancelado!',
+                        text:  'La Actividad no ha sido eliminada!',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar',
+                    })
+                    }
+                })
             }
-            function detalleActividad() {
-                var id = $('#detailA').val();
-                console.log(id);
-                var $url_path = '{!! url('/') !!}';
-                window.location.href = $url_path+"/administration/teacher/detail/activity/"+{{$course->id}}+"/"+id;
-            }
+
        </script>
 
       
-    @stop
-    
+	@stop

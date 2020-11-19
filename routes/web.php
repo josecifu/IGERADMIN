@@ -80,6 +80,9 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::post('/save/question/test', $route.'\Teacher@SaveAssignQuestion')->name('SaveAssignQuestion');
 		Route::post('/save/test', $route.'\Teacher@saveExam')->name('saveExam');
 		Route::post('/save/activity/{model}', $route.'\Teacher@saveActivity')->name('saveActivity');
+		Route::post('/update/activity', $route.'\Teacher@updateActivity')->name('updateActivity');
+		Route::get('/delete/activity/{curso}', $route.'\Teacher@deleteActivity')->name('deleteActivity');
+		Route::get('/detail/activity/{curso}/{model}', $route.'\Teacher@DetailActivity')->name('DetailActivity');
 	});
 	//Comentario
 	Route::group([ 'prefix' => 'configurations'], function(){
