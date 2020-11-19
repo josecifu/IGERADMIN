@@ -17,18 +17,21 @@ use App\Models\Asign_answer_test_student;
 use App\Models\Question;
 use App\Models\Test;
 use App\Models\Note;
+use App\Models\Assign_activity;
 //
 use App\Models\Asign_file_question_test;
 use App\Models\Assign_fields;
 use App\Models\field;
 use App\Models\Information;
 use App\Models\Schedule;
+use App\Models\Asign_teacher_course;
 
 class Student extends Controller
 {
     #ADMINISTRACION
     public function list()
     {
+        /*
         $buttons = [];
         $button = [
             "Name" => 'Añadir nuevo estudiante',
@@ -80,6 +83,30 @@ class Student extends Controller
             }
         }
         return view('Administration/Student/list',compact('models','titles','buttons'));
+        --------------------------------------------------------------------------------
+        --------------------------------------------------------------------------------
+        */
+
+        $id = 4;
+        $models = [];
+        $assign = Assign_student_grade::where('user_id',$id)->first();
+        $grade = Assign_student_grade::find($assign->id)->Grade();
+        $courses = $grade->Courses();
+        foreach ($courses as $course)
+        {
+
+            $tests = $course->Tests()->where('State','Active');
+            dd($tests);
+
+            $query = [
+                'id' => $course->id,
+                'course' => $course->Name,
+                'test' => $tests
+            ];
+            array_push($models,$query);
+        }
+        //dd($models);
+        return view('Student/test_list',compact('models'));
     }
 
     public function list_grade($id)
@@ -450,7 +477,7 @@ class Student extends Controller
         return view('Administration/Student/course_scores',compact('models','titles','student','subtitle'));
     }
 
-    public function list_test($id)
+    public function test_list($id)
     {
         $models = [];
         $titles = [
@@ -474,7 +501,7 @@ class Student extends Controller
             array_push($models,$query);
         }
         $grade = Grade::find($course->Grade_id)->GradeName();
-        return view('Administration/Student/list_test',compact('models','titles','course','grade'));
+        return view('Administration/Student/test_list',compact('models','titles','course','grade'));
     }
 
     //conexion directa a examen
@@ -548,13 +575,17 @@ class Student extends Controller
 
 
     #ESTUDIANTE
-    public function test_view()
+    public function student_test_list()
     {
-        return view('Student/test_view');
+        return view('Student/test_list');
     }
-    public function question_answer()
+    public function student_test()
     {
-        return view('Student/test_view');
+        return view('Student/test');
+    } 
+    public function answer()
+    {
+        return view('Student/');
     }
     public function save_answer()
     {
