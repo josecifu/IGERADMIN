@@ -49,7 +49,7 @@ class Administration extends Controller
         ];
         array_push($buttons,$button);
         $course = course::find(1);
-        return view('Administration.Dashboard.Vacio',compact('buttons'));
+        return view('Administration.Dashboard.Home',compact('buttons'));
     }
     public function test($test)
     {
