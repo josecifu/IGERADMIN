@@ -33,11 +33,11 @@ class LoginController extends Controller
             $rol=$rol[0]['Name'];
             if($rol=="Estudiante")
             {
-                return redirect('student/home');
+                return redirect('student/home/dashboard');
             }
             elseif($rol=="Voluntario")
             {
-                return redirect('teacher/home');
+                return redirect('teacher/home/dashboard');
             }
             
         }

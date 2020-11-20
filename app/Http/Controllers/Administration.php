@@ -44,11 +44,11 @@ class Administration extends Controller
         $rol = $request->session()->get('rol_Name');
         if($rol=="Estudiante")
         {
-            return redirect('student/home');
+            return redirect('student/home/dashboard');
         }
         elseif($rol=="Voluntario")
         {
-            return redirect('teacher/home');
+            return redirect('teacher/home/dashboard');
         }
         $buttons =[];
         $button = [
