@@ -4,10 +4,10 @@
     Inicio
     @stop
     @section('breadcrumb1')
-    Voluntarios
+    Tablero
     @stop
     @section('breadcrumb2')
-    Principal
+    Logs
     @stop
     {{-- Page content --}}
     @section('content')

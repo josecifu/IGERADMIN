@@ -4,10 +4,10 @@
     Inicio
     @stop
     @section('breadcrumb1')
-    Tablero
+    Asignación
     @stop
     @section('breadcrumb2')
-    Principal
+    Preguntas
     @stop
     {{-- Page content --}}
     @section('content')

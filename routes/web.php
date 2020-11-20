@@ -58,6 +58,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	#Voluntarios
 	Route::group([ 'prefix' => 'teacher'], function(){
 		$route = "App\Http\Controllers";
+		Route::get('/dashboard', $route.'\Teacher@Dashboard')->name('DashboardTeacher');
 		Route::get('/list',$route.'\Teacher@list')->name('ListTeacher');
 		Route::get('/list/workspace',$route.'\Teacher@workspace')->name('workTeacher');
 		Route::get('/create',$route.'\Teacher@create')->name('CreateTeacher');

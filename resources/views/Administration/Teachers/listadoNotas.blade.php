@@ -7,7 +7,7 @@
     Tablero
     @stop
     @section('breadcrumb2')
-    Principal
+    Notas
     @stop
     {{-- Page content --}}
     @section('content')
