@@ -336,7 +336,7 @@ var KTWizard1 = function () {
             var HoraF = $('#HoraFinal').val();
             var actividad = $('#actividad').val();
 			var Preguntas = $('#NoPreguntas').val();
-			var tipoexamen = $('#virtual').is(":checked")
+			var tipoexamen = $('#virtual').is(":checked");
             var data = [{
 				Titulo: Titulo,
 				Punteo: Punteo,

@@ -144,6 +144,7 @@ class Teacher extends Controller
         $Email= $data['Email'];
         $Contraseña = $data['Contraseña'];
         $Cursos = $data['Curso'];
+        $masculino = $data['masculino'];
         $grado = grade::find($data['Grado'])->GradeName();
         //LOGICA
         try {
@@ -153,6 +154,11 @@ class Teacher extends Controller
                 $person->Names = $Nombres;
                 $person->LastNames = $Apellidos;
                 $person->Phone = $Telefono;
+                if ($masculino == "true") {
+                    $person->Gender = 'Masculino';
+                } else {
+                    $person->Gender = 'Femenino';
+                }
                 $person->save();
                 //Tabla usuarios
                 $user = new User;
