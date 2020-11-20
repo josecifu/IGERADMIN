@@ -61,7 +61,7 @@
 																		<td class="pl-0 py-5">
 																			<div class="symbol symbol-50 symbol-light mr-2">
 																				<span class="symbol-label">
-																					<img src="assets/media/svg/misc/015-telegram.svg" class="h-50 align-self-center" alt="" />
+																					<img src="{{asset('assets/media/svg/misc/015-telegram.svg')}}" class="h-50 align-self-center" alt="" />
 																				</span>
 																			</div>
 																		</td>

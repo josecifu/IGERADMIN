@@ -29,132 +29,66 @@ use App\Models\Asign_teacher_course;
 class Student extends Controller
 {
     #ADMINISTRACION
-    public function list()
+    public function list($id)
     {
-        /*
-        $buttons = [];
-        $button = [
-            "Name" => 'Añadir nuevo estudiante',
-            "Link" => 'administration/student/create',
-            "Type" => "btn1"
-        ];
-        array_push($buttons,$button);
-        $button = [
-            "Name" => 'Ver lista de estudiantes deshabilitados',
-            "Link" => 'administration/student/list/eliminated',
-            "Type" => "btn1"
-        ];
-        array_push($buttons,$button);
-        $button = [
-            "Name" => 'Ver logs',
-            "Link" => 'administration/student/logs',
-            "Type" => "btn1"
-        ];
-        array_push($buttons,$button);        
-        $models = [];
-        $titles = [
-            'Id',
-            'Nombre del estudiante',
-            'No. Teléfono',
-            'Nombre de usuario',
-            'Correo electrónico',
-            'Grado',
-            'Última conexión',
-            'Acciones'
-        ];
-        $rols = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get();
-        foreach ($rols as $rol)
+        $assign = Asign_teacher_course::where('Course_id',$id)->first();
+        if(isset($assign->user_id)){
+            $userV = user::find($assign->user_id);
+            $vol = Person::find($userV->Person_id);
+            $Nombre = $vol->Names .' '.$vol->LastNames;
+        }else{
+            return redirect('/administration/teacher/list')->withErrors(['msg', 'The Message']);
+        }
+        $course = course::find($id);
+        $Titles = [];
+        $Models = [];
+        
+        $Activities = Assign_activity::where('Course_id',$id)->get();
+        foreach($Activities as $Activity)
         {
-            $user = User::find($rol->user_id);
-            $student = Person::find($user->Person_id);
-            $Assign = Assign_student_grade::where('User_id',$user->id)->get('Grade_id');
-            foreach ($Assign as $a)
+            $act = [
+                "Name" =>$Activity->Name,
+                "No" =>count($Activity->Tests()),
+                "Test" => $Activity->Tests(),
+            ];
+            array_push($Titles,$act);
+            
+        }
+        foreach($course->Grade()->Students() as $Studen)
+        {
+            $Tests = [];
+            foreach($Activities as $Activity)
             {
-                $grade = Grade::find($a->Grade_id);
-                $query = [
-                    'id' => $student->id,
-                    'name' => $student->Names . ' ' . $student->LastNames,
-                    'phone' => $student->Phone,
-                    'user' => $user->name,
-                    'email' => $user->email,
-                    'grade' => $grade->GradeName()
-                ];
-                array_push($models,$query);
+                foreach($Activity->Tests() as $Test)
+                {
+                    $test =[
+                        "Id" => $Test->id,
+                        "NoQuestions" => $Test->NoQuestions(),
+                    ];
+                    array_push($Tests,$test);
+                }
             }
-        }
-        return view('Administration/Student/list',compact('models','titles','buttons'));
-        --------------------------------------------------------------------------------
-        --------------------------------------------------------------------------------
-        */
-
-        $id = 4;
-        $models = [];
-        $assign = Assign_student_grade::where('user_id',$id)->first();
-        $grade = Assign_student_grade::find($assign->id)->Grade();
-        $courses = $grade->Courses();
-        foreach ($courses as $course)
-        {
-
-            $tests = $course->Tests()->where('State','Active');
-            dd($tests);
-
-            $query = [
-                'id' => $course->id,
-                'course' => $course->Name,
-                'test' => $tests
+            $Model = [
+                "Name" =>$Studen->person()->Names." ".$Studen->person()->LastNames,
+                "Tests"=>$Tests
             ];
-            array_push($models,$query);
+            array_push($Models,$Model);
         }
-        //dd($models);
-        return view('Student/test_list',compact('models'));
-    }
-
-    public function list_grade($id)
-    {
-        $buttons = [];
+        $buttons =[];
         $button = [
-            "Name" => 'Añadir nuevo estudiante',
-            "Link" => 'administration/student/create',
+            "Name" => 'Listado Voluntarios',
+            "Link" => 'administration/teacher/list',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver lista de estudiantes deshabilitados',
-            "Link" => 'administration/student/list/eliminated',
-            "Type" => "btn1"
+            "Name" => 'Crear Examen',
+            "Link" => 'administration/teacher/create/test/'."$id",
+            "Type" => "add"
         ];
         array_push($buttons,$button);
-        $button = [
-            "Name" => 'Ver logs',
-            "Link" => 'administration/student/logs',
-            "Type" => "btn1"
-        ];
-        array_push($buttons,$button); 
-        $models = [];
-        $titles = [
-            'Id',
-            'Nombre del estudiante',
-            'No. Teléfono',
-            'Nombre de usuario',
-            'Correo electrónico',
-            'Última conexión',
-            'Acciones'
-        ];
-        $grade = Grade::find($id);
-        foreach ($grade->Students() as $user)
-        {
-            $student = Person::find($user->Person_id);
-            $query = [
-                'id' => $student->id,
-                'name' => $student->Names . ' ' . $student->LastNames,
-                'phone' => $student->Phone,
-                'user' => $user->name,
-                'email' => $user->email
-            ];
-            array_push($models,$query);
-        }
-        $grade = $grade->GradeName();
-        return view('Administration/Student/list_grade',compact('models','titles','buttons','grade'));
+        $grado = grade::find($course->Grade_id)->GradeName();
+        return view('Administration/Student/test_list',compact('Titles','buttons','Nombre','course','grado','Models','id'));
     }
 
     public function eliminated_students()

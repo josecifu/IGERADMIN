@@ -48,8 +48,18 @@ class Administration extends Controller
             "Type" => "add"
         ];
         array_push($buttons,$button);
-        $course = course::find(1);
         return view('Administration.Dashboard.Home',compact('buttons'));
+    }
+    public function AttendantList(Request $request)
+    {
+        $buttons =[];
+        $button = [
+            "Name" => 'Añadir un estudiante',
+            "Link" => 'administration/home/dashboard',
+            "Type" => "add"
+        ];
+        array_push($buttons,$button);
+        return view('Administration.Attendant.List',compact('buttons'));
     }
     public function test($test)
     {

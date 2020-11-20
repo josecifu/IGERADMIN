@@ -30,11 +30,18 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	Route::post('/load/levels', $route.'\Administration@LoadLevels')->name('LoadLevels');
 	Route::post('/load/grades', $route.'\Administration@LoadGrades')->name('LoadGrades');
 	Route::post('/load/courses', $route.'\Administration@LoadCourses')->name('LoadCourses');
+	
 	#Inicio
 	Route::group([ 'prefix' => 'home'], function(){
 		$route = "App\Http\Controllers";
 		#Dashboad
 		Route::get('/dashboard', $route.'\Administration@Dashboard')->name('Dashboard');
+	});
+	#Encargados de circulo
+	Route::group([ 'prefix' => 'attendant'], function(){
+		$route = "App\Http\Controllers";
+		#Dashboad
+		Route::get('/list', $route.'\Administration@AttendantList')->name('AttendantList');
 	});
 	#Estudiantes
 	Route::group([ 'prefix' => 'student'], function(){
@@ -49,7 +56,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/score/course/{model}',$route.'\Student@course_scores')->name('CourseScores');
 		Route::get('/logs',$route.'\Student@logs')->name('LogsStudent');
 		Route::get('/test/{model}',$route.'\Student@test')->name('TestStudent');
-		Route::get('/lists/test/{model}',$route.'\Student@list_test')->name('ListTest');
+		Route::get('/lists/test/{model}',$route.'\Student@list')->name('list');
 		Route::get('/list/eliminated',$route.'\Student@eliminated_students')->name('ListEliminatedStudents');
 		Route::get('/delete/{model}', $route.'\Student@delete')->name('DeleteStudent');
 		Route::get('/statistics',$route.'\Student@statistics')->name('StudentStatistics');

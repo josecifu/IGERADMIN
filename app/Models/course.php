@@ -14,4 +14,7 @@ class course extends Model
     public function Activities(){
         return $this->hasMany(Assign_activity::class)->get();
     }
+    public function Grade(){
+        return $this->hasOne(grade::class,'id','Grade_id')->first();
+    }
 }
