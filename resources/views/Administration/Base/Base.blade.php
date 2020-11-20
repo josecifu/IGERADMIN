@@ -643,7 +643,7 @@
 				{
 					var Id = $('#gradeselect1').val();
 					var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/student/lists/grade/"+Id;
+                    window.location.href = $url_path+"/administration/student/list/bygrade/"+Id;
 				}
 				if(posGrade==2)
 				{
@@ -667,7 +667,7 @@
 				{
 					var Id = $('#courseselect1').val();
 					var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/student/lists/test/"+Id;
+                    window.location.href = $url_path+"/administration/student/list/test/"+Id;
 				}
 			}
 			function ListLevel(Period)

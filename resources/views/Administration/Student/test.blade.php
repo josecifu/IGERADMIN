@@ -21,11 +21,11 @@
                                 <tr>
                                     <th>
                                         <h4>
-                                            {{$test[0]['Title']}}<br>
+                                            Titulo de evaluacion<br>
                                             Nombre del estudiante: Javier Angulo<br>
                                             Curso: Matemáticas<br>
                                             Nombre del maestro: Rodrigo Castillo<br>
-                                            Nota final: {{$score[0]['Score']}}
+                                            Nota final: 25
                                         </h4>
                                     </th>
                                 </tr>

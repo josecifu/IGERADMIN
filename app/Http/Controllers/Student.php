@@ -29,20 +29,67 @@ use App\Models\Asign_teacher_course;
 class Student extends Controller
 {
     #ADMINISTRACION
-    public function ListTest($id)
+
+    //conexion directa a examen
+    //falta visualizar respuestas y modal ver pregunta
+    public function test($id)
+    {
+        $models = [];
+        $titles = [
+            'Id',
+            'Preguntas',
+            'Tipo de Pregunta',
+            'Respuestas del estudiante',
+            'Respuestas Correctas',
+            'Punteo Obtenido',
+            'Acciones'
+        ];
+        $answers = Asign_answer_test_student::where('Studen_id',$id)->get();
+        foreach ($answers as $answer)
+        {
+            $question = Question::find($answer->Question_id);
+            //dd($question);
+            $query = [
+                'id' => $question->id,
+                'question' => $question->Content,
+                'type' => $question->Type,
+                'correct' => $question->CorrectAnswers,
+            ];
+            array_push($models,$query);
+        }
+        //$test = Test::where('id',$question->Test_id)->get('Title');
+        //$score = Test::where('id',$question->Test_id)->get('Score');
+        return view('Administration/Student/test',compact('models','titles'));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    public function test_list($id)
     {
         $assign = Asign_teacher_course::where('Course_id',$id)->first();
-        if(isset($assign->user_id)){
+        if (isset($assign->user_id))
+        {
             $userV = user::find($assign->user_id);
             $vol = Person::find($userV->Person_id);
             $Nombre = $vol->Names .' '.$vol->LastNames;
-        }else{
-            return redirect('/administration/teacher/list')->withErrors(['msg', 'The Message']);
         }
+        else
+        {
+            return redirect('/administration/student/list')->withErrors(['msg', 'The Message']);
+        }
+
         $course = course::find($id);
         $Titles = [];
         $Models = [];
-        
         $Activities = Assign_activity::where('Course_id',$id)->get();
         foreach($Activities as $Activity)
         {
@@ -52,7 +99,6 @@ class Student extends Controller
                 "Test" => $Activity->Tests(),
             ];
             array_push($Titles,$act);
-            
         }
         foreach($course->Grade()->Students() as $Studen)
         {
@@ -69,27 +115,19 @@ class Student extends Controller
                 }
             }
             $Model = [
-                "Name" =>$Studen->person()->Names." ".$Studen->person()->LastNames,
-                "Tests"=>$Tests
+                "id" =>$Studen->person()->id,
+                "student" =>$Studen->person()->Names." ".$Studen->person()->LastNames,
+                "tests"=>$Tests
             ];
             array_push($Models,$Model);
         }
-        $buttons =[];
-        $button = [
-            "Name" => 'Listado Voluntarios',
-            "Link" => 'administration/teacher/list',
-            "Type" => "btn1"
-        ];
-        array_push($buttons,$button);
-        $button = [
-            "Name" => 'Crear Examen',
-            "Link" => 'administration/teacher/create/test/'."$id",
-            "Type" => "add"
-        ];
-        array_push($buttons,$button);
         $grado = grade::find($course->Grade_id)->GradeName();
-        return view('Administration/Student/test_list',compact('Titles','buttons','Nombre','course','grado','Models','id'));
+        return view('Administration/Student/test_list',compact('Titles','Nombre','course','grado','Models','id'));
     }
+
+
+                            #funciones terminadas
+/*-------------------------------------------------------------------------------------------*/
     public function list()
     {
         $buttons = [];
@@ -143,7 +181,54 @@ class Student extends Controller
             }
         }
         return view('Administration/Student/list',compact('models','titles','buttons'));
-        
+    }
+
+    public function list_bygrade($id)
+    {
+        $buttons = [];
+        $button = [
+            "Name" => 'Añadir nuevo estudiante',
+            "Link" => 'administration/student/create',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $button = [
+            "Name" => 'Ver lista de estudiantes deshabilitados',
+            "Link" => 'administration/student/list/eliminated',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $button = [
+            "Name" => 'Ver logs',
+            "Link" => 'administration/student/logs',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button); 
+        $models = [];
+        $titles = [
+            'Id',
+            'Nombre del estudiante',
+            'No. Teléfono',
+            'Nombre de usuario',
+            'Correo electrónico',
+            'Última conexión',
+            'Acciones'
+        ];
+        $grade = Grade::find($id);
+        foreach ($grade->Students() as $user)
+        {
+            $student = Person::find($user->Person_id);
+            $query = [
+                'id' => $student->id,
+                'name' => $student->Names . ' ' . $student->LastNames,
+                'phone' => $student->Phone,
+                'user' => $user->name,
+                'email' => $user->email
+            ];
+            array_push($models,$query);
+        }
+        $grade = $grade->GradeName();
+        return view('Administration/Student/list_bygrade',compact('models','titles','buttons','grade'));
     }
 
     public function eliminated_students()
@@ -372,6 +457,23 @@ class Student extends Controller
         return redirect()->route('ListStudent');
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function score($id)
     {
         $models = [];
@@ -466,64 +568,9 @@ class Student extends Controller
         return view('Administration/Student/course_scores',compact('models','titles','student','subtitle'));
     }
 
-    public function test_list($id)
-    {
-        $models = [];
-        $titles = [
-            'Id',
-            'Nombre del Estudiante',
-            'Primera Unidad',
-            'Segunda Unidad',
-            'Tercera Unidad',
-            'Cuarta Unidad',
-        ];
-        $course = Course::find($id);
-        $grade = Grade::find($id);
-        foreach ($grade->Students() as $user)
-        {
-            $student = Person::find($user->Person_id);
-            $query = [
-                'id' => $student->id,
-                'student' => $student->Names . ' ' . $student->LastNames,
-                'assign' => $user->Asssign_Grade()->id
-            ];
-            array_push($models,$query);
-        }
-        $grade = Grade::find($course->Grade_id)->GradeName();
-        return view('Administration/Student/test_list',compact('models','titles','course','grade'));
-    }
+    
 
-    //conexion directa a examen
-    //falta visualizar respuestas y modal ver pregunta
-    public function test($id)
-    {
-        $models = [];
-        $titles = [
-            'Id',
-            'Preguntas',
-            'Tipo de Pregunta',
-            'Respuestas del estudiante',
-            'Respuestas Correctas',
-            'Punteo Obtenido',
-            'Acciones'
-        ];
-        $answers = Asign_answer_test_student::where('Studen_id',$id)->get();
-        foreach ($answers as $answer)
-        {
-            $question = Question::find($answer->Question_id);
-            //dd($question);
-            $query = [
-                'id' => $question->id,
-                'question' => $question->Content,
-                'type' => $question->Type,
-                'correct' => $question->CorrectAnswers,
-            ];
-            array_push($models,$query);
-        }
-        $test = Test::where('id',$question->Test_id)->get('Title');
-        $score = Test::where('id',$question->Test_id)->get('Score');
-        return view('Administration/Student/test',compact('models','titles','test','score'));
-    }
+    
 
 
 
@@ -579,11 +626,6 @@ class Student extends Controller
     public function save_answer()
     {
     }
-
-
-
-
-
 
 
 

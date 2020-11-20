@@ -51,16 +51,16 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::post('/save', $route.'\Student@save')->name('SaveStudent');
 		Route::get('/edit/{model}',$route.'\Student@edit')->name('EditStudent');
 		Route::post('/update', $route.'\Student@update')->name('UpdateStudent');
-		Route::get('/lists/grade/{model}',$route.'\Student@list_grade')->name('ListGradeStudent');
+		Route::get('/list/bygrade/{model}',$route.'\Student@list_bygrade')->name('ListGradeStudent');
 		Route::get('/score/{model}',$route.'\Student@score')->name('ListScoreStudent');
 		Route::get('/score/course/{model}',$route.'\Student@course_scores')->name('CourseScores');
 		Route::get('/logs',$route.'\Student@logs')->name('LogsStudent');
 		Route::get('/test/{model}',$route.'\Student@test')->name('TestStudent');
-		Route::get('/lists/test/{model}',$route.'\Student@ListTest')->name('ListTestStudent');
+		Route::get('/list/test/{model}',$route.'\Student@test_list')->name('ListTestStudent');
 		Route::get('/list/eliminated',$route.'\Student@eliminated_students')->name('ListEliminatedStudents');
 		Route::get('/delete/{model}', $route.'\Student@delete')->name('DeleteStudent');
-		Route::get('/statistics',$route.'\Student@statistics')->name('StudentStatistics');
 		Route::get('/activate/{model}', $route.'\Student@activate')->name('ActivateStudent');
+		Route::get('/statistics',$route.'\Student@statistics')->name('StudentStatistics');
 	});
 	#Voluntarios
 	Route::group([ 'prefix' => 'teacher'], function(){
