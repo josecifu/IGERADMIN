@@ -92,7 +92,7 @@
 																<i class="la la-user"></i>
 															</span>
 														</div>
-														<input type="text"name="Nombres" id="Nombres" class="form-control form-control-solid" placeholder="Nombre" />
+														<input type="text"name="Nombres" id="Nombres" class="form-control form-control-solid" placeholder="Nombre"/>
 													</div>
 												</div>
 											</div>
@@ -105,7 +105,7 @@
 																<i class="la la-user"></i>
 															</span>
 														</div>
-														<input type="text" name="Apellidos" id="Apellidos" class="form-control form-control-solid" placeholder="Apellido" />
+														<input type="text" name="Apellidos" id="Apellidos" class="form-control form-control-solid" placeholder="Apellido"/>
 													</div>
 												</div>
 											</div>
@@ -118,7 +118,24 @@
 																<i class="la la-phone"></i>
 															</span>
 														</div>
-														<input type="text" name="Telefono" id="Telefono" class="form-control form-control-solid" placeholder="Phone" />
+														<input type="text" name="Telefono" id="Telefono" class="form-control form-control-solid" placeholder="Phone"/>
+													</div>
+												</div>
+											</div>
+											<div class="form-group row">
+												<label class="col-3">Genero</label>
+												<div class="col-9">
+													<div class="input-group input-group-solid">
+														<div class="input-group-prepend">
+															<span class="input-group-text">
+																<i class="la la-user"></i>
+															</span>
+														</div>
+		                                                <select name="Genero" id="Genero" class="form-control form-control-solid" placeholder="Genero">
+		                                                    <option value="">--Seleccione una opción</option>
+		                                                    <option value="mujer">Femenino</option>
+		                                                    <option value="hombre">Masculino</option>
+		                                                </select>
 													</div>
 												</div>
 											</div>
@@ -137,7 +154,7 @@
 																<i class="la la-user"></i>
 															</span>
 														</div>
-														<input type="text" name="Usuario" id="Usuario" class="form-control form-control-solid" placeholder="Usuario" />
+														<input type="text" name="Usuario" id="Usuario" class="form-control form-control-solid" placeholder="Usuario"/>
 													</div>
 												</div>
 											</div>
@@ -150,7 +167,7 @@
 																<i class="la la-at"></i>
 															</span>
 														</div>
-														<input type="email" name="Email" id="Email" class="form-control form-control-solid" placeholder="Correo electronico" />
+														<input type="email" name="Email" id="Email" class="form-control form-control-solid" placeholder="Correo electronico"/>
 													</div>
 												</div>
 											</div>
@@ -163,7 +180,7 @@
 																<i class="la la-key"></i>
 															</span>
 														</div>
-														<input type="password" name="Contraseña" id="Contraseña" class="form-control form-control-solid" placeholder="Contraseña" />
+														<input type="password" name="Contraseña" id="Contraseña" class="form-control form-control-solid" placeholder="Contraseña"/>
 													</div>
 												</div>
 											</div>
@@ -176,7 +193,7 @@
 											<div class="form-group row">
 												<label class="col-form-label text-right col-lg-3 col-sm-12">Circulo de estudio</label>
 												<div class="col-lg-9 col-md-9 col-sm-12">
-													<select class="form-control selectpicker" data-size="10" title="Seleccione una opción" data-live-search="true" id="Jornada">
+													<select class="form-control selectpicker" data-size="10" title="--Seleccione una opción" data-live-search="true" id="Jornada">
 													</select>
 												</div>
 											</div>
@@ -254,6 +271,13 @@
 										}
 									},
 									Telefono: {
+										validators: {
+											notEmpty: {
+												message: 'Es un campo obligatorio'
+											}
+										}
+									},
+									Genero: {
 										validators: {
 											notEmpty: {
 												message: 'Es un campo obligatorio'
@@ -397,6 +421,7 @@
 	            var NombrePersona = $('#Nombres').val();
 	            var ApellidosPersona = $('#Apellidos').val();
 	            var TelefonoPersona = $('#Telefono').val();
+	            var GeneroPersona = $('#Genero').val();
 	            var UsuarioPersona = $('#Usuario').val();
 	            var EmailPersona = $('#Email').val();
 	            var ContraseñaPersona = $('#Contraseña').val();
@@ -405,6 +430,7 @@
 	                Nombre: NombrePersona,
 	                Apellido: ApellidosPersona,
 	                Telefono: TelefonoPersona,
+	                Genero: GeneroPersona,
 	                Usuario: UsuarioPersona,
 	                Correo: EmailPersona,
 	                Contraseña: ContraseñaPersona,
