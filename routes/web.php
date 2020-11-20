@@ -21,7 +21,10 @@ Route::get('/', $route.'\Administration@Dashboard')->name('home')->middleware('a
 Route::post('/signin',  $route.'\LoginController@login')->name('signin');
 #logout
 Route::get('/logout', $route.'\LoginController@logout')->name('logout');
-
+Route::group([ 'prefix' => 'student'], function(){
+	$route = "App\Http\Controllers";
+	Route::get('/home',$route.'\Student@Dashboard')->name('StudentDashboard');
+});
 Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	
 	$route = "App\Http\Controllers";

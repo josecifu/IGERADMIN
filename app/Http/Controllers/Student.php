@@ -31,6 +31,10 @@ class Student extends Controller
     #ADMINISTRACION
     
     //mostrar notas por semetres    ->  visualizacion de notas por curso
+    public function Dashboard()
+    {
+        return view('Student/home');
+    }
     public function course_scores($id)
     {
         $models = [];

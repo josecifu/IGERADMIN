@@ -1,4 +1,4 @@
-@extends('Administration.Base/Base')
+@extends('Administration.Base/BaseStudent')
 {{-- Page title --}}
 @section('title')
 Inicio

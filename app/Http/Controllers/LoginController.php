@@ -29,6 +29,13 @@ class LoginController extends Controller
 
         if($rols->isNotEmpty()){
             $user->setSession($rols->toArray());
+            $rol =$rols->toArray();
+            $rol=$rol[0]['Name'];
+            if($rol=="Estudiante")
+            {
+                return redirect('student/home');
+            }
+            
         }
         else
         {
