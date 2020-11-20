@@ -7,7 +7,7 @@
     Tablero
     @stop
     @section('breadcrumb2')
-    Principal
+    Notas
     @stop
     {{-- Page content --}}
     @section('content')
@@ -124,8 +124,8 @@
                                                         @endforeach
                                                         <td nowrap="nowrap"></td>
                                                     </tr>
-                                                   @endforeach
-                                                 
+                                                   @endforeach                                                    
+                                                </div>
                                             </tbody>
                                         </table>
                                         <!--end: Datatable-->
@@ -133,8 +133,40 @@
                                 </div>
                                 <!--end::Card-->
                             </div>
+                            <div class="modal fade" id="kt_grades_modal1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Visualizar actividades del curso {{$course->Name}}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <i aria-hidden="true" class="ki ki-close"></i>
+                                            </button>
+                                        </div>
+                                        <form class="form">
+                                            <div class="modal-body">
+                                                <div class="form-group row">
+                                                    <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el nivel</label>
+                                                    <div class="col-lg-9 col-md-9 col-sm-12">
+                                                        <select class="form-control selectpicker" data-size="10" data-live-search="true" id="detailA">
+                                                            @foreach($Modal as $m)
+                                                                <option value="{{ $m['id']}} ">{{$m['Name']}} </option>
+                                                            @endforeach
+                                                        </select>
+                                                        <span class="form-text text-muted">Visualice los detalles de la actividad seleccionada</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                <button type="button" class="btn btn-primary mr-2" onclick="detalleActividad();">Visualizar</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
 
-	@stop
+    @stop
+    
 	@section('scripts')
 
         <!--begin::Page Vendors(used by this page)-->
@@ -210,91 +242,101 @@
                 $('#username').editable();
             });
             function create()
-        {
-            Swal.mixin({
-                input: 'text',
-                confirmButtonText: 'Siguiente  &rarr;',
-                showCancelButton: true,
-                progressSteps: ['1','2',]
-              }).queue([
-                {
-                  title: 'Ingrese nombre de la actividad:',
-                 
-                },
-                {
-                title: 'Ingrese Punteo total de la actividad:',
-                },
-              ]).then((result) => {
-                if (result.value) {
-                  const answers = JSON.stringify(result.value)
-                  console.log(result.value);
-                  const swalWithBootstrapButtons = Swal.mixin({
-                    customClass: {
-                      confirmButton: 'btn btn-success',
-                      cancelButton: 'btn btn-danger'
-                    },
-                    buttonsStyling: false
-                  })
-                  
-                  swalWithBootstrapButtons.fire({
-                    title: '¿Está seguro de los datos?',
-                    text: "El nombre de la actividad: "+result.value[0]+" y el punteo: "+result.value[1],
-                    icon: 'warning',
+            {
+                Swal.mixin({
+                    input: 'text',
+                    confirmButtonText: 'Siguiente  &rarr;',
                     showCancelButton: true,
-                    confirmButtonText: 'Si, crearlo!',
-                    cancelButtonText: 'No, cancelar!',
-                    reverseButtons: true
-                  }).then((result2) => {
-                    if (result2.isConfirmed) {
-                        var data = [{
-                            Actividad: result.value[0],
-                            Punteo: result.value[1],
-                        }];
-            
-                        $.ajax({
-                            url:'/administration/teacher/save/activity/'+{{$course->id}},
-                            type:'POST',
-                            data: {"_token":"{{ csrf_token() }}","data":data},
-                            dataType: "JSON",
-                            success: function(e){
-                                swalWithBootstrapButtons.fire({
-                                    title: 'Creado!',
-                                    text: 'Se ha creado con exito!',
-                                    icon: 'success',
-                                    confirmButtonText: 'Aceptar',
-                                }).then(function () {
-                                       
-                                      var $url_path = '{!! url('/') !!}';
-                                      window.location.href = $url_path+"/administration/teacher/score/"+{{$course->id}};
-                                    });
-                                 
-                            },
-                            error: function(e){
-                                swalWithBootstrapButtons.fire({
-                                    title: 'Cancelado!',
-                                    text:   e.responseJSON['error'],
-                                    icon: 'error',
-                                    confirmButtonText: 'Aceptar',
-                                })
-                               
-                            }
-                        });
-                     
-                    } else if (
-                      result.dismiss === Swal.DismissReason.cancel
-                    ) {
-                      swalWithBootstrapButtons.fire({
-                        title: 'Cancelado!',
-                        text:  'El dia no ha sido creada!',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar',
+                    progressSteps: ['1','2',]
+                }).queue([
+                    {
+                    title: 'Ingrese nombre de la actividad:',
+                    
+                    },
+                    {
+                    title: 'Ingrese Punteo total de la actividad:',
+                    },
+                ]).then((result) => {
+                    if (result.value) {
+                    const answers = JSON.stringify(result.value)
+                    console.log(result.value);
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                        },
+                        buttonsStyling: false
+                    })
+                    
+                    swalWithBootstrapButtons.fire({
+                        title: '¿Está seguro de los datos?',
+                        text: "El nombre de la actividad: "+result.value[0]+" y el punteo: "+result.value[1],
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Si, crearlo!',
+                        cancelButtonText: 'No, cancelar!',
+                        reverseButtons: true
+                    }).then((result2) => {
+                        if (result2.isConfirmed) {
+                            var data = [{
+                                Actividad: result.value[0],
+                                Punteo: result.value[1],
+                            }];
+                
+                            $.ajax({
+                                url:'/administration/teacher/save/activity/'+{{$course->id}},
+                                type:'POST',
+                                data: {"_token":"{{ csrf_token() }}","data":data},
+                                dataType: "JSON",
+                                success: function(e){
+                                    swalWithBootstrapButtons.fire({
+                                        title: 'Creado!',
+                                        text: 'Se ha creado con exito!',
+                                        icon: 'success',
+                                        confirmButtonText: 'Aceptar',
+                                    }).then(function () {
+                                        
+                                        var $url_path = '{!! url('/') !!}';
+                                        window.location.href = $url_path+"/administration/teacher/score/"+{{$course->id}};
+                                        });
+                                    
+                                },
+                                error: function(e){
+                                    swalWithBootstrapButtons.fire({
+                                        title: 'Cancelado!',
+                                        text:   e.responseJSON['error'],
+                                        icon: 'error',
+                                        confirmButtonText: 'Aceptar',
+                                    })
+                                
+                                }
+                            });
+                        
+                        } else if (
+                        result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                        swalWithBootstrapButtons.fire({
+                            title: 'Cancelado!',
+                            text:  'El dia no ha sido creada!',
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar',
+                        })
+                        }
                     })
                     }
-                  })
-                }
-              })
+                })
+            }
+            function modal() {
+                $("#kt_grades_modal1").modal("show");
+            }
+            function detalleActividad() {
+                var id = $('#detailA').val();
+                console.log(id);
+                var $url_path = '{!! url('/') !!}';
+                window.location.href = $url_path+"/administration/teacher/detail/activity/"+{{$course->id}}+"/"+id;
             }
        </script>
 
       
-	@stop
+    @stop
+    

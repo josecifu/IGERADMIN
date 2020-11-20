@@ -58,6 +58,17 @@ class Teacher extends Controller
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
+        return view('Administration/Teachers/spaceWork',compact('buttons'));
+    }
+    public function dashboard()
+    {
+        $buttons =[];
+        $button = [
+            "Name" => 'Info',
+            "Link" => '#',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
         return view('Administration/Teachers/dashboard',compact('buttons'));
     }
     public function list() //Visualizcion tabla Voluntarios con usuario
@@ -81,21 +92,31 @@ class Teacher extends Controller
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
-        $Titles =['Id','Nombres','Apellidos','Telefono','Usuario','Email', 'Acciones'];
+        $Titles =['Id','Nombres','Apellidos','Telefono','Usuario','Email','Cursos Asignados','Acciones'];
         $usuario_rol = Assign_user_rol::where('Rol_id',3)->where('State','Active')->get('user_id');
         $Models = [];
         foreach ($usuario_rol as $v) {
             $usuario = User::find($v->user_id);
             $persona = Person::find($usuario->Person_id);
-                $data = [
-                    'Id' => $persona->id,
-                    'Name' => $persona->Names,
-                    'Apellido' => $persona->LastNames,
-                    'Telefono' => $persona->Phone,
-                    'Usuario' => $usuario->name,
-                    'Correo' => $usuario->email,
+            $curses = User::find($v->user_id)->CoursesTeacher();
+            $dataT = [];
+            foreach ($curses as $value) {
+                $curso = course::find($value->Course_id);
+                $dataC = [
+                    'Curso' => $curso->Name,
                 ];
-                array_push($Models,$data);
+                array_push($dataT,$dataC);
+            }
+            $data = [
+                'Id' => $persona->id,
+                'Name' => $persona->Names,
+                'Apellido' => $persona->LastNames,
+                'Telefono' => $persona->Phone,
+                'Usuario' => $usuario->name,
+                'Correo' => $usuario->email,
+                'Curses' => $dataT,
+            ];
+            array_push($Models,$data);
         }
         return view('Administration/Teachers/ListadoVoluntarios',compact('Models','Titles','buttons'));
     }
@@ -270,10 +291,16 @@ class Teacher extends Controller
         }
         $Titles = [];
         $Models = [];
-        $Activities = Assign_activity::where('Course_id',$id)->get();
+        $Modal = [];
+        $Activities = Assign_activity::where([['Course_id',$id],['State','Active']])->get();
         $gradeStudents = grade::find($course->Grade_id)->Students();
         foreach($Activities as $Activity)
         {
+            $moda = [
+                'id' => $Activity->id,
+                "Name" => $Activity->Name,
+            ];
+            array_push($Modal,$moda);
             $act = [
                 "Name" =>$Activity->Name,
                 "No" =>count($Activity->Tests()),
@@ -282,6 +309,7 @@ class Teacher extends Controller
             array_push($Titles,$act);
             // dd($Titles);
         }
+        
         foreach($gradeStudents as $student)
         {
             $notas=[];
@@ -305,40 +333,6 @@ class Teacher extends Controller
             ];
             array_push($Models,$model);
         }
-        
-
-        // $p1 = $p2 = $p3 = $p4 = 0;
-        // $assignS = Assign_student_grade::where('Grade_id',$course->Grade_id)->get();
-        // foreach ($assignS as $value) {
-        //     $notas = Note::where('Course_id',$id)->where('Studen_id',$value->id)->get();
-        //     $user = user::find($value->user_id);
-        //     $student = Person::find($user->Person_id);
-        //     foreach ($notas as $valueN) {
-        //         if($valueN->Unity == 1){
-        //             $p1 = $valueN->Score;
-        //         }
-        //         elseif ($valueN->Unity == 2) {
-        //             $p2 = $valueN->Score;
-        //         }
-        //         elseif ($valueN->Unity == 3) {
-        //             $p3 = $valueN->Score;
-        //         }
-        //         elseif ($valueN->Unity == 4) {
-        //             $p4 = $valueN->Score;
-        //         }
-        //     }
-        //     $Final = $p1 + $p2 + $p3 + $p4;
-        //     $data = [
-        //         "Nombre" => $student->Names." ".$student->LastNames,
-        //         'P1' => $p1,
-        //         'P2' => $p2,
-        //         'P3' => $p3,
-        //         'P4' => $p4,
-        //         'Final' => $Final,
-        //     ];
-        //     array_push($Models,$data);
-        //     $p1 = $p2 = $p3 = $p4 = 0;
-        // }
         $buttons =[];
         $button = [
             "Name" => 'Crear Actividad',
@@ -347,11 +341,11 @@ class Teacher extends Controller
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Listado Voluntarios',
-            "Link" => 'administration/teacher/list',
-            "Type" => "btn1"
+            "Name" => 'Ver detalles de actividad',
+            "Link" => 'modal()',
+            "Type" => "addFunction1"
         ];
-        // array_push($buttons,$button);
+        array_push($buttons,$button);
         $Nombre = $vol->Names.' '.$vol->LastNames;
         $grado = grade::find($course->Grade_id)->GradeName();
         // $activity = Assign_activity::where('Course_id',$id)->get();
@@ -362,7 +356,7 @@ class Teacher extends Controller
         //     ];
         //     array_push($actividades,$data);
         // }
-        return view('Administration/Teachers/listadoNotas',compact('buttons','Titles','Models','Nombre','course','grado'));
+        return view('Administration/Teachers/listadoNotas',compact('buttons','Modal','Titles','Models','Nombre','course','grado'));
     }
 
             #===================    CRUD EXAMENES ================
@@ -570,6 +564,58 @@ class Teacher extends Controller
         return response()->json(["Accion completada"]);
 
     }
+    public function DetailActivity($curso,$id)
+    {
+        $course = course::find($curso);
+        $Titles =['Id','Actividad','Examenes de la actividad','Punteo Total','Acciones'];
+        $Models = [];
+        $actividad = Assign_activity::find($id);
+        $test = Assign_activity::find($id)->Tests();
+        foreach ($test as $value) {
+            $data = [
+                'Test' => $value->Title,
+            ];
+            array_push($Models,$data);
+        }
+        return view('Administration/Teachers/detailActivity',compact('actividad','course','Titles','Models'));
+    }
+    public function updateActivity(Request $request)
+    {
+        $user = user::find($request->session()->get('User_id')); 
+        $data = $request->data[0];
+        $Actividad = $data['Actividad'];
+        $Punteo = $data['Punteo'];
+        $id = $data['code'];
+        $curso = $data['curso'];
+        $assign = Assign_activity::find($id);
+        $assign->Name = $Actividad;
+        $assign->Score = $Punteo;
+        $assign->save();
+        $log = new logs;
+        $log->Table = "Voluntario";
+        $log->User_ID = $user->name;
+        $log->Description = "Se actualizo la actividad: ".$Actividad;
+        $log->Type = "Update";
+        $log->save();
+        return response()->json(["Accion completada"]);
+    }
+    public function deleteActivity($curso, $id, Request $request)   //ELIMINAR/DESACTIVAR VOLUNTARIO
+    {
+        $IID = user::find($request->session()->get('User_id'));
+        $r = Assign_activity::find($id);
+        $dataU=array(
+            'State' => 'Desactivated',
+        );
+        $log = new logs;
+        $log->Table = "Voluntario";
+        $log->User_ID = $IID->name;
+        $log->Description = "La Actividad: ".$r->Name." fue desactivado";
+        $log->Type = "Delete";
+        $log->save();
+        Assign_activity::where('id',$id)->update($dataU);
+        return redirect()->route('ScoreTeacher', [$curso]);
+    }
+
     public function Desactive()         //vista usuarios desactivados
     {
         $buttons =[];

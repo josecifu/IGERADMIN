@@ -4,10 +4,10 @@
     Inicio
     @stop
     @section('breadcrumb1')
-    Tablero
+    Actividades
     @stop
     @section('breadcrumb2')
-    Logs
+    Detalle
     @stop
     {{-- Page content --}}
     @section('content')
@@ -35,10 +35,17 @@
                                 <div class="card card-custom">
                                     <div class="card-header">
                                         <div class="card-title">
+                                            <div class="card-toolbar">
+                                                <a href="{{url('administration/teacher/score/'.$course->id)}}" class="btn btn-danger font-weight-bolder mr-2">
+                                                <i class="ki ki-long-arrow-back icon-sm"></i>Cancelar</a>
+                                            </div>
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            <h3 class="card-label">Registro de actividad de la tabla Voluntarios</h3>
+                                            @if($course)
+                                                <h3 class="card-label">Detalle de la actividad: {{$actividad->Name}} del curso {{$course->Name}}</h3>
+                                            @endif
+                                            
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -97,16 +104,19 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($Models as $Model)
                                                 <tr>
-                                                    <td>{{$Model['Id']}}</td>
-                                                    <td>{{$Model['Usuario']}}</td>
-                                                    <td>{{$Model['Descripcion']}}</td>
-                                                    <td>{{$Model['Tipo']}}</td>
-                                                    <td>{{$Model['HF']}}</td>
+                                                    <td>{{$actividad->id}}</td>
+                                                    <td>{{$actividad->Name}}</td>
+                                                    <td>
+                                                    @foreach($Models as $Model)
+                                                        <ul>
+                                                            <li>{{$Model['Test']}}</li> 
+                                                        </ul>
+                                                    @endforeach
+                                                    </td>
+                                                    <td>{{$actividad->Score}}</td>
                                                     <td nowrap="nowrap"></td>
                                                 </tr>
-                                                @endforeach
                                             </tbody>
                                         </table>
                                         <!--end: Datatable-->
@@ -145,21 +155,10 @@
                                 orderable: false,
                                 render: function(data, type, full, meta) {
                                     return '\
-                                        <div class="dropdown dropdown-inline">\
-                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">\
-                                                <i class="la la-cog"></i>\
-                                            </a>\
-                                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
-                                                <ul class="nav nav-hoverable flex-column">\
-                                                    <li class="nav-item"><a class="nav-link" href="/administration/teacher/edit/'+full[0]+'"><i class="nav-icon la la-edit"></i><span class="nav-text">Editar</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
-                                                </ul>\
-                                            </div>\
-                                        </div>\
-                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Detalle de asignación">\
+                                        <a href="javascript:;" onclick="edit(\''+full[0]+'\',\''+full[1]+'\',\''+full[3]+'\')" class="btn btn-sm btn-clean btn-icon" title="Detalle de asignación">\
                                             <i class="la la-edit"></i>\
                                         </a>\
-                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Borrar">\
+                                        <a href="javascript:;" onclick="deleteActivity(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Eliminar">\
                                             <i class="la la-trash"></i>\
                                         </a>\
                                     ';
@@ -186,7 +185,96 @@
             jQuery(document).ready(function() {
                 KTDatatablesDataSourceHtml.init();
             });
-            function deletePeriod($id,$name)
+            function edit($id,$Name,$Punteo)
+            {
+               Swal.mixin({
+                    input: 'text',
+                    confirmButtonText: 'Siguiente  &rarr;',
+                    showCancelButton: true,
+                    progressSteps: ['1','2',]
+                }).queue([
+                    {
+                    title: 'Ingrese el nombre de la actividad:',
+                    text: 'Nombre anterior:' + $Name
+                    },
+                    {
+                    title: 'Ingrese el Punteo total de la actividad:',
+                    text: 'Punteo anterior:' + $Punteo
+                    },
+                ]).then((result) => {
+                    if (result.value) {
+                    const answers = JSON.stringify(result.value)
+                    console.log(result.value);
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                        },
+                        buttonsStyling: false
+                    })
+                    
+                    swalWithBootstrapButtons.fire({
+                        title: '¿Está seguro de los datos?',
+                        text: "El nombre de la actividad: "+result.value[0]+" y el punteo: "+result.value[1],
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Si, crearlo!',
+                        cancelButtonText: 'No, cancelar!',
+                        reverseButtons: true
+                    }).then((result2) => {
+                        if (result2.isConfirmed) {
+                            var code = $id;
+                            var data = [{
+                                code: code,
+                                Actividad: result.value[0],
+                                Punteo: result.value[1],
+                                curso: {{$course->id}},
+                            }];
+                
+                            $.ajax({
+                                url:'/administration/teacher/update/activity',
+                                type:'POST',
+                                data: {"_token":"{{ csrf_token() }}","data":data},
+                                dataType: "JSON",
+                                success: function(e){
+                                    swalWithBootstrapButtons.fire({
+                                        title: 'Creado!',
+                                        text: 'Se ha creado con exito!',
+                                        icon: 'success',
+                                        confirmButtonText: 'Aceptar',
+                                    }).then(function () {
+                                        
+                                        var $url_path = '{!! url('/') !!}';
+                                        window.location.href = $url_path+"/administration/teacher/score/"+{{$course->id}};
+                                        });
+                                    
+                                },
+                                error: function(e){
+                                    swalWithBootstrapButtons.fire({
+                                        title: 'Cancelado!',
+                                        text:   e.responseJSON['error'],
+                                        icon: 'error',
+                                        confirmButtonText: 'Aceptar',
+                                    })
+                                
+                                }
+                            });
+                        
+                        } else if (
+                        result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                        swalWithBootstrapButtons.fire({
+                            title: 'Cancelado!',
+                            text:  'El dia no ha sido creada!',
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar',
+                        })
+                        }
+                    })
+                    }
+                })
+            }
+            function deleteActivity($id,$name)
             {
                 const swalWithBootstrapButtons = Swal.mixin({
                     customClass: {
@@ -197,7 +285,7 @@
                 })
                 swalWithBootstrapButtons.fire({
                     title: '¿Está seguro de eliminar el voluntario?',
-                    text: "El nombre del Voluntario: "+$name,
+                    text: "La actividad: "+$name,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Si, eliminar!',
@@ -205,27 +293,21 @@
                     reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        var Code = $id;
-                        var data = [{
-                            Code: Code,
-                            Name: result.value[0],
-                        }];
                         swalWithBootstrapButtons.fire({
                             title: 'Eliminado!',
                             text: 'Se ha eliminado con exito!',
                             icon: 'success',
                             confirmButtonText: 'Aceptar',
                         }).then(function () {
-                            
                             var $url_path = '{!! url('/') !!}';
-                            window.location.href = $url_path+"/administration/teacher/delete/"+$id;
+                            window.location.href = $url_path+"/administration/teacher/delete/activity/"+{{$course->id}}+"/"+$id;
                             });
                     } else if (
                     result.dismiss === Swal.DismissReason.cancel
                     ) {
                     swalWithBootstrapButtons.fire({
                         title: 'Cancelado!',
-                        text:  'La Voluntario no ha sido eliminada!',
+                        text:  'La Actividad no ha sido eliminada!',
                         icon: 'error',
                         confirmButtonText: 'Aceptar',
                     })

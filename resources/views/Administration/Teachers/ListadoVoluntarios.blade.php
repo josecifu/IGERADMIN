@@ -4,10 +4,10 @@
     Inicio
     @stop
     @section('breadcrumb1')
-    Voluntarios
+    Tablero
     @stop
     @section('breadcrumb2')
-    Principal
+    Voluntarios
     @stop
     {{-- Page content --}}
     @section('content')
@@ -105,6 +105,18 @@
                                                     <td>{{$Model['Telefono']}}</td>
                                                     <td>{{$Model['Usuario']}}</td>
                                                     <td>{{$Model['Correo']}}</td>
+                                                    <td>
+                                                        @if($Model['Curses'])
+                                                            <ul>
+                                                                @foreach($Model['Curses'] as $Course)
+                                                                    <li>{{$Course['Curso']}}</li>    
+                                                                @endforeach
+                                                            </ul>
+                                                        @else
+                                                        <p style="text-align: center;">  Ningun curso asignado</p>
+                                                            
+                                                        @endif
+                                                    </td>
                                                     <td nowrap="nowrap"></td>
                                                 </tr>
                                                 @endforeach
@@ -157,7 +169,7 @@
                                                 </ul>\
                                             </div>\
                                         </div>\
-                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Detalle de asignación">\
+                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Detalle de asignación">\
                                             <i class="la la-edit"></i>\
                                         </a>\
                                         <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Eliminar">\
