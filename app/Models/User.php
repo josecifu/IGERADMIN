@@ -27,6 +27,9 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Models\Assign_student_grade','user_id','id')->first();
     }
+    public function CoursesTeacher(){
+        return $this->hasMany(Asign_teacher_course::class)->get();
+    }
     /**
      * The attributes that should be hidden for arrays.
      *

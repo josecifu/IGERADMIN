@@ -4,10 +4,10 @@
     Voluntario
     @stop
     @section('breadcrumb1')
-    Examenes
+    Crear
     @stop
     @section('breadcrumb2')
-    Crear
+    Examenes
     @stop
     {{-- Page content --}}
     @section('content')

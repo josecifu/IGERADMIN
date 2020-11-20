@@ -4,10 +4,10 @@
     Inicio
     @stop
     @section('breadcrumb1')
-    Voluntarios
+    Actividades
     @stop
     @section('breadcrumb2')
-    Principal
+    Detalle
     @stop
     {{-- Page content --}}
     @section('content')
@@ -155,18 +155,7 @@
                                 orderable: false,
                                 render: function(data, type, full, meta) {
                                     return '\
-                                        <div class="dropdown dropdown-inline">\
-                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title ="Ajustes" data-toggle="dropdown">\
-                                                <i class="la la-cog"></i>\
-                                            </a>\
-                                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
-                                                <ul class="nav nav-hoverable flex-column">\
-                                                    <li class="nav-item"><a class="nav-link" href="#" onclick="edit(\''+full[0]+'\',\''+full[1]+'\',\''+full[3]+'\')"><i class="nav-icon la la-edit"></i><span class="nav-text">Editar</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
-                                                </ul>\
-                                            </div>\
-                                        </div>\
-                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Detalle de asignación">\
+                                        <a href="javascript:;" onclick="edit(\''+full[0]+'\',\''+full[1]+'\',\''+full[3]+'\')" class="btn btn-sm btn-clean btn-icon" title="Detalle de asignación">\
                                             <i class="la la-edit"></i>\
                                         </a>\
                                         <a href="javascript:;" onclick="deleteActivity(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Eliminar">\

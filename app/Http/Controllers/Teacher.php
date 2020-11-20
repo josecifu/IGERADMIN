@@ -58,6 +58,17 @@ class Teacher extends Controller
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
+        return view('Administration/Teachers/spaceWork',compact('buttons'));
+    }
+    public function dashboard()
+    {
+        $buttons =[];
+        $button = [
+            "Name" => 'Info',
+            "Link" => '#',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
         return view('Administration/Teachers/dashboard',compact('buttons'));
     }
     public function list() //Visualizcion tabla Voluntarios con usuario
@@ -81,21 +92,31 @@ class Teacher extends Controller
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
-        $Titles =['Id','Nombres','Apellidos','Telefono','Usuario','Email', 'Acciones'];
+        $Titles =['Id','Nombres','Apellidos','Telefono','Usuario','Email','Cursos Asignados','Acciones'];
         $usuario_rol = Assign_user_rol::where('Rol_id',3)->where('State','Active')->get('user_id');
         $Models = [];
         foreach ($usuario_rol as $v) {
             $usuario = User::find($v->user_id);
             $persona = Person::find($usuario->Person_id);
-                $data = [
-                    'Id' => $persona->id,
-                    'Name' => $persona->Names,
-                    'Apellido' => $persona->LastNames,
-                    'Telefono' => $persona->Phone,
-                    'Usuario' => $usuario->name,
-                    'Correo' => $usuario->email,
+            $curses = User::find($v->user_id)->CoursesTeacher();
+            $dataT = [];
+            foreach ($curses as $value) {
+                $curso = course::find($value->Course_id);
+                $dataC = [
+                    'Curso' => $curso->Name,
                 ];
-                array_push($Models,$data);
+                array_push($dataT,$dataC);
+            }
+            $data = [
+                'Id' => $persona->id,
+                'Name' => $persona->Names,
+                'Apellido' => $persona->LastNames,
+                'Telefono' => $persona->Phone,
+                'Usuario' => $usuario->name,
+                'Correo' => $usuario->email,
+                'Curses' => $dataT,
+            ];
+            array_push($Models,$data);
         }
         return view('Administration/Teachers/ListadoVoluntarios',compact('Models','Titles','buttons'));
     }
