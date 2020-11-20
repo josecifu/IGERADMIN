@@ -21,11 +21,12 @@
                                 <tr>
                                     <th>
                                         <h4>
-                                            Titulo de evaluacion<br>
-                                            Nombre del estudiante: Javier Angulo<br>
-                                            Curso: Matemáticas<br>
-                                            Nombre del maestro: Rodrigo Castillo<br>
-                                            Nota final: 25
+                                            Evaluación: {{$test->Title}}<br>
+                                            Nombre del estudiante: {{$student->Names}} {{$student->LastNames}}<br>
+                                            Curso: {{$course->Name}}<br>
+                                            Profesor: {{$teacher->Names}} {{$teacher->LastNames}}<br>
+                                            Valor: {{$test->Score}}<br>
+                                            Nota final: -
                                         </h4>
                                     </th>
                                 </tr>
@@ -35,7 +36,7 @@
                     <div class="card-toolbar">
                         <div class="card-header">
                             <div class="card-toolbar">
-                                <a href="{{url('administration/student/lists/test/1')}}" class="btn btn-danger font-weight-bolder mr-2">
+                                <a href="{{url('/administration/student/list/test/1')}}" class="btn btn-danger font-weight-bolder mr-2">
                                 <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
                             </div>
                         </div>
@@ -89,24 +90,20 @@
                     <table class="table table-bordered table-hover table-checkable" id="" style="margin-top: 13px !important">
                         <thead>
                             <tr>
-                                @foreach($titles as $t)
-                                <th>{{ $t }}</th>
+                                @foreach($titles as $title)
+                                <th>{{ $title }}</th>
                                 @endforeach
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($models as $m)
+                            @foreach($models as $model)
                             <tr>
-                                <td>{{$m['Id']}}</td>
-                                <td>{{$m['question']}}</td>
-                                <td>
-                                @if($m['type']=="V/F")
-                                    Verdadero / Falso
-                                @endif
-                                </td>
-                                <td>5</td>
-                                <td>{{$m['correct']}}</td>
-                                <td>0</td>
+                                <td>{{$model['id']}}</td>
+                                <td>{{$model['question']}}</td>
+                                <td>{{$model['type']}}</td>
+                                <td>{{$model['answer']}}</td>
+                                <td>{{$model['correct']}}</td>
+                                <td>{{$model['score']}}</td>
                                 <td><center><button type="button" disabled class="btn btn-outline-info" data-toggle="tooltip" title="Ver pregunta" data-placement="left">Ver pregunta</button></center></td>
                                 <td nowrap="nowrap"></td>
                             </tr>

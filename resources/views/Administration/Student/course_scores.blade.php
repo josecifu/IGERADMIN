@@ -84,35 +84,9 @@
                     <table class="table table-bordered table-hover table-checkable" id="" style="margin-top: 13px !important">
                         <thead>
                             <tr>
-                                <th rowspan="2">
-                                    <center>Id</center>
-                                </th>
-                                <th rowspan="2">
-                                    <center>Curso</center>
-                                </th>
-                                <th colspan="2">
-                                    <center>Primer Semestre</center>
-                                </th>
-                                <th colspan="2">
-                                    <center>Segundo Semestre</center>
-                                </th>
-                                <th rowspan="2">
-                                    <center>Nota Final</center>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <center>Parcial 1</center>
-                                </th>
-                                <th>
-                                    <center>Parcial 2</center>
-                                </th>
-                                <th>
-                                    <center>Parcial 3</center>
-                                </th>
-                                <th>
-                                    <center>Parcial 4</center>
-                                </th>
+                                @foreach($titles as $t)
+                                <th>{{ $t }}</th>
+                                @endforeach
                             </tr>
                         </thead>
                         <tbody>
