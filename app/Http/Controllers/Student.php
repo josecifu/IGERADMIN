@@ -102,7 +102,13 @@ class Student extends Controller
 
 
 
-
+    public function test_answers()
+    {
+        return view('Student/test');
+    }
+    public function save_answer()
+    {
+    }
 
 
 
@@ -311,9 +317,11 @@ class Student extends Controller
         $names = $data['Nombre'];
         $lastnames = $data['Apellido'];
         $phone = $data['Telefono'];
+        $gender = $data['Genero'];
         $username = $data['Usuario'];
         $email = $data['Correo'];
         $password = $data['Contraseña'];
+        $year = date("Y");
         $grade = Grade::find($data['Grado']);
         try
         {
@@ -322,6 +330,7 @@ class Student extends Controller
             $student->Names = $names;
             $student->LastNames = $lastnames;
             $student->Phone = $phone;
+            $student->Genre = $gender;
             $student->save();
             $user = new User;
             $user->name = $username;
@@ -338,7 +347,7 @@ class Student extends Controller
             $student_grades = new Assign_student_grade;
             $student_grades->user_id = $user->id;
             $student_grades->Grade_id = $grade->id;
-            $student_grades->Year = "2020";
+            $student_grades->Year = $year;
             $student_grades->State ="Active";
             $student_grades->save();
             $log = new Logs;
@@ -565,13 +574,6 @@ class Student extends Controller
     {
         return view('Student/test');
     }
-    public function answer()
-    {
-        return view('Student/');
-    }
-    public function save_answer()
-    {
-    }
     public function view_course_teachers_notes()
     {
     }
@@ -612,15 +614,6 @@ class Student extends Controller
         return response()->json(["Accion completada"]);
     }
     //////////////////////////////////////////
-    public function view_teacher_information()
-    {
-    }
-    public function view_schedule()
-    {
-    }
-    public function view_forms()
-    {
-    }
     public function view_calendar()
     {
     }
