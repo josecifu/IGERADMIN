@@ -95,8 +95,8 @@
                                                         @foreach($model['tests'] as $test)
                                                         <td>
                                                             <center>
-                                                                <a href="{{url('/administration/student/test/1')}}">
-                                                                <button type="button" class="btn btn-outline-info"  data-toggle="modal" >0</button></a>
+                                                                
+                                                                <button type="button" class="btn btn-outline-info"  onclick="verExamen({{$test['Id']}},{{$model['Assign']}});">0</button>
                                                             </center>
                                                         </td>   
                                                         @endforeach
@@ -156,9 +156,9 @@
             jQuery(document).ready(function() {
                 KTDatatablesDataSourceHtml.init();
             });
-            function verNotas($id,$curso) {
+            function verExamen($id,$assign) {
                 var $url_path = '{!! url('/') !!}';
-                window.location.href = $url_path+"/administration/teacher/question/"+$id+"/"+$curso;
+                window.location.href = $url_path+"/administration/student/test/"+$id+"/"+$assign;
             }
 
        </script>

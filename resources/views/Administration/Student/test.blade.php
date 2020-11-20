@@ -97,9 +97,13 @@
                         <tbody>
                             @foreach($models as $m)
                             <tr>
-                                <td>{{$m['id']}}</td>
+                                <td>{{$m['Id']}}</td>
                                 <td>{{$m['question']}}</td>
-                                <td>{{$m['type']}}</td>
+                                <td>
+                                @if($m['type']=="V/F")
+                                    Verdadero / Falso
+                                @endif
+                                </td>
                                 <td>5</td>
                                 <td>{{$m['correct']}}</td>
                                 <td>0</td>

@@ -32,8 +32,11 @@ class Student extends Controller
 
     //conexion directa a examen
     //falta visualizar respuestas y modal ver pregunta
-    public function test($id)
+    public function test($id,$assign)
     {
+        $Student = Assign_student_grade::find($assign);
+        $Test = test::find($id);
+        $Questions = $Test->Questions();
         $models = [];
         $titles = [
             'Id',
@@ -44,19 +47,33 @@ class Student extends Controller
             'Punteo Obtenido',
             'Acciones'
         ];
-        $answers = Asign_answer_test_student::where('Studen_id',$id)->get();
-        foreach ($answers as $answer)
+        
+        foreach($Questions as $Question)
         {
-            $question = Question::find($answer->Question_id);
-            //dd($question);
-            $query = [
-                'id' => $question->id,
-                'question' => $question->Content,
-                'type' => $question->Type,
-                'correct' => $question->CorrectAnswers,
+            $Assign = Asign_answer_test_student::where(['Studen_id'=>$assign,'Question_id'=>$Question->id])->first();
+            $model=[
+                "Id"=>$Question->id,
+                "Question" =>$Question->Title,
+                "Type" => $Question->Type,
+                "Aswer" =>$Assign->Answers ?? 'No contestada',
+                "CorrectAswer" =>$Question->CorrectAswers ?? 'No aplica',
+                "Score" => $Assign->Score ?? '0',
             ];
-            array_push($models,$query);
+            array_push($models,$model);
         }
+     
+       // foreach ($answers as $answer)
+        //{
+           // $question = Question::find($answer->Question_id);
+            //dd($question);
+           // $query = [
+             //   'id' => $question->id,
+            //    'question' => $question->Content,
+             //   'type' => $question->Type,
+            //    'correct' => $question->CorrectAnswers,
+            //];
+            //array_push($models,$query);
+        //}
         //$test = Test::where('id',$question->Test_id)->get('Title');
         //$score = Test::where('id',$question->Test_id)->get('Score');
         return view('Administration/Student/test',compact('models','titles'));
@@ -116,6 +133,7 @@ class Student extends Controller
             }
             $Model = [
                 "id" =>$Studen->person()->id,
+                "Assign" =>$Studen->Asssign_Grade()->id,
                 "student" =>$Studen->person()->Names." ".$Studen->person()->LastNames,
                 "tests"=>$Tests
             ];
