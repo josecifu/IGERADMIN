@@ -41,6 +41,15 @@ class Administration extends Controller
     //Dashboard
     public function Dashboard(Request $request)
     {
+        $rol = $request->session()->get('rol_Name');
+        if($rol=="Estudiante")
+        {
+            return redirect('student/home');
+        }
+        elseif($rol=="Voluntario")
+        {
+            return redirect('teacher/home');
+        }
         $buttons =[];
         $button = [
             "Name" => 'Añadir un estudiante',

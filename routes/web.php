@@ -23,7 +23,11 @@ Route::post('/signin',  $route.'\LoginController@login')->name('signin');
 Route::get('/logout', $route.'\LoginController@logout')->name('logout');
 Route::group([ 'prefix' => 'student'], function(){
 	$route = "App\Http\Controllers";
-	Route::get('/home',$route.'\Student@Dashboard')->name('StudentDashboard');
+	Route::get('/home/dashboard',$route.'\Student@Dashboard')->name('StudentDashboard');
+});
+Route::group([ 'prefix' => 'teacher'], function(){
+	$route = "App\Http\Controllers";
+	Route::get('/home/dashboard',$route.'\Teacher@dashboard')->name('TeacherDashboard');
 });
 Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	

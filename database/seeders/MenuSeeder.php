@@ -163,6 +163,9 @@ class MenuSeeder extends Seeder
             'Url' => 'administration/configurations/list/',  //23
             'menu_id' => '21'          
         ]); 
+
+
+        //Students
         DB::table('menus')->insert([
             'Name' => 'Inicio', //21
             'Icon' => 'pe-7s-home',
@@ -173,13 +176,13 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([ 
             'Name' => 'Dashboard',
             'State' => '1',
-            'Url' => 'student/home',  //25
+            'Url' => 'student/home/dashboard',  //25
             'menu_id' => '24'          
         ]); 
         DB::table('menus')->insert([ 
             'Name' => 'Espacio de trabajo',
             'State' => '1',
-            'Url' => 'student/workspace',  //26
+            'Url' => 'student/home/workspace',  //26
             'menu_id' => '24'          
         ]); 
         DB::table('menus')->insert([
@@ -211,8 +214,61 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([ 
             'Name' => 'Visualizar todos los examenes',
             'State' => '1',
-            'Url' => 'student/test/list',  //30
+            'Url' => 'student/test/list',  //31
             'menu_id' => '29'          
+        ]); 
+
+            //Teachers
+        DB::table('menus')->insert([
+            'Name' => 'Inicio', //32
+            'Icon' => 'pe-7s-home',
+            'Url' => 'teacher/home',
+            'State' => '1',     
+            'Order' => '4',      
+        ]);
+        DB::table('menus')->insert([ 
+            'Name' => 'Dashboard',
+            'State' => '1',
+            'Url' => 'teacher/home/dashboard',  //33
+            'menu_id' => '32'          
+        ]); 
+        DB::table('menus')->insert([ 
+            'Name' => 'Espacio de trabajo',
+            'State' => '1',
+            'Url' => 'teacher/home/workspace',  //34
+            'menu_id' => '32'          
+        ]); 
+        DB::table('menus')->insert([
+            'Name' => 'Notas', //35
+            'Icon' => 'pe-7s-home',
+            'Url' => 'teacher/score',
+            'State' => '1',     
+            'Order' => '4',      
+        ]);
+        DB::table('menus')->insert([ 
+            'Name' => 'Visualizar notas',
+            'State' => '1',
+            'Url' => 'teacher/score/list',  //36
+            'menu_id' => '35'          
+        ]); 
+        DB::table('menus')->insert([
+            'Name' => 'Examenes', //37
+            'Icon' => 'pe-7s-home',
+            'Url' => 'teacher/test',
+            'State' => '1',     
+            'Order' => '4',      
+        ]);
+        DB::table('menus')->insert([ 
+            'Name' => 'Visualizar examenes programados',
+            'State' => '1',
+            'Url' => 'teacher/test/view',  //38
+            'menu_id' => '37'          
+        ]); 
+        DB::table('menus')->insert([ 
+            'Name' => 'Visualizar todos los examenes',
+            'State' => '1',
+            'Url' => 'teacher/test/list',  //39
+            'menu_id' => '37'          
         ]); 
     }
 }
