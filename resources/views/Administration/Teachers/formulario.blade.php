@@ -123,6 +123,19 @@
 															</div>
 														</div>
 													</div>
+													<div class="form-group row">
+														<label class="col-3 col-form-label">Genero</label>
+														<div class="col-9 col-form-label">
+															<div class="radio-inline">
+																<label class="radio radio-primary">
+																<input type="radio" id="masculino" name="radios5"/>
+																<span></span>Masculino</label>
+																<label class="radio radio-primary">
+																<input type="radio" id="femenino" name="radios5"/>
+																<span></span>Femenino</label>
+															</div>
+														</div>
+                                                    </div>
 												</div>
 											</div>
 											<!--end::Wizard Step 1-->
@@ -444,13 +457,15 @@ var KTWizard1 = function () {
             var EmailPersona = $('#Email').val();
 			var Curso = $('#Curso').val();
 			var Grado = $('#Grado').val();
+			var masculino = $('#masculino').is(":checked");
             var data = [{
                 //Persona
 				Curso: Curso,
 				Grado: Grado,
                 Nombre: NombrePersona,
                 Apellido: ApellidosPersona,
-                Telefono: TelefonoPersona,
+				Telefono: TelefonoPersona,
+				masculino: masculino,
                 //Usuario
                 Usuario: UsuarioPersona,
                 Email: EmailPersona,

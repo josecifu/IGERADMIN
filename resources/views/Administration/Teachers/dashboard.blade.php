@@ -13,6 +13,7 @@
     @section('content')
 
         <div class="content flex-column-fluid" id="kt_content">
+                <h3>Dashboard</h3>
 								<!--begin::Teachers-->
 								<div class="d-flex flex-row">
 								</div>
@@ -21,17 +22,17 @@
                                         <!--begin::Header-->
                                         <div class="card-header border-0 pt-7">
                                             <h3 class="card-title align-items-start flex-column">
-                                                <span class="card-label font-weight-bold font-size-h4 text-dark-75">Punteo verificados</span>
+                                                <span class="card-label font-weight-bold font-size-h4 text-dark-75">Punteos verificados</span>
                                                 <span class="text-muted mt-3 font-weight-bold font-size-sm">Last week
                                                 <span class="text-primary font-weight-bolder">9 accidents</span></span>
                                             </h3>
                                             <div class="card-toolbar">
                                                 <ul class="nav nav-pills nav-pills-sm nav-dark">
                                                     <li class="nav-item ml-0">
-                                                        <a class="nav-link py-2 px-4 font-weight-bolder font-size-sm" data-toggle="tab" href="#kt_tab_pane_1_1">Year</a>
+                                                        <a class="nav-link py-2 px-4 font-weight-bolder font-size-sm" data-toggle="tab" href="#kt_tab_pane_1_1">Mes</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link py-2 px-4 active font-weight-bolder font-size-sm" data-toggle="tab" href="#kt_tab_pane_2_2">Month</a>
+                                                        <a class="nav-link py-2 px-4 active font-weight-bolder font-size-sm" data-toggle="tab" href="#kt_tab_pane_2_2">Semana</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -221,7 +222,7 @@
                                         <div class="card-toolbar">
                                             <ul class="nav nav-pills nav-pills-sm nav-dark-75">
                                                 <li class="nav-item">
-                                                    <a class="nav-link py-2 px-4 active font-weight-bolder" data-toggle="tab" href="#kt_tab_pane_10_2">Today</a>
+                                                    <a class="nav-link py-2 px-4 active font-weight-bolder" data-toggle="tab" href="#kt_tab_pane_10_2">Hoy</a>
                                                 </li>
                                             </ul>
                                         </div>
