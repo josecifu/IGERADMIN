@@ -80,20 +80,20 @@
 											<div class="d-flex flex-column pt-12 bg-dark-o-5 rounded-top">
 												<!--begin::Title-->
 												<h4 class="d-flex flex-center">
-													<span class="text-dark">User Notifications</span>
-													<span class="btn btn-text btn-success btn-sm font-weight-bold btn-font-md ml-2">23 new</span>
+													<span class="text-dark">Notificaciones</span>
+													<span class="btn btn-text btn-success btn-sm font-weight-bold btn-font-md ml-2">Circulos de estudio</span>
 												</h4>
 												<!--end::Title-->
 												<!--begin::Tabs-->
 												<ul class="nav nav-bold nav-tabs nav-tabs-line nav-tabs-line-3x nav-tabs-primary mt-3 px-8" role="tablist">
 													<li class="nav-item">
-														<a class="nav-link active show" data-toggle="tab" href="#topbar_notifications_notifications">Alerts</a>
+														<a class="nav-link active show" data-toggle="tab" href="#topbar_notifications_notifications">Notas</a>
 													</li>
 													<li class="nav-item">
-														<a class="nav-link" data-toggle="tab" href="#topbar_notifications_events">Events</a>
+														<a class="nav-link" data-toggle="tab" href="#topbar_notifications_events">Examenes</a>
 													</li>
 													<li class="nav-item">
-														<a class="nav-link" data-toggle="tab" href="#topbar_notifications_logs">Logs</a>
+														<a class="nav-link" data-toggle="tab" href="#topbar_notifications_logs">Voluntarios</a>
 													</li>
 												</ul>
 												<!--end::Tabs-->
@@ -301,7 +301,7 @@
 													<!--end::Scroll-->
 													<!--begin::Action-->
 													<div class="d-flex flex-center pt-7">
-														<a href="#" class="btn btn-light-primary font-weight-bold text-center">See All</a>
+														<a href="#" class="btn btn-light-primary font-weight-bold text-center" style="color:white;">Ver notas</a>
 													</div>
 													<!--end::Action-->
 												</div>
@@ -499,8 +499,8 @@
 												<!--begin::Tabpane-->
 												<div class="tab-pane" id="topbar_notifications_logs" role="tabpanel">
 													<!--begin::Nav-->
-													<div class="d-flex flex-center text-center text-muted min-h-200px">All caught up!
-													<br />No new notifications.</div>
+													<div class="d-flex flex-center text-center text-muted min-h-200px">No hay notificaciones!
+													</div>
 													<!--end::Nav-->
 												</div>
 												<!--end::Tabpane-->
@@ -737,7 +737,7 @@
 										<div class="d-flex align-items-center p-8 rounded-top">
 											<!--begin::Symbol-->
 											<div class="symbol symbol-md bg-light-primary mr-3 flex-shrink-0">
-												<img src="{{asset('assets/media/users/300_21.jpg')}}" alt="" />
+												<img src="{{asset('assets/media/users/default.jpg')}}" alt="" />
 											</div>
 											<!--end::Symbol-->
 											<!--begin::Text-->
