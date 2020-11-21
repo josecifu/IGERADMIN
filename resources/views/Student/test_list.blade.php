@@ -37,7 +37,7 @@ Principal
                     </h3>
                   </div>
                   <div class="card-toolbar">
-                    <a href="{{url('/student/test/view/1')}}">
+                    <a href="{{url('/student/test/view/questions/1')}}">
                       <button type="button" class="btn btn-outline-info">Empezar</button>
                     </a>
                   </div>
