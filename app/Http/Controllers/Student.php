@@ -123,12 +123,18 @@ class Student extends Controller
         return view('Student/test_list',compact('models'));
     }
 
+<<<<<<< HEAD
     public function test_questions()
+=======
+    //enviar todas las preguntas al formulario
+    public function test_questions($id)
+>>>>>>> 0af7e3d79ab26dd10b1320604acc824171674b2f
     {
         $id = 1;
         $models = [];
         $titles = [];
         $test = Test::find($id);
+<<<<<<< HEAD
         foreach ($test->Questions() as $question)
         {
             $query = [
@@ -144,6 +150,12 @@ class Student extends Controller
             array_push($models,$query);
         }
         return view('Student/test_form',compact('models','titles'));
+=======
+
+        $titles=[];
+        $buttons=[];
+        return view('Student/test','models','titles','buttons');
+>>>>>>> 0af7e3d79ab26dd10b1320604acc824171674b2f
     }
 
 
