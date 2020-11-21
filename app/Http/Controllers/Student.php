@@ -31,8 +31,6 @@ class Student extends Controller
     #ADMINISTRACION
     
     //mostrar notas por semetres    ->  visualizacion de notas por curso
-
-
     public function course_scores($id)
     {
         $models = [];
@@ -102,9 +100,29 @@ class Student extends Controller
         return view('Student/test_list');
     }
 
-    public function test_answers()
+    //enviar todas las preguntas al formulario
+    public function test_questions()
     {
-        return view('Student/test');
+        $id = 1;
+        $models = [];
+        $test = Test::find($id);
+        foreach ($test as $value)
+        {
+            $question = Question::find($value->Test_id);
+            dd($question);
+            $query = [
+                'id' => $question->id,
+                'title' => $question->Title,
+                'content' => $question->Content,
+                'score' => $question->Score,
+                'type' => $question->Type,
+                'answers' => $question->Answers ?? 'ninguno',
+                'correct' => $question->CorrectAnswers,
+                'test_id' => $question->Test_id
+            ];
+            array_push($models,$query);
+        }
+        return view('Student/test_form');
     }
 
     public function save_answer()

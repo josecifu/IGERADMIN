@@ -1,4 +1,4 @@
-@extends('Administration.Base/Base')
+@extends('Administration.Base/BaseStudent')
 {{-- Page title --}}
     @section('title')
     Estudiantes
@@ -11,58 +11,54 @@
     @stop
     {{-- Page content --}}
     @section('content')
-        <link href="assets/css/pages/wizard/wizard-3.css" rel="stylesheet" type="text/css" />
-        <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
-        <link href="assets/plugins/custom/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css"/>
-        <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
-        <link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
-
-
-
+        <link href="{{ asset('assets/css/pages/wizard/wizard-1.css')}}" rel="stylesheet" type="text/css" />
         <div class="content flex-column-fluid" id="kt_content">
             <div class="card card-custom">
                 <div class="card-body p-0">
-                    <!--begin: Wizard-->
-                    <div class="wizard wizard-3" id="kt_wizard_v3" data-wizard-state="step-first" data-wizard-clickable="true">
-                        <!--begin: Wizard Nav-->
-                        <div class="wizard-nav">
-                            <div class="wizard-steps px-8 py-8 px-lg-15 py-lg-3">
+                    <!--begin::Wizard-->
+                    <div class="wizard wizard-1" id="kt_wizard" data-wizard-state="step-first" data-wizard-clickable="false">
+                        <!--begin::Wizard Nav-->
+                        <div class="wizard-nav border-bottom">
+                            <div class="wizard-steps p-8 p-lg-10">
                                 <!--begin::Wizard Step 1 Nav-->
                                 <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
                                     <div class="wizard-label">
-                                        <h3 class="wizard-title">
-                                        <span></span>Primera Serie: Intrucciones</h3>
-                                        <div class="wizard-bar"></div>
+                                        <i class="wizard-icon flaticon-list"></i>
+                                        <h3 class="wizard-title">Preguntas</h3>
                                     </div>
+                                    <span class="svg-icon svg-icon-xl wizard-arrow">
+                                        <!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg-->
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <polygon points="0 0 24 0 24 24 0 24" />
+                                                <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 12.000000) rotate(-90.000000) translate(-12.000000, -12.000000)" x="11" y="5" width="2" height="14" rx="1" />
+                                                <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
+                                            </g>
+                                        </svg>
+                                        <!--end::Svg Icon-->
+                                    </span>
                                 </div>
                                 <!--end::Wizard Step 1 Nav-->
                                 <!--begin::Wizard Step 2 Nav-->
                                 <div class="wizard-step" data-wizard-type="step">
-                                    <div class="wizard-label">
-                                        <h3 class="wizard-title">
-                                        <span>1.</span>Pregunta</h3>
-                                        <div class="wizard-bar"></div>
-                                    </div>
+                                    <button type="button" disabled class="btn btn-outline-info">1</button>
                                 </div>
                                 <!--end::Wizard Step 2 Nav-->
                                 <!--begin::Wizard Step 3 Nav-->
                                 <div class="wizard-step" data-wizard-type="step">
-                                    <div class="wizard-label">
-                                        <h3 class="wizard-title">
-                                        <span>2.</span>Pregunta</h3>
-                                        <div class="wizard-bar"></div>
-                                    </div>
+                                    <button type="button" disabled class="btn btn-outline-info">2</button>
                                 </div>
                                 <!--end::Wizard Step 3 Nav-->
                                 <!--begin::Wizard Step 4 Nav-->
                                 <div class="wizard-step" data-wizard-type="step">
-                                    <div class="wizard-label">
-                                        <h3 class="wizard-title">
-                                        <span>3.</span>Pregunta</h3>
-                                        <div class="wizard-bar"></div>
-                                    </div>
+                                    <button type="button" disabled class="btn btn-outline-info">3</button>
                                 </div>
                                 <!--end::Wizard Step 4 Nav-->
+                                <!--begin::Wizard Step 5 Nav-->
+                                <div class="wizard-step" data-wizard-type="step">
+                                    <button type="button" disabled class="btn btn-outline-info">4</button>
+                                </div>
+                                <!--end::Wizard Step 5 Nav-->
                             </div>
                         </div>
                         <!--end: Wizard Nav-->
@@ -73,14 +69,12 @@
                                 <form class="form" id="kt_form">
                                     <!--begin: Wizard Step 1-->
                                     <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
-                                        <h4 class="mb-10 font-weight-bold text-dark">Intrucciones</h4>
-
-
+                                        <h4 class="mb-10 font-weight-bold text-dark">Primera Serie: Intrucciones</h4>
                                     </div>
                                     <!--end: Wizard Step 1-->
                                     <!--begin: Wizard Step 2-->
                                     <div class="pb-5" data-wizard-type="step-content">
-                                        <h4 class="mb-10 font-weight-bold text-dark">Enunciado de la pregunta</h4>
+                                        <h4 class="mb-10 font-weight-bold text-dark">Enunciado de la pregunta 1</h4>
                                         <!--begin::Input-->
                                         <div class="form-group">
                                             <label>Pregunta Tipo 1</label>
@@ -104,28 +98,7 @@
                                             </div>
                                         </div>
                                         <!--end::Input-->
-                                        <!--begin::Input-->
-                                        <div class="form-group">
-                                            <label>Pregunta Tipo 3</label>
-                                            <div class="radio-inline">
-                                                <label class="radio radio-square">
-                                                    <input type="radio" name="radios13_1"/>
-                                                    <span></span>
-                                                    Opcion 1
-                                                </label>
-                                                <label class="radio radio-square">
-                                                    <input type="radio" name="radios13_1"/>
-                                                    <span></span>
-                                                    Opcion 2
-                                                </label>
-                                                <label class="radio radio-square">
-                                                    <input type="radio" name="radios13_1"/>
-                                                    <span></span>
-                                                    Opcion 3
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <!--end::Input-->
+                                        <!--begin::Select-->
                                         <div class="row">
                                             <div class="col-xl-6">
                                                 <!--begin::Select-->
@@ -141,12 +114,13 @@
                                                 <!--end::Select-->
                                             </div>
                                         </div>
+                                        <!--end::Select-->
                                     </div>
                                     <!--end: Wizard Step 2-->
                                     <!--begin: Wizard Step 3-->
                                     <div class="pb-5" data-wizard-type="step-content">
-                                        <h4 class="mb-10 font-weight-bold text-dark">Enunciado de la pregunta</h4>
-                                        <!--begin::Select-->
+                                        <h4 class="mb-10 font-weight-bold text-dark">Enunciado de la pregunta 2</h4>
+                                        <!--begin::Input-->
                                         <div class="form-group">
                                             <label>Pregunta Tipo 1</label>
                                             <input type="text" name="respuesta" id="respuesta" class="form-control form-control-solid" placeholder="Ingrese su respuesta"/>
@@ -169,28 +143,7 @@
                                             </div>
                                         </div>
                                         <!--end::Input-->
-                                        <!--begin::Input-->
-                                        <div class="form-group">
-                                            <label>Pregunta Tipo 3</label>
-                                            <div class="radio-inline">
-                                                <label class="radio radio-square">
-                                                    <input type="radio" name="radios13_1"/>
-                                                    <span></span>
-                                                    Opcion 1
-                                                </label>
-                                                <label class="radio radio-square">
-                                                    <input type="radio" name="radios13_1"/>
-                                                    <span></span>
-                                                    Opcion 2
-                                                </label>
-                                                <label class="radio radio-square">
-                                                    <input type="radio" name="radios13_1"/>
-                                                    <span></span>
-                                                    Opcion 3
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <!--end::Input-->
+                                        <!--begin::Select-->
                                         <div class="row">
                                             <div class="col-xl-6">
                                                 <!--begin::Select-->
@@ -206,12 +159,13 @@
                                                 <!--end::Select-->
                                             </div>
                                         </div>
+                                        <!--end::Select-->
                                     </div>
                                     <!--end: Wizard Step 3-->
                                     <!--begin: Wizard Step 4-->
                                     <div class="pb-5" data-wizard-type="step-content">
-                                        <h4 class="mb-10 font-weight-bold text-dark">Enunciado de la pregunta</h4>
-                                        <!--begin::Select-->
+                                        <h4 class="mb-10 font-weight-bold text-dark">Enunciado de la pregunta 3</h4>
+                                        <!--begin::Input-->
                                         <div class="form-group">
                                             <label>Pregunta Tipo 1</label>
                                             <input type="text" name="respuesta" id="respuesta" class="form-control form-control-solid" placeholder="Ingrese su respuesta"/>
@@ -234,28 +188,7 @@
                                             </div>
                                         </div>
                                         <!--end::Input-->
-                                        <!--begin::Input-->
-                                        <div class="form-group">
-                                            <label>Pregunta Tipo 3</label>
-                                            <div class="radio-inline">
-                                                <label class="radio radio-square">
-                                                    <input type="radio" name="radios13_1"/>
-                                                    <span></span>
-                                                    Opcion 1
-                                                </label>
-                                                <label class="radio radio-square">
-                                                    <input type="radio" name="radios13_1"/>
-                                                    <span></span>
-                                                    Opcion 2
-                                                </label>
-                                                <label class="radio radio-square">
-                                                    <input type="radio" name="radios13_1"/>
-                                                    <span></span>
-                                                    Opcion 3
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <!--end::Input-->
+                                        <!--begin::Select-->
                                         <div class="row">
                                             <div class="col-xl-6">
                                                 <!--begin::Select-->
@@ -271,8 +204,54 @@
                                                 <!--end::Select-->
                                             </div>
                                         </div>
+                                        <!--end::Select-->
                                     </div>
                                     <!--end: Wizard Step 4-->
+                                    <!--begin: Wizard Step 5-->
+                                    <div class="pb-5" data-wizard-type="step-content">
+                                        <h4 class="mb-10 font-weight-bold text-dark">Enunciado de la pregunta 4</h4>
+                                        <!--begin::Input-->
+                                        <div class="form-group">
+                                            <label>Pregunta Tipo 1</label>
+                                            <input type="text" name="respuesta" id="respuesta" class="form-control form-control-solid" placeholder="Ingrese su respuesta"/>
+                                        </div>
+                                        <!--end::Input-->
+                                        <!--begin::Input-->
+                                        <div class="form-group">
+                                            <label>Pregunta Tipo 2</label>
+                                            <div class="radio-inline">
+                                                <label class="radio radio-lg">
+                                                    <input type="radio" name="radios3_1"/>
+                                                    <span></span>
+                                                    Verdadero
+                                                </label>
+                                                <label class="radio radio-lg">
+                                                    <input type="radio" name="radios3_1"/>
+                                                    <span></span>
+                                                    Falso
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <!--end::Input-->
+                                        <!--begin::Select-->
+                                        <div class="row">
+                                            <div class="col-xl-6">
+                                                <!--begin::Select-->
+                                                <div class="form-group">
+                                                    <label>Pregunta Tipo 4</label>
+                                                    <select name="country" class="form-control">
+                                                        <option value="">Select</option>
+                                                        <option value="op1">Opcion 1</option>
+                                                        <option value="op2">Opcion 2</option>
+                                                        <option value="op3">Opcion 3</option>
+                                                    </select>
+                                                </div>
+                                                <!--end::Select-->
+                                            </div>
+                                        </div>
+                                        <!--end::Select-->
+                                    </div>
+                                    <!--end: Wizard Step 5-->
                                     <!--begin: Wizard Actions-->
                                     <div class="d-flex justify-content-between border-top mt-5 pt-10">
                                         <div class="mr-2">
@@ -321,27 +300,6 @@
                                             }
                                         }
                                     },
-                                    Apellido: {
-                                        validators: {
-                                            notEmpty: {
-                                                message: 'Es un campo obligatorio'
-                                            }
-                                        }
-                                    },
-                                    Telefono: {
-                                        validators: {
-                                            notEmpty: {
-                                                message: 'Es un campo obligatorio'
-                                            }
-                                        }
-                                    },
-                                    Genero: {
-                                        validators: {
-                                            notEmpty: {
-                                                message: 'Es un campo obligatorio'
-                                            }
-                                        }
-                                    },
                                 },
                                 plugins: {
                                     trigger: new FormValidation.plugins.Trigger(),
@@ -359,13 +317,6 @@
                             {
                                 fields: {
                                     Usuario: {
-                                        validators: {
-                                            notEmpty: {
-                                                message: 'Es un campo obligatorio'
-                                            }
-                                        }
-                                    },                      
-                                    Contraseña: {
                                         validators: {
                                             notEmpty: {
                                                 message: 'Es un campo obligatorio'
@@ -476,101 +427,40 @@
                 }); 
             });
              function crearDatos(){
-                var NombrePersona = $('#Nombres').val();
-                var ApellidosPersona = $('#Apellidos').val();
-                var TelefonoPersona = $('#Telefono').val();
-                var GeneroPersona = $('#Genero').val();
-                var UsuarioPersona = $('#Usuario').val();
-                var EmailPersona = $('#Email').val();
-                var ContraseñaPersona = $('#Contraseña').val();
-                var AsignarGrado = $('#Grado').val();
+                var IdEstudiante = $('#Estudiante').val();
+                var PreguntaExamen = $('#Pregunta').val();
+                var PunteoObtenidoPregunta = $('#Punteo').val();
+                var RespuestaEstudiante = $('#Respuesta').val();
                 var data = [{
-                    Nombre: NombrePersona,
-                    Apellido: ApellidosPersona,
-                    Telefono: TelefonoPersona,
-                    Genero: GeneroPersona,
-                    Usuario: UsuarioPersona,
-                    Correo: EmailPersona,
-                    Contraseña: ContraseñaPersona,
-                    Grado: AsignarGrado,
+                    Estudiante: IdEstudiante,
+                    Pregunta: PreguntaExamen,
+                    Punteo: PunteoObtenidoPregunta,
+                    Respuesta: RespuestaEstudiante,
                 }];
                 $.ajax({
-                    url:'/administration/student/save',
+                    url:'/student/save_answer',
                     type:'POST',
                     data: {"_token":"{{ csrf_token() }}","data":data},
                     dataType: "JSON",
                     success: function(e){
                     swal.fire({ title: "Accion completada", 
-                      text: "Se ha guardado con exito los datos del estudiante!", 
+                      text: "Se ha enviado todos las respuesta del examen!", 
                       type: "success"
                             }).then(function () {
                               var $url_path = '{!! url('/') !!}';
-                              window.location.href = $url_path+"/administration/student/list";
+                              window.location.href = $url_path+"/student/home/dashboard";
                             });
                     },
                     error: function(e){
                         console.log(e);
                         swal.fire({
                             title: 'Ocurrio un error!',
-                            text:  'Los datos no han sido registrados!, verifique los campos',
+                            text:  'Espere!, por favor',
                             icon: 'error',
                             confirmButtonText: 'Aceptar',
                         })
                     }
                 });
              }
-             $.ajax ({
-                url: '{{route('LoadPeriods')}}',
-                type: 'GET',
-                success: (e) => {
-                    $('#Jornada').empty();
-                    $.each(e['Periods'], function(fetch, data){
-                      $('#Jornada').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
-                    });
-                    $('#Jornada').selectpicker('refresh');
-                }
-            });
-            function ListLevel(Period){
-                $.ajax ({
-                    url: '{{route('LoadLevels')}}',
-                    type: 'POST',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        "PeriodId"      : Period,
-                    },
-                    success: (e) => {
-                        $('#Nivel').empty();
-                        $('#Nivel').append('<option value="" >--Seleccione una opción</option>');
-                        $.each(e['Levels'], function(fetch, data){
-                            $('#Nivel').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
-                        });
-                        $('#Nivel').selectpicker('refresh');
-                    }
-                }); 
-            }
-            function ListGrades(Level){
-                $.ajax ({
-                    url: '{{route('LoadGrades')}}',
-                    type: 'POST',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        "LvlId"      : Level,
-                    },
-                    success: (e) => {
-                        $('#Grado').empty();
-                        $('#Grado').append('<option value="" >--Seleccione una opción</option>');
-                        $.each(e['Grades'], function(fetch, data){
-                        $('#Grado').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
-                        });
-                        $('#Grado').selectpicker('refresh');
-                    }
-                });
-            }
-            $('#Jornada').on('change', function() {
-                ListLevel($('#Jornada').val());
-            });
-            $('#Nivel').on('change', function() {
-                ListGrades($('#Nivel').val());
-            });
         </script>
     @stop
