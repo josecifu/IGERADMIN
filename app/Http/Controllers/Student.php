@@ -106,7 +106,8 @@ class Student extends Controller
         $id = 3;
         $models = [];
         $test = Test::find($id);
-        dd($test->Questions());
+        $course=course::find(1);
+        dd($course->Tests());
         foreach ($test->Questions() as $question)
         {   
             
