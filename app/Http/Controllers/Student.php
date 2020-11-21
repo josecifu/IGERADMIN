@@ -92,10 +92,14 @@ class Student extends Controller
         return view('Administration/Student/course_scores',compact('models','titles','student'));
     }
 
-
     public function dashboard()
     {
         return view('Student/home');
+    }
+
+    public function student_test_list()
+    {
+        return view('Student/test_list');
     }
 
     public function test_answers()
@@ -130,9 +134,8 @@ class Student extends Controller
         return response()->json(["Accion exitosa"]);
     }
 
-
-
-
+    public function score_list()
+    {}
 
 
 
@@ -583,17 +586,6 @@ class Student extends Controller
 /*-------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------*/
     #ESTUDIANTE
-    public function student_test_list()
-    {
-        return view('Student/test_list');
-    }
-    public function student_test()
-    {
-        return view('Student/test');
-    }
-    public function view_course_teachers_notes()
-    {
-    }
     public function edit_profile($id)
     {
         $student = Person::find($id);
