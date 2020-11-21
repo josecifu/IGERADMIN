@@ -112,7 +112,7 @@ class Student extends Controller
             $query = [
                 'id' => $course->id,
                 'course' => $course->Name,
-                'test' => $tests
+                'test' => $course->Tests()
             ];
             array_push($models,$query);
         }
@@ -123,14 +123,17 @@ class Student extends Controller
     //enviar todas las preguntas al formulario
     public function test_questions($id)
     {
-        $id = 1;
         $models = [];
         $titles = [];
-        $test = Test::find($id);
-
-        $titles=[];
+        $Test = Test::find($id);
         $buttons=[];
-        return view('Student/test','models','titles','buttons');
+        $button = [
+            "Name" => 'Regresar al listado de examenes',
+            "Link" => 'student/test/view',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        return view('Student/test_form',compact('titles','buttons','Test'));
     }
 
     public function save_answer()
