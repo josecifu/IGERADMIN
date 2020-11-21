@@ -127,6 +127,11 @@ class Student extends Controller
         $models = [];
         $titles = [];
         $test = Test::find($id);
+<<<<<<< HEAD
+=======
+        $course=course::find(1);
+        dd($course->Tests());
+>>>>>>> 3536ee7f6c4f97f3598cc2e060df0daf83196dec
         foreach ($test->Questions() as $question)
         {   
             $query = [

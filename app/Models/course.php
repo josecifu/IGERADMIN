@@ -9,7 +9,7 @@ class course extends Model
 {
     use HasFactory;
     public function Tests(){
-        return $this->hasMany(test::class)->get();
+        return $this->hasManyThrough(test::class,Assign_activity::class,'Course_id','Activity_id')->get();
     }
     public function Activities(){
         return $this->hasMany(Assign_activity::class)->get();
