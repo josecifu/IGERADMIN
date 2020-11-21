@@ -1,7 +1,7 @@
 @extends('Administration.Base/Base')
 {{-- Page title --}}
     @section('title')
-    Jornadas y niveles
+    Circulos de estudio, niveles y grados
     @stop
     @section('breadcrumb1')
     Niveles
@@ -39,7 +39,7 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            <h3 class="card-label">Listado de asignaciones de dias,niveles y grados .  </h3>
+                                            <h3 class="card-label">Listado de asignaciones de circulos de estudio,niveles y grados .  </h3>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -87,7 +87,7 @@
                                             <!--end::Dropdown-->
                                             <!--begin::Button-->
                                             <a href="#" onclick="create();" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-plus"></i>Crear un dia de trabajo</a>
+                                            <i class="la la-plus"></i>Crear un circulo de estudio</a>
                                             <!--end::Button-->
                                         </div>
                                     </div>
@@ -120,7 +120,7 @@
                                                         <div class="modal-dialog modal-lg" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title">Visualizar grados del dia {{$Model['Jornada']}}</h5>
+                                                                    <h5 class="modal-title">Visualizar grados del circulo de estudio: {{$Model['Jornada']}}</h5>
                                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                         <i aria-hidden="true" class="ki ki-close"></i>
                                                                     </button>
@@ -258,20 +258,20 @@
                                             </a>\
                                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right" >\
                                                 <ul class="nav nav-hoverable flex-column" >\
-                                                    <li class="nav-item"><a class="nav-link" href="#" onclick="Addlevel(\''+full[0]+'\')"><i class="nav-icon la la-mail-reply-all"></i><span class="nav-text" style="padding-left:10px;"> Agregar un nivel a el dia</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#kt_grades_modal'+full[0]+'"><i class="nav-icon la la-plus-square-o"></i><span class="nav-text" style="padding-left:10px;"> Agregar un grado a un nivel del dia</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#" onclick="Addlevel(\''+full[0]+'\')"><i class="nav-icon la la-mail-reply-all"></i><span class="nav-text" style="padding-left:10px;"> Agregar un nivel a el circulo de estudio</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#kt_grades_modal'+full[0]+'"><i class="nav-icon la la-plus-square-o"></i><span class="nav-text" style="padding-left:10px;"> Agregar un grado a un nivel del circulo de estudio</span></a></li>\
                                                 </ul>\
                                             </div>\
                                         </div>\
-                                        <a href="javascript:;" onclick="edit(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Editar dia de trabajo" data-placement="left">\
+                                        <a href="javascript:;" onclick="edit(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Editar circulo de estudio" data-placement="left">\
                                             <i class="la la-edit"></i>\
                                         </a>\
                                         @if($type=="Active")
-                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Eliminar dia de trabajo" data-placement="left">\
+                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Eliminar circulo de estudio" data-placement="left">\
                                         <i class="la la-trash"></i>\
                                         </a>\
                                         @else
-                                        <a href="javascript:;" onclick="ActivePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Activar dia de trabajo" data-placement="left">\
+                                        <a href="javascript:;" onclick="ActivePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Activar circulo de estudio" data-placement="left">\
                                         <i class="la la-check-circle"></i>\
                                         </a>\
                                         @endif';
@@ -309,7 +309,7 @@
                 buttonsStyling: false
               })
             swalWithBootstrapButtons.fire({
-                title: '¿Está seguro de eliminar la dia?',
+                title: '¿Está seguro de eliminar el circulo de estudio?',
                 text: "El nombre del dia: "+$name,
                 icon: 'warning',
                 showCancelButton: true,
@@ -338,7 +338,7 @@
                 ) {
                   swalWithBootstrapButtons.fire({
                     title: 'Cancelado!',
-                    text:  'La dia no ha sido eliminada!',
+                    text:  'El circulo de estudio no ha sido eliminado!',
                     icon: 'error',
                     confirmButtonText: 'Aceptar',
                 })
@@ -355,7 +355,7 @@
                 buttonsStyling: false
               })
             swalWithBootstrapButtons.fire({
-                title: '¿Está seguro de activar la dia?',
+                title: '¿Está seguro de activar el circulo de estudio?',
                 text: "El nombre del dia: "+$name,
                 icon: 'warning',
                 showCancelButton: true,
@@ -384,7 +384,7 @@
                 ) {
                   swalWithBootstrapButtons.fire({
                     title: 'Cancelado!',
-                    text:  'El di no ha sido activada!',
+                    text:  'El circulo de estudio no ha sido activado!',
                     icon: 'error',
                     confirmButtonText: 'Aceptar',
                 })
@@ -469,7 +469,7 @@
             }).queue([
                 
                 {
-                        title: 'Ingrese el nuevo nombre del dia:',
+                        title: 'Ingrese el nuevo nombre del circulo de estudio:',
                         text: 'Nombre anterior:' + $Name
                 },
                 ]).then((result) => {
@@ -484,7 +484,7 @@
                       })
                       swalWithBootstrapButtons.fire({
                         title: '¿Está seguro de los datos?',
-                        text: "El nombre del dia: "+result.value[0],
+                        text: "El nombre del circulo de estudio: "+result.value[0],
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonText: 'Si, modificar!',
@@ -530,7 +530,7 @@
                         ) {
                           swalWithBootstrapButtons.fire({
                             title: 'Cancelado!',
-                            text:  'El dia no ha sido modificado!',
+                            text:  'El circulo de estudio no ha sido modificado!',
                             icon: 'error',
                             confirmButtonText: 'Aceptar',
                         })
@@ -612,7 +612,7 @@
                     ) {
                       swalWithBootstrapButtons.fire({
                         title: 'Cancelado!',
-                        text:  'El dia no ha sido creada!',
+                        text:  'El circulo de estudio no ha sido creado!',
                         icon: 'error',
                         confirmButtonText: 'Aceptar',
                     })
@@ -631,7 +631,7 @@
                 progressSteps: ['1']
               }).queue([
                 {
-                  title: 'Ingrese el nombre del dia:',
+                  title: 'Ingrese el nombre del circulo de estudio:',
                  
                 }
               ]).then((result) => {
@@ -648,7 +648,7 @@
                   
                   swalWithBootstrapButtons.fire({
                     title: '¿Está seguro de los datos?',
-                    text: "El nombre del dia: "+result.value[0],
+                    text: "El nombre del circulo de estudio: "+result.value[0],
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Si, crearlo!',
@@ -695,7 +695,7 @@
                     ) {
                       swalWithBootstrapButtons.fire({
                         title: 'Cancelado!',
-                        text:  'El dia no ha sido creada!',
+                        text:  'El circulo de estudio no ha sido creado!',
                         icon: 'error',
                         confirmButtonText: 'Aceptar',
                     })

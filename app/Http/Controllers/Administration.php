@@ -200,24 +200,24 @@ class Administration extends Controller
     {
         $buttons =[];
         $button = [
-            "Name" => 'Añadir un dia de trabajo',
+            "Name" => 'Añadir un circulo de estudio',
             "Link" => 'create()',
             "Type" => "addFunction"
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver grados de un dia',
+            "Name" => 'Ver grados de un circulo de estudio',
             "Link" => 'administration/home/dashboard',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver dias eliminados',
+            "Name" => 'Ver circulos de estudio eliminados',
             "Link" => 'administration/configurations/level/list/deletes',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
-        $Titles =['Id','Dia','Niveles','No de Grados','Acciones'];
+        $Titles =['Id','Circulo de estudio','Niveles','No de Grados','Acciones'];
         $Models = [];
         $model = period::where("State","Active")->get();
         foreach ($model as $value) {

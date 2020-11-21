@@ -103,13 +103,13 @@ class Student extends Controller
     //enviar todas las preguntas al formulario
     public function test_questions()
     {
-        $id = 1;
+        $id = 3;
         $models = [];
         $test = Test::find($id);
-        foreach ($test as $value)
-        {
-            $question = Question::find($value->Test_id);
-            dd($question);
+        dd($test->Questions());
+        foreach ($test->Questions() as $question)
+        {   
+            
             $query = [
                 'id' => $question->id,
                 'title' => $question->Title,
@@ -122,7 +122,7 @@ class Student extends Controller
             ];
             array_push($models,$query);
         }
-        return view('Student/test_form');
+        return view('Student/test_form','models');
     }
 
     public function save_answer()
