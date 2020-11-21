@@ -1,4 +1,4 @@
-@extends('Administration.Base/Base')
+@extends('Administration.Base/BaseStudent')
 {{-- Page title --}}
 @section('title')
 Inicio
@@ -43,8 +43,8 @@ Principal
                   </div>
                 </div>
                 <div class="card-body">
-                  Disponible:
-                  Finaliza:
+                  Disponible: 20/11/2020 2:00 PM<br>
+                  Finaliza: 20/11/2020 4:00 PM
                 </div>
               </div>
               @endforeach

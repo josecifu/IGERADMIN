@@ -97,19 +97,38 @@ class Student extends Controller
 
     public function student_test_list()
     {
-        return view('Student/test_list');
+        $id = 4;
+        $models = [];
+        $assign = Assign_student_grade::where('user_id',$id)->first();
+        $grade = Assign_student_grade::find($assign->id)->Grade();
+        $courses = $grade->Courses();
+
+        //dd($courses);
+        
+        foreach ($courses as $course)
+        {
+            dd($course->Tests());
+
+            $query = [
+                'id' => $course->id,
+                'course' => $course->Name,
+                'test' => $tests
+            ];
+            array_push($models,$query);
+        }
+        //dd($models);
+        return view('Student/test_list',compact('models'));
     }
 
     //enviar todas las preguntas al formulario
     public function test_questions()
     {
-        $id = 3;
+        $id = 1;
         $models = [];
+        $titles = [];
         $test = Test::find($id);
-        dd($test->Questions());
         foreach ($test->Questions() as $question)
         {   
-            
             $query = [
                 'id' => $question->id,
                 'title' => $question->Title,
@@ -122,7 +141,7 @@ class Student extends Controller
             ];
             array_push($models,$query);
         }
-        return view('Student/test_form','models');
+        return view('Student/test_form',compact('models','titles'));
     }
 
     public function save_answer()
