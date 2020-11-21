@@ -24,8 +24,9 @@ Route::get('/logout', $route.'\LoginController@logout')->name('logout');
 Route::group([ 'prefix' => 'student'], function(){
 	$route = "App\Http\Controllers";
 	Route::get('/home/dashboard',$route.'\Student@dashboard')->name('StudentDashboard');
-	Route::get('/list/test',$route.'\Student@student_test_list')->name('StudentTestList');
-	Route::get('/test/{model}',$route.'\Student@test_questions')->name('TestQuestions');
+	Route::get('test/list',$route.'\Student@student_test_list')->name('StudentTestList');
+	Route::get('/test/view',$route.'\Student@student_test_list')->name('TestQuestions');
+	Route::get('/test/view/questions/{model}',$route.'\Student@test_questions')->name('TestQuestions');
 	Route::get('/score/list',$route.'\Student@score_list')->name('ScoreList');
 });
 Route::group([ 'prefix' => 'teacher'], function(){

@@ -101,29 +101,14 @@ class Student extends Controller
     }
 
     //enviar todas las preguntas al formulario
-    public function test_questions()
+    public function test_questions($id)
     {
         $id = 3;
         $models = [];
         $test = Test::find($id);
-        $course=course::find(1);
-        dd($course->Tests());
-        foreach ($test->Questions() as $question)
-        {   
-            
-            $query = [
-                'id' => $question->id,
-                'title' => $question->Title,
-                'content' => $question->Content,
-                'score' => $question->Score,
-                'type' => $question->Type,
-                'answers' => $question->Answers ?? 'ninguno',
-                'correct' => $question->CorrectAnswers,
-                'test_id' => $question->Test_id
-            ];
-            array_push($models,$query);
-        }
-        return view('Student/test_form','models');
+        $titles=[];
+        $buttons=[];
+        return view('Student/test','models','titles','buttons');
     }
 
     public function save_answer()
