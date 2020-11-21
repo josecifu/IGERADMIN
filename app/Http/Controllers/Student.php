@@ -31,10 +31,8 @@ class Student extends Controller
     #ADMINISTRACION
     
     //mostrar notas por semetres    ->  visualizacion de notas por curso
-    public function Dashboard()
-    {
-        return view('Student/home');
-    }
+
+
     public function course_scores($id)
     {
         $models = [];
@@ -95,23 +93,42 @@ class Student extends Controller
     }
 
 
-
-
-
-
-
-
+    public function dashboard()
+    {
+        return view('Student/home');
+    }
 
     public function test_answers()
     {
         return view('Student/test');
     }
+
     public function save_answer()
     {
+        $id = $request->session()->get('User_id');
+        $data = $request->data[0];
+        $student = $data['Estudiante'];
+        $question = $data['Pregunta'];
+        $score = $data['Punteo'];
+        $answer = $data['Respuesta'];
+        try
+        {
+            DB::beginTransaction();
+            $reply = new Asign_answer_test_student;
+            $reply->Studen_id = $student;
+            $reply->Question_id = $question;
+            $reply->Score = $score;
+            $reply->Answers = $answer;
+            $reply->State = "Active";
+            $reply->save();
+            DB::commit();
+        }
+        catch (Exception $e)
+        {
+            DB::rollBack();
+        }
+        return response()->json(["Accion exitosa"]);
     }
-
-
-
 
 
 
@@ -330,7 +347,7 @@ class Student extends Controller
             $student->Names = $names;
             $student->LastNames = $lastnames;
             $student->Phone = $phone;
-            $student->Genre = $gender;
+            $student->Gender = $gender;
             $student->save();
             $user = new User;
             $user->name = $username;
@@ -614,10 +631,6 @@ class Student extends Controller
         return response()->json(["Accion completada"]);
     }
     //////////////////////////////////////////
-    public function view_calendar()
-    {
-    }
-    public function statistics()
-    {
-    }
+    public function view_calendar(){}
+    public function statistics(){}
 }
