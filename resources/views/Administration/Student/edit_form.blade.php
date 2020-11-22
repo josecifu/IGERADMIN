@@ -319,7 +319,7 @@ var KTWizard1 = function () {
                         crearDatos(); // Submit form
                     } else if (result.dismiss === 'cancel') {
                         Swal.fire({
-                            text: "Los datos no fueron registrados!.",
+                            text: "Los datos no fueron actualizados!.",
                             icon: "error",
                             buttonsStyling: false,
                             confirmButtonText: "Ok, lo tengo!",
@@ -376,7 +376,7 @@ var KTWizard1 = function () {
                 dataType: "JSON",
                 success: function(e){
                 swal.fire({ title: "Accion completada!", 
-                  text: "Los datos han sido actualizado correctamente!", 
+                  text: "Los datos han sido actualizados correctamente!", 
                   type: "success"
                         }).then(function () {
                           var $url_path = '{!! url('/') !!}';
