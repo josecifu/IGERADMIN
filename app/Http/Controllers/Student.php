@@ -387,7 +387,14 @@ class Student extends Controller
             $student->Names = $names;
             $student->LastNames = $lastnames;
             $student->Phone = $phone;
-            $student->Gender = $gender;
+            if ($gender == "true")
+            {
+                $student->Gender = 'Femenino';
+            }
+            else
+            {
+                $student->Gender = 'Masculino';
+            }
             $student->save();
             $user = new User;
             $user->name = $username;

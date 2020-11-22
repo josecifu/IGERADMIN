@@ -139,18 +139,14 @@
 											</div>
 											<div class="form-group row">
 												<label class="col-3">Género</label>
-												<div class="col-9">
-													<div class="input-group input-group-solid">
-														<div class="input-group-prepend">
-															<span class="input-group-text">
-																<i class="la la-user"></i>
-															</span>
-														</div>
-		                                                <select name="Genero" id="Genero" class="form-control form-control-solid" placeholder="Genero">
-		                                                    <option value="">--Seleccione una opción</option>
-		                                                    <option value="mujer">Femenino</option>
-		                                                    <option value="hombre">Masculino</option>
-		                                                </select>
+												<div class="col-9 col-form-label">
+													<div class="radio-inline">
+														<label class="radio radio-primary">
+														<input type="radio" id="Genero" name="radios5"/>
+														<span></span>Femenino</label>
+														<label class="radio radio-primary">
+														<input type="radio" id="Sexo" name="radios5"/>
+														<span></span>Masculino</label>
 													</div>
 												</div>
 											</div>
@@ -438,7 +434,7 @@
 	            var NombrePersona = $('#Nombres').val();
 	            var ApellidosPersona = $('#Apellidos').val();
 	            var TelefonoPersona = $('#Telefono').val();
-	            var GeneroPersona = $('#Genero').val();
+	            var GeneroPersona = $('#Genero').is(":checked");
 	            var UsuarioPersona = $('#Usuario').val();
 	            var EmailPersona = $('#Email').val();
 	            var ContraseñaPersona = $('#Contraseña').val();
