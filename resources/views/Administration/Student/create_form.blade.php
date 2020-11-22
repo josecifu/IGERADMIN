@@ -142,11 +142,11 @@
 												<div class="col-9 col-form-label">
 													<div class="radio-inline">
 														<label class="radio radio-primary">
-														<input type="radio" id="masculino" name="radios5"/>
-														<span></span>Masculino</label>
-														<label class="radio radio-primary">
-														<input type="radio" id="femenino" name="radios5"/>
+														<input type="radio" id="Genero" name="radios5"/>
 														<span></span>Femenino</label>
+														<label class="radio radio-primary">
+														<input type="radio" id="Sexo" name="radios5"/>
+														<span></span>Masculino</label>
 													</div>
 												</div>
 											</div>
@@ -434,7 +434,7 @@
 	            var NombrePersona = $('#Nombres').val();
 	            var ApellidosPersona = $('#Apellidos').val();
 	            var TelefonoPersona = $('#Telefono').val();
-	            var GeneroPersona = $('#Genero').val();
+	            var GeneroPersona = $('#Genero').is(":checked");
 	            var UsuarioPersona = $('#Usuario').val();
 	            var EmailPersona = $('#Email').val();
 	            var ContraseñaPersona = $('#Contraseña').val();
