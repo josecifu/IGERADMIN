@@ -123,7 +123,7 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([ 
             'Name' => 'Ver listado de encargados de circulo',
             'State' => '1',
-            'Url' => 'administration/attendant/list',  
+            'Url' => 'administration/workspace/attendant/list',  
             'menu_id' => '16'          
         ]);  
         DB::table('menus')->insert([ //18
@@ -145,7 +145,7 @@ class MenuSeeder extends Seeder
             'menu_id' => '16'          
         ]);  
         DB::table('menus')->insert([
-            'Name' => 'Configuracion', //21
+            'Name' => 'Configuración', //21
             'Icon' => 'pe-7s-home',
             'Url' => 'administration/configurations',
             'State' => '1',     

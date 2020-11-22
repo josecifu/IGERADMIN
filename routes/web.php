@@ -49,12 +49,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/dashboard', $route.'\Administration@Dashboard')->name('Dashboard');
 		Route::get('/report', $route.'\Administration@Report')->name('Report');
 	});
-	#Encargados de circulo
-	Route::group([ 'prefix' => 'attendant'], function(){
-		$route = "App\Http\Controllers";
-		#Dashboad
-		Route::get('/list', $route.'\Administration@AttendantList')->name('AttendantList');
-	});
+	
 	#Estudiantes
 	Route::group([ 'prefix' => 'student'], function(){
 		$route = "App\Http\Controllers";
@@ -109,6 +104,12 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('inscriptions',$route.'\Administration@Inscriptions')->name('Inscriptions');
 		Route::get('list',$route.'\Administration@WorkspaceList')->name('WorkspaceList');
 		Route::get('statistics',$route.'\Administration@Statistics')->name('Statistics');
+		#Encargados de circulo
+		Route::group([ 'prefix' => 'attendant'], function(){
+			$route = "App\Http\Controllers";
+			#Dashboad
+			Route::get('/list', $route.'\Administration@AttendantList')->name('AttendantList');
+		});
 	});
 	//Configuraciones
 	Route::group([ 'prefix' => 'configurations'], function(){
