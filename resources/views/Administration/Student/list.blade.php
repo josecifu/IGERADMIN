@@ -19,7 +19,7 @@
                         <span class="card-icon">
                             <i class="flaticon2-favourite text-primary"></i>
                         </span>
-                        <h3 class="card-label">Listado general de estudiantes</h3>
+                        <h3 class="card-label">Listado general de estudiantes activos</h3>
                     </div>
                     <div class="card-toolbar">
                         <!--begin::Dropdown-->
@@ -86,11 +86,12 @@
                                 <tr>
                                     <td>{{$m['id']}}</td>
                                     <td>{{$m['name']}}</td>
+                                    <td>{{$m['lastname']}}</td>
                                     <td>{{$m['phone']}}</td>
                                     <td>{{$m['user']}}</td>
                                     <td>{{$m['email']}}</td>
                                     <td>{{$m['grade']}}</td>
-                                    <td>11/11/2020</td>
+                                    <td>{{$m['conexion']}}</td>
                                     <td nowrap="nowrap"></td>
                                 </tr>
                             @endforeach
@@ -124,9 +125,17 @@
                                 orderable: false,
                                 render: function(data, type, full, meta) {
                                     return '\
-                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Ver asistencia del estudiante">\
-                                            <i class="la la-list"></i>\
-                                        </a>\
+                                        <div class="dropdown dropdown-inline">\
+                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title ="Mas opciones" data-toggle="dropdown">\
+                                                <i class="la la-cog"></i>\
+                                            </a>\
+                                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
+                                                <ul class="nav nav-hoverable flex-column">\
+                                                    <li class="nav-item"><a class="nav-link" href=""><i class="nav-icon la la-list"></i><span class="nav-text">Ver asistencias</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href=""><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
+                                                </ul>\
+                                            </div>\
+                                        </div>\
                                         <a href="/administration/student/edit/'+full[0]+'" class="btn btn-sm btn-clean btn-icon" title="Actualizar datos del estudiante">\
                                             <i class="la la-edit"></i>\
                                         </a>\

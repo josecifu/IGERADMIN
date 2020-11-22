@@ -18,18 +18,10 @@ use App\Models\Question;
 use App\Models\Test;
 use App\Models\Note;
 use App\Models\Assign_activity;
-//
-use App\Models\Asign_file_question_test;
-use App\Models\Assign_fields;
-use App\Models\field;
-use App\Models\Information;
-use App\Models\Schedule;
 use App\Models\Asign_teacher_course;
 
 class Student extends Controller
 {
-    #ADMINISTRACION
-    
     //mostrar notas por semetres    ->  visualizacion de notas por curso
     public function course_scores($id)
     {
@@ -104,9 +96,12 @@ class Student extends Controller
 
 
 
-    public function student_test_list()
+
+
+
+    public function student_test_list(Request $request)
     {
-        $id = 4;
+        $id = $request->session()->get('User_id');
         $models = [];
         $assign = Assign_student_grade::where('user_id',$id)->first();
         $grade = Assign_student_grade::find($assign->id)->Grade();
@@ -138,15 +133,7 @@ class Student extends Controller
         return view('Student/test_form',compact('titles','buttons','Test'));
     }
 
-
-
-
-
-
-
-
-
-    public function save_answer()
+    public function save_answer(Request $request)
     {
         $id = $request->session()->get('User_id');
         $data = $request->data[0];
@@ -186,6 +173,7 @@ class Student extends Controller
                             #funciones terminadas
 /*-------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------*/
+    #FUNCIONES DE ADMINISTRACION
     public function list()
     {
         $buttons = [];
@@ -210,9 +198,10 @@ class Student extends Controller
         $models = [];
         $titles = [
             'Id',
-            'Nombre del estudiante',
+            'Nombres',
+            'Apellidos',
             'No. Teléfono',
-            'Nombre de usuario',
+            'Usuario',
             'Correo electrónico',
             'Grado',
             'Última conexión',
@@ -229,11 +218,13 @@ class Student extends Controller
                 $grade = Grade::find($a->Grade_id);
                 $query = [
                     'id' => $student->id,
-                    'name' => $student->Names . ' ' . $student->LastNames,
+                    'name' => $student->Names,
+                    'lastname' => $student->LastNames,
                     'phone' => $student->Phone,
                     'user' => $user->name,
                     'email' => $user->email,
-                    'grade' => $grade->GradeName()
+                    'grade' => $grade->GradeName(),
+                    'conexion' => '17/11/2020'
                 ];
                 array_push($models,$query);
             }
@@ -265,10 +256,12 @@ class Student extends Controller
         $models = [];
         $titles = [
             'Id',
-            'Nombre del estudiante',
+            'Nombres',
+            'Apellidos',
             'No. Teléfono',
-            'Nombre de usuario',
+            'Usuario',
             'Correo electrónico',
+            'Grado',
             'Última conexión',
             'Acciones'
         ];
@@ -278,10 +271,12 @@ class Student extends Controller
             $student = Person::find($user->Person_id);
             $query = [
                 'id' => $student->id,
-                'name' => $student->Names . ' ' . $student->LastNames,
+                'name' => $student->Names,
+                'lastname' => $student->LastNames,
                 'phone' => $student->Phone,
                 'user' => $user->name,
-                'email' => $user->email
+                'email' => $user->email,
+                'conexion' => '17/11/2020'
             ];
             array_push($models,$query);
         }
@@ -301,9 +296,10 @@ class Student extends Controller
         $models = [];
         $titles = [
             'Id',
-            'Nombre del estudiante',
+            'Nombres',
+            'Apellidos',
             'No. Teléfono',
-            'Nombre de usuario',
+            'Usuario',
             'Correo electrónico',
             'Última conexión',
             'Acciones'
@@ -315,10 +311,12 @@ class Student extends Controller
             $student = Person::find($user->Person_id);
             $query = [
                 'id' => $student->id,
-                'name' => $student->Names . ' ' . $student->LastNames,
+                'name' => $student->Names,
+                'lastname' => $student->LastNames,
                 'phone' => $student->Phone,
                 'user' => $user->name,
-                'email' => $user->email
+                'email' => $user->email,
+                'conexion' => '17/11/2020'
             ];
             array_push($models,$query);
         }
@@ -604,7 +602,8 @@ class Student extends Controller
         $models = [];
         $titles = [
             'Id',
-            'Nombre del estudiante',
+            'Nombres',
+            'Apellidos',
             'Última conexión',
             'Acciones'
         ];
@@ -624,7 +623,7 @@ class Student extends Controller
     }
 /*-------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------*/
-    #ESTUDIANTE
+    #FUNCIONES DE ESTUDIANTE
     public function edit_profile($id)
     {
         $student = Person::find($id);
