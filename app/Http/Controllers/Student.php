@@ -122,22 +122,15 @@ class Student extends Controller
     {
         $models = [];
         $titles = [];
-        $test = Test::find($id);
-        foreach ($test->Questions() as $question)
-        {
-            $query = [
-                'id' => $question->id,
-                'title' => $question->Title,
-                'content' => $question->Content,
-                'score' => $question->Score,
-                'type' => $question->Type,
-                'answers' => $question->Answers ?? 'ninguno',
-                'correct' => $question->CorrectAnswers,
-                'test_id' => $question->Test_id
-            ];
-            array_push($models,$query);
-        }
-        return view('Student/test_form',compact('models','titles'));
+        $Test = Test::find($id);
+        $buttons=[];
+        $button = [
+            "Name" => 'Regresar al listado de examenes',
+            "Link" => 'student/test/view',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        return view('Student/test_form',compact('titles','buttons','Test'));
     }
 
     public function save_answer(Request $request)
