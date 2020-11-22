@@ -88,10 +88,11 @@
                             <tr>
                                 <td>{{$m['id']}}</td>
                                 <td>{{$m['name']}}</td>
+                                <td>{{$m['lastname']}}</td>
                                 <td>{{$m['phone']}}</td>
                                 <td>{{$m['user']}}</td>
                                 <td>{{$m['email']}}</td>
-                                <td>11/11/2020</td>
+                                <td>{{$m['conexion']}}</td>
                                 <td nowrap="nowrap"></td>
                             </tr>
                             @endforeach
