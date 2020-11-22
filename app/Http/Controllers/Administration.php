@@ -63,12 +63,28 @@ class Administration extends Controller
     {
         $buttons =[];
         $button = [
-            "Name" => 'Añadir un estudiante',
-            "Link" => 'administration/home/dashboard',
+            "Name" => 'Añadir un encargado de circulo',
+            "Link" => 'administration/attendant/create',
             "Type" => "add"
         ];
         array_push($buttons,$button);
-        return view('Administration.Attendant.List',compact('buttons'));
+        $button = [
+            "Name" => 'Ver encargados de circulo eliminados',
+            "Link" => 'administration/attendant/deletes',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $ModelsData = rol::find(4);
+        $Models =[];
+        $Titles =['Id','Nombres','Correo electronico','Teléfono','Circulos encargados','Acciones'];
+        foreach ($ModelsData->Users()  as $value) {
+            $model = [
+                "Id" =>$value->id,
+                "Name" =>$value->name,
+            ];
+            array_push($Models,$model);
+         } 
+        return view('Administration.Attendant.List',compact('buttons','Titles','Models'));
     }
     public function test($test)
     {
@@ -206,12 +222,6 @@ class Administration extends Controller
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver grados de un circulo de estudio',
-            "Link" => 'administration/home/dashboard',
-            "Type" => "btn1"
-        ];
-        array_push($buttons,$button);
-        $button = [
             "Name" => 'Ver circulos de estudio eliminados',
             "Link" => 'administration/configurations/level/list/deletes',
             "Type" => "btn1"
@@ -272,23 +282,23 @@ class Administration extends Controller
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
-        $Titles =['Id','Grado','Sección','Nivel','Cursos','No. de Voluntarios','Acciones'];
+        $Titles =['Id','Grado','Nivel','Cursos','No. de Voluntarios','Acciones'];
         $lvl = level::find($id); 
         $level = $lvl->Name;
         $period = $lvl->Period()->Name;
         $Models = [];
+        $type ="Active";
         foreach ($lvl->Grades() as $key => $value) {
             $m =[
                 "Id" => $value->id,  
                 "Grade" => $value->Name,  
-                "Section" => $value->Section,  
                 "Lvl" => $lvl->Name,
                 "Curses" => $value->CoursesList(),
                 "NoTeachers" => "0"
             ];
             array_push($Models,$m);
         }
-        return view('Administration.Grades.List',compact('Titles','Models', 'level','period','buttons'));
+        return view('Administration.Grades.List',compact('Titles','Models', 'level','period','buttons','type'));
     }
     public function SaveCourses(Request $request)
     {
@@ -573,5 +583,25 @@ class Administration extends Controller
 
     public function Update_courses()
     {
+    }
+    public function Report()
+    {
+        return view('Administration/Dashboard/Report');
+    }
+    public function Inscriptions()
+    {
+        return view('Administration/Workspace/Inscriptions');
+    }
+    public function Configurations()
+    {
+        return view('Administration/Configurations/Configuration');
+    }
+    public function WorkspaceList()
+    {
+        return view('Administration/Workspace/List');
+    }
+    public function Statistics()
+    {
+        return view('Administration/Workspace/Statistics');
     }
 }

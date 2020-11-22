@@ -47,6 +47,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		$route = "App\Http\Controllers";
 		#Dashboad
 		Route::get('/dashboard', $route.'\Administration@Dashboard')->name('Dashboard');
+		Route::get('/report', $route.'\Administration@Report')->name('Report');
 	});
 	#Encargados de circulo
 	Route::group([ 'prefix' => 'attendant'], function(){
@@ -103,9 +104,16 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/delete/activity/{curso}', $route.'\Teacher@deleteActivity')->name('deleteActivity');
 		Route::get('/detail/activity/{curso}/{model}', $route.'\Teacher@DetailActivity')->name('DetailActivity');
 	});
-	//Comentario
+	Route::group([ 'prefix' => 'workspace'], function(){
+		$route = "App\Http\Controllers";
+		Route::get('inscriptions',$route.'\Administration@Inscriptions')->name('Inscriptions');
+		Route::get('list',$route.'\Administration@WorkspaceList')->name('WorkspaceList');
+		Route::get('statistics',$route.'\Administration@Statistics')->name('Statistics');
+	});
+	//Configuraciones
 	Route::group([ 'prefix' => 'configurations'], function(){
 		$route = "App\Http\Controllers";
+		Route::get('list',$route.'\Administration@Configurations')->name('Configurations');
 		Route::get('level/list',$route.'\Administration@LevelList')->name('LevelList');
 		Route::get('level/list/deletes',$route.'\Administration@LevelListDelete')->name('LevelListDelete');
 		Route::get('level/list/change/{id}/{type}',$route.'\Administration@ChangePeriod')->name('ChangePeriod');

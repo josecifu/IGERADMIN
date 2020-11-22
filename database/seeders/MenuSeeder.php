@@ -23,7 +23,7 @@ class MenuSeeder extends Seeder
             'Url' => 'administration/home',      
         ]);
         DB::table('menus')->insert([
-            'Name' => 'Dashboard',
+            'Name' => 'Tablero',
             'State' => '1',
             'Url' => 'administration/home/dashboard',  
             'menu_id' => '1'          
@@ -160,7 +160,7 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([ 
             'Name' => 'Configuraciones generales',
             'State' => '1',
-            'Url' => 'administration/configurations/list/',  //23
+            'Url' => 'administration/configurations/list',  //23
             'menu_id' => '21'          
         ]); 
 
@@ -174,7 +174,7 @@ class MenuSeeder extends Seeder
             'Order' => '4',      
         ]);
         DB::table('menus')->insert([ 
-            'Name' => 'Dashboard',
+            'Name' => 'Tablero',
             'State' => '1',
             'Url' => 'student/home/dashboard',  //25
             'menu_id' => '24'          
@@ -227,7 +227,7 @@ class MenuSeeder extends Seeder
             'Order' => '4',      
         ]);
         DB::table('menus')->insert([ 
-            'Name' => 'Dashboard',
+            'Name' => 'Tablero',
             'State' => '1',
             'Url' => 'teacher/home/dashboard',  //33
             'menu_id' => '32'          

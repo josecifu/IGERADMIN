@@ -260,6 +260,8 @@
                                                 <ul class="nav nav-hoverable flex-column" >\
                                                     <li class="nav-item"><a class="nav-link" href="#" onclick="Addlevel(\''+full[0]+'\')"><i class="nav-icon la la-mail-reply-all"></i><span class="nav-text" style="padding-left:10px;"> Agregar un nivel a el circulo de estudio</span></a></li>\
                                                     <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#kt_grades_modal'+full[0]+'"><i class="nav-icon la la-plus-square-o"></i><span class="nav-text" style="padding-left:10px;"> Agregar un grado a un nivel del circulo de estudio</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')"><i class="nav-icon la la-trash"></i><span class="nav-text" style="padding-left:10px;"> Eliminar un nivel</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')"><i class="nav-icon la la-trash"></i><span class="nav-text" style="padding-left:10px;"> Eliminar un grado</span></a></li>\
                                                 </ul>\
                                             </div>\
                                         </div>\
