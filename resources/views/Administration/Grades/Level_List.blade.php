@@ -259,7 +259,7 @@
                                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right" >\
                                                 <ul class="nav nav-hoverable flex-column" >\
                                                     <li class="nav-item"><a class="nav-link" href="#" onclick="Addlevel(\''+full[0]+'\')"><i class="nav-icon la la-mail-reply-all"></i><span class="nav-text" style="padding-left:10px;"> Agregar un nivel a el circulo de estudio</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#kt_grades_modal'+full[0]+'"><i class="nav-icon la la-plus-square-o"></i><span class="nav-text" style="padding-left:10px;"> Agregar un grado a un nivel del circulo de estudio</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#kt_grades_modal'+full[0]+'"><i class="nav-icon la la-plus-square-o"></i><span class="nav-text" style="padding-left:10px;"> Agregar grados a un nivel del circulo de estudio</span></a></li>\
                                                     <li class="nav-item"><a class="nav-link" href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')"><i class="nav-icon la la-trash"></i><span class="nav-text" style="padding-left:10px;"> Eliminar un nivel</span></a></li>\
                                                     <li class="nav-item"><a class="nav-link" href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')"><i class="nav-icon la la-trash"></i><span class="nav-text" style="padding-left:10px;"> Eliminar un grado</span></a></li>\
                                                 </ul>\
@@ -315,8 +315,8 @@
                 text: "El nombre del dia: "+$name,
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Si, eliminar!',
-                cancelButtonText: 'No, cancelar!',
+                confirmButtonText: 'Si, ¡eliminar!',
+                cancelButtonText: 'No, ¡cancelar!',
                 reverseButtons: true
               }).then((result) => {
                 if (result.isConfirmed) {
@@ -326,8 +326,8 @@
                         Name: result.value[0],
                     }];
                     swalWithBootstrapButtons.fire({
-                        title: 'Eliminado!',
-                        text: 'Se ha eliminado con exito!',
+                        title: '¡Eliminado!',
+                        text: '¡Se ha eliminado con exito!',
                         icon: 'success',
                         confirmButtonText: 'Aceptar',
                     }).then(function () {
@@ -361,8 +361,8 @@
                 text: "El nombre del dia: "+$name,
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Si, activar!',
-                cancelButtonText: 'No, cancelar!',
+                confirmButtonText: 'Si, ¡activar!',
+                cancelButtonText: 'No, ¡cancelar!',
                 reverseButtons: true
               }).then((result) => {
                 if (result.isConfirmed) {
@@ -372,8 +372,8 @@
                         Name: result.value[0],
                     }];
                     swalWithBootstrapButtons.fire({
-                        title: 'Activada!',
-                        text: 'Se ha activado con exito!',
+                        title: '¡Activada!',
+                        text: '¡Se ha activado con exito!',
                         icon: 'success',
                         confirmButtonText: 'Aceptar',
                     }).then(function () {
@@ -385,8 +385,8 @@
                   result.dismiss === Swal.DismissReason.cancel
                 ) {
                   swalWithBootstrapButtons.fire({
-                    title: 'Cancelado!',
-                    text:  'El circulo de estudio no ha sido activado!',
+                    title: '¡Cancelado!',
+                    text:  '¡El circulo de estudio no ha sido activado!',
                     icon: 'error',
                     confirmButtonText: 'Aceptar',
                 })
@@ -407,11 +407,11 @@
             })
             swalWithBootstrapButtons.fire({
               title: '¿Está seguro de los datos?',
-              text: "Desea ingresar los grados al circulo de estudio: "+$lvl,
+              text: "¿Desea ingresar los grados al circulo de estudio: "+$lvl+" ?",
               icon: 'warning',
               showCancelButton: true,
-              confirmButtonText: 'Si, crear!',
-              cancelButtonText: 'No, cancelar!',
+              confirmButtonText: '¡Si, crear!',
+              cancelButtonText: '¡No, cancelar!',
               reverseButtons: true
             }).then((result2) => {
               if (result2.isConfirmed) {
@@ -429,8 +429,8 @@
                       dataType: "JSON",
                       success: function(e){
                           swalWithBootstrapButtons.fire({
-                              title: 'Guardado!',
-                              text: 'Se ha guardado con exito!',
+                              title: '¡Guardado!',
+                              text: '¡Se ha guardado con exito!',
                               icon: 'success',
                               confirmButtonText: 'Aceptar',
                           }).then(function () {
@@ -441,7 +441,7 @@
                       },
                       error: function(e){
                           swalWithBootstrapButtons.fire({
-                              title: 'Cancelado!',
+                              title: '¡Cancelado!',
                               text:   e.responseJSON['error'],
                               icon: 'error',
                               confirmButtonText: 'Aceptar',
@@ -453,8 +453,8 @@
                 result.dismiss === Swal.DismissReason.cancel
               ) {
                 swalWithBootstrapButtons.fire({
-                  title: 'Cancelado!',
-                  text:  'No se han creado los grados!',
+                  title: '¡Cancelado!',
+                  text:  '¡No se han creado los grados!',
                   icon: 'error',
                   confirmButtonText: 'Aceptar',
               })
@@ -507,8 +507,8 @@
                                 dataType: "JSON",
                                 success: function(e){
                                     swalWithBootstrapButtons.fire({
-                                        title: 'Modificado!',
-                                        text: 'Se ha modificado con exito!',
+                                        title: '¡Modificado!',
+                                        text: '¡Se ha modificado con exito!',
                                         icon: 'success',
                                         confirmButtonText: 'Aceptar',
                                     }).then(function () {
@@ -532,7 +532,7 @@
                         ) {
                           swalWithBootstrapButtons.fire({
                             title: 'Cancelado!',
-                            text:  'El circulo de estudio no ha sido modificado!',
+                            text:  '¡El circulo de estudio no ha sido modificado!',
                             icon: 'error',
                             confirmButtonText: 'Aceptar',
                         })
@@ -600,7 +600,7 @@
                             },
                             error: function(e){
                                 swalWithBootstrapButtons.fire({
-                                    title: 'Cancelado!',
+                                    title: '¡Cancelado!',
                                     text:   e.responseJSON['error'],
                                     icon: 'error',
                                     confirmButtonText: 'Aceptar',
@@ -613,8 +613,8 @@
                       result.dismiss === Swal.DismissReason.cancel
                     ) {
                       swalWithBootstrapButtons.fire({
-                        title: 'Cancelado!',
-                        text:  'El circulo de estudio no ha sido creado!',
+                        title: '¡Cancelado!',
+                        text:  '¡El circulo de estudio no ha sido creado!',
                         icon: 'error',
                         confirmButtonText: 'Aceptar',
                     })
@@ -653,8 +653,8 @@
                     text: "El nombre del circulo de estudio: "+result.value[0],
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Si, crearlo!',
-                    cancelButtonText: 'No, cancelar!',
+                    confirmButtonText: '¡Si, crearlo!',
+                    cancelButtonText: '¡No, cancelar!',
                     reverseButtons: true
                   }).then((result2) => {
                     if (result2.isConfirmed) {
@@ -670,8 +670,8 @@
                             dataType: "JSON",
                             success: function(e){
                                 swalWithBootstrapButtons.fire({
-                                    title: 'Creado!',
-                                    text: 'Se ha creado con exito!',
+                                    title: '¡Creado!',
+                                    text: '¡Se ha creado con exito!',
                                     icon: 'success',
                                     confirmButtonText: 'Aceptar',
                                 }).then(function () {
@@ -696,8 +696,8 @@
                       result.dismiss === Swal.DismissReason.cancel
                     ) {
                       swalWithBootstrapButtons.fire({
-                        title: 'Cancelado!',
-                        text:  'El circulo de estudio no ha sido creado!',
+                        title: '¡Cancelado!',
+                        text:  '¡El circulo de estudio no ha sido creado!',
                         icon: 'error',
                         confirmButtonText: 'Aceptar',
                     })

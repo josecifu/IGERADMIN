@@ -590,7 +590,27 @@ class Administration extends Controller
     }
     public function Inscriptions()
     {
-        return view('Administration/Workspace/Inscriptions');
+        $Titles =['Id','Nombres','Grado','Fecha de inscripción','Acciones'];
+        $Models = [];
+        $data = period::where('State','Active')->get();
+        foreach($data as $value)
+        {
+            foreach($value->Grades() as $grade)
+            {
+                foreach($grade->Students() as $Student)
+                {
+                    $model = [
+                        "Id" =>$value->id,
+                        "Name" =>$Student->person()->Names." ".$Student->person()->LastNames,
+                        "Grade" => $value->Name." - ".$grade->GradeName(),
+                        "Date" => $Student->created_at->format('d/m/Y'),
+                    ];
+                    array_push($Models,$model);
+                }
+            }
+            
+        }
+        return view('Administration/Workspace/Inscriptions',compact('Titles','Models'));
     }
     public function Configurations()
     {

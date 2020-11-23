@@ -34,6 +34,13 @@ Route::group([ 'prefix' => 'student'], function(){
 Route::group([ 'prefix' => 'teacher'], function(){
 	$route = "App\Http\Controllers";
 	Route::get('/home/dashboard',$route.'\Teacher@dashboard')->name('TeacherDashboard');
+	Route::get('/home/workspace',$route.'\Teacher@workspaceT')->name('Teacherworkspace');
+	Route::get('/score/list/{model}',$route.'\Teacher@score')->name('TeacherScore');
+	Route::get('/test/list/{model}',$route.'\Teacher@TestTeacher')->name('TeacherTests');
+	Route::get('/create/test/{model}',$route.'\Teacher@createExam')->name('TeacherCreateTest');
+	Route::get('/assign/question/test/{exam}/{model}',$route.'\Teacher@AssignQuestion')->name('TeacherAssignQuestions');
+	Route::get('/question/{model}/{no}', $route.'\Teacher@QuestionTest')->name('TeacherQuestionsTest');
+	Route::get('/detail/activity/{curso}/{model}',$route.'\Teacher@DetailActivity')->name('TeacherdetailActivity');
 });
 Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	
@@ -51,12 +58,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/dashboard', $route.'\Administration@Dashboard')->name('Dashboard');
 		Route::get('/report', $route.'\Administration@Report')->name('Report');
 	});
-	#Encargados de circulo
-	Route::group([ 'prefix' => 'attendant'], function(){
-		$route = "App\Http\Controllers";
-		#Dashboad
-		Route::get('/list', $route.'\Administration@AttendantList')->name('AttendantList');
-	});
+	
 	#Estudiantes
 	Route::group([ 'prefix' => 'student'], function(){
 		$route = "App\Http\Controllers";
@@ -91,7 +93,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/delete/{model}', $route.'\Teacher@delete')->name('DeleteTeacher');
 		Route::get('/search',$route.'\Teacher@seach')->name('SceachTeacher');
 		Route::get('/workspace',$route.'\Teacher@workspace')->name('WorkspaceTeacher');
-		Route::get('/statistics',$route.'\Teacher@statistics')->name('Statistics');
+		Route::get('/statistics',$route.'\Teacher@statistics')->name('StatisticsTeacher');
 		Route::post('/load/courses', $route.'\Teacher@LoadCourses')->name('LoadCoursesTeacher');
 		Route::get('/desactive', $route.'\Teacher@Desactive')->name('Desactive');
 		Route::get('/activate/{model}', $route.'\Teacher@Activate')->name('ActivateTeacher');
@@ -111,6 +113,12 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('inscriptions',$route.'\Administration@Inscriptions')->name('Inscriptions');
 		Route::get('list',$route.'\Administration@WorkspaceList')->name('WorkspaceList');
 		Route::get('statistics',$route.'\Administration@Statistics')->name('Statistics');
+		#Encargados de circulo
+		Route::group([ 'prefix' => 'attendant'], function(){
+			$route = "App\Http\Controllers";
+			#Dashboad
+			Route::get('/list', $route.'\Administration@AttendantList')->name('AttendantList');
+		});
 	});
 	//Configuraciones
 	Route::group([ 'prefix' => 'configurations'], function(){

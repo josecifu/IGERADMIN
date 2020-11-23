@@ -38,8 +38,13 @@
                                         <div class="card-title">
                                             <div class="card-toolbar">
                                                 <!--begin::Dropdown-->
-                                                <a href="{{url('administration/teacher/test/'.$curso)}}" class="btn btn-danger font-weight-bolder mr-2">
-                                                <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
+                                                @if(session()->get('rol_Name')=="Voluntario")
+                                                    <a href="{{url('/teacher/test/list/vol')}}" class="btn btn-danger font-weight-bolder mr-2">
+                                                    <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
+                                                @else
+                                                    <a href="{{url('administration/teacher/test/'.$curso)}}" class="btn btn-danger font-weight-bolder mr-2">
+                                                    <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
+                                                @endif
                                                 <!--end::Dropdown-->
                                             </div>
                                         </div>

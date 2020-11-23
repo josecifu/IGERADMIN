@@ -36,8 +36,13 @@
                                     <div class="card-header">
                                         <div class="card-title">
                                             <div class="card-toolbar">
-                                                <a href="{{url('administration/teacher/score/'.$course->id)}}" class="btn btn-danger font-weight-bolder mr-2">
-                                                <i class="ki ki-long-arrow-back icon-sm"></i>Cancelar</a>
+                                                @if(session()->get('rol_Name')=="Voluntario")
+                                                    <a href="{{url('/teacher/score/list/vol')}}" class="btn btn-danger font-weight-bolder mr-2">
+                                                    <i class="ki ki-long-arrow-back icon-sm"></i>Cancelar</a>
+                                                @else
+                                                    <a href="{{url('administration/teacher/score/'.$course->id)}}" class="btn btn-danger font-weight-bolder mr-2">
+                                                    <i class="ki ki-long-arrow-back icon-sm"></i>Cancelar</a>
+                                                @endif
                                             </div>
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
@@ -232,7 +237,7 @@
                             }];
                 
                             $.ajax({
-                                url:'/administration/teacher/update/activity',
+                                url: '/administration/teacher/update/activity',
                                 type:'POST',
                                 data: {"_token":"{{ csrf_token() }}","data":data},
                                 dataType: "JSON",
@@ -243,9 +248,13 @@
                                         icon: 'success',
                                         confirmButtonText: 'Aceptar',
                                     }).then(function () {
-                                        
-                                        var $url_path = '{!! url('/') !!}';
-                                        window.location.href = $url_path+"/administration/teacher/score/"+{{$course->id}};
+                                        @if(session()->get('rol_Name')=="Voluntario")
+                                            var $url_path = '{!! url('/') !!}';
+                                            window.location.href = $url_path+"/teacher/detail/activity/"+{{$course->id}}+"/"+$id;
+                                        @else
+                                            var $url_path = '{!! url('/') !!}';
+                                            window.location.href = $url_path+"/administration/detail/activity/"+{{$course->id}}+"/"+$id;
+                                        @endif
                                         });
                                     
                                 },

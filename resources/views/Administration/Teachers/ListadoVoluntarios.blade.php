@@ -169,9 +169,6 @@
                                                 </ul>\
                                             </div>\
                                         </div>\
-                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Detalle de asignación">\
-                                            <i class="la la-edit"></i>\
-                                        </a>\
                                         <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Eliminar">\
                                             <i class="la la-trash"></i>\
                                         </a>\

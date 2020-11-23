@@ -1,4 +1,4 @@
-@extends('Administration.Base/Base')
+@extends('Administration.Base/BaseTeacher')
 {{-- Page title --}}
     @section('title')
     Inicio
@@ -111,7 +111,11 @@
                                             <tbody>
                                                 <tr>
                                                     @foreach( $Models as $model)
-                                                        <td><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="verNotas( {{$model['Id']}},{{$course->id}});">{{$model['NoQuestions']}}</button></center></td>   
+                                                        @if($model['NoQuestions'] != " ")
+                                                        <td><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="verNotas( {{$model['Id']}},{{$id}});">{{$model['NoQuestions']}}</button></center></td>   
+                                                        @else
+                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver voluntarios asignados" data-placement="left">0</button></center></td>
+                                                        @endif
                                                    @endforeach
                                                 </tr>
                                             </tbody>
@@ -170,13 +174,93 @@
                 KTDatatablesDataSourceHtml.init();
             });
             function verNotas($id,$curso) {
-                @if(session()->get('rol_Name')=="Voluntario")
-                    var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/teacher/question/"+$id+"/"+$curso;
-                @else
-                    var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/teacher/question/"+$id+"/"+$curso;
-                @endif
+                var $url_path = '{!! url('/') !!}';
+                window.location.href = $url_path+"/administration/teacher/question/"+$id+"/"+$curso;
+            }
+            function create()
+            {
+                Swal.mixin({
+                    input: 'text',
+                    confirmButtonText: 'Siguiente  &rarr;',
+                    showCancelButton: true,
+                    progressSteps: ['1','2',]
+                }).queue([
+                    {
+                    title: 'Ingrese nombre de la actividad:',
+                    
+                    },
+                    {
+                    title: 'Ingrese Punteo total de la actividad:',
+                    },
+                ]).then((result) => {
+                    if (result.value) {
+                    const answers = JSON.stringify(result.value)
+                    console.log(result.value);
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                        },
+                        buttonsStyling: false
+                    })
+                    
+                    swalWithBootstrapButtons.fire({
+                        title: '¿Está seguro de los datos?',
+                        text: "El nombre de la actividad: "+result.value[0]+" y el punteo: "+result.value[1],
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Si, crearlo!',
+                        cancelButtonText: 'No, cancelar!',
+                        reverseButtons: true
+                    }).then((result2) => {
+                        if (result2.isConfirmed) {
+                            var data = [{
+                                Actividad: result.value[0],
+                                Punteo: result.value[1],
+                            }];
+                
+                            $.ajax({
+                                url:'/administration/teacher/save/activity/'+{{$course->id}},
+                                type:'POST',
+                                data: {"_token":"{{ csrf_token() }}","data":data},
+                                dataType: "JSON",
+                                success: function(e){
+                                    swalWithBootstrapButtons.fire({
+                                        title: 'Creado!',
+                                        text: 'Se ha creado con exito!',
+                                        icon: 'success',
+                                        confirmButtonText: 'Aceptar',
+                                    }).then(function () {
+                                        
+                                        var $url_path = '{!! url('/') !!}';
+                                        window.location.href = $url_path+"/teacher/test/list";
+                                        });
+                                    
+                                },
+                                error: function(e){
+                                    swalWithBootstrapButtons.fire({
+                                        title: 'Cancelado!',
+                                        text:   e.responseJSON['error'],
+                                        icon: 'error',
+                                        confirmButtonText: 'Aceptar',
+                                    })
+                                
+                                }
+                            });
+                        
+                        } else if (
+                        result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                        swalWithBootstrapButtons.fire({
+                            title: 'Cancelado!',
+                            text:  'El dia no ha sido creada!',
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar',
+                        })
+                        }
+                    })
+                    }
+                })
             }
 
        </script>
