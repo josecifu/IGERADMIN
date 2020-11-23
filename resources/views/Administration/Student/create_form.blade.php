@@ -15,6 +15,20 @@
         <div class="content flex-column-fluid" id="kt_content">
 			<div class="card-header">
                 <div class="card-toolbar">
+                	&nbsp;&nbsp;&nbsp;&nbsp;
+                	&nbsp;&nbsp;&nbsp;&nbsp;
+                	&nbsp;&nbsp;&nbsp;&nbsp;
+                	&nbsp;&nbsp;&nbsp;&nbsp;
+                	&nbsp;&nbsp;&nbsp;&nbsp;
+                	&nbsp;&nbsp;&nbsp;&nbsp;
+                	&nbsp;&nbsp;&nbsp;&nbsp;
+                	&nbsp;&nbsp;&nbsp;&nbsp;
+                	&nbsp;&nbsp;&nbsp;&nbsp;
+                	&nbsp;&nbsp;&nbsp;&nbsp;
+                	&nbsp;&nbsp;&nbsp;&nbsp;
+                	&nbsp;&nbsp;&nbsp;&nbsp;
+                	&nbsp;&nbsp;&nbsp;&nbsp;
+                	&nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="{{url('administration/student/list')}}" class="btn btn-danger font-weight-bolder mr-2">
                     <i class="ki ki-long-arrow-back icon-sm"></i>Cancelar</a>
                 </div>
@@ -82,6 +96,7 @@
 								<form class="form" id="kt_form">
 									<!--begin::Wizard Step 1-->
 									<div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+										<h1>Ingrese los datos personales del estudiante</h1>
 										<div class="my-5">
 											<div class="form-group row">
 												<label class="col-3">Nombres</label>
@@ -123,19 +138,15 @@
 												</div>
 											</div>
 											<div class="form-group row">
-												<label class="col-3">Genero</label>
-												<div class="col-9">
-													<div class="input-group input-group-solid">
-														<div class="input-group-prepend">
-															<span class="input-group-text">
-																<i class="la la-user"></i>
-															</span>
-														</div>
-		                                                <select name="Genero" id="Genero" class="form-control form-control-solid" placeholder="Genero">
-		                                                    <option value="">--Seleccione una opción</option>
-		                                                    <option value="mujer">Femenino</option>
-		                                                    <option value="hombre">Masculino</option>
-		                                                </select>
+												<label class="col-3">Género</label>
+												<div class="col-9 col-form-label">
+													<div class="radio-inline">
+														<label class="radio radio-primary">
+														<input type="radio" id="Genero" name="radios5"/>
+														<span></span>Femenino</label>
+														<label class="radio radio-primary">
+														<input type="radio" id="Sexo" name="radios5"/>
+														<span></span>Masculino</label>
 													</div>
 												</div>
 											</div>
@@ -144,6 +155,7 @@
 									<!--end::Wizard Step 1-->
 									<!--begin::Wizard Step 2-->
 									<div class="pb-5" data-wizard-type="step-content">
+										<h1>Ingrese los datos del usuario</h1>
 										<div class="my-5">
 											<div class="form-group row">
 												<label class="col-3">Nombre de usuario</label>
@@ -189,6 +201,7 @@
 									<!--end::Wizard Step 2-->
 									<!--begin::Wizard Step 3-->
 									<div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+										<h1>Ingrese los datos de asignación</h1>
 										<div class="my-5">
 											<div class="form-group row">
 												<label class="col-form-label text-right col-lg-3 col-sm-12">Circulo de estudio</label>
@@ -220,7 +233,7 @@
 											<button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev">Anterior</button>
 										</div>
 										<div>
-											<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Guardar</button>
+											<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Guardar Registro</button>
 											<button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>
 										</div>
 									</div>
@@ -421,7 +434,7 @@
 	            var NombrePersona = $('#Nombres').val();
 	            var ApellidosPersona = $('#Apellidos').val();
 	            var TelefonoPersona = $('#Telefono').val();
-	            var GeneroPersona = $('#Genero').val();
+	            var GeneroPersona = $('#Genero').is(":checked");
 	            var UsuarioPersona = $('#Usuario').val();
 	            var EmailPersona = $('#Email').val();
 	            var ContraseñaPersona = $('#Contraseña').val();

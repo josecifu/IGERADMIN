@@ -53,6 +53,7 @@
 									</div>
 								</div>
 								<!--end::Search-->
+								@if(session()->get('rol_Name')=="Administrador")
 								<!--begin::Notifications-->
 								<div class="dropdown">
 									<!--begin::Toggle-->
@@ -511,6 +512,7 @@
 									<!--end::Dropdown-->
 								</div>
 								<!--end::Notifications-->
+								
 								<!--begin::Quick Actions-->
 								<div class="dropdown">
 									<!--begin::Toggle-->
@@ -624,6 +626,7 @@
 									<!--end::Dropdown-->
 								</div>
 								<!--end::Quick Actions-->
+								@endif
 								<!--begin::My Cart-->
 								<div class="dropdown">
 									<!--begin::Toggle-->
@@ -736,14 +739,34 @@
 										<!--begin::Header-->
 										<div class="d-flex align-items-center p-8 rounded-top">
 											<!--begin::Symbol-->
-											<div class="symbol symbol-md bg-light-primary mr-3 flex-shrink-0">
-												<img src="{{asset('assets/media/users/default.jpg')}}" alt="" />
+											<div class="symbol symbol-md bg-light-warning mr-3 flex-shrink-0">
+												@if(session()->get('Avatar')!=null)
+                                                <img src="{{ asset ('assets/media/svg/avatars/'.session()->get('Avatar'))}}" class="h-75 align-self-end" alt="" />
+												@else
+													@if(session()->get('rol_Name')=="Estudiante")
+														@if(session()->get('Gender')=="Masculino")
+														<img src="{{ asset ('assets/media/svg/avatars/001-boy.svg')}}" class="h-75 align-self-end" alt="" />
+														@else
+														<img src="{{ asset ('assets/media/svg/avatars/002-girl.svg')}}" class="h-75 align-self-end" alt="" />
+														@endif
+													@elseif(session()->get('rol_Name')=="Voluntario")
+														@if(session()->get('Gender')=="Masculino")
+															<img src="{{ asset ('assets/media/svg/avatars/Teacher-boy-1.svg')}}" class="h-75 align-self-end" alt="" />
+														@else
+															<img src="{{ asset ('assets/media/svg/avatars/Teacher-girl-1.svg')}}" class="h-75 align-self-end" alt="" />
+														@endif
+													@else
+														<img src="{{ asset ('assets/media/svg/avatars/Admin.svg')}}" class="h-75 align-self-end" alt="" />
+													@endif
+												@endif
 											</div>
 											<!--end::Symbol-->
 											<!--begin::Text-->
 											<div class="text-dark m-0 flex-grow-1 mr-3 font-size-h5">
-												@if(session()->has('Username'))
-													  {{session()->get('Username')}}
+												@if(session()->has('Name'))
+													  {{session()->get('Name')}}
+												@else
+													{{session()->get('Username')}}
 												@endif
 											</div>
 											<span class="label label-light-warning label-lg font-weight-bold label-inline">@if(session()->has('Username'))

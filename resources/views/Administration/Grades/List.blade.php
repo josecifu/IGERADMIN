@@ -29,12 +29,12 @@
                 </div>
                 <div class="card-toolbar">
                     <!--begin::Dropdown-->
-                    <div class="dropdown dropdown-inline mr-2">
-                        <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="la la-download"></i>Exportar</button>
+                    <div class="dropdown dropdown-inline mr-2" >
+                        <button type="button" style="color:white;" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="la la-download" style="color:white;"></i>Exportar</button>
                         <!--begin::Dropdown Menu-->
-                        <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                            <ul class="nav flex-column nav-hover">
+                        <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right" >
+                            <ul class="nav flex-column nav-hover" >
                                 <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opción:</li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
@@ -93,7 +93,6 @@
                                                     <tr>
                                                         <td>{{$Model['Id']}}</td>
                                                         <td>{{$Model['Grade']}}</td>
-                                                        <td>{{$Model['Section']}}</td>
                                                         <td>{{$Model['Lvl']}}</td>
                                                         <td >
                                                             @if($Model['Curses'])
@@ -123,7 +122,7 @@
                                                         <div class="modal-dialog modal-lg" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title">Añadir cursos a {{$Model['Grade']}}  {{$Model['Lvl']}} {{$Model['Section']}}</h5>
+                                                                    <h5 class="modal-title">Añadir cursos a {{$Model['Grade']}}  {{$Model['Lvl']}} </h5>
                                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                         <i aria-hidden="true" class="ki ki-close"></i>
                                                                     </button>
@@ -157,7 +156,7 @@
                                                         <div class="modal-dialog modal-lg" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title">Editar  {{$Model['Grade']}}  {{$Model['Lvl']}} {{$Model['Section']}}</h5>
+                                                                    <h5 class="modal-title">Editar  {{$Model['Grade']}}  {{$Model['Lvl']}} </h5>
                                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                         <i aria-hidden="true" class="ki ki-close"></i>
                                                                     </button>
@@ -269,13 +268,23 @@
                                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right" >\
                                                 <ul class="nav nav-hoverable flex-column" >\
                                                     <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#CoursesModal'+full[0]+'"><i class="nav-icon la la-mail-reply-all"></i><span class="nav-text" style="padding-left:10px;"> Agregar cursos a el grado</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')"><i class="nav-icon la la-trash"></i><span class="nav-text" style="padding-left:10px;"> Eliminar una materia</span></a></li>\
                                                 </ul>\
                                             </div>\
                                         </div>\
                                         <a href="javascript:;" data-toggle="modal" data-target="#EditModal'+full[0]+'"  class="btn btn-sm btn-clean btn-icon" >\
                                             <i class="la la-edit"></i>\
                                         </a>\
-                                        ';
+                                        @if($type=="Active")
+                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Eliminar Grado" data-placement="left">\
+                                        <i class="la la-trash"></i>\
+                                        </a>\
+                                        @else
+                                        <a href="javascript:;" onclick="ActivePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Activar circulo de estudio" data-placement="left">\
+                                        <i class="la la-check-circle"></i>\
+                                        </a>\
+                                        @endif';
+                                       
                                 },
                             },
                            

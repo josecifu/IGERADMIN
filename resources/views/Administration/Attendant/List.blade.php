@@ -12,12 +12,7 @@
     {{-- Page content --}}
     @section('content')
     <div class="content flex-column-fluid" id="kt_content">
-        <div class="card-header">
-            <div class="card-toolbar">
-                <a href="{{url('administration/configurations/level/list')}}" class="btn btn-danger font-weight-bolder mr-2">
-                <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
-            </div>
-        </div>
+      
         <!--begin::Card-->
         <div class="card card-custom">
             <div class="card-header">
@@ -25,13 +20,13 @@
                     <span class="card-icon">
                         <i class="flaticon2-favourite text-primary"></i>
                     </span>
-                    <h3 class="card-label">Listado de grados y cursos del nivel {{$level}} del dia {{$period}}</h3>
+                    <h3 class="card-label">Listado Encargados de circulo</h3>
                 </div>
                 <div class="card-toolbar">
                     <!--begin::Dropdown-->
                     <div class="dropdown dropdown-inline mr-2">
-                        <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="la la-download"></i>Exportar</button>
+                        <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" style="color:white;"data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="la la-download" style="color:white;"></i>Exportar</button>
                         <!--begin::Dropdown Menu-->
                         <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                             <ul class="nav flex-column nav-hover">
@@ -73,7 +68,7 @@
                     <!--end::Dropdown-->
                     <!--begin::Button-->
                     <a href="#" onclick="addGrade();"class="btn btn-primary font-weight-bolder">
-                    <i class="la la-plus"></i>Añadir un grado</a>
+                    <i class="la la-plus"></i>Añadir un encargado de circulo</a>
                     <!--end::Button-->
                 </div>
             </div>
@@ -92,30 +87,7 @@
                                                     @foreach($Models as $Model)
                                                     <tr>
                                                         <td>{{$Model['Id']}}</td>
-                                                        <td>{{$Model['Grade']}}</td>
-                                                        <td>{{$Model['Section']}}</td>
-                                                        <td>{{$Model['Lvl']}}</td>
-                                                        <td >
-                                                            @if($Model['Curses'])
-                                                                @php
-                                                                    $Courses=explode(";",$Model['Curses']);    
-                                                                @endphp
-                                                                <ul>
-                                                                    @foreach($Courses as $Course)
-                                                                        <li>{{$Course}}</li>    
-                                                                    @endforeach
-                                                                </ul>
-                                                            @else
-                                                            <p style="text-align: center;">  Ningun curso asignado a este grado</p>
-                                                               
-                                                            @endif
-
-                                                        </td>
-                                                        @if($Model['NoTeachers']!=0)
-                                                            <td><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" data-target="#kt_select_modal{{$Model['Id']}}">{{$Model['NoTeachers']}}</button></center></td>
-                                                        @else
-                                                            <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver voluntarios asignados" data-placement="left">{{$Model['NoTeachers']}}</button></center></td>
-                                                        @endif
+                                                        
                                                         <td nowrap="nowrap"></td>
                                                     </tr>
                                                     <!--begin::Modal-->
@@ -123,7 +95,7 @@
                                                         <div class="modal-dialog modal-lg" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title">Añadir cursos a {{$Model['Grade']}}  {{$Model['Lvl']}} {{$Model['Section']}}</h5>
+                                                                    <h5 class="modal-title">Añadir cursos a </h5>
                                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                         <i aria-hidden="true" class="ki ki-close"></i>
                                                                     </button>
@@ -157,7 +129,7 @@
                                                         <div class="modal-dialog modal-lg" role="document">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title">Editar  {{$Model['Grade']}}  {{$Model['Lvl']}} {{$Model['Section']}}</h5>
+                                                                    <h5 class="modal-title">Editar  </h5>
                                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                         <i aria-hidden="true" class="ki ki-close"></i>
                                                                     </button>

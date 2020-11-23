@@ -59,6 +59,10 @@ class User extends Authenticatable
                 'rol_Name' => $rols[0]['Name'],
                 'User_id' => $this->id,
                 'Username' =>$this->name,
+                'Email' =>$this->email,
+                'Name' =>$this->person()->Names." ".$this->person()->LastNames,
+                'Avatar' =>$this->Avatar,
+                'Gender' =>$this->person()->Gender,
             ]);
         }
     }

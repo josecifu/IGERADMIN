@@ -129,14 +129,8 @@ class Teacher extends Controller
     }
     public function dashboard()
     {
-        $buttons =[];
-        $button = [
-            "Name" => 'Info',
-            "Link" => '#',
-            "Type" => "btn1"
-        ];
-        array_push($buttons,$button);
-        return view('Administration/Teachers/dashboard',compact('buttons'));
+     
+        return view('Teacher/Home');
     }
     public function list() //Visualizcion tabla Voluntarios con usuario
     {
