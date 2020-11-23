@@ -31,6 +31,13 @@ Route::group([ 'prefix' => 'student'], function(){
 Route::group([ 'prefix' => 'teacher'], function(){
 	$route = "App\Http\Controllers";
 	Route::get('/home/dashboard',$route.'\Teacher@dashboard')->name('TeacherDashboard');
+	Route::get('/home/workspace',$route.'\Teacher@workspaceT')->name('Teacherworkspace');
+	Route::get('/score/list/{model}',$route.'\Teacher@score')->name('TeacherScore');
+	Route::get('/test/list/{model}',$route.'\Teacher@TestTeacher')->name('TeacherTests');
+	Route::get('/create/test/{model}',$route.'\Teacher@createExam')->name('TeacherCreateTest');
+	Route::get('/assign/question/test/{exam}/{model}',$route.'\Teacher@AssignQuestion')->name('TeacherAssignQuestions');
+	Route::get('/question/{model}/{no}', $route.'\Teacher@QuestionTest')->name('TeacherQuestionsTest');
+	Route::get('/detail/activity/{curso}/{model}',$route.'\Teacher@DetailActivity')->name('TeacherdetailActivity');
 });
 Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	

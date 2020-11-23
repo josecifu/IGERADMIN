@@ -389,7 +389,11 @@
                   type: "success"
                         }).then(function () {
                           var $url_path = '{!! url('/') !!}';
-                          window.location.href = $url_path+"/administration/teacher/test/"+e.id;
+						@if(session()->get('rol_Name')=="Voluntario")
+							window.location.href = $url_path+"/teacher/test/list/vol";
+						@else
+							window.location.href = $url_path+"/administration/teacher/test/"+e.id;
+						@endif
                         });
                      
                 },

@@ -248,7 +248,7 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([ 
             'Name' => 'Visualizar notas',
             'State' => '1',
-            'Url' => 'teacher/score/list',  //36
+            'Url' => 'teacher/score/list/vol',  //36
             'menu_id' => '35'          
         ]); 
         DB::table('menus')->insert([
@@ -267,7 +267,7 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([ 
             'Name' => 'Visualizar todos los examenes',
             'State' => '1',
-            'Url' => 'teacher/test/list',  //39
+            'Url' => 'teacher/test/list/vol',  //39
             'menu_id' => '37'          
         ]); 
     }

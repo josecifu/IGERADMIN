@@ -60,6 +60,73 @@ class Teacher extends Controller
         array_push($buttons,$button);
         return view('Administration/Teachers/spaceWork',compact('buttons'));
     }
+    public function workspaceT(Request $request)
+    {
+        $id = user::find($request->session()->get('User_id'));
+        $assignC = user::find($request->session()->get('User_id'))->CoursesTeacher();
+        $info = [];
+        $curse = "";
+        foreach ($assignC as $value) {
+            $curse = course::find($value->Course_id);
+            $grade = grade::find($curse->Grade_id)->Period();
+            $students = Assign_student_grade::where([['Grade_id',$curse->Grade_id],['State','Active']])->get();
+            $tests = Asign_test_course::where('Teacher_id',$value->id)->get();
+            $info = [
+                "curso" => $curse->Name,
+                "Period" => $grade->Name,
+                "Students" => count($students),
+                "Tests" => count($tests),
+            ];
+        }
+        $teacher = Person::find($id->Person_id);
+        return view('/Teacher/spaceWork',compact('info','teacher'));
+    }
+    public function TeacherTests(Request $request)
+    {  
+        $id = user::find($request->session()->get('User_id'));
+        $vol = Person::find($id->Person_id);
+        $Nombre = $vol->Names.' '. $vol->LastNames;
+        $assign = user::find($request->session()->get('User_id'))->CoursesTeacher();
+        $course = "";
+        foreach ($assign as $value) {
+            $course = course::find($value->Course_id);
+        }
+        $Titles = [];
+        $Models = [];
+        $Activities = Assign_activity::where('Course_id',$course->id)->get();
+        foreach($Activities as $Activity)
+        {
+            $act = [
+                "Name" =>$Activity->Name,
+                "No" =>count($Activity->Tests()),
+                "Test" => $Activity->Tests(),
+            ];
+            foreach($Activity->Tests() as $Test)
+            {
+                $model =[
+                    "Id" => $Test->id,
+                    "NoQuestions" => $Test->NoQuestions(),
+                ];
+                array_push($Models,$model);
+            }
+            array_push($Titles,$act);
+        }
+        $buttons =[];
+        $button = [
+            "Name" => 'Crear Actividad',
+            "Link" => 'create()',
+            "Type" => "addFunction1"
+        ];
+        array_push($buttons,$button);
+        $button = [
+            "Name" => 'Crear Examen',
+            "Link" => '/administration/teacher/create/test/'."$course->id",
+            "Type" => "add"
+        ];
+        array_push($buttons,$button);
+        $grado = grade::find($course->Grade_id)->GradeName();
+        return view('/Teacher/ViewTests',compact('Titles','buttons','Nombre','course','grado','Models','id'));
+    }
     public function dashboard()
     {
         $buttons =[];
@@ -284,21 +351,33 @@ class Teacher extends Controller
         Assign_user_rol::where('user_id',$id)->update($dataU);
         return redirect()->route('ListTeacher');
     }
-    public function score($id)      //VISUALIZACIÓN DE NOTAS DE LAS UNIDADES
+    public function score(Request $request, $id)      //VISUALIZACIÓN DE NOTAS DE LAS UNIDADES
     {
         $Models = [];
-        $course = course::find($id);
-        $assignV = Asign_teacher_course::where('Course_id',$id)->first();
-        if(isset($assignV)){
-            $userV = user::find($assignV->user_id);
-            $vol = Person::find($userV->id);
-        }else{
-            return redirect('/administration/teacher/list')->withErrors(['msg', 'No se ha asignado un voluntario al curso']);
+        if ($id=='vol') {
+            $teacher = $request->session()->get('User_id');
+            $assignV = Asign_teacher_course::where('user_id',$teacher)->first();
+            if(isset($assignV)){
+                $course = course::find($assignV->Course_id);
+                $userV = user::find($assignV->user_id);
+                $vol = Person::find($userV->id);
+            }else{
+                return redirect('/teacher/home/dashboard')->withErrors(['msg', 'No tiene cursos asignados']);
+            }
+        } else {
+            $course = course::find($id);
+            $assignV = Asign_teacher_course::where('Course_id',$id)->first();
+            if(isset($assignV)){
+                $userV = user::find($assignV->user_id);
+                $vol = Person::find($userV->id);
+            }else{
+                return redirect('/administration/teacher/list')->withErrors(['msg', 'No se ha asignado un voluntario al curso']);
+            }
         }
         $Titles = [];
         $Models = [];
         $Modal = [];
-        $Activities = Assign_activity::where([['Course_id',$id],['State','Active']])->get();
+        $Activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
         $gradeStudents = grade::find($course->Grade_id)->Students();
         foreach($Activities as $Activity)
         {
@@ -354,14 +433,6 @@ class Teacher extends Controller
         array_push($buttons,$button);
         $Nombre = $vol->Names.' '.$vol->LastNames;
         $grado = grade::find($course->Grade_id)->GradeName();
-        // $activity = Assign_activity::where('Course_id',$id)->get();
-        // $actividades = [];
-        // foreach ($activity as $value) {
-        //     $data=[
-        //         "Nombre" => $value->Name
-        //     ];
-        //     array_push($actividades,$data);
-        // }
         return view('Administration/Teachers/listadoNotas',compact('buttons','Modal','Titles','Models','Nombre','course','grado'));
     }
 
@@ -369,18 +440,47 @@ class Teacher extends Controller
 
     public function TestTeacher(Request $request,$id)   //VISTA DE EXAMENES DE UN CURSO
     {
-        $assign = Asign_teacher_course::where('Course_id',$id)->first();
-        if(isset($assign->user_id)){
-            $userV = user::find($assign->user_id);
-            $vol = Person::find($userV->Person_id);
-            $Nombre = $vol->Names .' '.$vol->LastNames;
-        }else{
-            return redirect('/administration/teacher/list')->withErrors(['msg', 'The Message']);
+        $buttons =[];
+        if ($id=='vol') {
+            $teacher = $request->session()->get('User_id');
+            $assignV = Asign_teacher_course::where([['user_id',$teacher],['State','Active']])->first();
+            if(isset($assignV)){
+                $course = course::find($assignV->Course_id);
+                $vol = Person::find($teacher);
+                $button = [
+                    "Name" => 'Crear Examen',
+                    "Link" => 'teacher/create/test/'."$course->id",
+                    "Type" => "add"
+                ];
+                array_push($buttons,$button);
+            }else{
+                return redirect('/teacher/home/dashboard')->withErrors(['msg', 'No tiene cursos asignados']);
+            }
+        } else{
+            $assign = Asign_teacher_course::where([['Course_id',$id],['State','Active']])->first();
+            $button = [
+                "Name" => 'Listado Voluntarios',
+                "Link" => 'administration/teacher/list',
+                "Type" => "btn1"
+            ];
+            array_push($buttons,$button);
+            $button = [
+                "Name" => 'Crear Examen',
+                "Link" => 'administration/teacher/create/test/'."$id",
+                "Type" => "add"
+            ];
+            array_push($buttons,$button);
+            if(isset($assign->user_id)){
+                $userV = user::find($assign->user_id);
+                $vol = Person::find($userV->Person_id);
+                $course = course::find($id);
+            }else{
+                return redirect('/administration/teacher/list')->withErrors(['msg', 'The Message']);
+            }
         }
-        $course = course::find($id);
         $Titles = [];
         $Models = [];
-        $Activities = Assign_activity::where('Course_id',$id)->get();
+        $Activities = Assign_activity::where('Course_id',$course->id)->get();
         foreach($Activities as $Activity)
         {
             $act = [
@@ -398,22 +498,11 @@ class Teacher extends Controller
             }
             array_push($Titles,$act);
         }
-        $buttons =[];
-        $button = [
-            "Name" => 'Listado Voluntarios',
-            "Link" => 'administration/teacher/list',
-            "Type" => "btn1"
-        ];
-        array_push($buttons,$button);
-        $button = [
-            "Name" => 'Crear Examen',
-            "Link" => 'administration/teacher/create/test/'."$id",
-            "Type" => "add"
-        ];
-        array_push($buttons,$button);
-        $grado = grade::find($course->Grade_id)->GradeName();
         
-        return view('Administration/Teachers/ViewTests',compact('Titles','buttons','Nombre','course','grado','Models','id'));
+        $grado = grade::find($course->Grade_id)->GradeName();
+        $Nombre = $vol->Names .' '.$vol->LastNames;
+        
+        return view('Administration/Teachers/ViewTests',compact('Titles','buttons','Nombre','course','grado','Models'));
     }
     public function QuestionTest($id,$curso)   #VER PREGUNTAS DE UN EXAMEN
     {
@@ -424,23 +513,32 @@ class Teacher extends Controller
 
     public function createExam($id)
     {
-        $buttons =[];
-        $button = [
-            "Name" => 'Listado Voluntarios',
-            "Link" => 'administration/teacher/list',
-            "Type" => "add"
-        ];  
-        array_push($buttons,$button);
+        // $buttons =[];
+        // $button = [
+        //     "Name" => 'Listado Voluntarios',
+        //     "Link" => 'administration/teacher/list',
+        //     "Type" => "add"
+        // ];  
+        // array_push($buttons,$button);
         $actividad = Assign_activity::where('Course_id',$id)->where('State','Active')->get();
-        $actividades=[];
-        foreach ($actividad as $value) {
-            $data = [
-                'id' => $value->id,
-                "Nombre" => $value->Name,
-            ];
-            array_push($actividades,$data);
+        if ($actividad->isempty()) {
+            if(session()->get('rol_Name')=="Voluntario"){
+                return redirect('/teacher/score/list/vol')->withErrors(['msg', 'No hay actividades creadas']);
+            }else{
+                return redirect('/administration/teacher/score/'.$id)->withErrors(['msg', 'No hay actividades creadas']);
+            }
+        } else {
+            $actividades=[];
+            foreach ($actividad as $value) {
+                $data = [
+                    'id' => $value->id,
+                    "Nombre" => $value->Name,
+                ];
+                array_push($actividades,$data);
+            }
+            return view('Administration/Teachers/CreateTest',compact('id','actividades'));
         }
-        return view('Administration/Teachers/CreateTest',compact('buttons','id','actividades'));
+        
     }
     public function saveExam(Request $request)
     {
@@ -518,7 +616,6 @@ class Teacher extends Controller
     }
     public function SaveAssignQuestion(Request $request)
     {
-        
         $data = $request->data;
         $test = $request->ID;
         $assignTest = Asign_test_course::where('Test_id',$test)->first();

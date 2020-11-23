@@ -15,8 +15,13 @@
 				<div class="content flex-column-fluid" id="kt_content">
 						<div class="card-header">
 							<div class="card-toolbar">
+							@if(session()->get('rol_Name')=="Voluntario")
+								<a href="{{url('/teacher/test/list/vol')}}" class="btn btn-danger font-weight-bolder mr-2">
+								<i class="ki ki-long-arrow-back icon-sm"></i>Cancelar</a>
+							@else
 								<a href="{{url('administration/teacher/test/'.$id)}}" class="btn btn-danger font-weight-bolder mr-2">
 								<i class="ki ki-long-arrow-back icon-sm"></i>Cancelar</a>
+							@endif
 							</div>
 						</div>
 					<div class="card card-custom">
@@ -121,9 +126,6 @@
 											<!--end::Wizard Step 1-->
 											<!--begin::Wizard Actions-->
 											<div class="d-flex justify-content-between border-top mt-5 pt-10">
-												<div class="mr-2">
-													<button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev">Anterior</button>
-												</div>
 												<div>
 													<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Crear Examen</button>
 													<button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>*
@@ -359,11 +361,19 @@ var KTWizard1 = function () {
                   type: "success"
                         }).then(function () {
                           var $url_path = '{!! url('/') !!}';
-						  if(e.id){
-							window.location.href = $url_path+"/administration/teacher/assign/question/test/"+e.id+"/"+Preguntas;
-						  }else{
-							window.location.href = $url_path+"/administration/teacher/test/"+{{$id}};
-						  }
+						  	@if(session()->get('rol_Name')=="Voluntario")
+								if(e.id){
+									window.location.href = $url_path+"/teacher/assign/question/test/"+e.id+"/"+Preguntas;
+								}else{
+									window.location.href = $url_path+"/teacher/test/list/vol";
+								}
+							@else
+								if(e.id){
+									window.location.href = $url_path+"/administration/teacher/assign/question/test/"+e.id+"/"+Preguntas;
+								}else{
+									window.location.href = $url_path+"/administration/teacher/test/"+{{$id}};
+								}
+							@endif
                         });
                      
                 },
