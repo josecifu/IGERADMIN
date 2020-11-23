@@ -91,7 +91,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/delete/{model}', $route.'\Teacher@delete')->name('DeleteTeacher');
 		Route::get('/search',$route.'\Teacher@seach')->name('SceachTeacher');
 		Route::get('/workspace',$route.'\Teacher@workspace')->name('WorkspaceTeacher');
-		Route::get('/statistics',$route.'\Teacher@statistics')->name('Statistics');
+		Route::get('/statistics',$route.'\Teacher@statistics')->name('StatisticsTeacher');
 		Route::post('/load/courses', $route.'\Teacher@LoadCourses')->name('LoadCoursesTeacher');
 		Route::get('/desactive', $route.'\Teacher@Desactive')->name('Desactive');
 		Route::get('/activate/{model}', $route.'\Teacher@Activate')->name('ActivateTeacher');
