@@ -82,7 +82,8 @@
                                 @endforeach
                             </tr>
                             <tr>
-                                <th>Nombre de los estudiantes</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
                                 @foreach($titles as $title)
                                     @foreach($title['test'] as $t)
                                     <th>
@@ -95,7 +96,8 @@
                         <tbody>
                                 @foreach($models as $model)
                                 <tr>
-                                    <td>{{$model['student']}}</td>
+                                    <td>{{$model['name']}}</td>
+                                    <td>{{$model['lastname']}}</td>
                                     @foreach($model['tests'] as $test)
                                     <td>
                                         <center>

@@ -22,13 +22,67 @@ use App\Models\Asign_teacher_course;
 
 class Student extends Controller
 {
+
+    public function dashboard()
+    {
+        return view('Student/home');
+    }
+
+    public function test_questions($id)
+    {
+        $models = [];
+        $titles = [];
+        $buttons=[];
+        $button = [
+            "Name" => 'Regresar al listado de examenes',
+            "Link" => 'student/test/view',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $test = Test::find($id);
+        return view('Student/test_form',compact('titles','buttons','test'));
+    }
+
+    public function save_answer(Request $request)
+    {
+        $id = $request->session()->get('User_id');
+        $data = $request->data[0];
+        $student = $data['Estudiante'];
+        $question = $data['Pregunta'];
+        $score = $data['Punteo'];
+        $answer = $data['Respuesta'];
+        try
+        {
+            DB::beginTransaction();
+            $reply = new Asign_answer_test_student;
+            $reply->Studen_id = $student;
+            $reply->Question_id = $question;
+            $reply->Score = $score;
+            $reply->Answers = $answer;
+            $reply->State = "Active";
+            $reply->save();
+            DB::commit();
+        }
+        catch (Exception $e)
+        {
+            DB::rollBack();
+        }
+        return response()->json(["Accion exitosa"]);
+    }
+
+
+
+
+
+
+
+
     //mostrar notas por semetres    ->  visualizacion de notas por curso
     public function course_scores($id)
     {
         $models = [];
         $student = [];
         $titles = [
-            'Id',
             'Curso',
             'Unidad I',
             'Unidad II',
@@ -82,10 +136,6 @@ class Student extends Controller
         return view('Administration/Student/course_scores',compact('models','titles','student'));
     }
 
-    public function dashboard()
-    {
-        return view('Student/home');
-    }
 
 
 
@@ -105,7 +155,7 @@ class Student extends Controller
         $models = [];
         $assign = Assign_student_grade::where('user_id',$id)->first();
         $grade = Assign_student_grade::find($assign->id)->Grade();
-        $courses = $grade->Courses();        
+        $courses = $grade->Courses();
         foreach ($courses as $course)
         {
             $query = [
@@ -118,61 +168,53 @@ class Student extends Controller
         return view('Student/test_list',compact('models'));
     }
 
-    public function test_questions($id)
-    {
-        $models = [];
-        $titles = [];
-        $Test = Test::find($id);
-        $buttons=[];
-        $button = [
-            "Name" => 'Regresar al listado de examenes',
-            "Link" => 'student/test/view',
-            "Type" => "btn1"
-        ];
-        array_push($buttons,$button);
-        return view('Student/test_form',compact('titles','buttons','Test'));
-    }
-
-    public function save_answer(Request $request)
+    public function score_list(Request $request)
     {
         $id = $request->session()->get('User_id');
-        $data = $request->data[0];
-        $student = $data['Estudiante'];
-        $question = $data['Pregunta'];
-        $score = $data['Punteo'];
-        $answer = $data['Respuesta'];
-        try
+        $titles = [];
+        $models = [];
+        $assign = Assign_student_grade::where('user_id',$id)->first();
+        $grade = Assign_student_grade::find($assign->id)->Grade();
+        $courses = $grade->Courses();
+        foreach ($courses as $course)
         {
-            DB::beginTransaction();
-            $reply = new Asign_answer_test_student;
-            $reply->Studen_id = $student;
-            $reply->Question_id = $question;
-            $reply->Score = $score;
-            $reply->Answers = $answer;
-            $reply->State = "Active";
-            $reply->save();
-            DB::commit();
+            $scores = [];
+            $notes = Note::where('Course_id',$course->id)->get();
+            foreach($notes as $activity)
+            {
+                $values = [
+                    "activity" => $activity->Activity
+                ];
+                array_push($titles,$values);
+            }
+            foreach($notes as $note)
+            {
+                $data = [
+                    "note" => $note->Score
+                ];
+                array_push($scores,$data);
+            }
+            $query = [
+                'course' => $course->Name,
+                'scores' => $scores
+            ];
+            array_push($models,$query);
         }
-        catch (Exception $e)
-        {
-            DB::rollBack();
-        }
-        return response()->json(["Accion exitosa"]);
+        //dd($titles);
+        return view('Student/score_list',compact('models','titles'));
     }
 
-    public function score_list()
-    {}
-
-
-
-
-
+    public function all_tests(Request $request)
+    {
+        $id = $request->session()->get('User_id');
+    }
 
 
 
                             #funciones terminadas
 /*-------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------*/
+
     #FUNCIONES DE ADMINISTRACION
     public function list()
     {
@@ -546,7 +588,7 @@ class Student extends Controller
                 foreach($activity->Tests() as $test)
                 {
                     $values =[
-                        "Id" => $Test->id,
+                        "Id" => $test->id,
                         "NoQuestions" => $test->NoQuestions(),
                     ];
                     array_push($tests,$values);
@@ -555,7 +597,8 @@ class Student extends Controller
             $query = [
                 "id" =>$student->person()->id,
                 "assign" =>$student->Asssign_Grade()->id,
-                "student" =>$student->person()->Names." ".$student->person()->LastNames,
+                "name" =>$student->person()->Names,
+                'lastname' => $student->person()->LastNames,
                 "tests"=>$tests
             ];
             array_push($models,$query);
@@ -564,13 +607,10 @@ class Student extends Controller
         return view('Administration/Student/test_list',compact('models','titles','course','grado'));
     }
 
-    //boton regresar
-    //ver la pregunta en un modal
     public function test($id,$assign)
     {
         $models = [];
         $titles = [
-            'Id',
             'Preguntas',
             'Tipo de Pregunta',
             'Respuestas del estudiante',
@@ -593,7 +633,7 @@ class Student extends Controller
             $answer = Asign_answer_test_student::where(['Studen_id'=>$assign,'Question_id'=>$question->id])->first();
             $query = [
                 "id" => $question->id,
-                "question" => $question->Content,
+                "question" => $question->Title,
                 "type" => $question->Type,
                 "answer" => $answer->Answers ?? 'No contestada',
                 "correct" => $question->CorrectAnswers  ?? 'No aplica',
@@ -608,7 +648,6 @@ class Student extends Controller
     {
         $models = [];
         $titles = [
-            'Id',
             'Nombres',
             'Apellidos',
             'Última conexión',
@@ -620,8 +659,10 @@ class Student extends Controller
             $student = Person::find($user->Person_id);
             $query = [
                 'id' => $student->id,
-                'student' => $student->Names . ' ' . $student->LastNames,
-                'assign' => $user->Asssign_Grade()->id
+                'name' => $student->Names,
+                'lastname' => $student->LastNames,
+                'assign' => $user->Asssign_Grade()->id,
+                'conexion' => '17/11/2020'
             ];
             array_push($models,$query);
         }
@@ -631,13 +672,15 @@ class Student extends Controller
 /*-------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------*/
     #FUNCIONES DE ESTUDIANTE
-    public function edit_profile($id)
+    public function edit_profile(Request $request)
     {
+        $id = $request->session()->get('User_id');
         $student = Person::find($id);
         $user = User::where('Person_id',$id)->first();
         $models = [
             'Usuario' => $user->name,
-            'Email' => $user->email
+            'Email' => $user->email,
+            'Contraseña' => $user->password
         ];
         return view('Student/edit_profile',compact('student','models'));
     }
@@ -647,12 +690,13 @@ class Student extends Controller
         $data = $request->data[0];
         $username = $data['Usuario'];
         $email = $data['Email'];
-        $password = $data['Contraseña'];
-        $phone = $data['Telefono'];
+        //$password = $data['Contraseña'];
         $personid = $data['Persona'];
+        $phone = $data['Telefono'];
         $data_user = array(
             'name' => $username,
-            'email' => $email
+            'email' => $email,
+            //'password' => $password
         );
         User::where('Person_id', $personid)->update($data_user);
         $data_student = array(
@@ -660,10 +704,10 @@ class Student extends Controller
         );
         Person::where('id',$personid)->update($data_student);
         $log = new logs;
-        $log->Table = "peoples and users";
+        $log->Table = "Estudiante";
         $log->User_ID = $id;
         $log->Description = "Se actualizaron los datos del estudiante: ".$names." ".$lastnames;
-        $log->Type = "Update";
+        $log->Type = "Actualizar";
         $log->save();
         return response()->json(["Accion completada"]);
     }

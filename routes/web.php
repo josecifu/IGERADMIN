@@ -28,6 +28,8 @@ Route::group([ 'prefix' => 'student'], function(){
 	Route::get('/test/view',$route.'\Student@student_test_list')->name('TestStudentView');
 	Route::get('/test/view/questions/{model}',$route.'\Student@test_questions')->name('TestQuestions');
 	Route::get('/score/list',$route.'\Student@score_list')->name('ScoreList');
+	Route::get('/profile/edit/{model}',$route.'\Student@edit_profile')->name('EditData');
+	Route::post('/profile/update', $route.'\Student@update_profile')->name('UpdateData');
 });
 Route::group([ 'prefix' => 'teacher'], function(){
 	$route = "App\Http\Controllers";

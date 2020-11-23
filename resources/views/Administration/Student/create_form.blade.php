@@ -15,22 +15,7 @@
         <div class="content flex-column-fluid" id="kt_content">
 			<div class="card-header">
                 <div class="card-toolbar">
-                	&nbsp;&nbsp;&nbsp;&nbsp;
-                	&nbsp;&nbsp;&nbsp;&nbsp;
-                	&nbsp;&nbsp;&nbsp;&nbsp;
-                	&nbsp;&nbsp;&nbsp;&nbsp;
-                	&nbsp;&nbsp;&nbsp;&nbsp;
-                	&nbsp;&nbsp;&nbsp;&nbsp;
-                	&nbsp;&nbsp;&nbsp;&nbsp;
-                	&nbsp;&nbsp;&nbsp;&nbsp;
-                	&nbsp;&nbsp;&nbsp;&nbsp;
-                	&nbsp;&nbsp;&nbsp;&nbsp;
-                	&nbsp;&nbsp;&nbsp;&nbsp;
-                	&nbsp;&nbsp;&nbsp;&nbsp;
-                	&nbsp;&nbsp;&nbsp;&nbsp;
-                	&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="{{url('administration/student/list')}}" class="btn btn-danger font-weight-bolder mr-2">
-                    <i class="ki ki-long-arrow-back icon-sm"></i>Cancelar</a>
+                    <a href="{{url('administration/student/list')}}" class="btn btn-danger font-weight-bolder mr-2">Cancelar</a>
                 </div>
         	</div>
 			<div class="card card-custom">

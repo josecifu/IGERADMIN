@@ -34,11 +34,9 @@
                         </table>
                     </div>
                     <div class="card-toolbar">
-                        <div class="card-header">
-                            <div class="card-toolbar">
-                                <a href="{{url('/administration/student/list/test/1')}}" class="btn btn-danger font-weight-bolder mr-2">
-                                <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
-                            </div>
+                        <div class="card-toolbar">
+                            <a href="{{url('administration/student/list/test/1')}}" class="btn btn-danger font-weight-bolder mr-2">
+                            <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
                         </div>
                         <!--begin::Dropdown-->
                         <div class="dropdown dropdown-inline mr-2">
@@ -98,7 +96,6 @@
                         <tbody>
                             @foreach($models as $model)
                             <tr>
-                                <td>{{$model['id']}}</td>
                                 <td>{{$model['question']}}</td>
                                 <td>{{$model['type']}}</td>
                                 <td>{{$model['answer']}}</td>

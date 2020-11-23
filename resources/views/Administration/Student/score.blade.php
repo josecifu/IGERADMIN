@@ -74,19 +74,19 @@
                     <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
                             <tr>
-                                @foreach($titles as $t)
-                                    <th>{{ $t }}</th>
+                                @foreach($titles as $title)
+                                    <th>{{$title}}</th>
                                 @endforeach
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($models as $m)
+                            @foreach($models as $model)
                                 <tr>
-                                    <td>{{$m['id']}}</td>
-                                    <td>{{$m['student']}}</td>
-                                    <td>11/11/2020</td>
+                                    <td>{{$model['name']}}</td>
+                                    <td>{{$model['lastname']}}</td>
+                                    <td>{{$model['conexion']}}</td>
                                     <td>
-                                        <a href="{{url('/administration/student/score/course/'.$m['assign'])}}">
+                                        <a href="{{url('/administration/student/score/course/'.$model['assign'])}}">
                                             <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver notas</button>
                                         </a>
                                     </td>

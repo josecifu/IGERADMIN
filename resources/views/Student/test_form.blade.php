@@ -17,7 +17,7 @@
                 <div class="alert-icon">
                    
                 </div>
-                <div class="alert-text"><center><h1>{{$Test->Title}}</h1><h2>Fecha de finalización: {{$Test->EndDate}}</h2></center></div>
+                <div class="alert-text"><center><h1>{{$test->Title}}</h1><h2>Fecha de finalización: {{$test->EndDate}}</h2></center></div>
             </div>
             <div class="card card-custom">
                 <div class="card-body p-0">
@@ -27,7 +27,7 @@
                         <div class="wizard-nav">
                             <div class="wizard-steps px-8 py-8 px-lg-15 py-lg-3">
                                
-                               @foreach($Test->Questions() as $key => $Question)
+                               @foreach($test->Questions() as $key => $Question)
                                 <!--begin::Wizard Step 1 Nav-->
                                 <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
                                     <div class="wizard-label">
@@ -48,7 +48,7 @@
                             <div class="col-xl-12 col-xxl-7">
                                 <!--begin: Wizard Form-->
                                 <form class="form" id="kt_form">
-                                    @foreach($Test->Questions() as $key => $Question)
+                                    @foreach($test->Questions() as $key => $Question)
                                     <!--begin: Wizard Step 1-->
                                     <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
                                         <h3 class="mb-10 font-weight-bold text-dark">Pregunta: {!! $Question->Title !!} <br> Tipo: @if($Question->Type=="V/F") Verdadero ó falso @else{{$Question->Type}}@endif <br>Punteo: {!! $Question->Score !!}</h3>
