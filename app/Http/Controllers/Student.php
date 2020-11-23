@@ -70,7 +70,41 @@ class Student extends Controller
         return response()->json(["Accion exitosa"]);
     }
 
-
+    public function score_list(Request $request)
+    {
+        $id = $request->session()->get('User_id');
+        $titles = [];
+        $models = [];
+        $assign = Assign_student_grade::where('user_id',$id)->first();
+        $grade = Assign_student_grade::find($assign->id)->Grade();
+        $courses = $grade->Courses();
+        foreach ($courses as $course)
+        {
+            $scores = [];
+            $notes = Note::where('Course_id',$course->id)->get();
+            foreach($notes as $activity)
+            {
+                $values = [
+                    "activity" => $activity->Activity
+                ];
+                array_push($titles,$values);
+            }
+            foreach($notes as $note)
+            {
+                $data = [
+                    "note" => $note->Score
+                ];
+                array_push($scores,$data);
+            }
+            $query = [
+                'course' => $course->Name,
+                'scores' => $scores
+            ];
+            array_push($models,$query);
+        }
+        //dd($titles);
+        return view('Student/score_list',compact('models','titles'));
+    }
 
 
 
@@ -83,6 +117,7 @@ class Student extends Controller
         $models = [];
         $student = [];
         $titles = [
+            'Id',
             'Curso',
             'Unidad I',
             'Unidad II',
@@ -144,11 +179,6 @@ class Student extends Controller
 
 
 
-
-
-
-
-
     public function student_test_list(Request $request)
     {
         $id = $request->session()->get('User_id');
@@ -168,48 +198,10 @@ class Student extends Controller
         return view('Student/test_list',compact('models'));
     }
 
-    public function score_list(Request $request)
-    {
-        $id = $request->session()->get('User_id');
-        $titles = [];
-        $models = [];
-        $assign = Assign_student_grade::where('user_id',$id)->first();
-        $grade = Assign_student_grade::find($assign->id)->Grade();
-        $courses = $grade->Courses();
-        foreach ($courses as $course)
-        {
-            $scores = [];
-            $notes = Note::where('Course_id',$course->id)->get();
-            foreach($notes as $activity)
-            {
-                $values = [
-                    "activity" => $activity->Activity
-                ];
-                array_push($titles,$values);
-            }
-            foreach($notes as $note)
-            {
-                $data = [
-                    "note" => $note->Score
-                ];
-                array_push($scores,$data);
-            }
-            $query = [
-                'course' => $course->Name,
-                'scores' => $scores
-            ];
-            array_push($models,$query);
-        }
-        //dd($titles);
-        return view('Student/score_list',compact('models','titles'));
-    }
-
     public function all_tests(Request $request)
     {
         $id = $request->session()->get('User_id');
     }
-
-
 
                             #funciones terminadas
 /*-------------------------------------------------------------------------------------------*/
@@ -303,7 +295,6 @@ class Student extends Controller
             'No. Teléfono',
             'Usuario',
             'Correo electrónico',
-            'Grado',
             'Última conexión',
             'Acciones'
         ];
@@ -569,7 +560,6 @@ class Student extends Controller
     {
         $titles = [];
         $models = [];
-        $course = course::find($id);
         $activities = Assign_activity::where('Course_id',$id)->get();
         foreach($activities as $activity)
         {
@@ -580,6 +570,7 @@ class Student extends Controller
             ];
             array_push($titles,$data);
         }
+        $course = course::find($id);
         foreach($course->Grade()->Students() as $student)
         {
             $tests = [];
@@ -671,7 +662,6 @@ class Student extends Controller
     }
 /*-------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------*/
-    #FUNCIONES DE ESTUDIANTE
     public function edit_profile(Request $request)
     {
         $id = $request->session()->get('User_id');
@@ -711,7 +701,6 @@ class Student extends Controller
         $log->save();
         return response()->json(["Accion completada"]);
     }
-    //////////////////////////////////////////
     public function view_calendar(){}
     public function statistics(){}
 }

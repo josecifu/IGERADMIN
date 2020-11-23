@@ -109,7 +109,7 @@ Principal
                                     <!--end::Svg Icon-->
                                 </span>
 
-                                <a href="{{url('student/profile/edit/4')}}" class="text-warning font-weight-bold font-size-h6 mt-2">Actualizar informacion</a>
+                                <a href="#" class="text-warning font-weight-bold font-size-h6 mt-2">Actualizar informacion</a>
                             </div>
                             </a>
                         </div>
