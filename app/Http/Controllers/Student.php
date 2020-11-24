@@ -201,7 +201,14 @@ class Student extends Controller
     public function all_tests(Request $request)
     {
         $id = $request->session()->get('User_id');
+        return view('Student/tests');
     }
+
+
+
+
+
+
 
                             #funciones terminadas
 /*-------------------------------------------------------------------------------------------*/
@@ -662,45 +669,6 @@ class Student extends Controller
     }
 /*-------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------*/
-    public function edit_profile(Request $request)
-    {
-        $id = $request->session()->get('User_id');
-        $student = Person::find($id);
-        $user = User::where('Person_id',$id)->first();
-        $models = [
-            'Usuario' => $user->name,
-            'Email' => $user->email,
-            'Contraseña' => $user->password
-        ];
-        return view('Student/edit_profile',compact('student','models'));
-    }
-    public function update_profile(Request $request)
-    {
-        $id = $request->session()->get('User_id');
-        $data = $request->data[0];
-        $username = $data['Usuario'];
-        $email = $data['Email'];
-        //$password = $data['Contraseña'];
-        $personid = $data['Persona'];
-        $phone = $data['Telefono'];
-        $data_user = array(
-            'name' => $username,
-            'email' => $email,
-            //'password' => $password
-        );
-        User::where('Person_id', $personid)->update($data_user);
-        $data_student = array(
-            'Phone' => $phone
-        );
-        Person::where('id',$personid)->update($data_student);
-        $log = new logs;
-        $log->Table = "Estudiante";
-        $log->User_ID = $id;
-        $log->Description = "Se actualizaron los datos del estudiante: ".$names." ".$lastnames;
-        $log->Type = "Actualizar";
-        $log->save();
-        return response()->json(["Accion completada"]);
-    }
     public function view_calendar(){}
     public function statistics(){}
 }
