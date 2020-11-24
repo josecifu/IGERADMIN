@@ -334,7 +334,7 @@
                 @if(session()->get('rol_Name')=="Voluntario")
                     var $url_path = '{!! url('/') !!}';
                     window.location.href = $url_path+"/teacher/detail/activity/"+{{$course->id}}+"/"+id;   
-                @else {
+                @else 
                     var $url_path = '{!! url('/') !!}';
                     window.location.href = $url_path+"/administration/teacher/detail/activity/"+{{$course->id}}+"/"+id;   
                 @endif

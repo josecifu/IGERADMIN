@@ -24,7 +24,7 @@
                             <div class="d-flex align-items-center">
                                 <!--begin::Pic-->
                                 <div class="flex-shrink-0 mr-4 symbol symbol-60 symbol-circle">
-                                    <img src="assets/media/project-logos/3.png" alt="image" />
+                                    
                                 </div>
                                 <!--end::Pic-->
                                 <!--begin::Info-->

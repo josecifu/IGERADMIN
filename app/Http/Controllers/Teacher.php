@@ -828,6 +828,7 @@ class Teacher extends Controller
             $course = [
                 "Id" =>$value->id,
                 "Name" =>$value->Name,
+                "Grade"=>$value->Grade()->Period()->Name." - ".$value->Grade()->GradeName()
             ];
             array_push($courses,$course);
          } 

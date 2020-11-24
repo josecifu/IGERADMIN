@@ -27,7 +27,8 @@
           </div>
         </div>
         <div class="card-body">
-          <div class="row">@foreach($models as $model)
+          <div class="row">
+            @foreach($models as $model)
             <div class="col-lg-6 draggable-zone float-left">
               <!--begin::Card-->
               <div class="card card-custom gutter-b draggable">

@@ -201,7 +201,33 @@ class Student extends Controller
     public function all_tests(Request $request)
     {
         $id = $request->session()->get('User_id');
-        return view('Student/tests');
+        $models = [];
+        $assign = Assign_student_grade::where('user_id',$id)->first();
+        $courses = $assign->Grade()->Courses();
+        foreach($courses as $course)
+        {
+          
+            if($course->Tests())
+            {
+                foreach($course->Tests() as $test)
+                {
+                    $model =[
+                        "Id"=>$test->id,
+                        "Course"=>$course->Name,
+                        "Name"=>$test->Title,
+                        "Startdate"=>$test->StartDate,
+                        "Enddate"=>$test->EndDate,
+                        "Score"=>$test->Score,
+                        "Activity" => $test->Activity()->Name,
+                        "Teacher"=> $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames
+                    ];
+                    array_push($models,$model);
+                }
+                
+            }     
+        }
+        dd($models);
+        return view('Student/tests',compact('models'));
     }
 
 
