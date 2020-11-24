@@ -87,22 +87,7 @@
 												<h1>Detalle Persona:</h1>
 												<div class="my-5">
 													<div class="form-group row">
-														<div class="card-body">
-															<div class="row">
-																<div class="col-lg-12">
-																	<div class="card card-custom card-stretch gutter-b example example-compact">
-																		<button type="button" onclick="agregar();">Agregar</button>
-																		<div class="card-body">
-																			<select id="kt_dual_listbox_1" class="dual-listbox" multiple="multiple">
-																				<option>1</option>
-																			</select>
-																			
-																		</div>
-																	</div>
-																</div>
-																
-															</div>
-														</div>
+													
 														<label class="col-3">Nombre</label>
 														<div class="col-9">
 															<div class="input-group input-group-solid">
@@ -228,15 +213,7 @@
 															</select>
 														</div>
 													</div>
-													<div class="form-group row">
-														<label class="col-form-label text-right col-lg-3 col-sm-12">Curso</label>
-														<div class="col-lg-9 col-md-9 col-sm-12">
-															<select class="form-control" id="Curso" name="Curso" multiple="multiple">
-																<optgroup Label="Cursos">
-																</optgroup>
-															</select>
-														</div>
-													</div>		
+													
 													<!--begin::Card-->
 								<div class="card card-custom gutter-b">
 									<div class="card-header">
@@ -250,7 +227,7 @@
 												<div class="card card-custom card-stretch gutter-b example example-compact">
 													
 													<div class="card-body">
-														<select id="kt_dual_listbox_2" class="dual-listbox" multiple="multiple">
+														<select id="kt_dual_listbox_1" class="dual-listbox" multiple="multiple">
 															
 														</select>
 														
@@ -293,9 +270,7 @@
 		<script type="text/javascript">
 			"use strict";
 		// multi select
-		$('#Curso').select2({
-         placeholder: "Seleccione los cursos a asignar"
-        });
+	
 
 // Class definition
 var KTWizard1 = function () {
@@ -479,7 +454,8 @@ var KTWizard1 = function () {
 
 		</script>
 
-        <script type="text/javascript">
+		<script type="text/javascript">
+			var cursosduallist;
          $( document ).ready(function() {
           $.ajaxSetup({
                 headers: {
@@ -496,12 +472,24 @@ var KTWizard1 = function () {
             var UsuarioPersona = $('#Usuario').val(); 
             var ContraseñaPersona = $('#Contraseña').val();
             var EmailPersona = $('#Email').val();
-			var Curso = $('#Curso').val();
+			var Cursos = cursosduallist.selected;
+			var selectedCourse ="";
+			$.each(Cursos, function(fetch, data){
+				if(selectedCourse=="")
+				{
+					selectedCourse=data.dataset.id;
+				}
+				else
+				{
+
+					selectedCourse = selectedCourse+";"+data.dataset.id;
+				}
+			});
 			var Grado = $('#Grado').val();
 			var masculino = $('#masculino').is(":checked");
             var data = [{
                 //Persona
-				Curso: Curso,
+				Curso: selectedCourse,
 				Grado: Grado,
                 Nombre: NombrePersona,
                 Apellido: ApellidosPersona,
@@ -598,12 +586,17 @@ var KTWizard1 = function () {
 					"GradeId"      : Grade,
 				},
 				success: (e) => {
-					$('#kt_dual_listbox_1').empty();
-					$('#kt_dual_listbox_1').append('<option value="" >--Seleccione una opcion</option>');
+					var options = [];
 					$.each(e['Courses'], function(fetch, data){
-					$('#kt_dual_listbox_1').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
+						options.push({
+							text: data.Name + " - "+ data.Grade,
+							value: data.Id
+						});
 					});
-					$('#kt_dual_listbox_1').refresh()
+					cursosduallist.available = [];
+					cursosduallist._splitOptions(options);
+					cursosduallist.redraw();
+					
 				}
 			});
 		}
@@ -616,6 +609,7 @@ var KTWizard1 = function () {
 		$('#Grado').on('change', function() {
 			ListCourses($('#Grado').val());
 		});
+		
 		'use strict';
 
 		// Class definition
@@ -637,7 +631,7 @@ var KTWizard1 = function () {
 				});
 		
 				// init dual listbox
-				var dualListBox = new DualListbox($this.get(0), {
+				cursosduallist = new DualListbox($this.get(0), {
 					addEvent: function (value) {
 						console.log(value);
 					},
@@ -647,11 +641,13 @@ var KTWizard1 = function () {
 					availableTitle: 'Listado de cursos',
 					selectedTitle: 'Cursos por asignar',
 					addButtonText: 'Agregar',
+					searchPlaceholder: 'Buscar',
 					removeButtonText: 'Quitar',
 					addAllButtonText: 'Agregar todos',
 					removeAllButtonText: 'Quitar todos',
-					options: options,
+					
 				});
+				
 			};
 		
 		
@@ -667,11 +663,6 @@ var KTWizard1 = function () {
 		jQuery(document).ready(function () {
 			KTDualListbox.init();
 		});
-		function agregar()
-		{
-			console.log($("#kt_dual_listbox_1"));
-			$('#kt_dual_listbox_1').append('<option value="1" >2</option>');
-					alert("AGREGADO");
-		}
+		
     </script>
 	@stop
