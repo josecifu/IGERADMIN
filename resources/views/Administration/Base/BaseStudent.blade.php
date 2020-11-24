@@ -588,9 +588,9 @@
 		<!--begin::Page Scripts(used by this page)-->
 		<script src="{{ asset('assets/js/pages/widgets.js')}}"></script>
 		<script type="text/javascript">
-			@if(isset($Error))
+			@if(Session::has('error'))
 			Swal.fire({
-				title: "{{$Error}}",
+				title: "{{Session::get('error')}}",
 				text: "",
 				icon: "error",
 				confirmButtonText: "Aceptar",
