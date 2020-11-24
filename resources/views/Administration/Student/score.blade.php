@@ -71,26 +71,26 @@
                 </div>
                 <div class="card-body">
                     <!--begin: Datatable-->
-                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
-                        <thead>
+                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 15px !important">
+                        <thead style="background:#e5e5e5">
                             <tr>
                                 @foreach($titles as $title)
-                                    <th>{{$title}}</th>
+                                <th>{{$title}}</th>
                                 @endforeach
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($models as $model)
-                                <tr>
-                                    <td>{{$model['name']}}</td>
-                                    <td>{{$model['lastname']}}</td>
-                                    <td>{{$model['conexion']}}</td>
-                                    <td>
-                                        <a href="{{url('/administration/student/score/course/'.$model['assign'])}}">
-                                            <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver notas</button>
-                                        </a>
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td>{{$model['name']}}</td>
+                                <td>{{$model['lastname']}}</td>
+                                <td>{{$model['conexion']}}</td>
+                                <td>
+                                    <a href="{{url('/administration/student/score/course/'.$model['assign'])}}">
+                                        <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver notas</button>
+                                    </a>
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>

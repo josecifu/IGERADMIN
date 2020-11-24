@@ -22,10 +22,46 @@ use App\Models\Asign_teacher_course;
 
 class Student extends Controller
 {
-
+    #FUNCIONES DE ESTUDIANTE
     public function dashboard()
     {
         return view('Student/home');
+    }
+
+    public function score_list(Request $request)
+    {
+        $id = $request->session()->get('User_id');
+        $titles = [];
+        $models = [];
+        $assign = Assign_student_grade::where('user_id',$id)->first();
+        $grade = Assign_student_grade::find($assign->id)->Grade();
+        $courses = $grade->Courses();
+        foreach ($courses as $course)
+        {
+            $scores = [];
+            $notes = Note::where('Course_id',$course->id)->get();
+            foreach($notes as $activity)
+            {
+                $values = [
+                    "activity" => $activity->Activity
+                ];
+                array_push($titles,$values);
+            }
+            foreach($notes as $note)
+            {
+                $data = [
+                    "note" => $note->Score
+                ];
+                array_push($scores,$data);
+            }
+            $query = [
+                'course' => $course->Name,
+                'scores' => $scores
+            ];
+            array_push($models,$query);
+        }
+        //dd($titles);
+        return view('Student/score_list',compact('models','titles'));
     }
 
     public function test_questions($id)
@@ -70,40 +106,64 @@ class Student extends Controller
         return response()->json(["Accion exitosa"]);
     }
 
-    public function score_list(Request $request)
+    public function student_test_list(Request $request)
     {
         $id = $request->session()->get('User_id');
-        $titles = [];
         $models = [];
         $assign = Assign_student_grade::where('user_id',$id)->first();
-        $grade = Assign_student_grade::find($assign->id)->Grade();
-        $courses = $grade->Courses();
-        foreach ($courses as $course)
-        {
-            $scores = [];
-            $notes = Note::where('Course_id',$course->id)->get();
-            foreach($notes as $activity)
+        $courses = $assign->Grade()->Courses();
+        foreach($courses as $course)
+        { 
+            if($course->Tests())
             {
-                $values = [
-                    "activity" => $activity->Activity
-                ];
-                array_push($titles,$values);
-            }
-            foreach($notes as $note)
-            {
-                $data = [
-                    "note" => $note->Score
-                ];
-                array_push($scores,$data);
-            }
-            $query = [
-                'course' => $course->Name,
-                'scores' => $scores
-            ];
-            array_push($models,$query);
+                foreach($course->Tests() as $test)
+                {
+                    $query =[
+                        "id"=>$test->id,
+                        "course"=>$course->Name,
+                        "test"=>$test->Title,
+                        "start"=>$test->StartDate,
+                        "end"=>$test->EndDate,
+                        "score"=>$test->Score,
+                        "activity" => $test->Activity()->Name,
+                        "teacher"=> $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames
+                    ];
+                    array_push($models,$query);
+                }
+            }     
         }
-        //dd($titles);
-        return view('Student/score_list',compact('models','titles'));
+        //dd($models);
+        return view('Student/test_list',compact('models'));
+    }
+
+    public function all_tests(Request $request)
+    {
+        $id = $request->session()->get('User_id');
+        $models = [];
+        $assign = Assign_student_grade::where('user_id',$id)->first();
+        $courses = $assign->Grade()->Courses();
+        foreach($courses as $course)
+        { 
+            if($course->Tests())
+            {
+                foreach($course->Tests() as $test)
+                {
+                    $query =[
+                        "id"=>$test->id,
+                        "course"=>$course->Name,
+                        "test"=>$test->Title,
+                        "start"=>$test->StartDate,
+                        "end"=>$test->EndDate,
+                        "score"=>$test->Score,
+                        "activity" => $test->Activity()->Name,
+                        "teacher"=> $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames
+                    ];
+                    array_push($models,$query);
+                }
+            }     
+        }
+        //dd($models);
+        return view('Student/tests',compact('models'));
     }
 
 
@@ -111,7 +171,59 @@ class Student extends Controller
 
 
 
-    //mostrar notas por semetres    ->  visualizacion de notas por curso
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//mostrar notas por semetres    ->  visualizacion de notas por curso
     public function course_scores($id)
     {
         $models = [];
@@ -170,71 +282,6 @@ class Student extends Controller
         }
         return view('Administration/Student/course_scores',compact('models','titles','student'));
     }
-
-
-
-
-
-
-
-
-
-    public function student_test_list(Request $request)
-    {
-        $id = $request->session()->get('User_id');
-        $models = [];
-        $assign = Assign_student_grade::where('user_id',$id)->first();
-        $grade = Assign_student_grade::find($assign->id)->Grade();
-        $courses = $grade->Courses();
-        foreach ($courses as $course)
-        {
-            $query = [
-                'id' => $course->id,
-                'course' => $course->Name,
-                'test' => $course->Tests()
-            ];
-            array_push($models,$query);
-        }
-        return view('Student/test_list',compact('models'));
-    }
-
-    public function all_tests(Request $request)
-    {
-        $id = $request->session()->get('User_id');
-        $models = [];
-        $assign = Assign_student_grade::where('user_id',$id)->first();
-        $courses = $assign->Grade()->Courses();
-        foreach($courses as $course)
-        {
-          
-            if($course->Tests())
-            {
-                foreach($course->Tests() as $test)
-                {
-                    $model =[
-                        "Id"=>$test->id,
-                        "Course"=>$course->Name,
-                        "Name"=>$test->Title,
-                        "Startdate"=>$test->StartDate,
-                        "Enddate"=>$test->EndDate,
-                        "Score"=>$test->Score,
-                        "Activity" => $test->Activity()->Name,
-                        "Teacher"=> $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames
-                    ];
-                    array_push($models,$model);
-                }
-                
-            }     
-        }
-        dd($models);
-        return view('Student/tests',compact('models'));
-    }
-
-
-
-
-
-
 
                             #funciones terminadas
 /*-------------------------------------------------------------------------------------------*/
