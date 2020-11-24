@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use DateTime;
+use DateTimeZone;
 use Illuminate\Http\Request;
 //tabla de informacion
 use App\Models\information;
@@ -660,6 +661,31 @@ class Teacher extends Controller
         $log->save();
         return response()->json(["Accion completada"]);
 
+    }
+    public function ViewTestsGeplande(Request $request)
+    {
+        $Titles = ['id','Examen','Fecha y hora de Inicio','Fecha y hora de Final','Acciones'];
+        $user = user::find($request->session()->get('User_id'));
+        $cursosT = user::find($user->id)->CoursesTeacher();
+        $Models=[];
+        foreach ($cursosT as $value) {
+            $actividades = Assign_activity::where([['Course_id',$value->Course_id],['State','Active']])->first();
+            $examenes = test::where([['Activity_id',$actividades->id],['State','Active']])->get();
+            foreach ($examenes as $value) {
+                $fechainicio = explode(" ", $value->StartDate);
+                $actual = new DateTime(null, new DateTimeZone('America/Guatemala'));
+                if(date($fechainicio[0]) >= $actual->format('m/d/Y')){
+                    $data=[
+                        "id" => $value->id,
+                        "examen" => $value->Title,
+                        "FI" => $value->StartDate,
+                        "FF" => $value->EndDate,
+                    ];
+                    array_push($Models,$data);
+                }
+            }
+        }
+        return view('Teacher/geplandeTests',compact('Titles','Models'));
     }
     public function DetailActivity($curso,$id)
     {

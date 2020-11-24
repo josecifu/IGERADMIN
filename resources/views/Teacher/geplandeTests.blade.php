@@ -1,4 +1,4 @@
-@extends('Administration.Base/BaseTeacher')
+@extends('Administration.Base/Base')
 {{-- Page title --}}
     @section('title')
     Inicio
@@ -7,7 +7,7 @@
     Tablero
     @stop
     @section('breadcrumb2')
-    Examenes
+    Voluntarios
     @stop
     {{-- Page content --}}
     @section('content')
@@ -38,9 +38,7 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            @isset($course)
-                                                <h3 class="card-label">Listado de Examenes de {{$course->Name ?? ''}} de {{$grado ?? ''}} / Voluntario encargado: {{$Nombre}}</h3>
-                                            @endisset
+                                            <h3 class="card-label">Listado de exámenes programados</h3>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -94,30 +92,20 @@
                                             <thead>
                                                 <tr>
                                                     @foreach($Titles as $Title)
-                                                    <th colspan="{{$Title['No']}}" >{{ $Title['Name'] }}</th>
+                                                    <th>{{ $Title }}</th>
                                                     @endforeach
                                                 </tr>
-                                                <tr>
-                                                    @foreach($Titles as $Title)
-                                                        @if($Title['No']==0)
-                                                        <th><center>No existen examenes asignados</center></th>
-                                                        @endif
-                                                        @foreach($Title['Test'] as $title)
-                                                        <th><center>{{$title->Title}}</center></th>
-                                                        @endforeach
-                                                    @endforeach
-                                                  </tr>
                                             </thead>
                                             <tbody>
+                                                @foreach($Models as $Model)
                                                 <tr>
-                                                    @foreach( $Models as $model)
-                                                        @if($model['NoQuestions'] != " ")
-                                                        <td><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="verNotas( {{$model['Id']}},{{$id}});">{{$model['NoQuestions']}}</button></center></td>   
-                                                        @else
-                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver voluntarios asignados" data-placement="left">0</button></center></td>
-                                                        @endif
-                                                   @endforeach
+                                                    <td>{{$Model['id']}}</td>
+                                                    <td>{{$Model['examen']}}</td>
+                                                    <td>{{$Model['FI']}}</td>
+                                                    <td>{{$Model['FF']}}</td>
+                                                    <td nowrap="nowrap"></td>
                                                 </tr>
+                                                @endforeach
                                             </tbody>
                                         </table>
                                         <!--end: Datatable-->
@@ -151,6 +139,27 @@
                         },
                         columnDefs: [
                             {
+                                targets: -1,
+                                title: 'Acciones',
+                                orderable: false,
+                                render: function(data, type, full, meta) {
+                                    return '\
+                                        <div class="dropdown dropdown-inline">\
+                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title ="Ajustes" data-toggle="dropdown">\
+                                                <i class="la la-cog"></i>\
+                                            </a>\
+                                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
+                                                <ul class="nav nav-hoverable flex-column">\
+                                                    <li class="nav-item"><a class="nav-link" href="/administration/teacher/edit/'+full[0]+'"><i class="nav-icon la la-edit"></i><span class="nav-text">Editar</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
+                                                </ul>\
+                                            </div>\
+                                        </div>\
+                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Eliminar">\
+                                            <i class="la la-trash"></i>\
+                                        </a>\
+                                    ';
+                                },
                             },
                            
                           
@@ -173,91 +182,48 @@
             jQuery(document).ready(function() {
                 KTDatatablesDataSourceHtml.init();
             });
-            function verNotas($id,$curso) {
-                var $url_path = '{!! url('/') !!}';
-                window.location.href = $url_path+"/administration/teacher/question/"+$id+"/"+$curso;
-            }
-            function create()
+            function deletePeriod($id,$name)
             {
-                Swal.mixin({
-                    input: 'text',
-                    confirmButtonText: 'Siguiente  &rarr;',
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                })
+                swalWithBootstrapButtons.fire({
+                    title: '¿Está seguro de eliminar el voluntario?',
+                    text: "El nombre del Voluntario: "+$name,
+                    icon: 'warning',
                     showCancelButton: true,
-                    progressSteps: ['1','2',]
-                }).queue([
-                    {
-                    title: 'Ingrese nombre de la actividad:',
-                    
-                    },
-                    {
-                    title: 'Ingrese Punteo total de la actividad:',
-                    },
-                ]).then((result) => {
-                    if (result.value) {
-                    const answers = JSON.stringify(result.value)
-                    console.log(result.value);
-                    const swalWithBootstrapButtons = Swal.mixin({
-                        customClass: {
-                        confirmButton: 'btn btn-success',
-                        cancelButton: 'btn btn-danger'
-                        },
-                        buttonsStyling: false
-                    })
-                    
-                    swalWithBootstrapButtons.fire({
-                        title: '¿Está seguro de los datos?',
-                        text: "El nombre de la actividad: "+result.value[0]+" y el punteo: "+result.value[1],
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Si, crearlo!',
-                        cancelButtonText: 'No, cancelar!',
-                        reverseButtons: true
-                    }).then((result2) => {
-                        if (result2.isConfirmed) {
-                            var data = [{
-                                Actividad: result.value[0],
-                                Punteo: result.value[1],
-                            }];
-                
-                            $.ajax({
-                                url:'/administration/teacher/save/activity/'+{{$course->id}},
-                                type:'POST',
-                                data: {"_token":"{{ csrf_token() }}","data":data},
-                                dataType: "JSON",
-                                success: function(e){
-                                    swalWithBootstrapButtons.fire({
-                                        title: 'Creado!',
-                                        text: 'Se ha creado con exito!',
-                                        icon: 'success',
-                                        confirmButtonText: 'Aceptar',
-                                    }).then(function () {
-                                        
-                                        var $url_path = '{!! url('/') !!}';
-                                        window.location.href = $url_path+"/teacher/test/list";
-                                        });
-                                    
-                                },
-                                error: function(e){
-                                    swalWithBootstrapButtons.fire({
-                                        title: 'Cancelado!',
-                                        text:   e.responseJSON['error'],
-                                        icon: 'error',
-                                        confirmButtonText: 'Aceptar',
-                                    })
-                                
-                                }
-                            });
-                        
-                        } else if (
-                        result.dismiss === Swal.DismissReason.cancel
-                        ) {
+                    confirmButtonText: 'Si, eliminar!',
+                    cancelButtonText: 'No, cancelar!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var Code = $id;
+                        var data = [{
+                            Code: Code,
+                            Name: result.value[0],
+                        }];
                         swalWithBootstrapButtons.fire({
-                            title: 'Cancelado!',
-                            text:  'El dia no ha sido creada!',
-                            icon: 'error',
+                            title: 'Eliminado!',
+                            text: 'Se ha eliminado con exito!',
+                            icon: 'success',
                             confirmButtonText: 'Aceptar',
-                        })
-                        }
+                        }).then(function () {
+                            
+                            var $url_path = '{!! url('/') !!}';
+                            window.location.href = $url_path+"/administration/teacher/delete/"+$id;
+                            });
+                    } else if (
+                    result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                    swalWithBootstrapButtons.fire({
+                        title: 'Cancelado!',
+                        text:  'La Voluntario no ha sido eliminada!',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar',
                     })
                     }
                 })
