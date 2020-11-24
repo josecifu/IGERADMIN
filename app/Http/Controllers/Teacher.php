@@ -165,7 +165,7 @@ class Teacher extends Controller
             foreach ($curses as $value) {
                 $curso = course::find($value->Course_id);
                 $dataC = [
-                    'Curso' => $curso->Name,
+                    'Curso' => $curso->Name." - ".$curso->Grade()->GradeNamePeriod(),
                 ];
                 array_push($dataT,$dataC);
             }
@@ -206,6 +206,7 @@ class Teacher extends Controller
         $Email= $data['Email'];
         $Contraseña = $data['Contraseña'];
         $Cursos = $data['Curso'];
+        $Cursos = explode(";",$Cursos);
         $masculino = $data['masculino'];
         $grado = grade::find($data['Grado'])->GradeName();
         //LOGICA
@@ -854,6 +855,7 @@ class Teacher extends Controller
             $course = [
                 "Id" =>$value->id,
                 "Name" =>$value->Name,
+                "Grade"=>$value->Grade()->GradeName()." / ".$value->Grade()->Period()->Name
             ];
             array_push($courses,$course);
          } 

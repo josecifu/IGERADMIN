@@ -15,22 +15,7 @@
         <div class="content flex-column-fluid" id="kt_content">
             <div class="card-header">
                 <div class="card-toolbar">
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="{{url('administration/student/list')}}" class="btn btn-danger font-weight-bolder mr-2">
-                    <i class="ki ki-long-arrow-back icon-sm"></i>Cancelar</a>
+                    <a href="{{url('administration/student/list')}}" class="btn btn-danger font-weight-bolder mr-2">Cancelar</a>
                 </div>
             </div>
             <div class="card card-custom">
@@ -79,7 +64,7 @@
                                     <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
                                         <div class="my-5">
                                             <div class="form-group row">
-                                                <label class="col-3">Nombre</label>
+                                                <label class="col-3">Nombres</label>
                                                 <div class="col-9">
                                                     <div class="input-group input-group-solid">
                                                         <div class="input-group-prepend">
@@ -105,7 +90,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-3">Teléfono</label>
+                                                <label class="col-3">No. Teléfono</label>
                                                 <div class="col-9">
                                                     <div class="input-group input-group-solid">
                                                         <div class="input-group-prepend">
@@ -124,7 +109,7 @@
                                     <div class="pb-5" data-wizard-type="step-content">
                                         <div class="my-5">
                                             <div class="form-group row">
-                                                <label class="col-3">Usuario</label>
+                                                <label class="col-3">Nombre de usuario</label>
                                                 <div class="col-9">
                                                     <div class="input-group input-group-solid">
                                                         <div class="input-group-prepend">

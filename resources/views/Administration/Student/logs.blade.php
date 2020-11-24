@@ -78,19 +78,19 @@
                     <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
                             <tr>
-                                @foreach($titles as $t)
-                                <th>{{$t}}</th>
+                                @foreach($titles as $title)
+                                <th>{{$title}}</th>
                                 @endforeach
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($models as $m)
+                            @foreach($models as $model)
                             <tr>
-                                <td>{{$m['id']}}</td>
-                                <td>{{$m['responsible']}}</td>
-                                <td>{{$m['activity']}}</td>
-                                <td>{{$m['type']}}</td>
-                                <td>{{$m['datatime']}}</td>
+                                <td>{{$model['id']}}</td>
+                                <td>{{$model['responsible']}}</td>
+                                <td>{{$model['activity']}}</td>
+                                <td>{{$model['type']}}</td>
+                                <td>{{$model['datatime']}}</td>
                                 <td nowrap="nowrap"></td>
                             </tr>
                             @endforeach

@@ -92,7 +92,7 @@ Principal
                                     </svg>
                                     <!--end::Svg Icon-->
                                 </span>
-                                <a href="#" class="text-warning font-weight-bold font-size-h6">Visualizar notas</a>
+                                <a href="{{url('student/score/list')}}" class="text-warning font-weight-bold font-size-h6">Visualizar notas</a>
                             </div>
                             </a>
                             <a href="#">
@@ -108,6 +108,7 @@ Principal
                                     </svg>
                                     <!--end::Svg Icon-->
                                 </span>
+
                                 <a href="#" class="text-warning font-weight-bold font-size-h6 mt-2">Actualizar informacion</a>
                             </div>
                             </a>
@@ -128,7 +129,7 @@ Principal
                                     </svg>
                                     <!--end::Svg Icon-->
                                 </span>
-                                <a href="#" class="text-danger font-weight-bold font-size-h6 mt-2">Visualizar examenes</a>
+                                <a href="{{url('student/test/view')}}" class="text-danger font-weight-bold font-size-h6 mt-2">Visualizar examenes</a>
                             </div>
                             </a>
                             <a href="#">

@@ -10,7 +10,9 @@
     Ingreso de datos
     @stop
     {{-- Page content --}}
-    @section('content')
+	@section('content')
+	<link href="{{ asset('assets/plugins/custom/kanban/kanban.bundle.css')}}" rel="stylesheet" type="text/css" />
+		
     <link href="{{ asset('assets/css/pages/wizard/wizard-1.css')}}" rel="stylesheet" type="text/css" />
 				<div class="content flex-column-fluid" id="kt_content">
 						<div class="card-header">
@@ -85,6 +87,7 @@
 												<h1>Detalle Persona:</h1>
 												<div class="my-5">
 													<div class="form-group row">
+													
 														<label class="col-3">Nombre</label>
 														<div class="col-9">
 															<div class="input-group input-group-solid">
@@ -210,22 +213,39 @@
 															</select>
 														</div>
 													</div>
-													<div class="form-group row">
-														<label class="col-form-label text-right col-lg-3 col-sm-12">Curso</label>
-														<div class="col-lg-9 col-md-9 col-sm-12">
-															<select class="form-control" id="Curso" name="Curso" multiple="multiple">
-																<optgroup Label="Cursos">
-																</optgroup>
-															</select>
-														</div>
-													</div>															
+													
+													<!--begin::Card-->
+								<div class="card card-custom gutter-b">
+									<div class="card-header">
+										<div class="card-title">
+											<h3 class="card-label">Asignacion de cursos para voluntarios</h3>
+										</div>
+									</div>
+									<div class="card-body">
+										<div class="row">
+											<div class="col-lg-12">
+												<div class="card card-custom card-stretch gutter-b example example-compact">
+													
+													<div class="card-body">
+														<select id="kt_dual_listbox_1" class="dual-listbox" multiple="multiple">
+															
+														</select>
+														
+													</div>
+												</div>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+								<!--end::Card-->													
 												</div>
 											</div>
 											<!--end::Wizard Step 3-->
 											<!--begin::Wizard Actions-->
 											<div class="d-flex justify-content-between border-top mt-5 pt-10">
 												<div class="mr-2">
-													<button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev">Anterior</button>
+													<button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev" style="color:white;">Anterior</button>
 												</div>
 												<div>
 													<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Registrar</button>
@@ -245,16 +265,12 @@
 					</div>
 				</div>
 	@stop
-    @section('scripts')
-	
-
+	@section('scripts')
 		<!--begin::Page Scripts(used by this page)-->
 		<script type="text/javascript">
 			"use strict";
 		// multi select
-		$('#Curso').select2({
-         placeholder: "Seleccione los cursos a asignar"
-        });
+	
 
 // Class definition
 var KTWizard1 = function () {
@@ -438,7 +454,8 @@ var KTWizard1 = function () {
 
 		</script>
 
-        <script type="text/javascript">
+		<script type="text/javascript">
+			var cursosduallist;
          $( document ).ready(function() {
           $.ajaxSetup({
                 headers: {
@@ -455,12 +472,24 @@ var KTWizard1 = function () {
             var UsuarioPersona = $('#Usuario').val(); 
             var ContraseñaPersona = $('#Contraseña').val();
             var EmailPersona = $('#Email').val();
-			var Curso = $('#Curso').val();
+			var Cursos = cursosduallist.selected;
+			var selectedCourse ="";
+			$.each(Cursos, function(fetch, data){
+				if(selectedCourse=="")
+				{
+					selectedCourse=data.dataset.id;
+				}
+				else
+				{
+
+					selectedCourse = selectedCourse+";"+data.dataset.id;
+				}
+			});
 			var Grado = $('#Grado').val();
 			var masculino = $('#masculino').is(":checked");
             var data = [{
                 //Persona
-				Curso: Curso,
+				Curso: selectedCourse,
 				Grado: Grado,
                 Nombre: NombrePersona,
                 Apellido: ApellidosPersona,
@@ -557,12 +586,17 @@ var KTWizard1 = function () {
 					"GradeId"      : Grade,
 				},
 				success: (e) => {
-					$('#Curso').empty();
-					$('#Curso').append('<option value="" >--Seleccione una opcion</option>');
+					var options = [];
 					$.each(e['Courses'], function(fetch, data){
-					$('#Curso').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
+						options.push({
+							text: data.Name + " - "+ data.Grade,
+							value: data.Id
+						});
 					});
-					$('#Curso').selectpicker('refresh');
+					cursosduallist.available = [];
+					cursosduallist._splitOptions(options);
+					cursosduallist.redraw();
+					
 				}
 			});
 		}
@@ -575,5 +609,60 @@ var KTWizard1 = function () {
 		$('#Grado').on('change', function() {
 			ListCourses($('#Grado').val());
 		});
+		
+		'use strict';
+
+		// Class definition
+		var KTDualListbox = function () {
+			// Private functions
+			var demo1 = function () {
+				// Dual Listbox
+				var $this = $('#kt_dual_listbox_1');
+		
+				// get options
+				var options = [];
+				$this.children('option').each(function () {
+					var value = $(this).val();
+					var label = $(this).text();
+					options.push({
+						text: label,
+						value: value
+					});
+				});
+		
+				// init dual listbox
+				cursosduallist = new DualListbox($this.get(0), {
+					addEvent: function (value) {
+						console.log(value);
+					},
+					removeEvent: function (value) {
+						console.log(value);
+					},
+					availableTitle: 'Listado de cursos',
+					selectedTitle: 'Cursos por asignar',
+					addButtonText: 'Agregar',
+					searchPlaceholder: 'Buscar',
+					removeButtonText: 'Quitar',
+					addAllButtonText: 'Agregar todos',
+					removeAllButtonText: 'Quitar todos',
+					
+				});
+				
+			};
+		
+		
+			return {
+				// public functions
+				init: function () {
+					demo1();
+					
+				},
+			};
+		}();
+		
+		jQuery(document).ready(function () {
+			KTDualListbox.init();
+		});
+		
     </script>
 	@stop

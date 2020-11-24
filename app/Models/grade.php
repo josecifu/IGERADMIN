@@ -16,6 +16,10 @@ class grade extends Model
     {
         return $this->Level()->Period();
     }
+    public function GradeNamePeriod()
+    {
+        return $this->GradeName()." / ".$this->Period()->Name;
+    }
     public function GradeName()
     {
         return $this->Name." ".$this->Level()->first()->Name;

@@ -20,7 +20,7 @@
                             <i class="flaticon2-favourite text-primary"></i>
                         </span>
                         <h3 class="card-label">
-                            Listado de estudiantes de {{$grade}}
+                            Listado de notas de {{$grade}}
                         </h3>
                     </div>
                     <div class="card-toolbar">
@@ -71,26 +71,26 @@
                 </div>
                 <div class="card-body">
                     <!--begin: Datatable-->
-                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
-                        <thead>
+                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 15px !important">
+                        <thead style="background:#e5e5e5">
                             <tr>
-                                @foreach($titles as $t)
-                                    <th>{{ $t }}</th>
+                                @foreach($titles as $title)
+                                <th>{{$title}}</th>
                                 @endforeach
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($models as $m)
-                                <tr>
-                                    <td>{{$m['id']}}</td>
-                                    <td>{{$m['student']}}</td>
-                                    <td>11/11/2020</td>
-                                    <td>
-                                        <a href="{{url('/administration/student/score/course/'.$m['assign'])}}">
-                                            <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver notas</button>
-                                        </a>
-                                    </td>
-                                </tr>
+                            @foreach($models as $model)
+                            <tr>
+                                <td>{{$model['name']}}</td>
+                                <td>{{$model['lastname']}}</td>
+                                <td>{{$model['conexion']}}</td>
+                                <td>
+                                    <a href="{{url('/administration/student/score/course/'.$model['assign'])}}">
+                                        <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver notas</button>
+                                    </a>
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>

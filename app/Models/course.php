@@ -17,4 +17,7 @@ class course extends Model
     public function Grade(){
         return $this->hasOne(grade::class,'id','Grade_id')->first();
     }
+    public function Teacher(){
+        return $this->belongsToMany('App\Models\User', 'asign_teacher_courses', 'Course_id', 'user_id')->first();
+    }
 }

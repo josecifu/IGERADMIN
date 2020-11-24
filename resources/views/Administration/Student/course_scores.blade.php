@@ -1,4 +1,3 @@
-
 @extends('Administration.Base/Base')
 {{-- Page title --}}
     @section('title')
@@ -28,11 +27,9 @@
                         </h3>
                     </div>
                     <div class="card-toolbar">
-                        <div class="card-header">
-                            <div class="card-toolbar">
-                                <a href="{{url('administration/student/score/')}}" class="btn btn-danger font-weight-bolder mr-2">
-                                <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
-                            </div>
+                        <div class="card-toolbar">
+                            <a href="{{url('administration/student/score/1')}}" class="btn btn-danger font-weight-bolder mr-2">
+                            <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
                         </div>
                         <!--begin::Dropdown-->
                         <div class="dropdown dropdown-inline mr-2">
@@ -84,30 +81,29 @@
                     <table class="table table-bordered table-hover table-checkable" id="" style="margin-top: 13px !important">
                         <thead>
                             <tr>
-                                @foreach($titles as $t)
-                                <th>{{ $t }}</th>
+                                @foreach($titles as $title)
+                                <th>{{$title}}</th>
                                 @endforeach
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($models as $m)
+                            @foreach($models as $model)
                                 <tr>
-                                    <td>{{$m['id']}}</td>
-                                    <td>{{$m['course']}}</td>
+                                    <td>{{$model['course']}}</td>
                                     <td>
-                                        <center>{{$m['first']}}</center>
+                                        <center>{{$model['first']}}</center>
                                     </td>
                                     <td>
-                                        <center>{{$m['second']}}</center>
+                                        <center>{{$model['second']}}</center>
                                     </td>
                                     <td>
-                                        <center>{{$m['third']}}</center>
+                                        <center>{{$model['third']}}</center>
                                     </td>
                                     <td>
-                                        <center>{{$m['fourth']}}</center>
+                                        <center>{{$model['fourth']}}</center>
                                     </td>
                                     <td >
-                                        <center>{{$m['final']}}</center>
+                                        <center>{{$model['final']}}</center>
                                     </td>
                                 </tr>
                             @endforeach
