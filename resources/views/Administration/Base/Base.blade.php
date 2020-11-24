@@ -738,8 +738,14 @@
 					ListCourse($('#gradeselect1').val());
 				}
 			});
-
-			
+			@if(isset($Error))
+			Swal.fire({
+				title: "{{$Error}}",
+				text: "",
+				icon: "error",
+				confirmButtonText: "Aceptar",
+			})
+			@endif
 		</script>
 
 

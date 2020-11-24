@@ -587,7 +587,19 @@
 		<!--end::Page Vendors-->
 		<!--begin::Page Scripts(used by this page)-->
 		<script src="{{ asset('assets/js/pages/widgets.js')}}"></script>
-	
+		<script type="text/javascript">
+			console.log({{ $errors }});
+
+			@if(Session::has('error'))
+	  
+			Swal.fire({
+				title: "{{Session::get('error')}}",
+				text: "",
+				icon: "error",
+				confirmButtonText: "Aceptar",
+			})
+			@endif
+		</script>
 		@section('scripts')
 																					          
 		@show

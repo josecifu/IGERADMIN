@@ -179,6 +179,7 @@ class Teacher extends Controller
             ];
             array_push($Models,$data);
         }
+        return redirect('/teacher/home/dashboard')->withError('No tiene cursos asignados');
         return view('Administration/Teachers/ListadoVoluntarios',compact('Models','Titles','buttons'));
     }
 

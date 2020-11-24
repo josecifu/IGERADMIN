@@ -587,7 +587,16 @@
 		<!--end::Page Vendors-->
 		<!--begin::Page Scripts(used by this page)-->
 		<script src="{{ asset('assets/js/pages/widgets.js')}}"></script>
-	
+		<script type="text/javascript">
+			@if(isset($Error))
+			Swal.fire({
+				title: "{{$Error}}",
+				text: "",
+				icon: "error",
+				confirmButtonText: "Aceptar",
+			})
+			@endif
+		</script>
 		@section('scripts')
 																					          
 		@show
