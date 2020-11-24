@@ -73,15 +73,17 @@
                     <!--begin: Datatable-->
                     <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
-                            <tr>
-                                <th></th>
+                            <tr style="background:#cecece">
+                                <th colspan="2">
+                                    <center>Estudiantes</center>
+                                </th>
                                 @foreach($titles as $title)
                                 <th colspan="{{$title['no']}}">
                                     <center>{{$title['name']}}</center>
                                 </th>
                                 @endforeach
                             </tr>
-                            <tr>
+                            <tr style="background:#e5e5e5">
                                 <th>Nombres</th>
                                 <th>Apellidos</th>
                                 @foreach($titles as $title)

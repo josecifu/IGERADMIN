@@ -34,7 +34,12 @@
               <div class="card card-custom gutter-b draggable">
                 <div class="card-header">
                   <div class="card-title">
-                    <h4>{{$model['course']}}</h4>
+                    <h5>
+                      <div class="d-flex flex-column mr-auto">
+                          <a class="text-dark text-hover-primary font-size-h4 font-weight-bolder mb-1">{{$model['course']}}</a>
+                          <span class="text-muted font-weight-bold">Profesor: {{$model['teacher']}}</span>
+                      </div>
+                    </h5>
                   </div>
                   <div class="card-toolbar">
                     <a href="{{url('/student/test/view/questions/1')}}">
@@ -43,11 +48,31 @@
                   </div>
                 </div>
                 <div class="card-body">
-                  <h7>Disponible: 20/11/2020 2:00 PM<br><br>Finaliza: 20/11/2020 4:00 PM</h7>
+                  <!--begin::Info-->
+                  <div class="mb-7">
+                    <h6>
+                      {{$model['activity']}}<br>
+                      {{$model['test']}}
+                    </h6>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="text-dark-75 font-weight-bolder mr-2">Valor:</span>
+                      <span class="text-dark-75 font-weight-bolder">{{$model['score']}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="text-dark-75 font-weight-bolder mr-2">Fecha de disponibilidad:</span>
+                      <span class="text-dark-75 font-weight-bolder">{{$model['start']}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="text-dark-75 font-weight-bolder mr-2">Fecha de finalización</span>
+                      <span class="text-dark-75 font-weight-bolder">{{$model['end']}}</span>
+                    </div>
+                  </div>
+                  <!--end::Info-->
                 </div>
               </div>
               <!--end::Card-->
-            </div>@endforeach
+            </div>
+            @endforeach
           </div>
         </div>
         <!--end::Card-->
