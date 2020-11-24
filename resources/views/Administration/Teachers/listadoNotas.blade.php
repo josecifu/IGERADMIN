@@ -148,6 +148,7 @@
                                                     <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el nivel</label>
                                                     <div class="col-lg-9 col-md-9 col-sm-12">
                                                         <select class="form-control selectpicker" data-size="10" data-live-search="true" id="detailA">
+                                                            <option value="0">--Seleccione una opción</option>
                                                             @foreach($Modal as $m)
                                                                 <option value="{{ $m['id']}} ">{{$m['Name']}} </option>
                                                             @endforeach
@@ -334,7 +335,7 @@
                 @if(session()->get('rol_Name')=="Voluntario")
                     var $url_path = '{!! url('/') !!}';
                     window.location.href = $url_path+"/teacher/detail/activity/"+{{$course->id}}+"/"+id;   
-                @else 
+                @else
                     var $url_path = '{!! url('/') !!}';
                     window.location.href = $url_path+"/administration/teacher/detail/activity/"+{{$course->id}}+"/"+id;   
                 @endif
