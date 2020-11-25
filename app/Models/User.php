@@ -30,6 +30,37 @@ class User extends Authenticatable
     public function CoursesTeacher(){
         return $this->hasMany(Asign_teacher_course::class)->get();
     }
+    public function CoursesTeacherData(){
+        return $this->belongsToMany(course::class,'asign_teacher_courses','user_id','Course_id')->get();
+    }
+    public function CountTeacherPeriods()
+    {
+        $model=[];
+        $Models=[];
+        foreach($this->CoursesTeacherData() as $course)
+        {
+            if(!in_array($course->Grade()->Period()->Name,$model))
+            {
+                array_push($model,$course->Grade()->Period()->Name);
+            }
+            
+        }
+        return $model;
+    }
+    public function CountTeacherGrades()
+    {
+        $model=[];
+        $Models=[];
+        foreach($this->CoursesTeacherData() as $course)
+        {
+            if(!in_array($course->Grade()->Name,$model))
+            {
+                array_push($model,$course->Grade()->Name);
+            }
+            
+        }
+        return $model;
+    }
     /**
      * The attributes that should be hidden for arrays.
      *
