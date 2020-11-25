@@ -180,7 +180,6 @@ class Teacher extends Controller
             ];
             array_push($Models,$data);
         }
-        return redirect('/teacher/home/dashboard')->withError('No tiene cursos asignados');
         return view('Administration/Teachers/ListadoVoluntarios',compact('Models','Titles','buttons'));
     }
 
@@ -484,7 +483,7 @@ class Teacher extends Controller
         }
         $Titles = [];
         $Models = [];
-        $Activities = Assign_activity::where('Course_id',$course->id)->get();
+        $Activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
         foreach($Activities as $Activity)
         {
             $act = [

@@ -232,7 +232,7 @@
                             }];
                 
                             $.ajax({
-                                url: '/administration/teacher/update/activity',
+                                url: '/teacher/update/activity',
                                 type:'POST',
                                 data: {"_token":"{{ csrf_token() }}","data":data},
                                 dataType: "JSON",

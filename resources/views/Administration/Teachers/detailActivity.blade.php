@@ -230,22 +230,30 @@
                                 Punteo: result.value[1],
                                 curso: {{$course->id}},
                             }];
-                
                             $.ajax({
                                 url: '/administration/teacher/update/activity',
                                 type:'POST',
                                 data: {"_token":"{{ csrf_token() }}","data":data},
                                 dataType: "JSON",
                                 success: function(e){
-                                    swalWithBootstrapButtons.fire({
+                                    if(e.id){
+                                        swalWithBootstrapButtons.fire({
+                                        title: 'Error!',
+                                        text: e.id,
+                                        icon: 'error',
+                                        confirmButtonText: 'Aceptar',
+                                        })
+                                    }else{
+                                        swalWithBootstrapButtons.fire({
                                         title: 'Actualizado!',
                                         text: 'La actividad se ha actualizado con exito!',
                                         icon: 'success',
                                         confirmButtonText: 'Aceptar',
-                                    }).then(function () {                                        
+                                        }).then(function () {                                        
                                             var $url_path = '{!! url('/') !!}';
-                                            window.location.href = $url_path+"/administration/detail/activity/"+{{$course->id}}+"/"+$id;
+                                            window.location.href = $url_path+"/administration/teacher/detail/activity/"+{{$course->id}}+"/"+$id;
                                         });
+                                    }//fin else
                                 },
                                 error: function(e){
                                     swalWithBootstrapButtons.fire({
