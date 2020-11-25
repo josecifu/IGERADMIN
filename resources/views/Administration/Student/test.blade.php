@@ -42,7 +42,7 @@
                     <!--end::Title-->
                     <div class="card-toolbar">
                         <div class="card-toolbar">
-                            <a href="{{url('administration/student/list/test/1')}}" class="btn btn-danger font-weight-bolder mr-2">
+                            <a href="{{url('administration/student/list/test/'.$course->id)}}" class="btn btn-danger font-weight-bolder mr-2">
                             <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
                         </div>
                         <!--begin::Dropdown-->
@@ -131,11 +131,7 @@
                                     </td>
                                     <td>
                                         <center>
-                                            @if (0>=60 )
-                                                <span class="label label-lg label-light-success label-inline">{{$model['score']}}</span>
-                                            @else
-                                                <span class="label label-lg label-light-danger label-inline">{{$model['score']}}</span>
-                                            @endif
+                                            <span class="label label-lg label-light-primary label-inline">{{$model['score']}}</span>
                                         </center>
                                     </td>
                                     <td>

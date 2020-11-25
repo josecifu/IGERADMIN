@@ -20,7 +20,7 @@
                             <i class="flaticon2-favourite text-primary"></i>
                         </span>
                         @isset($course)
-                            <h3 class="card-label">Listado de Examenes de {{$course->Name ?? ''}} de {{$grado ?? ''}}</h3>
+                            <h3 class="card-label">Listado de evaluaciones de {{$course->Name ?? ''}} de {{$grade ?? ''}}</h3>
                         @endisset
                     </div>
                     <div class="card-toolbar">
