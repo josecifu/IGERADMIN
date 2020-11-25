@@ -674,8 +674,9 @@ class Student extends Controller
             ];
             array_push($models,$query);
         }
-        $grado = grade::find($course->Grade_id)->GradeName();
-        return view('Administration/Student/test_list',compact('models','titles','course','grado'));
+        //dd($models);
+        $grade = grade::find($course->Grade_id)->GradeName();
+        return view('Administration/Student/test_list',compact('models','titles','course','grade'));
     }
 
     public function test($id,$assign)

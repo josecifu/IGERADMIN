@@ -128,10 +128,34 @@ class Teacher extends Controller
         $grado = grade::find($course->Grade_id)->GradeName();
         return view('/Teacher/ViewTests',compact('Titles','buttons','Nombre','course','grado','Models','id'));
     }
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-     
-        return view('Teacher/Home');
+        $Titles =['Id','Nombres','Curso','Examen 1','Examen 2'];
+        $Models = [];
+        $data = user::find($request->session()->get('User_id'));
+        $DataTeacher=[];
+        if($data)
+        {
+            $DataTeacher=[
+                "CountPeriods" => count($data->CountTeacherPeriods()),
+                "CountGrades" => count($data->CountTeacherGrades()),
+                "CountCourses" => count($data->CoursesTeacherData()),
+                "CountTest" =>count($data->CoursesTeacherData()),
+            ];
+            foreach($data->CoursesTeacherData() as $value)
+            {
+                    foreach($value->Grade()->Students() as $Student)
+                    {
+                        $model = [
+                            "Id" =>$value->id,
+                            "Name" =>$Student->person()->Names." ".$Student->person()->LastNames,
+                            "Curse" => $value->Name." - ".$value->Grade()->GradeNamePeriod(),
+                        ];
+                        array_push($Models,$model);
+                    }
+            }
+        }
+        return view('Teacher/Home',compact('Titles','Models','DataTeacher'));
     }
     public function list() //Visualizcion tabla Voluntarios con usuario
     {
