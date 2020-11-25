@@ -1,4 +1,4 @@
-@extends('Administration.Base/Base')
+@extends('Administration.Base/BaseTeacher')
 {{-- Page title --}}
     @section('title')
     Inicio
@@ -148,6 +148,7 @@
                                                     <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el nivel</label>
                                                     <div class="col-lg-9 col-md-9 col-sm-12">
                                                         <select class="form-control selectpicker" data-size="10" data-live-search="true" id="detailA">
+                                                            <option value="0">--Seleccione una opción</option>
                                                             @foreach($Modal as $m)
                                                                 <option value="{{ $m['id']}} ">{{$m['Name']}} </option>
                                                             @endforeach
@@ -284,26 +285,33 @@
                             }];
                 
                             $.ajax({
-                                url:'/administration/teacher/save/activity/'+{{$course->id}},
+                                url:'/teacher/save/activity/'+{{$course->id}},
                                 type:'POST',
                                 data: {"_token":"{{ csrf_token() }}","data":data},
                                 dataType: "JSON",
                                 success: function(e){
-                                    swalWithBootstrapButtons.fire({
+                                    if(e.id){
+                                        swalWithBootstrapButtons.fire({
+                                        title: 'Error!',
+                                        text: e.id,
+                                        icon: 'error',
+                                        confirmButtonText: 'Aceptar',
+                                        })
+                                    }else{
+                                        swalWithBootstrapButtons.fire({
                                         title: 'Creado!',
                                         text: 'Se ha creado con exito!',
                                         icon: 'success',
                                         confirmButtonText: 'Aceptar',
-                                    }).then(function () {
-                                        
-                                        var $url_path = '{!! url('/') !!}';
-                                        window.location.href = $url_path+"/teacher/score/list/vol";
+                                        }).then(function () {    
+                                            var $url_path = '{!! url('/') !!}';
+                                            window.location.href = $url_path+"/teacher/score/list/"+{{$course->id}};
                                         });
-                                    
+                                    }//fin else
                                 },
                                 error: function(e){
                                     swalWithBootstrapButtons.fire({
-                                        title: 'Cancelado!',
+                                        title: 'Error!',
                                         text:   e.responseJSON['error'],
                                         icon: 'error',
                                         confirmButtonText: 'Aceptar',
@@ -312,12 +320,10 @@
                                 }
                             });
                         
-                        } else if (
-                        result.dismiss === Swal.DismissReason.cancel
-                        ) {
+                        } else {
                         swalWithBootstrapButtons.fire({
                             title: 'Cancelado!',
-                            text:  'El dia no ha sido creada!',
+                            text:  'La actividad no ha sido creada!',
                             icon: 'error',
                             confirmButtonText: 'Aceptar',
                         })
@@ -325,15 +331,14 @@
                     })
                     }
                 })
-            }
+            }//fin funcion crear
             function modal() {
                 $("#kt_grades_modal1").modal("show");
             }
             function detalleActividad() {
                 var id = $('#detailA').val();
-                console.log(id);
                 var $url_path = '{!! url('/') !!}';
-                window.location.href = $url_path+"/administration/teacher/detail/activity/"+{{$course->id}}+"/"+id;
+                window.location.href = $url_path+"/teacher/detail/activity/"+{{$course->id}}+"/"+id;   
             }
        </script>
 

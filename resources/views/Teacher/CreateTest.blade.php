@@ -1,4 +1,4 @@
-@extends('Administration.Base/Base')
+@extends('Administration.Base/BaseTeacher')
 {{-- Page title --}}
     @section('title')
     Voluntario
@@ -15,7 +15,7 @@
 				<div class="content flex-column-fluid" id="kt_content">
 						<div class="card-header">
 							<div class="card-toolbar">
-								<a href="{{url('administration/teacher/test/'.$id)}}" class="btn btn-danger font-weight-bolder mr-2">
+								<a href="{{url('/teacher/test/list/vol')}}" class="btn btn-danger font-weight-bolder mr-2">
 								<i class="ki ki-long-arrow-back icon-sm"></i>Cancelar</a>
 							</div>
 						</div>
@@ -325,7 +325,6 @@ var KTWizard1 = function () {
 
          function crearDatos()
          {
-			console.log("asdf");
 			var Titulo = $('#Titulo').val(); 
             var Punteo = $('#Punteo').val();
             var Fechas = $('#Fechas').val();
@@ -354,15 +353,14 @@ var KTWizard1 = function () {
                 swal.fire({ title: "Accion completada", 
                   text: "Se ha creado el examen!", 
                   type: "success"
-                        }).then(function () {
-                          var $url_path = '{!! url('/') !!}';
-							if(e.id){
-								window.location.href = $url_path+"/administration/teacher/assign/question/test/"+e.id+"/"+Preguntas;
-							}else{
-								window.location.href = $url_path+"/administration/teacher/test/"+{{$id}};
-							}
-                        });
-                     
+					}).then(function () {
+						var $url_path = '{!! url('/') !!}';
+						if(e.id){
+							window.location.href = $url_path+"/teacher/assign/question/test/"+e.id+"/"+Preguntas;
+						}else{
+							window.location.href = $url_path+"/teacher/test/list/vol";
+						}
+					});
                 },
                 error: function(e){
 					console.log(e);

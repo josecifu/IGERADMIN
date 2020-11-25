@@ -187,52 +187,26 @@
 								 <div class="modal-dialog modal-lg" role="document">
 									 <div class="modal-content">
 										 <div class="modal-header">
-											 <h5 class="modal-title" id="Title1">Listado de alumnos por grados </h5>
+											 <h5 class="modal-title" id="Title1">Listado</h5>
 											 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 												 <i aria-hidden="true" class="ki ki-close"></i>
 											 </button>
 										 </div>
 										 <form class="form">
 											 <div class="modal-body" id="bdModal">
-												<div class="form-group row">
-													<label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el dia:</label>
-													<div class="col-lg-9 col-md-9 col-sm-12">
-														<select class="form-control selectpicker" data-size="10" title="Ninguna jornada ha sido seleccionada" data-live-search="true" id="periodselect1">
-														   
-														</select>
-														
-													</div>
-												</div>
-												 <div class="form-group row" id="SelectLvl" style="visibility: hidden;">
-													 <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el nivel:</label>
-													 <div class="col-lg-9 col-md-9 col-sm-12">
-														 <select class="form-control selectpicker" title="Ningun nivel ha sido seleccionado" data-size="10" data-live-search="true" id="lvlmodalselect1">
-															
-														 </select>
-														 
-													 </div>
-												 </div>
-												 <div class="form-group row" id="SelectGrd" style="visibility: hidden;">
-													<label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el grado:</label>
-													<div class="col-lg-9 col-md-9 col-sm-12">
-														<select class="form-control selectpicker" title="Ningun grado ha sido seleccionado" data-size="10" data-live-search="true" id="gradeselect1">
-														   
-														</select>
-													</div>
-												</div>
-												<div class="form-group row" id="SelectCourse" style="visibility: hidden;">
+												<div class="form-group row" id="SelectCourse">
 													<label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el curso:</label>
 													<div class="col-lg-9 col-md-9 col-sm-12">
 														<select class="form-control selectpicker" title="Ningun curso ha sido seleccionado" data-size="10" data-live-search="true" id="courseselect1">
 														   
 														</select>
-														<span class="form-text text-muted" id="Title3">Visualice el listado de alumnos por grados del nivel y dia seleccionado</span>
+														<span class="form-text text-muted" id="Title3">Visualice las notas del curso seleccionado</span>
 													</div>
 												</div>
 											 </div>
 											 <div class="modal-footer">
 												 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-												 <button type="button" class="btn btn-primary mr-2" onclick="save();" id="btnModal">Visualizar</button>
+												 <button type="button" class="btn btn-primary mr-2" onclick="buscar();" id="btnModal">Visualizar</button>
 											 </div>
 										 </form>
 									 </div>
@@ -587,7 +561,51 @@
 		<!--end::Page Vendors-->
 		<!--begin::Page Scripts(used by this page)-->
 		<script src="{{ asset('assets/js/pages/widgets.js')}}"></script>
-	
+
+		<script type="text/javascript">
+		
+			var posCourse;
+
+			function listCourse(pos) {
+				posCourse = pos;
+				if(pos == 1){
+					$('#Title1').text("Listado de notas del curso: ");
+				}
+				else if(pos == 2){
+					$('#Title1').text("Listado de exámenes del curso: ");
+				}
+			} // Fin de la funcion
+
+			$.ajax ({
+				url: '{{route('TeacherLoadCourse')}}',
+				type: 'GET',
+				success: (e) => {
+					$('#courseselect1').empty();
+					$.each(e['Courses'], function(fetch, data){
+						$('#courseselect1').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
+					});
+					$('#courseselect1').selectpicker('refresh');
+				}
+			});
+
+			function buscar() {
+				if(posCourse==1)
+				{
+					var Id = $('#courseselect1').val();
+					console.log(Id);
+					var $url_path = '{!! url('/') !!}';
+                    window.location.href = $url_path+"/teacher/score/list/"+Id;
+				}
+				if(posCourse==2)
+				{
+					var Id = $('#courseselect1').val();
+					var $url_path = '{!! url('/') !!}';
+                    window.location.href = $url_path+"/teacher/test/list/"+Id;
+				}
+			}//fin de la funcion
+		
+		</script>
+
 		@section('scripts')
 																					          
 		@show

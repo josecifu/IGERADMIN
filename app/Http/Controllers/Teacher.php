@@ -208,7 +208,6 @@ class Teacher extends Controller
         $Cursos = $data['Curso'];
         $Cursos = explode(";",$Cursos);
         $masculino = $data['masculino'];
-        $grado = grade::find($data['Grado'])->GradeName();
         //LOGICA
         try {
               DB::beginTransaction();
@@ -256,21 +255,25 @@ class Teacher extends Controller
                 $log->Description = "Se asigno el rol voluntario al usuario: ".$user->name;
                 $log->Type = "Assign";
                 $log->save();
-                for ($i=0; $i < count($Cursos) ; $i++) { 
-                    $usuario_curso = new Asign_teacher_course;
-                    $curso = course::find($Cursos[$i]);
-                    $usuario_curso->user_id = $user->id;
-                    $usuario_curso->Course_id = $Cursos[$i];
-                    $usuario_curso->State = "Active";
-                    $usuario_curso->save();
-                    #logs registro de asignación
-                    $log = new logs;
-                    $log->Table = "Voluntario";
-                    $log->User_ID = $id->name;
-                    $log->Description = "Se asigno el usuario: ".$user->name.
-                    " al curso de ".$curso->Name." del grado de ".$grado;
-                    $log->Type = "Assign";
-                    $log->save();
+                for ($i=0; $i < count($Cursos) ; $i++) {
+                    $verificar = Asign_teacher_course::where([['Course_id',$Cursos[$i]],['State','Active']])->first();
+                    if (!isset($verificar)) {
+                        $usuario_curso = new Asign_teacher_course;
+                        $curso = course::find($Cursos[$i]);
+                        $grado = grade::find($curso->Grade_id)->GradeName();
+                        $usuario_curso->user_id = $user->id;
+                        $usuario_curso->Course_id = $Cursos[$i];
+                        $usuario_curso->State = "Active";
+                        $usuario_curso->save();
+                        #logs registro de asignación
+                        $log = new logs;
+                        $log->Table = "Voluntario";
+                        $log->User_ID = $id->name;
+                        $log->Description = "Se asigno el usuario: ".$user->name.
+                        " al curso de ".$curso->Name." del grado de ".$grado;
+                        $log->Type = "Assign";
+                        $log->save();
+                    }
                 }
                 DB::commit();
         } catch (Exception $e) {
@@ -350,7 +353,7 @@ class Teacher extends Controller
     public function score(Request $request, $id)      //VISUALIZACIÓN DE NOTAS DE LAS UNIDADES
     {
         $Models = [];
-        if ($id=='vol') {
+        if(session()->get('rol_Name')=="Voluntario"){
             $teacher = $request->session()->get('User_id');
             $assignV = Asign_teacher_course::where('user_id',$teacher)->first();
             if(isset($assignV)){
@@ -358,7 +361,7 @@ class Teacher extends Controller
                 $userV = user::find($assignV->user_id);
                 $vol = Person::find($userV->id);
             }else{
-                return redirect('/teacher/home/dashboard')->withErrors(['msg', 'No tiene cursos asignados']);
+                return redirect('/teacher/home/dashboard')->withErrors('No tiene cursos asignados');
             }
         } else {
             $course = course::find($id);
@@ -367,7 +370,7 @@ class Teacher extends Controller
                 $userV = user::find($assignV->user_id);
                 $vol = Person::find($userV->id);
             }else{
-                return redirect('/administration/teacher/list')->withErrors(['msg', 'No se ha asignado un voluntario al curso']);
+                return redirect('/administration/teacher/list')->withErrors('No se ha asignado un voluntario al curso');
             }
         }
         $Titles = [];
@@ -429,7 +432,11 @@ class Teacher extends Controller
         array_push($buttons,$button);
         $Nombre = $vol->Names.' '.$vol->LastNames;
         $grado = grade::find($course->Grade_id)->GradeName();
-        return view('Administration/Teachers/listadoNotas',compact('buttons','Modal','Titles','Models','Nombre','course','grado'));
+        if(session()->get('rol_Name')=="Voluntario"){
+            return view('Teacher/listadoNotas',compact('buttons','Modal','Titles','Models','Nombre','course','grado'));
+        }else{
+            return view('Administration/Teachers/listadoNotas',compact('buttons','Modal','Titles','Models','Nombre','course','grado'));
+        }
     }
 
             #===================    CRUD EXAMENES ================
@@ -437,7 +444,7 @@ class Teacher extends Controller
     public function TestTeacher(Request $request,$id)   //VISTA DE EXAMENES DE UN CURSO
     {
         $buttons =[];
-        if ($id=='vol') {
+        if (session()->get('rol_Name')=="Voluntario") {
             $teacher = $request->session()->get('User_id');
             $assignV = Asign_teacher_course::where([['user_id',$teacher],['State','Active']])->first();
             if(isset($assignV)){
@@ -450,7 +457,7 @@ class Teacher extends Controller
                 ];
                 array_push($buttons,$button);
             }else{
-                return redirect('/teacher/home/dashboard')->withErrors(['msg', 'No tiene cursos asignados']);
+                return redirect('/teacher/home/dashboard')->withErrors(['Error', 'No tiene cursos asignados']);
             }
         } else{
             $assign = Asign_teacher_course::where([['Course_id',$id],['State','Active']])->first();
@@ -471,7 +478,7 @@ class Teacher extends Controller
                 $vol = Person::find($userV->Person_id);
                 $course = course::find($id);
             }else{
-                return redirect('/administration/teacher/list')->withErrors(['msg', 'The Message']);
+                return redirect('/administration/teacher/list')->withErrors(['Error', 'The Message']);
             }
         }
         $Titles = [];
@@ -497,8 +504,11 @@ class Teacher extends Controller
         
         $grado = grade::find($course->Grade_id)->GradeName();
         $Nombre = $vol->Names .' '.$vol->LastNames;
-        
-        return view('Administration/Teachers/ViewTests',compact('Titles','buttons','Nombre','course','grado','Models'));
+        if (session()->get('rol_Name')=="Voluntario") {
+            return view('Teacher/ViewTests',compact('Titles','buttons','Nombre','course','grado','Models'));
+        } else {
+            return view('Administration/Teachers/ViewTests',compact('Titles','buttons','Nombre','course','grado','Models'));
+        }
     }
     public function QuestionTest($id,$curso)   #VER PREGUNTAS DE UN EXAMEN
     {
@@ -519,9 +529,9 @@ class Teacher extends Controller
         $actividad = Assign_activity::where('Course_id',$id)->where('State','Active')->get();
         if ($actividad->isempty()) {
             if(session()->get('rol_Name')=="Voluntario"){
-                return redirect('/teacher/score/list/vol')->withErrors(['msg', 'No hay actividades creadas']);
+                return redirect('/teacher/score/list/vol')->withErrors(['Error', 'No hay actividades creadas']);
             }else{
-                return redirect('/administration/teacher/score/'.$id)->withErrors(['msg', 'No hay actividades creadas']);
+                return redirect('/administration/teacher/score/'.$id)->withErrors(['Error', 'No hay actividades creadas']);
             }
         } else {
             $actividades=[];
@@ -634,7 +644,6 @@ class Teacher extends Controller
             $preguntas->Test_id = $test;
             $preguntas->save();
         }
-        
         return response()->json(["id"=>$assign->Course_id]);
         
     }
@@ -648,42 +657,48 @@ class Teacher extends Controller
         $data = $request->data[0];
         $Actividad = $data['Actividad'];
         $Punteo = $data['Punteo'];
-        $assignA = new Assign_activity;
-        $assignA->Name = $Actividad;
-        $assignA->Score = $Punteo;
-        $assignA->Course_id = $id;
-        $assignA->State = "Active";
-        $assignA->save();
-        $log = new logs;
-        $log->Table = "Voluntario";
-        $log->User_ID = $user->name;
-        $log->Description = "Se creo la nueva actividad: ".$Actividad;
-        $log->Type = "Create";
-        $log->save();
-        return response()->json(["Accion completada"]);
-
+        if($Punteo < 1 || $Punteo > 100 || $Actividad == ""){
+            return response()->json(["id"=>"Ingrese datos validos o un punteo entre 1 y 100"]);
+        }else{
+            $assignA = new Assign_activity;
+            $assignA->Name = $Actividad;
+            $assignA->Score = $Punteo;
+            $assignA->Course_id = $id;
+            $assignA->State = "Active";
+            $assignA->save();
+            $log = new logs;
+            $log->Table = "Voluntario";
+            $log->User_ID = $user->name;
+            $log->Description = "Se creo la nueva actividad: ".$Actividad;
+            $log->Type = "Create";
+            $log->save();
+            return response()->json(["Acción Completada"]);
+        }
     }
     public function ViewTestsGeplande(Request $request)
     {
         $Titles = ['id','Examen','Fecha y hora de Inicio','Fecha y hora de Final','Acciones'];
         $user = user::find($request->session()->get('User_id'));
         $cursosT = user::find($user->id)->CoursesTeacher();
-        $Models=[];
+        $Models=[];        
         foreach ($cursosT as $value) {
             $actividades = Assign_activity::where([['Course_id',$value->Course_id],['State','Active']])->first();
-            $examenes = test::where([['Activity_id',$actividades->id],['State','Active']])->get();
-            foreach ($examenes as $value) {
-                $fechainicio = explode(" ", $value->StartDate);
-                $actual = new DateTime(null, new DateTimeZone('America/Guatemala'));
-                if(date($fechainicio[0]) >= $actual->format('m/d/Y')){
-                    $data=[
-                        "id" => $value->id,
-                        "examen" => $value->Title,
-                        "FI" => $value->StartDate,
-                        "FF" => $value->EndDate,
-                    ];
-                    array_push($Models,$data);
+            if (isset($actividades)) {
+                $examenes = test::where([['Activity_id',$actividades->id],['State','Active']])->get();
+                foreach ($examenes as $value) {
+                    $fechainicio = explode(" ", $value->StartDate);
+                    $actual = new DateTime(null, new DateTimeZone('America/Guatemala'));
+                    if(date($fechainicio[0]) >= $actual->format('m/d/Y')){
+                        $data=[
+                            "id" => $value->id,
+                            "examen" => $value->Title,
+                            "FI" => $value->StartDate,
+                            "FF" => $value->EndDate,
+                        ];
+                        array_push($Models,$data);
+                    }
                 }
+            } else {
             }
         }
         return view('Teacher/geplandeTests',compact('Titles','Models'));
@@ -695,13 +710,24 @@ class Teacher extends Controller
         $Models = [];
         $actividad = Assign_activity::find($id);
         $test = Assign_activity::find($id)->Tests();
-        foreach ($test as $value) {
+        if(count($test) == 0){
             $data = [
-                'Test' => $value->Title,
+                'Test' => 'No existen examenes creados',
             ];
             array_push($Models,$data);
+        }else{
+            foreach ($test as $value) {
+                $data = [
+                    'Test' => $value->Title,
+                ];
+                array_push($Models,$data);
+            }
         }
-        return view('Administration/Teachers/detailActivity',compact('actividad','course','Titles','Models'));
+        if(session()->get('rol_Name')=="Voluntario"){
+            return view('Teacher/detailActivity',compact('actividad','course','Titles','Models'));
+        }else{
+            return view('Administration/Teachers/detailActivity',compact('actividad','course','Titles','Models'));
+        }
     }
     public function updateActivity(Request $request)
     {
@@ -711,17 +737,21 @@ class Teacher extends Controller
         $Punteo = $data['Punteo'];
         $id = $data['code'];
         $curso = $data['curso'];
-        $assign = Assign_activity::find($id);
-        $assign->Name = $Actividad;
-        $assign->Score = $Punteo;
-        $assign->save();
-        $log = new logs;
-        $log->Table = "Voluntario";
-        $log->User_ID = $user->name;
-        $log->Description = "Se actualizo la actividad: ".$Actividad;
-        $log->Type = "Update";
-        $log->save();
-        return response()->json(["Accion completada"]);
+        if($Punteo < 1 || $Punteo > 100 || $Actividad == ""){
+            return response()->json(["id"=>"Ingrese datos validos o un punteo entre 1 y 100"]);
+        }else{
+            $assign = Assign_activity::find($id);
+            $assign->Name = $Actividad;
+            $assign->Score = $Punteo;
+            $assign->save();
+            $log = new logs;
+            $log->Table = "Voluntario";
+            $log->User_ID = $user->name;
+            $log->Description = "Se actualizo la actividad: ".$Actividad;
+            $log->Type = "Update";
+            $log->save();
+            return response()->json(["Accion completada"]);
+        }
     }
     public function deleteActivity($curso, $id, Request $request)   //ELIMINAR/DESACTIVAR VOLUNTARIO
     {
@@ -737,7 +767,12 @@ class Teacher extends Controller
         $log->Type = "Delete";
         $log->save();
         Assign_activity::where('id',$id)->update($dataU);
-        return redirect()->route('ScoreTeacher', [$curso]);
+        
+        if (session()->get('rol_Name')=="Voluntario") {
+            return redirect()->route('TeacherScore',$curso);
+        }else{
+            return redirect()->route('ScoreTeacher',$curso);
+        }
     }
 
     public function Desactive()         //vista usuarios desactivados
@@ -862,5 +897,24 @@ class Teacher extends Controller
         return response()->json([
             "Courses" => $courses,
             ]);
+    }
+    public function TeacherLoadCourse(Request $request)         //Cargar cursos asignados de un voluntario
+    {
+        $id = $request->session()->get('User_id');
+        $assign = Asign_teacher_course::where('user_id',$id)->get();
+        // if(count($assign) > 1){
+            $courses = [];
+            foreach ($assign as $value) {
+                $CourseData = course::find($value->Course_id);
+                $period = [
+                    "Id" =>$CourseData->id,
+                    "Name" =>$CourseData->Name.' - '.$CourseData->Grade()->GradeNamePeriod(),
+                ];
+                array_push($courses,$period);
+            }
+            return response()->json([
+                "Courses" => $courses,
+            ]);
+        // }    
     }
 }

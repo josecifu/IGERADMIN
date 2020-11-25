@@ -170,13 +170,8 @@
                 KTDatatablesDataSourceHtml.init();
             });
             function verNotas($id,$curso) {
-                @if(session()->get('rol_Name')=="Voluntario")
-                    var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/teacher/question/"+$id+"/"+$curso;
-                @else
-                    var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/teacher/question/"+$id+"/"+$curso;
-                @endif
+                var $url_path = '{!! url('/') !!}';
+                window.location.href = $url_path+"/administration/teacher/question/"+$id+"/"+$curso;
             }
 
        </script>
