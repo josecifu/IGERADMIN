@@ -248,8 +248,10 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([ 
             'Name' => 'Visualizar notas',
             'State' => '1',
-            'Url' => 'teacher/score/list/vol',  //36
-            'menu_id' => '35'          
+            // 'Url' => 'teacher/score/list/vol',  //36
+            'Type' => '3',
+            'Url' => 'listCourse(1)',       
+            'menu_id' => '35'
         ]); 
         DB::table('menus')->insert([
             'Name' => 'Examenes', //37
@@ -267,8 +269,10 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([ 
             'Name' => 'Visualizar todos los examenes',
             'State' => '1',
-            'Url' => 'teacher/test/list/vol',  //39
-            'menu_id' => '37'          
+            // 'Url' => 'teacher/test/list/vol',  //39
+            'Type' => '3',
+            'Url' => 'listCourse(2)',
+            'menu_id' => '37'      
         ]); 
     }
 }

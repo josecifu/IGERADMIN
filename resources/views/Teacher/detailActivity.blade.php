@@ -1,4 +1,4 @@
-@extends('Administration.Base/Base')
+@extends('Administration.Base/BaseTeacher')
 {{-- Page title --}}
     @section('title')
     Inicio
@@ -36,7 +36,7 @@
                                     <div class="card-header">
                                         <div class="card-title">
                                             <div class="card-toolbar">
-                                                <a href="{{url('administration/teacher/score/'.$course->id)}}" class="btn btn-danger font-weight-bolder mr-2">
+                                                <a href="{{url('/teacher/score/list/'.$course->id)}}" class="btn btn-danger font-weight-bolder mr-2">
                                                 <i class="ki ki-long-arrow-back icon-sm"></i>Cancelar</a>
                                             </div>
                                             <span class="card-icon">
@@ -155,7 +155,7 @@
                                 orderable: false,
                                 render: function(data, type, full, meta) {
                                     return '\
-                                        <a href="javascript:;" onclick="edit(\''+full[0]+'\',\''+full[1]+'\',\''+full[3]+'\')" class="btn btn-sm btn-clean btn-icon" title="Detalle de asignación">\
+                                        <a href="javascript:;" onclick="edit(\''+full[0]+'\',\''+full[1]+'\',\''+full[3]+'\')" class="btn btn-sm btn-clean btn-icon" title="Editar Actividad">\
                                             <i class="la la-edit"></i>\
                                         </a>\
                                         <a href="javascript:;" onclick="deleteActivity(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Eliminar">\
@@ -237,15 +237,24 @@
                                 data: {"_token":"{{ csrf_token() }}","data":data},
                                 dataType: "JSON",
                                 success: function(e){
-                                    swalWithBootstrapButtons.fire({
+                                    if(e.id){
+                                        swalWithBootstrapButtons.fire({
+                                        title: 'Error!',
+                                        text: e.id,
+                                        icon: 'error',
+                                        confirmButtonText: 'Aceptar',
+                                        })
+                                    }else{
+                                        swalWithBootstrapButtons.fire({
                                         title: 'Actualizado!',
-                                        text: 'La actividad se ha actualizado con exito!',
+                                        text: 'La actividad se actualizo con exito!',
                                         icon: 'success',
                                         confirmButtonText: 'Aceptar',
-                                    }).then(function () {                                        
+                                        }).then(function () {
                                             var $url_path = '{!! url('/') !!}';
-                                            window.location.href = $url_path+"/administration/detail/activity/"+{{$course->id}}+"/"+$id;
+                                            window.location.href = $url_path+"/teacher/detail/activity/"+{{$course->id}}+"/"+$id;
                                         });
+                                    }//fin else
                                 },
                                 error: function(e){
                                     swalWithBootstrapButtons.fire({
@@ -298,7 +307,7 @@
                             confirmButtonText: 'Aceptar',
                         }).then(function () {
                                 var $url_path = '{!! url('/') !!}';
-                                window.location.href = $url_path+"/administration/teacher/delete/activity/"+{{$course->id}}+"/"+$id;
+                                window.location.href = $url_path+"/teacher/delete/activity/"+{{$course->id}}+"/"+$id;
                             });
                     } else if (
                     result.dismiss === Swal.DismissReason.cancel

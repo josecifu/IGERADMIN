@@ -485,12 +485,10 @@ var KTWizard1 = function () {
 					selectedCourse = selectedCourse+";"+data.dataset.id;
 				}
 			});
-			var Grado = $('#Grado').val();
 			var masculino = $('#masculino').is(":checked");
             var data = [{
                 //Persona
 				Curso: selectedCourse,
-				Grado: Grado,
                 Nombre: NombrePersona,
                 Apellido: ApellidosPersona,
 				Telefono: TelefonoPersona,

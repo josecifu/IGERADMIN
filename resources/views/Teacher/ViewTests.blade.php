@@ -1,13 +1,13 @@
-@extends('Administration.Base/Base')
+@extends('Administration.Base/BaseTeacher')
 {{-- Page title --}}
     @section('title')
     Inicio
     @stop
     @section('breadcrumb1')
-    Actividades
+    Tablero
     @stop
     @section('breadcrumb2')
-    Detalle
+    Examenes
     @stop
     {{-- Page content --}}
     @section('content')
@@ -35,17 +35,12 @@
                                 <div class="card card-custom">
                                     <div class="card-header">
                                         <div class="card-title">
-                                            <div class="card-toolbar">
-                                                <a href="{{url('administration/teacher/score/'.$course->id)}}" class="btn btn-danger font-weight-bolder mr-2">
-                                                <i class="ki ki-long-arrow-back icon-sm"></i>Cancelar</a>
-                                            </div>
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            @if($course)
-                                                <h3 class="card-label">Detalle de la actividad: {{$actividad->Name}} del curso {{$course->Name}}</h3>
-                                            @endif
-                                            
+                                            @isset($course)
+                                                <h3 class="card-label">Listado de Examenes de {{$course->Name ?? ''}} de {{$grado ?? ''}} / Voluntario encargado: {{$Nombre}}</h3>
+                                            @endisset
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -99,23 +94,25 @@
                                             <thead>
                                                 <tr>
                                                     @foreach($Titles as $Title)
-                                                    <th>{{ $Title }}</th>
+                                                    <th colspan="{{$Title['No']}}" >{{ $Title['Name'] }}</th>
                                                     @endforeach
                                                 </tr>
+                                                <tr>
+                                                    @foreach($Titles as $Title)
+                                                        @if($Title['No']==0)
+                                                        <th><center>No existen examenes asignados</center></th>
+                                                        @endif
+                                                        @foreach($Title['Test'] as $title)
+                                                        <th><center>{{$title->Title}}</center></th>
+                                                        @endforeach
+                                                    @endforeach
+                                                  </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>{{$actividad->id}}</td>
-                                                    <td>{{$actividad->Name}}</td>
-                                                    <td>
-                                                    @foreach($Models as $Model)
-                                                        <ul>
-                                                            <li>{{$Model['Test']}}</li> 
-                                                        </ul>
-                                                    @endforeach
-                                                    </td>
-                                                    <td>{{$actividad->Score}}</td>
-                                                    <td nowrap="nowrap"></td>
+                                                    @foreach( $Models as $model)
+                                                        <td><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="verNotas( {{$model['Id']}},{{$course->id}});">{{$model['NoQuestions']}}</button></center></td>   
+                                                   @endforeach
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -150,19 +147,6 @@
                         },
                         columnDefs: [
                             {
-                                targets: -1,
-                                title: 'Acciones',
-                                orderable: false,
-                                render: function(data, type, full, meta) {
-                                    return '\
-                                        <a href="javascript:;" onclick="edit(\''+full[0]+'\',\''+full[1]+'\',\''+full[3]+'\')" class="btn btn-sm btn-clean btn-icon" title="Detalle de asignación">\
-                                            <i class="la la-edit"></i>\
-                                        </a>\
-                                        <a href="javascript:;" onclick="deleteActivity(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Eliminar">\
-                                            <i class="la la-trash"></i>\
-                                        </a>\
-                                    ';
-                                },
                             },
                            
                           
@@ -185,132 +169,14 @@
             jQuery(document).ready(function() {
                 KTDatatablesDataSourceHtml.init();
             });
-            function edit($id,$Name,$Punteo)
-            {
-               Swal.mixin({
-                    input: 'text',
-                    confirmButtonText: 'Siguiente  &rarr;',
-                    showCancelButton: true,
-                    progressSteps: ['1','2',]
-                }).queue([
-                    {
-                    title: 'Ingrese el nombre de la actividad:',
-                    text: 'Nombre anterior:' + $Name
-                    },
-                    {
-                    title: 'Ingrese el Punteo total de la actividad:',
-                    text: 'Punteo anterior:' + $Punteo
-                    },
-                ]).then((result) => {
-                    if (result.value) {
-                    const answers = JSON.stringify(result.value)
-                    console.log(result.value);
-                    const swalWithBootstrapButtons = Swal.mixin({
-                        customClass: {
-                        confirmButton: 'btn btn-success',
-                        cancelButton: 'btn btn-danger'
-                        },
-                        buttonsStyling: false
-                    })
-                    
-                    swalWithBootstrapButtons.fire({
-                        title: '¿Está seguro de los datos?',
-                        text: "El nombre de la actividad: "+result.value[0]+" y el punteo: "+result.value[1],
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Si, crearlo!',
-                        cancelButtonText: 'No, cancelar!',
-                        reverseButtons: true
-                    }).then((result2) => {
-                        if (result2.isConfirmed) {
-                            var code = $id;
-                            var data = [{
-                                code: code,
-                                Actividad: result.value[0],
-                                Punteo: result.value[1],
-                                curso: {{$course->id}},
-                            }];
-                
-                            $.ajax({
-                                url: '/administration/teacher/update/activity',
-                                type:'POST',
-                                data: {"_token":"{{ csrf_token() }}","data":data},
-                                dataType: "JSON",
-                                success: function(e){
-                                    swalWithBootstrapButtons.fire({
-                                        title: 'Actualizado!',
-                                        text: 'La actividad se ha actualizado con exito!',
-                                        icon: 'success',
-                                        confirmButtonText: 'Aceptar',
-                                    }).then(function () {                                        
-                                            var $url_path = '{!! url('/') !!}';
-                                            window.location.href = $url_path+"/administration/detail/activity/"+{{$course->id}}+"/"+$id;
-                                        });
-                                },
-                                error: function(e){
-                                    swalWithBootstrapButtons.fire({
-                                        title: 'Cancelado!',
-                                        text:   e.responseJSON['error'],
-                                        icon: 'error',
-                                        confirmButtonText: 'Aceptar',
-                                    })
-                                
-                                }
-                            });
-                        
-                        } else if (
-                        result.dismiss === Swal.DismissReason.cancel
-                        ) {
-                        swalWithBootstrapButtons.fire({
-                            title: 'Cancelado!',
-                            text:  'El dia no ha sido creada!',
-                            icon: 'error',
-                            confirmButtonText: 'Aceptar',
-                        })
-                        }
-                    })
-                    }
-                })
-            }
-            function deleteActivity($id,$name)
-            {
-                const swalWithBootstrapButtons = Swal.mixin({
-                    customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                    },
-                    buttonsStyling: false
-                })
-                swalWithBootstrapButtons.fire({
-                    title: '¿Está seguro de eliminar la actividad?',
-                    text: "El nombre de la actividad: "+$name,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Si, eliminar!',
-                    cancelButtonText: 'No, cancelar!',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        swalWithBootstrapButtons.fire({
-                            title: 'Eliminado!',
-                            text: 'Se ha eliminado con exito!',
-                            icon: 'success',
-                            confirmButtonText: 'Aceptar',
-                        }).then(function () {
-                                var $url_path = '{!! url('/') !!}';
-                                window.location.href = $url_path+"/administration/teacher/delete/activity/"+{{$course->id}}+"/"+$id;
-                            });
-                    } else if (
-                    result.dismiss === Swal.DismissReason.cancel
-                    ) {
-                    swalWithBootstrapButtons.fire({
-                        title: 'Cancelado!',
-                        text:  'La Voluntario no ha sido eliminada!',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar',
-                    })
-                    }
-                })
+            function verNotas($id,$curso) {
+                @if(session()->get('rol_Name')=="Voluntario")
+                    var $url_path = '{!! url('/') !!}';
+                    window.location.href = $url_path+"/teacher/question/"+$id+"/"+$curso;
+                @else
+                    var $url_path = '{!! url('/') !!}';
+                    window.location.href = $url_path+"/administration/teacher/question/"+$id+"/"+$curso;
+                @endif
             }
 
        </script>

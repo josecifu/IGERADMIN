@@ -4,13 +4,14 @@
     Inicio
     @stop
     @section('breadcrumb1')
-    Tablero
+    Asignación
     @stop
     @section('breadcrumb2')
-    Voluntarios
+    Preguntas
     @stop
     {{-- Page content --}}
     @section('content')
+
     <div class="content flex-column-fluid" id="kt_content">
                                 <!--begin::Notice-->
                                 <!--<div class="alert alert-custom alert-white alert-shadow gutter-b" role="alert">
@@ -35,10 +36,17 @@
                                 <div class="card card-custom">
                                     <div class="card-header">
                                         <div class="card-title">
-                                            <span class="card-icon">
-                                                <i class="flaticon2-favourite text-primary"></i>
-                                            </span>
-                                            <h3 class="card-label">Listado de exámenes programados</h3>
+                                            <div class="card-toolbar">
+                                                <!--begin::Dropdown-->
+                                                @if(session()->get('rol_Name')=="Voluntario")
+                                                    <a href="{{url('/teacher/test/list/vol')}}" class="btn btn-danger font-weight-bolder mr-2">
+                                                    <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
+                                                @else
+                                                    <a href="{{url('administration/teacher/test/'.$curso)}}" class="btn btn-danger font-weight-bolder mr-2">
+                                                    <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
+                                                @endif
+                                                <!--end::Dropdown-->
+                                            </div>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
@@ -87,28 +95,39 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <!--begin: Datatable-->
-                                        <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
-                                            <thead>
-                                                <tr>
-                                                    @foreach($Titles as $Title)
-                                                    <th>{{ $Title }}</th>
+                                        <!--begin::Card-->
+										<div class="card card-custom gutter-b example-hover">
+											<div class="card-header">
+												<div class="card-title">
+                                                    <span class="card-icon">
+                                                        <i class="flaticon2-favourite text-primary"></i>
+                                                    </span>
+													<h3 class="card-label">{{$test->Title}} - Valor: {{$test->Score}} pts</h3>
+												</div>
+											</div>
+											<div class="card-body">
+												<!--begin::Accordion-->
+												<div class="accordion accordion-toggle-arrow" id="accordionExample1">
+                                                    @foreach($questions as $key => $q)
+                                                        <div class="card">
+                                                            <div class="card-header">
+                                                                    <div class="card-title" data-toggle="collapse" data-target="#collapseOne{{$key}}">{{$q->Title}}  - valor {{$q->Score}} pts</div>
+                                                            </div>
+                                                            <div id="collapseOne{{$key}}" class="collapse" data-parent="#accordionExample1">
+                                                                <div class="card-body">
+                                                                    {!! $q->Content !!}
+                                                                    <input type="number">
+                                                                    <button>Hola</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     @endforeach
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach($Models as $Model)
-                                                <tr>
-                                                    <td>{{$Model['id']}}</td>
-                                                    <td>{{$Model['examen']}}</td>
-                                                    <td>{{$Model['FI']}}</td>
-                                                    <td>{{$Model['FF']}}</td>
-                                                    <td nowrap="nowrap"></td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                        <!--end: Datatable-->
+												</div>
+												<!--end::Accordion-->
+											</div>
+										</div>
+                                        <!--end::Card-->
+                                        
                                     </div>
                                 </div>
                                 <!--end::Card-->
@@ -123,6 +142,7 @@
         <!--begin::Page Scripts(used by this page)-->
         
         <!--end::Page Scripts-->
+     
         <script type="text/javascript">
            
             "use strict";
@@ -134,9 +154,6 @@
                     // begin first table
                     table.DataTable({
                         responsive: true,
-                        "language": {
-                            "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-                        },
                         columnDefs: [
                             {
                                 targets: -1,
@@ -145,7 +162,7 @@
                                 render: function(data, type, full, meta) {
                                     return '\
                                         <div class="dropdown dropdown-inline">\
-                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title ="Ajustes" data-toggle="dropdown">\
+                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">\
                                                 <i class="la la-cog"></i>\
                                             </a>\
                                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
@@ -155,7 +172,10 @@
                                                 </ul>\
                                             </div>\
                                         </div>\
-                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Eliminar">\
+                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Edit details">\
+                                            <i class="la la-edit"></i>\
+                                        </a>\
+                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Delete">\
                                             <i class="la la-trash"></i>\
                                         </a>\
                                     ';
@@ -181,55 +201,30 @@
 
             jQuery(document).ready(function() {
                 KTDatatablesDataSourceHtml.init();
+                document.querySelectorAll( 'oembed[url]' ).forEach( element => {
+                    
+                    var videoId = getId(element.getAttribute("url"));
+            
+                    var iframeMarkup = '<iframe width="560" height="315" src="//www.youtube.com/embed/' 
+                        + videoId + '" frameborder="0" allowfullscreen></iframe>';
+                        let div = document.createElement('div');
+                        div.innerHTML = iframeMarkup;
+                        element.parentNode.appendChild(div);
+                        element.parentNode.removeChild(element);
+                 } );
             });
-            function deletePeriod($id,$name)
-            {
-                const swalWithBootstrapButtons = Swal.mixin({
-                    customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                    },
-                    buttonsStyling: false
-                })
-                swalWithBootstrapButtons.fire({
-                    title: '¿Está seguro de eliminar el voluntario?',
-                    text: "El nombre del Voluntario: "+$name,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Si, eliminar!',
-                    cancelButtonText: 'No, cancelar!',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        var Code = $id;
-                        var data = [{
-                            Code: Code,
-                            Name: result.value[0],
-                        }];
-                        swalWithBootstrapButtons.fire({
-                            title: 'Eliminado!',
-                            text: 'Se ha eliminado con exito!',
-                            icon: 'success',
-                            confirmButtonText: 'Aceptar',
-                        }).then(function () {
-                            
-                            var $url_path = '{!! url('/') !!}';
-                            window.location.href = $url_path+"/administration/teacher/delete/"+$id;
-                            });
-                    } else if (
-                    result.dismiss === Swal.DismissReason.cancel
-                    ) {
-                    swalWithBootstrapButtons.fire({
-                        title: 'Cancelado!',
-                        text:  'La Voluntario no ha sido eliminada!',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar',
-                    })
-                    }
-                })
+
+            function getId(url) {
+                var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+                var match = url.match(regExp);
+            
+                if (match && match[2].length == 11) {
+                    return match[2];
+                } else {
+                    return 'error';
+                }
             }
-
+            
+           
        </script>
-
-      
 	@stop

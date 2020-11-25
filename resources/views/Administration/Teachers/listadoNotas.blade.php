@@ -332,13 +332,8 @@
             }
             function detalleActividad() {
                 var id = $('#detailA').val();
-                @if(session()->get('rol_Name')=="Voluntario")
-                    var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/teacher/detail/activity/"+{{$course->id}}+"/"+id;   
-                @else
-                    var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/teacher/detail/activity/"+{{$course->id}}+"/"+id;   
-                @endif
+                var $url_path = '{!! url('/') !!}';
+                window.location.href = $url_path+"/administration/teacher/detail/activity/"+{{$course->id}}+"/"+id;   
             }
        </script>
 

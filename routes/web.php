@@ -31,7 +31,7 @@ Route::group([ 'prefix' => 'student'], function(){
 	Route::get('/profile/edit/{model}',$route.'\Student@edit_profile')->name('EditData');
 	Route::post('/profile/update', $route.'\Student@update_profile')->name('UpdateData');
 });
-Route::group([ 'prefix' => 'teacher'], function(){
+Route::group([ 'prefix' => 'teacher'], function(){									// =======================================
 	$route = "App\Http\Controllers";
 	Route::get('/home/dashboard',$route.'\Teacher@dashboard')->name('TeacherDashboard');
 	Route::get('/home/workspace',$route.'\Teacher@workspaceT')->name('Teacherworkspace');
@@ -42,6 +42,9 @@ Route::group([ 'prefix' => 'teacher'], function(){
 	Route::get('/assign/question/test/{exam}/{model}',$route.'\Teacher@AssignQuestion')->name('TeacherAssignQuestions');
 	Route::get('/question/{model}/{no}', $route.'\Teacher@QuestionTest')->name('TeacherQuestionsTest');
 	Route::get('/detail/activity/{curso}/{model}',$route.'\Teacher@DetailActivity')->name('TeacherdetailActivity');
+	Route::get('/load/courses', $route.'\Teacher@TeacherLoadCourse')->name('TeacherLoadCourse');
+	Route::post('/save/activity/{model}', $route.'\Teacher@saveActivity')->name('TeachersaveActivity');
+	Route::get('/delete/activity/{curso}/{model}', $route.'\Teacher@deleteActivity')->name('TeacherdeleteActivity');
 });
 Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	
@@ -106,7 +109,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::post('/save/test', $route.'\Teacher@saveExam')->name('saveExam');
 		Route::post('/save/activity/{model}', $route.'\Teacher@saveActivity')->name('saveActivity');
 		Route::post('/update/activity', $route.'\Teacher@updateActivity')->name('updateActivity');
-		Route::get('/delete/activity/{curso}', $route.'\Teacher@deleteActivity')->name('deleteActivity');
+		Route::get('/delete/activity/{curso}/{model}', $route.'\Teacher@deleteActivity')->name('deleteActivity');
 		Route::get('/detail/activity/{curso}/{model}', $route.'\Teacher@DetailActivity')->name('DetailActivity');
 	});
 	Route::group([ 'prefix' => 'workspace'], function(){
