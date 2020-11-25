@@ -45,6 +45,7 @@ Route::group([ 'prefix' => 'teacher'], function(){									// ==================
 	Route::get('/load/courses', $route.'\Teacher@TeacherLoadCourse')->name('TeacherLoadCourse');
 	Route::post('/save/activity/{model}', $route.'\Teacher@saveActivity')->name('TeachersaveActivity');
 	Route::get('/delete/activity/{curso}/{model}', $route.'\Teacher@deleteActivity')->name('TeacherdeleteActivity');
+	Route::post('/update/activity', $route.'\Teacher@updateActivity')->name('TeacherupdateActivity');
 });
 Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	

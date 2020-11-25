@@ -350,17 +350,26 @@ var KTWizard1 = function () {
                 data: {"_token":"{{ csrf_token() }}","data":data},
                 dataType: "JSON",
                 success: function(e){
-                swal.fire({ title: "Accion completada", 
-                  text: "Se ha creado el examen!", 
-                  type: "success"
-					}).then(function () {
-						var $url_path = '{!! url('/') !!}';
-						if(e.id){
-							window.location.href = $url_path+"/teacher/assign/question/test/"+e.id+"/"+Preguntas;
-						}else{
-							window.location.href = $url_path+"/teacher/test/list/vol";
-						}
-					});
+					if (e.Error) {
+						swal.fire({
+						title: 'Ocurrio un error!',
+						text:  e.Error,
+						icon: 'error',
+						confirmButtonText: 'Aceptar',
+                    	})
+					} else {
+						swal.fire({ title: "Accion completada", 
+						text: "Se ha creado el examen!", 
+						type: "success"
+							}).then(function () {
+								var $url_path = '{!! url('/') !!}';
+								if(e.id){
+									window.location.href = $url_path+"/teacher/assign/question/test/"+e.id+"/"+Preguntas;
+								}else{
+									window.location.href = $url_path+"/teacher/test/list/vol";
+								}
+							});
+					}//fin else
                 },
                 error: function(e){
 					console.log(e);

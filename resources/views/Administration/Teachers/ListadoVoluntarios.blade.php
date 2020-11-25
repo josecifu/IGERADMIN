@@ -84,6 +84,8 @@
                                                 <!--end::Dropdown Menu-->
                                             </div>
                                             <!--end::Dropdown-->
+                                            <a href="{{url('administration/teacher/create')}}" class="btn btn-primary font-weight-bolder">
+                                            <i class="la la-plus"></i>Añadir un voluntario</a>
                                         </div>
                                     </div>
                                     <div class="card-body">

@@ -111,7 +111,11 @@
                                             <tbody>
                                                 <tr>
                                                     @foreach( $Models as $model)
-                                                        <td><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" onclick="verNotas( {{$model['Id']}},{{$course->id}});">{{$model['NoQuestions']}}</button></center></td>   
+                                                        @if($model['Tipo']=="Fisico")                                                       
+                                                            <td><center><button type="button" disabled class="btn btn-outline-info"  data-toggle="modal">Examen Fisico</button></center></td>   
+                                                        @else
+                                                            <td><center><button type="button"  class="btn btn-outline-info"  data-toggle="modal" onclick="verNotas( {{$model['Id']}},{{$course->id}});">Detalle preguntas{{$model['NoQuestions']}}</button></center></td>
+                                                        @endif
                                                    @endforeach
                                                 </tr>
                                             </tbody>
