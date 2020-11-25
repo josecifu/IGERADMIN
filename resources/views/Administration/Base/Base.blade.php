@@ -738,8 +738,15 @@
 					ListCourse($('#gradeselect1').val());
 				}
 			});
-
-			
+			@if(Session::has('error'))
+	  
+			Swal.fire({
+				title: "{{Session::get('error')}}",
+				text: "",
+				icon: "error",
+				confirmButtonText: "Aceptar",
+			})
+			@endif
 		</script>
 
 
