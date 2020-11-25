@@ -49,7 +49,7 @@
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item" href="#">Notas</a>
                                             <a class="dropdown-item" href="#">Asistencias</a>
-                                            <a class="dropdown-item" href="#">Examens</a>
+                                            <a class="dropdown-item" id="contact-tab-6" data-toggle="tab" href="#contact-6" aria-controls="contact">Examenes</a>
                                            
                                         </div>
                                     </li>
@@ -121,6 +121,45 @@
                                         <div class="tab-pane fade" id="contact-5" role="tabpanel" aria-labelledby="contact-tab-5">
                                             
                                         </div>
+                                        <div class="tab-pane fade " id="contact-6" role="tabpanel" aria-labelledby="contact-tab-6">
+                                            <div class="row">
+                                                <label class="col-xl-3"></label>
+                                                <div class="col-lg-9 col-xl-9">
+                                                    <h5 class="font-weight-bold mb-9">Configuración de tiempo para presentar examenes:</h5>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-3 col-form-label">Tiempo antes de la fecha de disponibilidad:</label>
+                                                <div class="col-9 col-form-label">
+                                                    <div class="radio-inline">
+                                                        <label class="radio radio-danger">
+                                                            <input type="radio" value="1" name="radios12"/>
+                                                            <span></span>
+                                                            Instantaneo
+                                                        </label>
+                                                        <label class="radio radio-danger">
+                                                            <input type="radio" value="2"  name="radios12" checked="checked" />
+                                                            <span></span>
+                                                            5 dias antes
+                                                        </label>
+                                                        <label class="radio radio-danger ">
+                                                            <input type="radio" value="3"  name="radios12" />
+                                                            <span></span>
+                                                            10 dias antes
+                                                        </label>
+                                                        <label class="radio radio-danger ">
+                                                            <input type="radio" value="4" name="radios12" />
+                                                            <span></span>
+                                                            Definir dias:
+                                                        </label>
+                                                        
+                                                        <input class="form-control" type="number" value="0" disabled id="cant"/>
+                                                        
+                                                    </div>
+                                                    <span class="form-text text-muted">Some help text goes here</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -139,6 +178,18 @@
     </div>
 	@stop
 	@section('scripts')
-
+    <script type="text/javascript">
+        $("input[type=radio][name=radios12]").change(function(){
+           if($(this).val()==4)
+           {
+                $('#cant').prop( "disabled", false );
+           }
+           else
+           {
+                $('#cant').prop( "disabled", true );
+                $('#cant').val(0);
+           }
+        });
+    </script>
       
 	@stop
