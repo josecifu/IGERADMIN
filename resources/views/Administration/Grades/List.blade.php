@@ -267,12 +267,12 @@
                                             </a>\
                                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right" >\
                                                 <ul class="nav nav-hoverable flex-column" >\
-                                                    <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#CoursesModal'+full[0]+'"><i class="nav-icon la la-mail-reply-all"></i><span class="nav-text" style="padding-left:10px;"> Agregar cursos a el grado</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#CoursesModal'+full[0]+'"><i class="nav-icon la la-mail-reply-all"></i><span class="nav-text" style="padding-left:10px;"> Agregar cursos al grado</span></a></li>\
                                                     <li class="nav-item"><a class="nav-link" href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')"><i class="nav-icon la la-trash"></i><span class="nav-text" style="padding-left:10px;"> Eliminar una materia</span></a></li>\
                                                 </ul>\
                                             </div>\
                                         </div>\
-                                        <a href="javascript:;" data-toggle="modal" data-target="#EditModal'+full[0]+'"  class="btn btn-sm btn-clean btn-icon" >\
+                                        <a href="javascript:;" onclick="EditGrade(\''+full[0]+'\',\''+full[1]+'\')"  class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Modificar Grado" data-placement="left">\
                                             <i class="la la-edit"></i>\
                                         </a>\
                                         @if($type=="Active")
@@ -317,8 +317,9 @@
             var $url_path = '{!! url('/') !!}';
             window.location.href = $url_path+"/administration/configurations/level/list/grades/level/"+lvl;
         }
-        function edit($id,$Name)
+        function EditGrade($id,$Name)
         {
+            console.log("HOLA");
             Swal.mixin({
                 input: 'text',
                 confirmButtonText: 'Siguiente  &rarr;',
@@ -608,6 +609,9 @@ $('#CoursesModal{{$Model['Id']}}').on('shown.bs.modal', function () {
                 }
             });
          }
+         $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+          })
        </script>
         <!--end::Page Scripts-->
       

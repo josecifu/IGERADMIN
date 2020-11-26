@@ -84,7 +84,12 @@
 												<div class="col-lg-4 col-md-9 col-sm-12">
 													<select class="form-control" id="Respuesta" name="param">
 														<option value="">--Seleccione una opción</option>
-															<option value="">{{$Question['Answers']}}</option>
+														@php 
+														$Answers = explode(',',$Question['Answers']);
+														@endphp
+														@foreach($Answers as $Answer)
+															<option value="{{$Answer}}">{{$Answer}}</option>
+														@endforeach
 													</select>
 												</div>
 											</div>

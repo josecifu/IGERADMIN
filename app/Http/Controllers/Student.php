@@ -78,7 +78,10 @@ class Student extends Controller
         $test = Test::find($id);
         return view('Student/test_form',compact('titles','buttons','test'));
     }
-
+    public function WorkSpace(Request $request)
+    {
+        return view('Student/workspace');
+    }
     public function save_answer(Request $request)
     {
         $id = $request->session()->get('User_id');
