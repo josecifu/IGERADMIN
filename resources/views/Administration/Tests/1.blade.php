@@ -40,7 +40,7 @@
                                     </div>
                                     <a href="#"><div class="wizard-label" >
                                         <h3 class="wizard-title">Pregunta No.{{$i}}</h3>
-                                        <div class="wizard-desc">Sin clasificar!</div>
+                                        <div class="wizard-desc" id="TextQuestion">Sin clasificar!</div>
                                     </div>
                                 </a>
                                 </div>
@@ -257,7 +257,6 @@
 						validator.validate().then(function (status) {
 							if (status == 'Valid') {
 								wizard.goTo(wizard.getNewStep());
-
 								KTUtil.scrollTop();
 							} else {
 								Swal.fire({
@@ -273,8 +272,13 @@
 								});
 							}
 						});
+						
 					}
-
+					else{
+						wizard.goTo(wizard.getNewStep());
+						KTUtil.scrollTop();
+					}
+					
 					return false;  // Do not change wizard step, further action will be handled by he validator
 				});
 
