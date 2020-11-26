@@ -139,19 +139,19 @@
 															@endif
 															@if($button['Type']=='add')
 																<li class="navi-footer py-4">
-																	<a class="btn btn-clean font-weight-bold btn-sm"  style="width: 100%" href="{{ url($button['Link'])}}">
+																	<a class="btn btn-clean font-weight-bold btn-sm"  style="height:100%; width: 100%" href="{{ url($button['Link'])}}">
 																	<i class="ki ki-plus icon-sm"></i>{{$button['Name']}}</a>
 																</li>
 															@elseif($button['Type']=='addFunction')
 																<li class="navi-footer py-4">
-																	<a class="btn btn-clean font-weight-bold btn-sm"  style="width: 100%" href="#" onclick="{{$button['Link']}}">
+																	<a class="btn btn-clean font-weight-bold btn-sm"  style="height:100%; width: 100%" href="#" onclick="{{$button['Link']}}">
 																	<i class="ki ki-plus icon-sm"></i>{{$button['Name']}}</a>
 																</li>
 															@elseif($button['Type']=='addFunction1')
 															<li class="navi-item">
 																<a href="#" onclick="{{$button['Link']}}" class="navi-link">
 																	<span class="navi-text">
-																		<span class="label label-xl label-inline"  style="width: 100%">{{$button['Name']}}</span>
+																		<span class="label label-xl label-inline"  style="height:100%;width: 100%">{{$button['Name']}}</span>
 																	</span>
 																</a>
 															</li>
@@ -159,7 +159,7 @@
 															<li class="navi-item">
 																<a href="{{ url($button['Link'])}}" class="navi-link">
 																	<span class="navi-text">
-																		<span class="label label-xl label-inline"  style="width: 100%">{{$button['Name']}}</span>
+																		<span class="label label-xl label-inline"  style="height:100%; width: 100%">{{$button['Name']}}</span>
 																	</span>
 																</a>
 															</li>
@@ -468,7 +468,6 @@
 								<span class="btn btn-sm btn-light font-weight-bolder my-lg-0 my-2 py-1 text-dark-50">15/11/2020</span>
 							</div>
 							<!--end: Item-->
-
 						</div>
 						<!--end::Section-->
 						<!--begin::Section-->
