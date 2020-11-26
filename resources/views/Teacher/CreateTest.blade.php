@@ -366,7 +366,7 @@ var KTWizard1 = function () {
 								if(e.id){
 									window.location.href = $url_path+"/teacher/assign/question/test/"+e.id+"/"+Preguntas;
 								}else{
-									window.location.href = $url_path+"/teacher/test/list/vol";
+									window.location.href = $url_path+"/teacher/test/list/"+{{$id}};
 								}
 							});
 					}//fin else
