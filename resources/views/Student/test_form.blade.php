@@ -26,7 +26,6 @@
                         <!--begin: Wizard Nav-->
                         <div class="wizard-nav">
                             <div class="wizard-steps px-8 py-8 px-lg-15 py-lg-3">
-                               
                                @foreach($test->Questions() as $key => $Question)
                                 <!--begin::Wizard Step 1 Nav-->
                                 <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
@@ -38,8 +37,6 @@
                                 </div>
                                 <!--end::Wizard Step 1 Nav-->
                               @endforeach
-                             
-                            
                             </div>
                         </div>
                         <!--end: Wizard Nav-->
@@ -51,24 +48,51 @@
                                     @foreach($test->Questions() as $key => $Question)
                                     <!--begin: Wizard Step 1-->
                                     <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
-                                        <h3 class="mb-10 font-weight-bold text-dark">Pregunta: {!! $Question->Title !!} <br> Tipo: @if($Question->Type=="V/F") Verdadero ó falso @else{{$Question->Type}}@endif <br>Punteo: {!! $Question->Score !!}</h3>
-                                        <!--begin::Input-->
+                                        <h3 class="mb-10 font-weight-bold text-dark">
+                                        	Pregunta: {!! $Question->Title !!}<br>
+                                        	Tipo:
+                                        	@if($Question->Type=="V/F")
+                                        		Verdadero ó falso
+                                        	@else{{$Question->Type}}
+                                        	@endif<br>
+                                        	Valor: {!! $Question->Score !!}
+                                        </h3>
                                         <div class="form-group">
                                                 <div class="card-body" style="border-style: solid;border-color: #E26207;">
                                                     {!! $Question->Content !!}
                                                 </div>
                                         </div>
-                                        <!--end::Input-->
-                                        	<div class="form-group">
-													<label>Respuesta:</label>
-													<input type="text" class="form-control" name="Respuesta" placeholder="" value="" />
-													<span class="form-text text-muted">Por favor escriba la respuesta correcta.</span>
+                                        <!--begin::Answer-->
+                                        	@if($Question->Type=="V/F")
+											<div class="radio-inline">
+												<label class="radio radio-primary">
+												<input type="radio" id="Respuesta" name="radios5"/>
+												<span></span>Verdadero</label>
+												<label class="radio radio-primary">
+												<input type="radio" id="Respuesta2" name="radios5"/>
+												<span></span>Falso</label>
 											</div>
+                                        	@elseif($Question->Type=="Respuesta Abierta")
+                                        	<div class="form-group">
+												<label>Respuesta:</label>
+												<input type="text" class="form-control" name="Respuesta" placeholder="" value="" />
+												<span class="form-text text-muted">Por favor escriba la respuesta correcta.</span>
+											</div>
+											@elseif($Question->Type=="Multiple")
+											<div class="form-group row">
+												<label class="col-3">Actividad</label>
+												<div class="col-lg-4 col-md-9 col-sm-12">
+													<select class="form-control" id="Respuesta" name="param">
+														<option value="">--Seleccione una opción</option>
+															<option value="">{{$Question['Answers']}}</option>
+													</select>
+												</div>
+											</div>
+                                        	@endif
+                                        <!--end::Answer-->
                                     </div>
                                     <!--end: Wizard Step 1-->
                                     @endforeach
-                                   
-                                   
                                     <!--begin: Wizard Actions-->
                                     <div class="d-flex justify-content-between border-top mt-5 pt-10">
                                         <div class="mr-2">
@@ -103,70 +127,6 @@
 				var _wizardObj;
 				var _validations = [];
 				// Private functions
-				var _initWizard = function () {
-					// Initialize form wizard
-					_wizardObj = new KTWizard(_wizardEl, {
-						startStep: 1, // initial active step number
-						clickableSteps: true  // allow step clicking
-					});
-					// Validation before going to next page
-					_wizardObj.on('change', function (wizard) {
-						if (wizard.getStep() > wizard.getNewStep()) {
-							return; // Skip if stepped back
-						}
-						// Validate form before change wizard step
-						var validator = _validations[wizard.getStep() - 1]; // get validator for currnt step
-						if (validator) {
-							validator.validate().then(function (status) {
-								if (status == 'Valid') {
-									wizard.goTo(wizard.getNewStep());
-									KTUtil.scrollTop();
-								} else {
-									Swal.fire({
-										text: "Por favor conteste",
-										icon: "error",
-										buttonsStyling: false,
-										confirmButtonText: "Ok, lo tengo!",
-										customClass: {
-											confirmButton: "btn font-weight-bold btn-light"
-										}
-									}).then(function () {
-										KTUtil.scrollTop();
-									});
-								}
-							});
-						}
-						return false;  // Do not change wizard step, further action will be handled by he validator
-					});
-					// Changed event
-					_wizardObj.on('changed', function (wizard) {
-						KTUtil.scrollTop();
-					});
-					// Submit event
-					_wizardObj.on('submit', function (wizard) {
-						// Validate form before submit
-						var validator = _validations[wizard.getStep() - 1]; // get validator for currnt step
-						if (validator) {
-							validator.validate().then(function (status) {
-								if (status == 'Valid') {
-									_formEl.submit(); // submit form
-								} else {
-									Swal.fire({
-										text: "Por favor conteste todas las preguntas",
-										icon: "error",
-										buttonsStyling: false,
-										confirmButtonText: "Ok, lo tengo!",
-										customClass: {
-											confirmButton: "btn font-weight-bold btn-light"
-										}
-									}).then(function () {
-										KTUtil.scrollTop();
-									});
-								}
-							});
-						}
-					});
-				}
 				var _initValidation = function () {
 					// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
 					// Step 1
@@ -193,13 +153,85 @@
 						}
 					));
 				}
+				// Private functions
+				var _initWizard = function () {
+					// Initialize form wizard
+					_wizardObj = new KTWizard(_wizardEl, {
+						startStep: 1, // initial active step number
+						clickableSteps: false  // allow step clicking
+					});
+					// Validation before going to next page
+					_wizardObj.on('change', function (wizard) {
+						if (wizard.getStep() > wizard.getNewStep()) {
+							return; // Skip if stepped back
+						}
+						/*
+						// Validate form before change wizard step
+						var validator = _validations[wizard.getStep() - 1]; // get validator for currnt step
+						if (validator) {
+							validator.validate().then(function (status) {
+								if (status == 'Valid') {
+									wizard.goTo(wizard.getNewStep());
+									KTUtil.scrollTop();
+								} else {
+									Swal.fire({
+										text: "Por favor responda las preguntas",
+										icon: "error",
+										buttonsStyling: false,
+										confirmButtonText: "Ok, lo tengo!",
+										customClass: {
+											confirmButton: "btn font-weight-bold btn-light"
+										}
+									}).then(function () {
+										KTUtil.scrollTop();
+									});
+								}
+							});
+						}
+						return false;  // Do not change wizard step, further action will be handled by he validator
+						*/
+					});
+					// Change event
+					_wizardObj.on('changed', function (wizard) {
+						KTUtil.scrollTop();
+					});
+					// Submit event
+					_wizardObj.on('submit', function (wizard) {
+						Swal.fire({
+							text: "Por favor conteste todas las preguntas",
+							icon: "success",
+							showCancelButton: true,
+							buttonsStyling: false,
+							confirmButtonText: "Guardar",
+							cancelButtonText: "Cancelar",
+							customClass: {
+								confirmButton: "btn font-weight-bold btn-primary",
+								cancelButton: "btn font-weight-bold btn-default"
+							}
+						}).then(function (result) {
+							if (result.value) {
+								crearDatos(); // Submit form
+							} else if (result.dismiss === 'cancel') {
+								Swal.fire({
+									text: "Las respuestas no fueron guardados!.",
+									icon: "error",
+									buttonsStyling: false,
+									confirmButtonText: "Ok, lo tengo!",
+									customClass: {
+										confirmButton: "btn font-weight-bold btn-primary",
+									}
+								});
+							}
+						});
+					});
+				}
 				return {
 					// public functions
 					init: function () {
 						_wizardEl = KTUtil.getById('kt_wizard_v3');
 						_formEl = KTUtil.getById('kt_form');
-						_initWizard();
 						_initValidation();
+						_initWizard();
 					}
 				};
 			}();

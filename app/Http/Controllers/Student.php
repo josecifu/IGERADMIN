@@ -119,7 +119,6 @@ class Student extends Controller
                 foreach($course->Tests() as $test)
                 {
                     $fecha_actual = date("d-m-Y");
-                   
                     $StartDate = date("d-m-Y",strtotime($test->StartDate." - 5 days")); 
                     $date_now = strtotime(date("d-m-Y H:i:00"));
                     $date_teststart = strtotime($StartDate);
@@ -129,7 +128,6 @@ class Student extends Controller
                     {
                         if($date_now <=$date_testend)
                         {
-                            
                             if($test->StartDate)
                             {
                                 $query =[
@@ -149,7 +147,6 @@ class Student extends Controller
                 }
             }     
         }
-   
         return view('Student/test_list',compact('models'));
     }
 
@@ -179,7 +176,6 @@ class Student extends Controller
                 }
             }     
         }
-        //dd($models);
         return view('Student/tests',compact('models'));
     }
 

@@ -14,8 +14,6 @@
         <div class="content flex-column-fluid" id="kt_content">
             <!--begin::Row-->
             <div class="row">
-
-
                 @foreach($models as $model)
                 <!--begin::Course-->
                 <div class="col-xl-4">
@@ -91,12 +89,10 @@
                         <i class="ki ki-bold-arrow-back icon-xs"></i>
                     </a>
                     <a href="#" class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1">...</a>
-                    <a href="#" class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1">3</a>
                     <a href="#" class="btn btn-icon btn-sm border-0 btn-hover-primary active mr-2 my-1">4</a>
                     <a href="#" class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1">5</a>
                     <a href="#" class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1">6</a>
                     <a href="#" class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1">7</a>
-                    <a href="#" class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1">8</a>
                     <a href="#" class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1">...</a>
                     <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-2 my-1">
                         <i class="ki ki-bold-arrow-next icon-xs"></i>
