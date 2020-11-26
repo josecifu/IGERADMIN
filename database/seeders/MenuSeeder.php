@@ -263,7 +263,9 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([ 
             'Name' => 'Visualizar examenes programados',
             'State' => '1',
-            'Url' => 'teacher/test/view',  //38
+            // 'Url' => 'teacher/test/view',  //38
+            'Type' => '3',
+            'Url' => 'listCourse(3)',
             'menu_id' => '37'          
         ]); 
         DB::table('menus')->insert([ 

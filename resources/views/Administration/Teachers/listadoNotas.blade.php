@@ -290,17 +290,24 @@
                                 data: {"_token":"{{ csrf_token() }}","data":data},
                                 dataType: "JSON",
                                 success: function(e){
-                                    swalWithBootstrapButtons.fire({
+                                    if(e.id){
+                                        swalWithBootstrapButtons.fire({
+                                        title: 'Error!',
+                                        text: e.id,
+                                        icon: 'error',
+                                        confirmButtonText: 'Aceptar',
+                                        })
+                                    }else{
+                                        swalWithBootstrapButtons.fire({
                                         title: 'Creado!',
                                         text: 'Se ha creado con exito!',
                                         icon: 'success',
                                         confirmButtonText: 'Aceptar',
-                                    }).then(function () {
-                                        
-                                        var $url_path = '{!! url('/') !!}';
-                                        window.location.href = $url_path+"/administration/teacher/score/"+{{$course->id}};
+                                        }).then(function () {
+                                            var $url_path = '{!! url('/') !!}';
+                                            window.location.href = $url_path+"/administration/teacher/score/"+{{$course->id}};
                                         });
-                                    
+                                    }//fin else                                    
                                 },
                                 error: function(e){
                                     swalWithBootstrapButtons.fire({
@@ -308,11 +315,9 @@
                                         text:   e.responseJSON['error'],
                                         icon: 'error',
                                         confirmButtonText: 'Aceptar',
-                                    })
-                                
+                                    }) 
                                 }
                             });
-                        
                         } else if (
                         result.dismiss === Swal.DismissReason.cancel
                         ) {

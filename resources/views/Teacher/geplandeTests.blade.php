@@ -38,7 +38,7 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            <h3 class="card-label">Listado de exámenes programados</h3>
+                                            <h3 class="card-label">Listado de exámenes virtuales programados</h3>
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->

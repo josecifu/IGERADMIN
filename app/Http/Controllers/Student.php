@@ -118,21 +118,38 @@ class Student extends Controller
             {
                 foreach($course->Tests() as $test)
                 {
-                    $query =[
-                        "id"=>$test->id,
-                        "course"=>$course->Name,
-                        "test"=>$test->Title,
-                        "start"=>$test->StartDate,
-                        "end"=>$test->EndDate,
-                        "score"=>$test->Score,
-                        "activity" => $test->Activity()->Name,
-                        "teacher"=> $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames
-                    ];
-                    array_push($models,$query);
+                    $fecha_actual = date("d-m-Y");
+                   
+                    $StartDate = date("d-m-Y",strtotime($test->StartDate." - 5 days")); 
+                    $date_now = strtotime(date("d-m-Y H:i:00"));
+                    $date_teststart = strtotime($StartDate);
+                    $EndDate = date("d-m-Y H:i:00",strtotime($test->EndDate)); 
+                    $date_testend = strtotime($EndDate);
+                    if($date_now >= $date_teststart)
+                    {
+                        if($date_now <=$date_testend)
+                        {
+                            
+                            if($test->StartDate)
+                            {
+                                $query =[
+                                    "id"=>$test->id,
+                                    "course"=>$course->Name,
+                                    "test"=>$test->Title,
+                                    "start"=>$test->StartDate,
+                                    "end"=>$test->EndDate,
+                                    "score"=>$test->Score,
+                                    "activity" => $test->Activity()->Name,
+                                    "teacher"=> $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames
+                                ];
+                                array_push($models,$query);
+                            }
+                        }
+                    }
                 }
             }     
         }
-        //dd($models);
+   
         return view('Student/test_list',compact('models'));
     }
 
