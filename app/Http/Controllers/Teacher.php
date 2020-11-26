@@ -379,7 +379,7 @@ class Teacher extends Controller
         $Models = [];
         if(session()->get('rol_Name')=="Voluntario"){
             $teacher = $request->session()->get('User_id');
-            $assignV = Asign_teacher_course::where('user_id',$teacher)->first();
+            $assignV = Asign_teacher_course::where('Course_id',$id)->first();
             if(isset($assignV)){
                 $course = course::find($assignV->Course_id);
                 $userV = user::find($assignV->user_id);
@@ -459,7 +459,7 @@ class Teacher extends Controller
         $buttons =[];
         if (session()->get('rol_Name')=="Voluntario") {
             $teacher = $request->session()->get('User_id');
-            $assignV = Asign_teacher_course::where([['user_id',$teacher],['State','Active']])->first();
+            $assignV = Asign_teacher_course::where([['Course_id',$id],['State','Active']])->first();
             if(isset($assignV)){
                 $course = course::find($assignV->Course_id);
                 $vol = Person::find($teacher);
@@ -491,7 +491,7 @@ class Teacher extends Controller
                 $vol = Person::find($userV->Person_id);
                 $course = course::find($id);
             }else{
-                return redirect('/administration/teacher/list')->withErrors(['Error', 'The Message']);
+                return redirect('/administration/teacher/list')->withErrors(['No hay voluntario asignado al curso']);
             }
         }
         $Titles = [];
@@ -702,30 +702,25 @@ class Teacher extends Controller
             return response()->json(["Acción Completada"]);
         }
     }
-    public function ViewTestsGeplande(Request $request)
+    public function ViewTestsGeplande($id)
     {
         $Titles = ['id','Examen','Fecha y hora de Inicio','Fecha y hora de Final','Acciones'];
-        $user = user::find($request->session()->get('User_id'));
-        $cursosT = user::find($user->id)->CoursesTeacher();
         $Models=[];        
-        foreach ($cursosT as $value) {
-            $actividades = Assign_activity::where([['Course_id',$value->Course_id],['State','Active']])->first();
-            if (isset($actividades)) {
-                $examenes = test::where([['Activity_id',$actividades->id],['State','Active']])->get();
-                foreach ($examenes as $value) {
-                    $fechainicio = explode(" ", $value->StartDate);
-                    $actual = new DateTime(null, new DateTimeZone('America/Guatemala'));
-                    if(date($fechainicio[0]) >= $actual->format('m/d/Y')){
-                        $data=[
-                            "id" => $value->id,
-                            "examen" => $value->Title,
-                            "FI" => $value->StartDate,
-                            "FF" => $value->EndDate,
-                        ];
-                        array_push($Models,$data);
-                    }
+        $actividades = Assign_activity::where([['Course_id',$id],['State','Active']])->first();
+        if (isset($actividades)) {
+            $examenes = test::where([['Activity_id',$actividades->id],['State','Active']])->get();
+            foreach ($examenes as $value) {
+                $fechainicio = explode(" ", $value->StartDate);
+                $actual = new DateTime(null, new DateTimeZone('America/Guatemala'));
+                if(date($fechainicio[0]) >= $actual->format('m/d/Y')){
+                    $data=[
+                        "id" => $value->id,
+                        "examen" => $value->Title,
+                        "FI" => $value->StartDate,
+                        "FF" => $value->EndDate,
+                    ];
+                    array_push($Models,$data);
                 }
-            } else {
             }
         }
         return view('Teacher/geplandeTests',compact('Titles','Models'));

@@ -574,6 +574,9 @@
 				else if(pos == 2){
 					$('#Title1').text("Listado de exámenes del curso: ");
 				}
+				else if(pos == 3){
+					$('#Title1').text("Listado de exámenes programados del curso: ");
+				}
 			} // Fin de la funcion
 
 			$.ajax ({
@@ -601,6 +604,12 @@
 					var Id = $('#courseselect1').val();
 					var $url_path = '{!! url('/') !!}';
                     window.location.href = $url_path+"/teacher/test/list/"+Id;
+				}
+				if(posCourse==3)
+				{
+					var Id = $('#courseselect1').val();
+					var $url_path = '{!! url('/') !!}';
+                    window.location.href = $url_path+"/teacher/test/view/"+Id;
 				}
 			}//fin de la funcion
 		

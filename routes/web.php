@@ -36,7 +36,7 @@ Route::group([ 'prefix' => 'teacher'], function(){									// ==================
 	Route::get('/home/dashboard',$route.'\Teacher@dashboard')->name('TeacherDashboard');
 	Route::get('/home/workspace',$route.'\Teacher@workspaceT')->name('Teacherworkspace');
 	Route::get('/score/list/{model}',$route.'\Teacher@score')->name('TeacherScore');
-	Route::get('/test/view',$route.'\Teacher@ViewTestsGeplande')->name('TeacherViewTestsGeplande');
+	Route::get('/test/view/{model}',$route.'\Teacher@ViewTestsGeplande')->name('TeacherViewTestsGeplande');
 	Route::get('/test/list/{model}',$route.'\Teacher@TestTeacher')->name('TeacherTests');
 	Route::get('/create/test/{model}',$route.'\Teacher@createExam')->name('TeacherCreateTest');
 	Route::get('/assign/question/test/{exam}/{model}',$route.'\Teacher@AssignQuestion')->name('TeacherAssignQuestions');
