@@ -229,8 +229,7 @@ class Student extends Controller
         $models = [];
         $student = [];
         $titles = [
-            'Id',
-            'Curso',
+            'Cursos',
             'Unidad I',
             'Unidad II',
             'Unidad III',
