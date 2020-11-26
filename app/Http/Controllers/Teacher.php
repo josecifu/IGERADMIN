@@ -547,9 +547,9 @@ class Teacher extends Controller
         $actividad = Assign_activity::where('Course_id',$id)->where('State','Active')->get();
         if ($actividad->isempty()) {
             if(session()->get('rol_Name')=="Voluntario"){
-                return redirect('/teacher/score/list/vol')->withErrors(['Error', 'No hay actividades creadas']);
+                return redirect('/teacher/score/list/'.$id)->withErrors(['El curso no tiene actividades creadas']);
             }else{
-                return redirect('/administration/teacher/score/'.$id)->withErrors(['Error', 'No hay actividades creadas']);
+                return redirect('/administration/teacher/score/'.$id)->withErrors(['El curso no tiene actividades creadas']);
             }
         } else {
             $actividades=[];
@@ -560,7 +560,11 @@ class Teacher extends Controller
                 ];
                 array_push($actividades,$data);
             }
-            return view('Administration/Teachers/CreateTest',compact('id','actividades'));
+            if(session()->get('rol_Name')=="Voluntario"){
+                return view('Teacher/CreateTest',compact('id','actividades'));
+            }else{
+                return view('Administration/Teachers/CreateTest',compact('id','actividades'));
+            }
         }
         
     }
@@ -577,18 +581,20 @@ class Teacher extends Controller
         $total = $Punteo;
         $grado = grade::find($c->Grade_id)->GradeName();
         $activity = Assign_activity::find($actividad);
-        $scores = test::where('Activity_id',$actividad)->get('Score');
+        $scores = test::where([['Activity_id',$actividad],['State','Active']])->orWhere('State','Fisico')->get('Score');
         foreach ($scores as $value) {
             $total += $value->Score;
         }
         if ($total > $activity->Score) {
-            return response()->json(["Error"=>"El punteo del examen exede el punteo total de la actividad"]);
+            return response()->json(["Error"=>"El punteo del examen excede el punteo total de la actividad: ".$activity->Score]);
         } else {
             if ($data['tipoexamen'] == 'true') {
+                if ($data['Preguntas'] <= 0) {
+                    return response()->json(["Error"=>"Ingrese una cantidad valida de preguntas"]);    
+                }
                 $Fechas = explode(' - ',$data['Fechas']);
                 $HoraI = $data['HoraI'];
                 $HoraF = $data['HoraF'];
-                $Preguntas = $data['Preguntas'];
                 try {
                     DB::beginTransaction();
                     $examen = new test;
@@ -645,33 +651,50 @@ class Teacher extends Controller
     }
     public function AssignQuestion($id,$preguntas)
     {
-        return view('Administration/Tests/1',compact('id','preguntas'));
+        if(session()->get('rol_Name')=="Voluntario"){
+            return view('Administration/Tests/AssignQuestionTeacher',compact('id','preguntas'));
+        }else{
+            return view('Administration/Tests/1',compact('id','preguntas'));   
+        }
     }
     public function SaveAssignQuestion(Request $request)
     {
         $data = $request->data;
         $test = $request->ID;
+        $scoreT = test::find($test);
         $assignTest = Asign_test_course::where('Test_id',$test)->first();
         $assign = Asign_teacher_course::find($assignTest->Teacher_id);
+        $total = 0;
         foreach ($data as $value) {
             $value = $value[0];
-            $preguntas = new Question;
-            $preguntas->Title = $value['Titulo'];
-            $preguntas->Content = $value['Contenido'];
-            $preguntas->Score = $value['Punteo'];
-            $preguntas->Type = $value['TipoPregunta'];
-            $preguntas->Answers = $value['Respuesta'];
-            if ($value['TipoPregunta'] == 'Multiple') {
-                $temp = "";
-                for ($i=0; $i < count($value['PosibleR']) ; $i++) { 
-                    $temp = $temp . $value['PosibleR'][$i] . ',';
-                }
-                $preguntas->CorrectAnswers = $temp;   
-            }
-            $preguntas->Test_id = $test;
-            $preguntas->save();
+            $total += $value['Punteo'];
         }
-        return response()->json(["id"=>$assign->Course_id]);
+        if ($total > $scoreT->Score) {
+            return response()->json(["Error"=>"La suma del punteo de las preguntas excede al punteo total del exámen: "+ $scoreT->Score]);
+        }else{
+            foreach ($data as $value) {
+                $value = $value[0];
+                $preguntas = new Question;
+                $preguntas->Title = $value['Titulo'];
+                $preguntas->Content = $value['Contenido'];
+                $preguntas->Score = $value['Punteo'];
+                $preguntas->Type = $value['TipoPregunta'];
+                if ($value['TipoPregunta'] == 'Multiple') {
+                    $temp = "";
+                    $preguntas->Answers = $value['Respuesta'];
+                    for ($i=0; $i < count($value['PosibleR']) ; $i++) { 
+                        $temp = $temp . $value['PosibleR'][$i] . ',';
+                    }
+                    $preguntas->CorrectAnswers = $temp;
+                }
+                else if($value['TipoPregunta'] == 'V/F'){
+                    $preguntas->Answers = $value['RespuestaVF'];;
+                }
+                $preguntas->Test_id = $test;
+                $preguntas->save();
+            }
+            return response()->json(["id"=>$assign->Course_id]);
+        }
         
     }
     public function createActivity($id)

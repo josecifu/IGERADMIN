@@ -1,4 +1,4 @@
-@extends('Administration.Base/Base')
+@extends('Administration.Base/BaseTeacher')
 {{-- Page title --}}
     @section('title')
     Inicio
@@ -116,12 +116,10 @@
 											<div class="form-group row" id="tipoVF{{$i}}" style="visibility: hidden;">
 												<label class="col-3">Respuesta Correcta</label>
 												<div class="col-9">
-													<div class="input-group input-group-solid">
-														<select class="form-control select2" id="VF{{$i}}" name="param">
-															<option value="Verdadero">Verdadero</option>
-															<option value="Falso">Falso</option>
-														</select>
-													</div>
+													<select class="form-control select2" id="VF{{$i}}" name="param">
+														<option value="Verdadero">Verdadero</option>
+														<option value="Falso">Falso</option>
+													</select>
 												</div>
 											</div>
 											<div class="form-group row" id="tipomulti{{$i}}" style="visibility: hidden;">
@@ -135,11 +133,9 @@
 											<div class="form-group row" id="Varios{{$i}}" style="visibility: hidden;">
 												<label class="col-3">Respuestas</label>
 												<div class="col-9">
-													<div class="input-group input-group-solid">
-															<select class="form-control select2" id="P-respuestas{{$i}}" multiple name="param">
-															<option label="Label"></option>
-															</select>
-													</div>
+													<select class="form-control select2" id="P-respuestas{{$i}}" multiple name="param">
+														<option label="Label"></option>
+													</select>
 												</div>
 											</div>
 										</div>
@@ -419,7 +415,7 @@
 						type: "success"
                         }).then(function () {
                         var $url_path = '{!! url('/') !!}';
-							window.location.href = $url_path+"/administration/teacher/test/"+e.id;
+							window.location.href = $url_path+"/teacher/test/list/"+e.id;
                         });
 					}
                      

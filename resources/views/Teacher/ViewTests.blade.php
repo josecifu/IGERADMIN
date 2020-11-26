@@ -39,7 +39,7 @@
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
                                             @isset($course)
-                                                <h3 class="card-label">Listado de Examenes de {{$course->Name ?? ''}} de {{$grado ?? ''}} / Voluntario encargado: {{$Nombre}}</h3>
+                                                <h3 class="card-label">Listado de Exámenes de {{$course->Name ?? ''}} de {{$grado ?? ''}} / Voluntario encargado: {{$Nombre}}</h3>
                                             @endisset
                                         </div>
                                         <div class="card-toolbar">
@@ -100,7 +100,7 @@
                                                 <tr>
                                                     @foreach($Titles as $Title)
                                                         @if($Title['No']==0)
-                                                        <th><center>No existen examenes asignados</center></th>
+                                                        <th><center>No existen exámenes asignados</center></th>
                                                         @endif
                                                         @foreach($Title['Test'] as $title)
                                                         <th><center>{{$title->Title}}</center></th>
