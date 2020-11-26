@@ -201,6 +201,7 @@
         "use strict";
 		for (let index = 1; index <= {{$preguntas}}; index++) {
 			$('#TipoPregunta'+index).select2({
+				minimumResultsForSearch: -1,
 				placeholder: "Seleccione el tipo de pregunta"
 			});
 			$('#P-respuestas'+index).select2({
@@ -236,6 +237,48 @@
 			var _wizardObj;
 			var _validations = [];
 
+			var _initValidation = function () {
+				// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
+				@for ($i = 1; $i <= $preguntas; $i++)
+				// Step $i
+				_validations.push(FormValidation.formValidation(
+					_formEl,
+					{
+						fields: {
+							Pregunta{{$i}}: {
+								validators: {
+									notEmpty: {
+										message: 'El titulo de la pregunta es requerido'
+									}
+								}
+							},
+							Punteo{{$i}}: {
+								validators: {
+									notEmpty: {
+										message: 'El punteo es requerido'
+									}
+								}
+							},
+							TipoPregunta{{$i}}: {
+								validators: {
+									notEmpty: {
+										message: 'El tipo de pregunta es requerido'
+									}
+								}
+							},
+						},
+						plugins: {
+							trigger: new FormValidation.plugins.Trigger(),
+							// Bootstrap Framework Integration
+							bootstrap: new FormValidation.plugins.Bootstrap({
+								//eleInvalidClass: '',
+								eleValidClass: '',
+							})
+						}
+					}
+				));
+				@endfor
+			}
 			// Private functions
 			var _initWizard = function () {
 				// Initialize form wizard
@@ -260,7 +303,7 @@
 								KTUtil.scrollTop();
 							} else {
 								Swal.fire({
-									text: "Sorry, looks like there are some errors detected, please try again.",
+									text: "No se puede continuar hasta completar los campos que son requeridos.",
 									icon: "error",
 									buttonsStyling: false,
 									confirmButtonText: "Ok, got it!",
@@ -318,24 +361,6 @@
 				});
 			}
 
-			var _initValidation = function () {
-				// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
-				// Step 1
-				_validations.push(FormValidation.formValidation(
-					_formEl,
-					{
-						
-						plugins: {
-							trigger: new FormValidation.plugins.Trigger(),
-							// Bootstrap Framework Integration
-							bootstrap: new FormValidation.plugins.Bootstrap({
-								//eleInvalidClass: '',
-								eleValidClass: '',
-							})
-						}
-					}
-				));
-			}
 
 				return {
 					// public functions
