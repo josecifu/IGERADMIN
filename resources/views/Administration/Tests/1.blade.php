@@ -327,7 +327,7 @@
 									text: "No se puede continuar hasta completar los campos que son requeridos.",
 									icon: "error",
 									buttonsStyling: false,
-									confirmButtonText: "Ok, got it!",
+									confirmButtonText: "Aceptar",
 									customClass: {
 										confirmButton: "btn font-weight-bold btn-light"
 									}

@@ -670,7 +670,7 @@ class Teacher extends Controller
             $total += $value['Punteo'];
         }
         if ($total > $scoreT->Score) {
-            return response()->json(["Error"=>"La suma del punteo de las preguntas excede al punteo total del exámen: "+ $scoreT->Score]);
+            return response()->json(["Error"=>"La suma del punteo de las preguntas excede al punteo total del exámen: ".$scoreT->Score]);
         }else{
             foreach ($data as $value) {
                 $value = $value[0];
