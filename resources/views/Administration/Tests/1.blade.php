@@ -105,7 +105,6 @@
 												<div class="col-9">
 													<div class="input-group input-group-solid">
 														<select class="form-control select2" id="TipoPregunta{{$i}}" name="param">
-															<option value="">Seleccione una opcion</option>
 															<option value="Respuesta Abierta">Respuesta abierta</option>
 															<option value="V/F">Verdadero o Falso</option>
 															<option value="Multiple">Selección Múltiple</option>
@@ -213,9 +212,9 @@
 		for (let index = 1; index <= {{$preguntas}}; index++) {
 			$('#TipoPregunta'+index).select2({
 				minimumResultsForSearch: -1,
-				placeholder: "Seleccione el tipo de pregunta"
 			});
 			$('#VF'+index).select2({
+				minimumResultsForSearch: -1,
 				placeholder: "V o F"
 			});
 			$('#P-respuestas'+index).select2({
@@ -466,4 +465,4 @@
 		 }//fin de la funcion
     </script>
       
-    @stop
+	@stop

@@ -1,4 +1,4 @@
-@extends('Administration.Base/BaseTeacher')
+@extends('Administration.Base/Base')
 {{-- Page title --}}
     @section('title')
     Inicio
@@ -40,7 +40,7 @@
                                     </div>
                                     <a href="#"><div class="wizard-label" >
                                         <h3 class="wizard-title">Pregunta No.{{$i}}</h3>
-                                        <div class="wizard-desc">Sin clasificar!</div>
+                                        <div class="wizard-desc" id="TextQuestion">Sin clasificar!</div>
                                     </div>
                                 </a>
                                 </div>
@@ -105,7 +105,6 @@
 												<div class="col-9">
 													<div class="input-group input-group-solid">
 														<select class="form-control select2" id="TipoPregunta{{$i}}" name="param">
-															<option value="">Seleccione una opcion</option>
 															<option value="Respuesta Abierta">Respuesta abierta</option>
 															<option value="V/F">Verdadero o Falso</option>
 															<option value="Multiple">Selección Múltiple</option>
@@ -116,10 +115,12 @@
 											<div class="form-group row" id="tipoVF{{$i}}" style="visibility: hidden;">
 												<label class="col-3">Respuesta Correcta</label>
 												<div class="col-9">
-													<select class="form-control select2" id="VF{{$i}}" name="param">
-														<option value="Verdadero">Verdadero</option>
-														<option value="Falso">Falso</option>
-													</select>
+													<div class="input-group input-group-solid">
+														<select class="form-control select2" id="VF{{$i}}" name="param">
+															<option value="Verdadero">Verdadero</option>
+															<option value="Falso">Falso</option>
+														</select>
+													</div>
 												</div>
 											</div>
 											<div class="form-group row" id="tipomulti{{$i}}" style="visibility: hidden;">
@@ -133,9 +134,11 @@
 											<div class="form-group row" id="Varios{{$i}}" style="visibility: hidden;">
 												<label class="col-3">Respuestas</label>
 												<div class="col-9">
-													<select class="form-control select2" id="P-respuestas{{$i}}" multiple name="param">
-														<option label="Label"></option>
-													</select>
+													<div class="input-group input-group-solid">
+															<select class="form-control select2" id="P-respuestas{{$i}}" multiple name="param">
+															<option label="Label"></option>
+															</select>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -208,9 +211,10 @@
         "use strict";
 		for (let index = 1; index <= {{$preguntas}}; index++) {
 			$('#TipoPregunta'+index).select2({
-				placeholder: "Seleccione el tipo de pregunta"
+				minimumResultsForSearch: -1,
 			});
 			$('#VF'+index).select2({
+				minimumResultsForSearch: -1,
 				placeholder: "V o F"
 			});
 			$('#P-respuestas'+index).select2({
@@ -253,6 +257,48 @@
 			var _wizardObj;
 			var _validations = [];
 
+			var _initValidation = function () {
+				// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
+				@for ($i = 1; $i <= $preguntas; $i++)
+				// Step $i
+				_validations.push(FormValidation.formValidation(
+					_formEl,
+					{
+						fields: {
+							Pregunta{{$i}}: {
+								validators: {
+									notEmpty: {
+										message: 'El titulo de la pregunta es requerido'
+									}
+								}
+							},
+							Punteo{{$i}}: {
+								validators: {
+									notEmpty: {
+										message: 'El punteo es requerido'
+									}
+								}
+							},
+							TipoPregunta{{$i}}: {
+								validators: {
+									notEmpty: {
+										message: 'El tipo de pregunta es requerido'
+									}
+								}
+							},
+						},
+						plugins: {
+							trigger: new FormValidation.plugins.Trigger(),
+							// Bootstrap Framework Integration
+							bootstrap: new FormValidation.plugins.Bootstrap({
+								//eleInvalidClass: '',
+								eleValidClass: '',
+							})
+						}
+					}
+				));
+				@endfor
+			}
 			// Private functions
 			var _initWizard = function () {
 				// Initialize form wizard
@@ -274,11 +320,10 @@
 						validator.validate().then(function (status) {
 							if (status == 'Valid') {
 								wizard.goTo(wizard.getNewStep());
-
 								KTUtil.scrollTop();
 							} else {
 								Swal.fire({
-									text: "Sorry, looks like there are some errors detected, please try again.",
+									text: "No se puede continuar hasta completar los campos que son requeridos.",
 									icon: "error",
 									buttonsStyling: false,
 									confirmButtonText: "Ok, got it!",
@@ -290,8 +335,13 @@
 								});
 							}
 						});
+						
 					}
-
+					else{
+						wizard.goTo(wizard.getNewStep());
+						KTUtil.scrollTop();
+					}
+					
 					return false;  // Do not change wizard step, further action will be handled by he validator
 				});
 
@@ -331,24 +381,6 @@
 				});
 			}
 
-			var _initValidation = function () {
-				// Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
-				// Step 1
-				_validations.push(FormValidation.formValidation(
-					_formEl,
-					{
-						
-						plugins: {
-							trigger: new FormValidation.plugins.Trigger(),
-							// Bootstrap Framework Integration
-							bootstrap: new FormValidation.plugins.Bootstrap({
-								//eleInvalidClass: '',
-								eleValidClass: '',
-							})
-						}
-					}
-				));
-			}
 
 				return {
 					// public functions
@@ -397,7 +429,7 @@
 				preguntas.push(data);
 			}
             $.ajax({
-                url:'/administration/teacher/save/question/test',
+                url:'/teacher/save/question/test',
                 type:'POST',
                 data: {"_token":"{{ csrf_token() }}","data":preguntas,"ID":id},
                 dataType: "JSON",
@@ -433,4 +465,4 @@
 		 }//fin de la funcion
     </script>
       
-    @stop
+	@stop

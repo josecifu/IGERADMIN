@@ -24,7 +24,7 @@ Route::get('/logout', $route.'\LoginController@logout')->name('logout');
 Route::group([ 'prefix' => 'student'], function(){
 	$route = "App\Http\Controllers";
 	Route::get('/home/dashboard',$route.'\Student@dashboard')->name('StudentDashboard');
-	Route::get('/home/workspace',$route.'\Student@workspace')->name('WorkSpace');
+	Route::get('/home/workspace/{model}',$route.'\Student@workspace')->name('WorkSpace');
 	Route::get('/test/list',$route.'\Student@all_tests')->name('StudentAllTest');
 	Route::get('/test/view',$route.'\Student@student_test_list')->name('TestStudentView');
 	Route::get('/test/view/questions/{model}',$route.'\Student@test_questions')->name('TestQuestions');
@@ -49,6 +49,9 @@ Route::group([ 'prefix' => 'teacher'], function(){									// ==================
 	Route::post('/save/activity/{model}', $route.'\Teacher@saveActivity')->name('TeachersaveActivity');
 	Route::get('/delete/activity/{curso}/{model}', $route.'\Teacher@deleteActivity')->name('TeacherdeleteActivity');
 	Route::post('/update/activity', $route.'\Teacher@updateActivity')->name('TeacherupdateActivity');
+	Route::post('/save/question/test', $route.'\Teacher@SaveAssignQuestion')->name('TeacherSaveAssignQuestion');
+	Route::get('/prueba', $route.'\Teacher@QualifyTest');
+	Route::post('/qualify/question', $route.'\Teacher@SaveQualifyTest');
 });
 Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	

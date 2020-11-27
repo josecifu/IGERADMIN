@@ -197,7 +197,7 @@
 												<div class="form-group row" id="SelectCourse">
 													<label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el curso:</label>
 													<div class="col-lg-9 col-md-9 col-sm-12">
-														<select class="form-control selectpicker" title="Ningun curso ha sido seleccionado" data-size="10" data-live-search="true" id="courseselect1">
+														<select class="form-control selectpicker" data-size="10" id="courseselect1">
 														   
 														</select>
 														<span class="form-text text-muted" id="Title3">Visualice las notas del curso seleccionado</span>
@@ -577,6 +577,9 @@
 				else if(pos == 3){
 					$('#Title1').text("Listado de exámenes programados del curso: ");
 				}
+				else if(pos == 4){
+					$('#Title1').text("Espacio de trabajo del curso: ");
+				}
 			} // Fin de la funcion
 
 			$.ajax ({
@@ -610,6 +613,12 @@
 					var Id = $('#courseselect1').val();
 					var $url_path = '{!! url('/') !!}';
                     window.location.href = $url_path+"/teacher/test/view/"+Id;
+				}
+				if(posCourse==4)
+				{
+					var Id = $('#courseselect1').val();
+					var $url_path = '{!! url('/') !!}';
+                    window.location.href = $url_path+"/teacher/home/workspace/"+Id;
 				}
 			}//fin de la funcion
 		

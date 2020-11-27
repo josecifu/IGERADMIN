@@ -4,13 +4,14 @@
     Inicio
     @stop
     @section('breadcrumb1')
-    Tablero
+    Asignación
     @stop
     @section('breadcrumb2')
-    Examenes
+    Preguntas
     @stop
     {{-- Page content --}}
     @section('content')
+
     <div class="content flex-column-fluid" id="kt_content">
                                 <!--begin::Notice-->
                                 <!--<div class="alert alert-custom alert-white alert-shadow gutter-b" role="alert">
@@ -35,14 +36,20 @@
                                 <div class="card card-custom">
                                     <div class="card-header">
                                         <div class="card-title">
-                                            <span class="card-icon">
-                                                <i class="flaticon2-favourite text-primary"></i>
-                                            </span>
-                                            @isset($course)
-                                                <h3 class="card-label">Listado de Exámenes de {{$course->Name ?? ''}} de {{$grado ?? ''}} / Voluntario encargado: {{$Nombre}}</h3>
-                                            @endisset
+                                            <div class="card-toolbar">
+                                                <!--begin::Dropdown-->
+                                                <a href="#" class="btn btn-danger font-weight-bolder mr-2">
+                                                <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
+                                                <!--end::Dropdown-->
+                                            </div>
                                         </div>
                                         <div class="card-toolbar">
+                                            <div class="card-toolbar">
+                                                <!--begin::Dropdown-->
+                                                <a onclick="calificar();" class="btn btn-primary font-weight-bolder mr-2">
+                                                <i class="ki ki-check icon-sm"></i>Guardar Calificación</a>
+                                                <!--end::Dropdown-->
+                                            </div>
                                             <!--begin::Dropdown-->
                                             <div class="dropdown dropdown-inline mr-2">
                                                 <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -89,38 +96,45 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <!--begin: Datatable-->
-                                        <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
-                                            <thead>
-                                                <tr>
-                                                    @foreach($Titles as $Title)
-                                                    <th colspan="{{$Title['No']}}" >{{ $Title['Name'] }}</th>
+                                        <!--begin::Card-->
+										<div class="card card-custom gutter-b example-hover">
+											<div class="card-header">
+												<div class="card-title">
+                                                    <span class="card-icon">
+                                                        <i class="flaticon2-favourite text-primary"></i>
+                                                    </span>
+													<h3 class="card-label">{{$test->Title}} - Valor: {{$test->Score}} pts</h3>
+												</div>
+											</div>
+											<div class="card-body">
+												<!--begin::Accordion-->
+												<div class="accordion accordion-toggle-arrow" id="accordionExample1">
+                                                    @foreach($Models as $key => $q)
+                                                        <div class="card">
+                                                            <div class="card-header">
+                                                                    <div class="card-title" data-toggle="collapse" data-target="#collapseOne{{$key}}">{{$q['Pregunta']}}  - valor {{$q['valor']}} pts - Tipo:{{$q['Tipo']}}</div>
+                                                            </div>
+                                                             <div id="collapseOne{{$key}}" data-parent="#accordionExample1"> <!-- style="text-align: center" -->
+                                                                <div class="card-body">
+                                                                    <h5>Respuesta Correcta: {{$q['RespuestaC']}}</h5>
+                                                                    <label>Respuesta del estudiante: {{$q['RespuestaE']}}</label>
+                                                                    <div class="form-group row">
+                                                                        <label class="col-2 col-form-label">Punteo: </label>
+                                                                        <div class="col-1">
+                                                                            <input name="score{{$key}}" id="score{{$key}}"  value="{{$q['Punteo']}}" class="form-control" type="text" style="text-align: center"/>
+                                                                        </div>
+                                                                    </div>
+                                                                    <input name="answer{{$key}}" id="answer{{$key}}"  value="{{$q['id']}}" class="form-control" type="hidden" style="text-align: center"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     @endforeach
-                                                </tr>
-                                                <tr>
-                                                    @foreach($Titles as $Title)
-                                                        @if($Title['No']==0)
-                                                        <th><center>No existen exámenes asignados</center></th>
-                                                        @endif
-                                                        @foreach($Title['Test'] as $title)
-                                                        <th><center>{{$title->Title}}</center></th>
-                                                        @endforeach
-                                                    @endforeach
-                                                  </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    @foreach( $Models as $model)
-                                                        @if($model['Tipo']=="Fisico")                                                       
-                                                            <td><center><button type="button" disabled class="btn btn-outline-info"  data-toggle="modal">Examen Fisico</button></center></td>   
-                                                        @else
-                                                            <td><center><button type="button"  class="btn btn-outline-info"  data-toggle="modal" onclick="verNotas( {{$model['Id']}},{{$course->id}});">Detalle preguntas: {{$model['NoQuestions']}}</button></center></td>
-                                                        @endif
-                                                   @endforeach
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <!--end: Datatable-->
+												</div>
+												<!--end::Accordion-->
+											</div>
+										</div>
+                                        <!--end::Card-->
+                                        
                                     </div>
                                 </div>
                                 <!--end::Card-->
@@ -135,50 +149,54 @@
         <!--begin::Page Scripts(used by this page)-->
         
         <!--end::Page Scripts-->
+     
         <script type="text/javascript">
            
-            "use strict";
-            var KTDatatablesDataSourceHtml = function() {
-
-                var initTable1 = function() {
-                    var table = $('#kt_datatable');
-
-                    // begin first table
-                    table.DataTable({
-                        responsive: true,
-                        "language": {
-                            "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-                        },
-                        columnDefs: [
-                            {
-                            },
-                           
-                          
-                        ],
-                    });
-
-                };
-
-                return {
-
-                    //main function to initiate the module
-                    init: function() {
-                        initTable1();
+            function calificar() {
+                var modelo=[];
+                for (let i = 0; i < {{count($Models)}}; i++) {
+                    var id = $('#answer'+i).val();
+                    var Punteo = $('#score'+i).val();
+                    var data = [{
+                        id: id,
+                        Punteo: Punteo,
+                    }];
+                    modelo.push(data);
+                }
+                $.ajax({
+                url:'/teacher/qualify/question',
+                type:'POST',
+                data: {"_token":"{{ csrf_token() }}","data":modelo},
+                dataType: "JSON",
+                success: function(e){
+                        if (e.Error) {
+                            swal.fire({
+                            title: 'Error!',
+                            text: e.Error,
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar',
+                            })
+                        } else {
+                            swal.fire({ title: "Accion completada", 
+                            text: "El exámen ha sido calificado!", 
+                            type: "success"
+                            }).then(function () {
+                            var $url_path = '{!! url('/') !!}';
+                                window.location.href = $url_path+"/teacher/home/dashboard";
+                            });
+                        }
+                        
                     },
-
-                };
-
-            }();
-
-            jQuery(document).ready(function() {
-                KTDatatablesDataSourceHtml.init();
-            });
-            function verNotas($id,$curso) {
-                var $url_path = '{!! url('/') !!}';
-                window.location.href = $url_path+"/teacher/question/"+$id+"/"+$curso;
+                    error: function(e){
+                        console.log(e);
+                        swal.fire({
+                            title: 'Ocurrio un error!',
+                            text:  'Los datos no han sido registrados!, verifique los campos',
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar',
+                        })
+                    }
+                });
             }
-
        </script>
-
-      
 	@stop

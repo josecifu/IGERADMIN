@@ -16,6 +16,8 @@ use App\Models\test;
 use App\Models\Question;
 //tabla de asignacion de preguntas a prueba
 use App\Models\Asign_question_test;
+//tabla de asignacion de preguntas a prueba
+use App\Models\Asign_answer_test_student;
 //tabla de asignacion de prueba a curso
 use App\Models\Asign_test_course;
 //tabla de asignacion de estudiante grado
@@ -61,26 +63,22 @@ class Teacher extends Controller
         array_push($buttons,$button);
         return view('Administration/Teachers/spaceWork',compact('buttons'));
     }
-    public function workspaceT(Request $request)
+    public function workspaceT(Request $request, $id)
     {
         $id = user::find($request->session()->get('User_id'));
-        $assignC = user::find($request->session()->get('User_id'))->CoursesTeacher();
+        $course = course::find($id);
         $info = [];
-        $curse = "";
-        foreach ($assignC as $value) {
-            $curse = course::find($value->Course_id);
-            $grade = grade::find($curse->Grade_id)->Period();
-            $students = Assign_student_grade::where([['Grade_id',$curse->Grade_id],['State','Active']])->get();
-            $tests = Asign_test_course::where('Teacher_id',$value->id)->get();
-            $info = [
-                "curso" => $curse->Name,
-                "Period" => $grade->Name,
-                "Students" => count($students),
-                "Tests" => count($tests),
-            ];
-        }
+        $grade = grade::find($curse->Grade_id)->Period();
+        $students = Assign_student_grade::where([['Grade_id',$curse->Grade_id],['State','Active']])->get();
+        $tests = Asign_test_course::where('Teacher_id',$value->id)->get();
+        $info = [
+            "curso" => $curse->Name,
+            "Period" => $grade->Name,
+            "Students" => count($students),
+            "Tests" => count($tests),
+        ];
         $teacher = Person::find($id->Person_id);
-        return view('/Teacher/spaceWork',compact('info','teacher'));
+        return view('/Teacher/spaceWork',compact('info','teacher','id'));
     }
     public function TeacherTests(Request $request)
     {  
@@ -400,7 +398,7 @@ class Teacher extends Controller
         $Titles = [];
         $Models = [];
         $Modal = [];
-        $Activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
+        $Activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->orWhere('State','Fisico')->get();
         $gradeStudents = grade::find($course->Grade_id)->Students();
         foreach($Activities as $Activity)
         {
@@ -415,13 +413,11 @@ class Teacher extends Controller
                 "Test" => $Activity->Tests(),
             ];
             array_push($Titles,$act);
-            // dd($Titles);
         }
-        
         foreach($gradeStudents as $student)
         {
             $notas=[];
-            foreach($Activities as $Activity)
+            foreach($Activity->Tests() as $v)
             {
                 array_push($notas,0);
             }
@@ -528,13 +524,49 @@ class Teacher extends Controller
     {
         $test = test::find($id);
         $questions = Question::where('Test_id',$id)->get();
+        $Models = [];
+        foreach ($questions as $value) {
+            dd($value->Title);
+        }
         if (session()->get('rol_Name')=="Voluntario") {
             return view('Teacher/QuestionTest',compact('test','questions','curso'));
         }else{
             return view('Administration/Teachers/QuestionTest',compact('test','questions','curso'));
         }
     }
-
+    public function QualifyTest()
+    {
+        $id = 1;    //este proviene de la ruta como parametro
+        $answers = Asign_answer_test_student::where([['Studen_id',$id],['State','Active']])->get();
+        $test;
+        $Models = [];
+        foreach ($answers as $key => $value) {
+            $question = Question::find($value->Question_id);
+            $data = [
+                'id' => $value->id,
+                'Pregunta' => $question->Title,
+                'valor' => $question->Score,
+                'Tipo' => $question->Type,
+                'RespuestaC' => $question->Answers,
+                'RespuestaE' => $value->Answers,
+                'Punteo' => $value->Score,
+            ];
+            array_push($Models,$data);
+            $test = test::find($question->Test_id);
+        }
+        return view('Teacher/QualifyTestStudent',compact('test','Models'));
+    }
+    public function SaveQualifyTest(Request $request)
+    {
+        $data = $request->data;
+        foreach ($data as $value){
+            $value = $value[0];
+            $respuesta = Asign_answer_test_student::find($value['id']);
+            $respuesta->Score = $value['Punteo'];
+            $respuesta->save();
+        }
+        return response()->json(["Accion Completada"]);
+    }
     public function createExam($id)
     {
         // $buttons =[];
@@ -670,7 +702,7 @@ class Teacher extends Controller
             $total += $value['Punteo'];
         }
         if ($total > $scoreT->Score) {
-            return response()->json(["Error"=>"La suma del punteo de las preguntas excede al punteo total del exámen: "+ $scoreT->Score]);
+            return response()->json(["Error"=>"La suma del punteo de las preguntas excede al punteo total del exámen: ". $scoreT->Score]);
         }else{
             foreach ($data as $value) {
                 $value = $value[0];
