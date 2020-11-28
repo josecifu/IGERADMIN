@@ -15,8 +15,8 @@ class CreateNotesTable extends Migration
     {
         Schema::create('notes', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('Studen_id'); 
-            $table->foreign('Studen_id')->references('id')->on('assign_student_grades');
+            $table->unsignedInteger('Student_id'); 
+            $table->foreign('Student_id')->references('id')->on('assign_student_grades');
             $table->unsignedInteger('Course_id'); 
             $table->foreign('Course_id')->references('id')->on('courses');
             $table->string('Score')->nullable();

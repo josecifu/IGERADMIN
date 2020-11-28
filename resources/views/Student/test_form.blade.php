@@ -17,7 +17,7 @@
                 <div class="alert-icon">
                    
                 </div>
-                <div class="alert-text"><center><h1>{{$test->Title}}</h1><h2>Fecha de finalización: {{$test->EndDate}}</h2></center></div>
+                <div class="alert-text"><center><h1>{{$test->Title}}- {{$Course}}</h1><h2>Fecha de finalización: {{$test->EndDate}}</h2></center></div>
             </div>
             <div class="card card-custom">
                 <div class="card-body p-0">
@@ -66,23 +66,23 @@
                                         	@if($Question->Type=="V/F")
 											<div class="radio-inline">
 												<label class="radio radio-primary">
-												<input type="radio" id="Respuesta" name="radios5"/>
+												<input type="radio" id="AnswerVF{{$key}}1" value="V" name="AnswerRadio{{$key}}"/>
 												<span></span>Verdadero</label>
 												<label class="radio radio-primary">
-												<input type="radio" id="Respuesta2" name="radios5"/>
+												<input type="radio" id="AnswerVF{{$key}}2" value="F" name="AnswerRadio{{$key}}"/>
 												<span></span>Falso</label>
 											</div>
                                         	@elseif($Question->Type=="Respuesta Abierta")
                                         	<div class="form-group">
 												<label>Respuesta:</label>
-												<input type="text" class="form-control" name="Respuesta" placeholder="" value="" />
+												<input type="text" class="form-control" name="Respuesta" id="AnswerText{{$key}}" placeholder="" value="" />
 												<span class="form-text text-muted">Por favor escriba la respuesta correcta.</span>
 											</div>
 											@elseif($Question->Type=="Multiple")
 											<div class="form-group row">
 												<label class="col-3">Actividad</label>
-												<div class="col-lg-4 col-md-9 col-sm-12">
-													<select class="form-control" id="Respuesta" name="param">
+												<div class="col-lg-9 col-md-9 col-sm-12">
+													<select class="form-control" id="AnswerSelect{{$key}}" style="width:100%" name="param">
 														<option value="">--Seleccione una opción</option>
 														@php 
 														$Answers = explode(',',$Question['Answers']);
@@ -93,6 +93,7 @@
 													</select>
 												</div>
 											</div>
+											
                                         	@endif
                                         <!--end::Answer-->
                                     </div>
@@ -101,8 +102,11 @@
                                     <!--begin: Wizard Actions-->
                                     <div class="d-flex justify-content-between border-top mt-5 pt-10">
                                         <div class="mr-2">
-                                            <button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev">Pregunta anterior</button>
-                                        </div>
+											@if($test->Order=="true")
+                                            <button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev" style="color:white;">Pregunta anterior</button>
+											@endif
+											
+										</div>
                                         <div>
                                             <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Subir examen</button>
                                             <button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente Pregunta</button>
@@ -122,7 +126,14 @@
     @stop
     @section('scripts')
         <!--begin::Page Scripts(used by this page)-->
-        <script type="text/javascript">
+		<script type="text/javascript">
+			$( document ).ready(function() {
+				$.ajaxSetup({
+					  headers: {
+						  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					  }
+				  }); 
+			   });
             "use strict";
 			// Class definition
 			var KTWizard3 = function () {
@@ -163,7 +174,11 @@
 					// Initialize form wizard
 					_wizardObj = new KTWizard(_wizardEl, {
 						startStep: 1, // initial active step number
-						clickableSteps: false  // allow step clicking
+						@if($test->Order =="true")
+						clickableSteps: true  // allow step clicking
+						@else
+						clickableSteps: false
+						@endif
 					});
 					// Validation before going to next page
 					_wizardObj.on('change', function (wizard) {
@@ -203,7 +218,7 @@
 					// Submit event
 					_wizardObj.on('submit', function (wizard) {
 						Swal.fire({
-							text: "Por favor conteste todas las preguntas",
+							text: "¿Desea completar el examen? no se podra editar las respuestas al finalizar.",
 							icon: "success",
 							showCancelButton: true,
 							buttonsStyling: false,
@@ -221,7 +236,7 @@
 									text: "Las respuestas no fueron guardados!.",
 									icon: "error",
 									buttonsStyling: false,
-									confirmButtonText: "Ok, lo tengo!",
+									confirmButtonText: "Aceptar",
 									customClass: {
 										confirmButton: "btn font-weight-bold btn-primary",
 									}
@@ -240,7 +255,81 @@
 					}
 				};
 			}();
+			function crearDatos()
+			{
+				
+				var Answers = [];
+				var question;
+				@foreach($test->Questions() as $key => $Question)
+				
+				@if($Question->Type=="V/F")
+					question =$("input[name='AnswerRadio{{$key}}']:checked").val();  
+				@elseif($Question->Type=="Respuesta Abierta")
+					question = $('#AnswerText{{$key}}').val();
+				@elseif($Question->Type=="Multiple")
+					question = $('#AnswerSelect{{$key}}').val();
+				@endif
+				var data = {
+					"QuestionId" :{{$Question->id}},
+					"Answer" : question,
+				};
+				Answers.push(data);
+				@endforeach
+				$.ajax({
+					url:"{{url('student/test/view/answers/save')}}",
+					type:'POST',
+					data: {"_token":"{{ csrf_token() }}","data":Answers,"IdTest":{{$test->id}}},
+					dataType: "JSON",
+					success: function(e){
+						if (e.Error) {
+							swal.fire({
+							title: 'Ocurrio un error!',
+							text:  e.Error,
+							icon: 'error',
+							confirmButtonText: 'Aceptar',
+							})
+						} else {
+							swal.fire({ title: "Accion completada", 
+							text: "Se ha creado el examen!", 
+							type: "success"
+							}).then(function () {
+								var $url_path = '{!! url('/') !!}';
+								if(e.id){
+									window.location.href = $url_path+"/administration/teacher/assign/question/test/"+e.id+"/"+Preguntas;
+								}else{
+									window.location.href = $url_path+"/administration/teacher/test/";
+								}
+							});
+						}//fin else
+					},
+					error: function(e){
+						console.log(e);
+						swal.fire({
+							title: 'Ocurrio un error!',
+							text:  'Los datos no han sido registrados!, verifique los campos',
+							icon: 'error',
+							confirmButtonText: 'Aceptar',
+						})
+					}
+				});
+			}
 			jQuery(document).ready(function () {
+				@foreach($test->Questions() as $key => $Question)
+					@if($Question->Type=="Multiple")
+						$('#AnswerSelect{{$key}}').select2({
+							minimumResultsForSearch: -1,
+							placeholder: "Seleccione una respuesta"
+						});
+					@endif
+				@endforeach
+				@if($test->Order =="true")
+				Swal.fire({
+					title: "¡Advertencia!",
+					text: "Al iniciar el exámen, no podra regresar ninguna pregunta",
+					icon: "info",
+					confirmButtonText: "Aceptar",
+				});
+				@endif
 			    KTWizard3.init();
 			    document.querySelectorAll( 'oembed[url]' ).forEach( element => {     
 			        var videoId = getId(element.getAttribute("url"));

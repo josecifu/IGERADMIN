@@ -21,6 +21,7 @@ class CreateTestsTable extends Migration
             $table->string('EndDate')->nullable();
             $table->unsignedInteger('Activity_id'); 
             $table->foreign('Activity_id')->references('id')->on('assign_activities');
+            $table->string('Order')->nullable();
             $table->string('State');
             $table->timestamps();
         });

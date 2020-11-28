@@ -42,8 +42,12 @@
                     </h5>
                   </div>
                   <div class="card-toolbar">
-                    <a href="{{url('/student/test/view/questions/1')}}">
-                      <button type="button" class="btn btn-outline-info">Empezar</button>
+                    <a href="{{url('/student/test/view/questions/'.$model['id'])}}">
+                      <button type="button" 
+                      @if($model['Active'])
+                        disabled
+                      @endif
+                      class="btn btn-outline-info">Empezar</button>
                     </a>
                   </div>
                 </div>
@@ -55,16 +59,24 @@
                       {{$model['test']}}
                     </h6>
                     <div class="d-flex justify-content-between align-items-center">
-                      <span class="text-dark-75 font-weight-bolder mr-2">Valor:</span>
-                      <span class="text-dark-75 font-weight-bolder">{{$model['score']}}</span>
+                      <span class="text-dark-75 font-weight-bolder mr-2">No de preguntas:</span>
+                    <span class="label label-info label-inline mr-2">{{$model['NoQuestions']}} Preguntas</span>
                     </div>
+                    <br>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="text-dark-75 font-weight-bolder mr-2">Valor:</span>
+                      <span class="label label-warning label-pill label-inline mr-2">{{$model['score']}} PTS</span>
+                    </div>
+                    <br>
                     <div class="d-flex justify-content-between align-items-center">
                       <span class="text-dark-75 font-weight-bolder mr-2">Fecha de disponibilidad:</span>
-                      <span class="text-dark-75 font-weight-bolder">{{$model['start']}}</span>
+                      <span class="label label-dark label-inline mr-2">{{$model['start']}}</span>
+                      
                     </div>
+                    <br>
                     <div class="d-flex justify-content-between align-items-center">
                       <span class="text-dark-75 font-weight-bolder mr-2">Fecha de finalización</span>
-                      <span class="text-dark-75 font-weight-bolder">{{$model['end']}}</span>
+                      <span class="label label-dark label-inline mr-2">{{$model['end']}}</span>
                     </div>
                   </div>
                   <!--end::Info-->

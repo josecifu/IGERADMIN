@@ -14,6 +14,10 @@ class test extends Model
     public function Activity(){
         return $this->hasOne('App\Models\Assign_activity','id','Activity_id')->first();
     }
+    public function Course()
+    {
+            return $this->hasManyThrough(course::class,Assign_activity::class,'id','id')->first();
+    }
     public function NoQuestions(){
         return count($this->Questions()) ?? 0;
     }

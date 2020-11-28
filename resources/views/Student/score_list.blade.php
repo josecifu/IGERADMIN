@@ -31,13 +31,24 @@
                     <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
                             <tr>
-                                <th>Cursos</th>
-                                @foreach($titles as $title)
-                                <th>
-                                    <center>{{$title['activity']}}</center>
-                                </th>
+                                <th></th>
+                                @foreach($Titles as $Title)
+                                    <th colspan="{{ $Title['No'] }}" ><center>{{ $Title['Name'] }}</center></th>
                                 @endforeach
+                                <th></th>
                             </tr>
+                            <tr>
+                                <th>Materia</th>
+                                @foreach($Titles as $Title)
+                                    @if($Title['No']==0)
+                                    <th><center>No existen examenes asignados</center></th>
+                                    @endif
+                                    @foreach($Title['Test'] as $title)
+                                    <th><center>{{$title->Title}}</center></th>
+                                    @endforeach
+                                @endforeach
+                                <th>Acciones</th>
+                              </tr>
                         </thead>
                         <tbody>
                             @foreach($models as $model)

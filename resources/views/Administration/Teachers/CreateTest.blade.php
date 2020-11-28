@@ -64,16 +64,19 @@
 													</div>
 													<div class="form-group row">
 														<label class="col-3">Actividad</label>
-														<div class="col-lg-4 col-md-9 col-sm-12">
-															<select class="form-control" id="actividad" name="param">
-																<option value="">--Seleccione una opción</option>
-																@foreach($actividades as $a)
-																	<option value="{{$a['id']}}">{{$a['Nombre']}}</option>
-																@endforeach
-															</select>
+														<div class="col-lg-9 col-md-9 col-sm-12">
+															<div class="input-group input-group-solid">
+																<select class="form-control select2" id="actividad" style="width: 100%;" name="param">
+																	<option value="">--Seleccione una opción</option>
+																	@foreach($actividades as $a)
+																		<option value="{{$a['id']}}">{{$a['Nombre']}}</option>
+																	@endforeach
+																</select>
+															</div>
 														</div>
 													</div>
-													<div class="form-group row">
+												
+													<div class="form-group row" >
 														<label class="col-3 col-form-label">Crear examen virtual</label>
 														<div class="col-3">
 															<span class="switch switch-info">
@@ -83,7 +86,9 @@
 																</label>
 															</span>
 														</div>
-													</div>
+														</div>
+												
+													
 													<div class="form-group row" id="virtualFecha" style="visibility: hidden;">
 														<label class="col-3">Fecha de inicio y final</label>
 														<div class="col-9">
@@ -116,14 +121,25 @@
 															</div>
 														</div>
 													</div>
+													<div class="form-group row" id="OrdenQuestionCheck" style="visibility: hidden;">
+														<label class="col-3 col-form-label">Permitir cambio entre preguntas</label>
+														<div class="col-3">
+															<span class="switch switch-info">
+																<label>
+																	<input type="checkbox" id="OrderQuestions" checked="checked" name="OrderQuestions" />
+																	<span></span>
+																</label>
+															</span>
+														</div>
+													</div>
 												</div>
 											</div>
 											<!--end::Wizard Step 1-->
 											<!--begin::Wizard Actions-->
-											<div class="d-flex justify-content-between border-top mt-5 pt-10">
+											<div class="d-flex justify-content-center border-top mt-5 pt-10">
 												<div>
 													<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Crear Examen</button>
-													<button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>*
+													<button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>
 												</div>
 											</div>
 											<!--end::Wizard Actions-->
@@ -309,9 +325,13 @@ var KTWizard1 = function () {
 
 	jQuery(document).ready(function () {
 		KTWizard1.init();
+		$('#actividad').select2({
+			minimumResultsForSearch: -1,
+			placeholder: "Seleccione una actividad"
+		});
 	});
-
-
+	
+	
 		</script>
 
         <script type="text/javascript">
@@ -325,7 +345,7 @@ var KTWizard1 = function () {
 
          function crearDatos()
          {
-			console.log("asdf");
+			
 			var Titulo = $('#Titulo').val(); 
             var Punteo = $('#Punteo').val();
             var Fechas = $('#Fechas').val();
@@ -334,6 +354,8 @@ var KTWizard1 = function () {
             var actividad = $('#actividad').val();
 			var Preguntas = $('#NoPreguntas').val();
 			var tipoexamen = $('#virtual').is(":checked");
+			var OrderQuestions = $('#OrderQuestions').is(":checked");
+			
             var data = [{
 				Titulo: Titulo,
 				Punteo: Punteo,
@@ -344,6 +366,7 @@ var KTWizard1 = function () {
                 Preguntas: Preguntas,
 				tipoexamen: tipoexamen,
 				curso: {{$id}},
+				OrderQuestions:OrderQuestions
             }];
             $.ajax({
                 url:'/administration/teacher/save/test',
@@ -393,11 +416,13 @@ var KTWizard1 = function () {
 				$('#virtualHI').css("visibility", "visible");
 				$('#virtualHF').css("visibility", "visible");
 				$('#virtualPreguntas').css("visibility", "visible");
+				$('#OrdenQuestionCheck').css("visibility", "visible");
 			}else{
 				$('#virtualFecha').css("visibility", "hidden");
 				$('#virtualHI').css("visibility", "hidden");
 				$('#virtualHF').css("visibility", "hidden");
 				$('#virtualPreguntas').css("visibility", "hidden");
+				$('#OrdenQuestionCheck').css("visibility", "hidden");
 			}
 		});
 		

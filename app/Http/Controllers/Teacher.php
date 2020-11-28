@@ -603,6 +603,7 @@ class Teacher extends Controller
                     $examen->StartDate = $Fechas[0].' '.$HoraI;
                     $examen->EndDate = $Fechas[1].' '.$HoraF;
                     $examen->Activity_id = $actividad;
+                    $examen->Order = $data['OrderQuestions'];
                     $examen->State = 'Active';
                     $examen->save();
                     $assignVol = Asign_teacher_course::where('Course_id',$curso)->first();

@@ -305,7 +305,9 @@
 				// Initialize form wizard
 				_wizardObj = new KTWizard(_wizardEl, {
 					startStep: 1, // initial active step number
+					
 					clickableSteps: true // to make steps clickable this set value true and add data-wizard-clickable="true" in HTML for class="wizard" element
+					
 				});
 
 				// Validation before going to next page

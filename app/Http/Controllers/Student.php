@@ -20,6 +20,7 @@ use App\Models\Note;
 use App\Models\Assign_activity;
 use App\Models\Asign_teacher_course;
 
+
 class Student extends Controller
 {
     #FUNCIONES DE ESTUDIANTE
@@ -31,40 +32,79 @@ class Student extends Controller
     public function score_list(Request $request)
     {
         $id = $request->session()->get('User_id');
-        $titles = [];
-        $models = [];
         $assign = Assign_student_grade::where('user_id',$id)->first();
         $grade = Assign_student_grade::find($assign->id)->Grade();
         $courses = $grade->Courses();
+        $Modal = [];
+        $cantActivities = 0;
+        $pos = 0;
+        $models = [];
+        
         foreach ($courses as $course)
         {
-            $scores = [];
-            $notes = Note::where('Course_id',$course->id)->get();
-            foreach($notes as $activity)
+            
+            $Activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
+            foreach($Activities as $Activity)
             {
-                $values = [
-                    "activity" => $activity->Activity
+                $data = [];
+                $testData = [];
+                if(!in_array($Activity->Name,$data))
+                {
+                    array_push($data,$Activity->Name);
+                }
+                foreach($Activity->Tests() as $test)
+                {
+                    if(!in_array($test->Name,$testData))
+                    {
+                        array_push($testData,$test->Name);
+                    }
+                }
+                $act = [
+                    "Name" =>$Activity->Name,
+                    "No" =>count($Activity->Tests()),
+                    "Test" => $Activity->Tests(),
                 ];
-                array_push($titles,$values);
+                array_push($Titles,$act);
             }
-            foreach($notes as $note)
+            if($cantActivities<count($Activities))
             {
-                $data = [
-                    "note" => $note->Score
-                ];
-                array_push($scores,$data);
+                $cantActivities=count($Activities);
+                $Titles = [];
+                $Modal = [];
+                foreach($Activities as $Activity)
+                {
+                    $moda = [
+                        'id' => $Activity->id,
+                        "Name" => $Activity->Name,
+                    ];
+                    array_push($Modal,$moda);
+                    
+                }
             }
-            $query = [
-                'course' => $course->Name,
-                'scores' => $scores
+            else
+            {
+                $pos++;
+            }
+           
+            $Notes = [];
+            foreach($data as $d)
+            {
+                //$acti = Assign_activity::where(['Course_id'=>$course->id,'State'=>'Active','Name'])->get();
+                $Note = [
+                    "Score" => "0",
+                    "Disable" =>true,
+                ];
+            }
+            $model = [
+                "IdCourse"=>$course->Grade_id,
+                "CourseName"=>$course->Name
             ];
-            array_push($models,$query);
         }
-        //dd($titles);
-        return view('Student/score_list',compact('models','titles'));
+       //dd($data);
+        return view('Student/score_list',compact('models','Titles'));
     }
 
-    public function test_questions($id)
+    public function test_questions(Request $request,$id)
     {
         $models = [];
         $titles = [];
@@ -76,7 +116,9 @@ class Student extends Controller
         ];
         array_push($buttons,$button);
         $test = Test::find($id);
-        return view('Student/test_form',compact('titles','buttons','test'));
+        $Course = $test->Course()->Name;
+        
+        return view('Student/test_form',compact('titles','buttons','test','Course'));
     }
     public function WorkSpace(Request $request)
     {
@@ -85,21 +127,37 @@ class Student extends Controller
     public function save_answer(Request $request)
     {
         $id = $request->session()->get('User_id');
-        $data = $request->data[0];
-        $student = $data['Estudiante'];
-        $question = $data['Pregunta'];
-        $score = $data['Punteo'];
-        $answer = $data['Respuesta'];
         try
         {
             DB::beginTransaction();
-            $reply = new Asign_answer_test_student;
-            $reply->Studen_id = $student;
-            $reply->Question_id = $question;
-            $reply->Score = $score;
-            $reply->Answers = $answer;
-            $reply->State = "Active";
-            $reply->save();
+            $totalScore=0;
+            $test="";
+            $asign = Assign_student_grade::where('user_id',$id)->first();
+            foreach($request->data as $Answer)
+            {
+                $question = question::find($Answer['QuestionId']);
+                $score = 0;
+                if($question->Answers == $Answer['Answer'])
+                {
+                    $score = $question->Score;
+                }
+                $totalScore=$totalScore+$score;
+                $reply = new Asign_answer_test_student;
+                $reply->Studen_id = $asign->id;
+                $reply->Question_id = $Answer['QuestionId'];
+                $reply->Score = $score;
+                $reply->Answers = $Answer['Answer'];
+                $reply->State = "Complete";
+                $reply->save();
+                $test = $question->Test();
+            }
+            $note = new Note;
+            $note->Student_id = $asign->id;
+            $note->Test_id = $test->id;
+            $note->Score = $totalScore;
+            $note->Course_id = $test->Course()->id;
+            $note->State = "Complete";   
+            $note->save();             
             DB::commit();
         }
         catch (Exception $e)
@@ -123,12 +181,19 @@ class Student extends Controller
                 {
                     $fecha_actual = date("d-m-Y");
                     $StartDate = date("d-m-Y",strtotime($test->StartDate." - 5 days")); 
+                    $StartDate2 = date("d-m-Y H:i:00",strtotime($test->StartDate)); 
                     $date_now = strtotime(date("d-m-Y H:i:00"));
                     $date_teststart = strtotime($StartDate);
+                    $date_teststart2 = strtotime($StartDate2);
                     $EndDate = date("d-m-Y H:i:00",strtotime($test->EndDate)); 
                     $date_testend = strtotime($EndDate);
+                    $start = true;
                     if($date_now >= $date_teststart)
                     {
+                        if($date_now >= $date_teststart2)
+                        {
+                            $start=false;
+                        }
                         if($date_now <=$date_testend)
                         {
                             if($test->StartDate)
@@ -140,7 +205,9 @@ class Student extends Controller
                                     "start"=>$test->StartDate,
                                     "end"=>$test->EndDate,
                                     "score"=>$test->Score,
+                                    "NoQuestions"=>$test->NoQuestions(),
                                     "activity" => $test->Activity()->Name,
+                                    "Active" =>$start,
                                     "teacher"=> $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames
                                 ];
                                 array_push($models,$query);
