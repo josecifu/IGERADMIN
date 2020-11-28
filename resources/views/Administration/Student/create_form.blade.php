@@ -451,10 +451,9 @@
 	                    });
 	                },
 	                error: function(e){
-						console.log(e);
 						swal.fire({
 							title: 'Ocurrio un error!',
-							text:  e['responseText']['Error'],
+							text:  e['responseJSON']['Error'],
 							icon: 'error',
 							confirmButtonText: 'Aceptar',
 	                    })
