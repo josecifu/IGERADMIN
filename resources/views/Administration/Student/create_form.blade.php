@@ -92,7 +92,7 @@
 																<i class="la la-user"></i>
 															</span>
 														</div>
-														<input type="text"name="Nombres" id="Nombres" class="form-control form-control-solid" placeholder="Nombre"/>
+														<input type="text" name="Nombres" id="Nombres" class="form-control form-control-solid" placeholder="Nombre"/>
 													</div>
 												</div>
 											</div>
@@ -166,6 +166,7 @@
 														</div>
 														<input type="email" name="Email" id="Email" class="form-control form-control-solid" placeholder="Correo electronico"/>
 													</div>
+													<span style="color:green; font-size:12px;">Es un campo opcional</span>
 												</div>
 											</div>
 											<div class="form-group row">
@@ -254,14 +255,14 @@
 						_formEl,
 						{
 							fields: {
-								Nombre: {
+								Nombres: {
 									validators: {
 										notEmpty: {
 											message: 'Es un campo obligatorio'
 										}
 									}
 								},
-								Apellido: {
+								Apellidos: {
 									validators: {
 										notEmpty: {
 											message: 'Es un campo obligatorio'
@@ -275,7 +276,7 @@
 										}
 									}
 								},
-								Genero: {
+								radios5: {
 									validators: {
 										notEmpty: {
 											message: 'Es un campo obligatorio'
@@ -304,7 +305,7 @@
 											message: 'Es un campo obligatorio'
 										}
 									}
-								},						
+								},
 								Contraseña: {
 									validators: {
 										notEmpty: {
@@ -384,7 +385,7 @@
 									text: "Los datos no fueron registrados!.",
 									icon: "error",
 									buttonsStyling: false,
-									confirmButtonText: "Ok, lo tengo!",
+									confirmButtonText: "Aceptar",
 									customClass: {
 										confirmButton: "btn font-weight-bold btn-primary",
 									}

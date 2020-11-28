@@ -403,15 +403,16 @@ class Student extends Controller
             'Última conexión',
             'Acciones'
         ];
+        $year = date("Y");
         $rols = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get();
         foreach ($rols as $rol)
         {
             $user = User::find($rol->user_id);
             $student = Person::find($user->Person_id);
-            $Assign = Assign_student_grade::where('User_id',$user->id)->get('Grade_id');
-            foreach ($Assign as $a)
+            $assigns = Assign_student_grade::where('User_id',$user->id)->where('Year',$year)->where('State','Active')->get('Grade_id');
+            foreach ($assigns as $assign)
             {
-                $grade = Grade::find($a->Grade_id);
+                $grade = Grade::find($assign->Grade_id);
                 $query = [
                     'id' => $student->id,
                     'name' => $student->Names,
@@ -461,19 +462,26 @@ class Student extends Controller
             'Acciones'
         ];
         $grade = Grade::find($id);
-        foreach ($grade->Students() as $user)
+        $year = date("Y");
+        $rols = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get();
+        foreach ($rols as $rol)
         {
+            $user = User::find($rol->user_id);
             $student = Person::find($user->Person_id);
-            $query = [
-                'id' => $student->id,
-                'name' => $student->Names,
-                'lastname' => $student->LastNames,
-                'phone' => $student->Phone,
-                'user' => $user->name,
-                'email' => $user->email,
-                'conexion' => '17/11/2020'
-            ];
-            array_push($models,$query);
+            $assigns = Assign_student_grade::where('User_id',$user->id)->where('Year',$year)->where('State','Active')->where('Grade_id',$grade->id)->get('Grade_id');
+            foreach ($assigns as $assign)
+            {
+                $query = [
+                    'id' => $student->id,
+                    'name' => $student->Names,
+                    'lastname' => $student->LastNames,
+                    'phone' => $student->Phone,
+                    'user' => $user->name,
+                    'email' => $user->email,
+                    'conexion' => '17/11/2020'
+                ];
+                array_push($models,$query);
+            }
         }
         $grade = $grade->GradeName();
         return view('Administration/Student/list_bygrade',compact('models','titles','buttons','grade'));
@@ -625,13 +633,13 @@ class Student extends Controller
             $log->Table = "Rol";
             $log->User_ID = $responsible->name;
             $log->Description = "Se ha asignado el rol Estudiante al usuario: ".$user->name;
-            $log->Type = "Asignación";
+            $log->Type = "Asignar";
             $log->save();
             $log = new logs;
             $log->Table = "Grado";
             $log->User_ID = $responsible->name;
             $log->Description = "Al estudiante: ".$student->Names." ".$student->LastNames." se le ha asignado a: ".$grade->GradeName();
-            $log->Type = "Asignación";
+            $log->Type = "Asignar";
             $log->save();
             DB::commit();
         }
