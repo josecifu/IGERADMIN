@@ -39,10 +39,8 @@ class Student extends Controller
         $cantActivities = 0;
         $pos = 0;
         $models = [];
-        
         foreach ($courses as $course)
-        {
-            
+        {   
             $Activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
             foreach($Activities as $Activity)
             {
@@ -78,14 +76,12 @@ class Student extends Controller
                         "Name" => $Activity->Name,
                     ];
                     array_push($Modal,$moda);
-                    
                 }
             }
             else
             {
                 $pos++;
             }
-           
             $Notes = [];
             foreach($data as $d)
             {
@@ -100,7 +96,6 @@ class Student extends Controller
                 "CourseName"=>$course->Name
             ];
         }
-       //dd($data);
         return view('Student/score_list',compact('models','Titles'));
     }
 
@@ -117,7 +112,6 @@ class Student extends Controller
         array_push($buttons,$button);
         $test = Test::find($id);
         $Course = $test->Course()->Name;
-        
         return view('Student/test_form',compact('titles','buttons','test','Course'));
     }
     public function WorkSpace(Request $request)
@@ -309,59 +303,6 @@ class Student extends Controller
 //mostrar notas por semetres    ->  visualizacion de notas por curso
     public function course_scores($id)
     {
-        $models = [];
-        $student = [];
-        $titles = [
-            'Cursos',
-            'Unidad I',
-            'Unidad II',
-            'Unidad III',
-            'Unidad IV',
-            'Nota final',
-            'Actividades'
-        ];
-        $assigns = Assign_student_grade::where('id',$id)->get('user_id');
-        foreach ($assigns as $assign)
-        {
-            $user = User::find($assign->user_id);
-            $person = Person::find($user->Person_id);
-            $data = [
-                'name' => $person->Names . ' ' . $person->LastNames
-            ];
-            array_push($student,$data);
-        }
-        $grade = Assign_student_grade::find($id)->Grade();
-        $courses = $grade->Courses();
-        foreach ($courses as $course)
-        {
-            $unity = [];
-            $final_note = 0;
-            for ($i=1; $i<=4; $i++)
-            {
-                $total_activities = 0;
-                $notes = Note::where([
-                    'Studen_id' => $id,
-                    'Course_id' => $course->id,
-                    //'Unity' => $i
-                ])->get();
-                foreach ($notes as $note)
-                {
-                    $total_activities = $total_activities + intval($note->Score);
-                }
-                $unity[$i] = $total_activities;
-                $final_note = $final_note + $total_activities;
-            }
-            $query = [
-                'id' => $course->id,
-                'course' => $course->Name,
-                'first' => $unity[1],
-                'second' => $unity[2],
-                'third' => $unity[3],
-                'fourth' => $unity[4],
-                'final' => $final_note
-            ];
-            array_push($models,$query);
-        }
         return view('Administration/Student/course_scores',compact('models','titles','student'));
     }
 
@@ -572,7 +513,7 @@ class Student extends Controller
     public function save(Request $request)
     {
         $id = $request->session()->get('User_id');
-        $responsible = User::find($id);
+        $responsible_user = User::find($id);
         $data = $request->data[0];
         $names = $data['Nombre'];
         $lastnames = $data['Apellido'];
@@ -583,6 +524,7 @@ class Student extends Controller
         $password = $data['Contraseña'];
         $year = date("Y");
         $grade = Grade::find($data['Grado']);
+        $registered_user = User::where('name',$username)->first();
         try
         {
             DB::beginTransaction();
@@ -601,6 +543,11 @@ class Student extends Controller
             $student->save();
             $user = new User;
             $user->name = $username;
+            if ($registered_user!=null)
+            {
+                return response()->json(['Error' => "El usuario ya existe"], 500);
+            }
+
             $user->email = $email;
             $user->password = bcrypt($password);
             $user->State = "Active";
@@ -619,25 +566,25 @@ class Student extends Controller
             $student_grades->save();
             $log = new Logs;
             $log->Table = "Estudiante";
-            $log->User_ID = $responsible->name;
+            $log->User_ID = $responsible_user->name;
             $log->Description = "Se registro un nuevo estudiante: ".$student->Names." ".$student->LastNames;
             $log->Type = "Crear";
             $log->save();
             $log = new Logs;
             $log->Table = "Usuario";
-            $log->User_ID = $responsible->name;
+            $log->User_ID = $responsible_user->name;
             $log->Description = "Se registro un nuevo usuario: ".$user->name;
             $log->Type = "Crear";
             $log->save();
             $log = new Logs;
             $log->Table = "Rol";
-            $log->User_ID = $responsible->name;
+            $log->User_ID = $responsible_user->name;
             $log->Description = "Se ha asignado el rol Estudiante al usuario: ".$user->name;
             $log->Type = "Asignar";
             $log->save();
             $log = new logs;
             $log->Table = "Grado";
-            $log->User_ID = $responsible->name;
+            $log->User_ID = $responsible_user->name;
             $log->Description = "Al estudiante: ".$student->Names." ".$student->LastNames." se le ha asignado a: ".$grade->GradeName();
             $log->Type = "Asignar";
             $log->save();
@@ -664,7 +611,7 @@ class Student extends Controller
     public function update(Request $request)
     {
         $id = $request->session()->get('User_id');
-        $responsible = User::find($id);
+        $responsible_user = User::find($id);
         $data = $request->data[0];
         $names = $data['Nombre'];
         $lastnames = $data['Apellido'];
@@ -685,7 +632,7 @@ class Student extends Controller
         Person::where('id',$personid)->update($data_student);
         $log = new logs;
         $log->Table = "Estudiante";
-        $log->User_ID = $responsible->name;
+        $log->User_ID = $responsible_user->name;
         $log->Description = "Se actualizaron los datos del estudiante: ".$names." ".$lastnames;
         $log->Type = "Actualizar";
         $log->save();
@@ -695,35 +642,38 @@ class Student extends Controller
     public function delete($id, Request $request)
     {
         $indentity = $request->session()->get('User_id');
-        $responsible = User::find($indentity);
-        $user = User::find($id);
+        $responsible_user = User::find($indentity);
+        $person = Person::find($id);
+        $user = User::where('Person_id',$person->id)->first();
         $data_user = array('State' => 'Desactivated');
         $log = new logs;
         $log->Table = "Estudiante";
-        $log->User_ID = $responsible->name;
+        $log->User_ID = $responsible_user->name;
         $log->Description = "Se ha eliminado el usuario: ".$user->name;
         $log->Type = "Eliminar";
         $log->save();
         User::where('Person_id', $id)->update($data_user);
-        Assign_user_rol::where('user_id',$id)->update($data_user);
+        Assign_user_rol::where('user_id',$user->id)->update($data_user);
+        Assign_student_grade::where('user_id',$user->id)->update($data_user);
         return redirect()->route('ListStudent');
     }
 
     public function activate($id, Request $request)
     {
         $indentity = $request->session()->get('User_id');
-        $responsible = User::find($indentity);
-        $user = User::find($id);
+        $responsible_user = User::find($indentity);
+        $person = Person::find($id);
+        $user = User::where('Person_id',$person->id)->first();
         $data_user = array('State' => 'Active');
         $log = new logs;
         $log->Table = "Estudiante";
-        $log->User_ID = $responsible->name;
+        $log->User_ID = $responsible_user->name;
         $log->Description = "Se ha habilitado el usuario: ".$user->name;
         $log->Type = "Activar";
         $log->save();
         User::where('Person_id', $id)->update($data_user);
-        Assign_user_rol::where('user_id',$id)->update($data_user);
-        return redirect()->route('ListStudent');
+        Assign_user_rol::where('user_id',$user->id)->update($data_user);
+        return redirect()->route('ListEliminatedStudents');
     }
 
     public function test_list($id)
@@ -746,7 +696,7 @@ class Student extends Controller
             $tests = [];
             foreach($activities as $activity)
             {
-                foreach($activity->Tests() as $test)
+                foreach($activity->Tests()->where('State','Complete') as $test)
                 {
                     $values =[
                         "Id" => $test->id,

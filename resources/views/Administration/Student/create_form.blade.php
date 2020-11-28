@@ -81,7 +81,7 @@
 								<form class="form" id="kt_form">
 									<!--begin::Wizard Step 1-->
 									<div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
-										<h1>Ingrese los datos personales del estudiante</h1>
+										<h3>Ingrese los datos personales del estudiante</h3><br>
 										<div class="my-5">
 											<div class="form-group row">
 												<label class="col-3">Nombres</label>
@@ -140,7 +140,7 @@
 									<!--end::Wizard Step 1-->
 									<!--begin::Wizard Step 2-->
 									<div class="pb-5" data-wizard-type="step-content">
-										<h1>Ingrese los datos del usuario</h1>
+										<h3>Ingrese los datos del usuario</h3><br>
 										<div class="my-5">
 											<div class="form-group row">
 												<label class="col-3">Nombre de usuario</label>
@@ -187,10 +187,10 @@
 									<!--end::Wizard Step 2-->
 									<!--begin::Wizard Step 3-->
 									<div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
-										<h1>Ingrese los datos de asignación</h1>
+										<h3>Ingrese los datos de asignación</h3><br>
 										<div class="my-5">
 											<div class="form-group row">
-												<label class="col-form-label text-right col-lg-3 col-sm-12">Circulo de estudio</label>
+												<label class="col-form-label text-right col-lg-3 col-sm-12">Círculo de estudio</label>
 												<div class="col-lg-9 col-md-9 col-sm-12">
 													<select class="form-control selectpicker" data-size="10" title="--Seleccione una opción" data-live-search="true" id="Jornada">
 													</select>
@@ -348,7 +348,7 @@
 										text: "Porfavor completar los campos requeridos",
 										icon: "error",
 										buttonsStyling: false,
-										confirmButtonText: "Ok, lo tengo!",
+										confirmButtonText: "Aceptar",
 										customClass: {
 											confirmButton: "btn font-weight-bold btn-light"
 										}
@@ -441,19 +441,20 @@
 	                data: {"_token":"{{ csrf_token() }}","data":data},
 	                dataType: "JSON",
 	                success: function(e){
-	                swal.fire({ title: "Accion completada", 
-	                  text: "Se ha guardado con exito los datos del estudiante!", 
-	                  type: "success"
-	                        }).then(function () {
-	                          var $url_path = '{!! url('/') !!}';
-	                          window.location.href = $url_path+"/administration/student/list";
-	                        });
+	                swal.fire({
+	                	title: "Accion completada", 
+	                  	text: "Se ha guardado con exito los datos del estudiante!",
+	                  	confirmButtonText: 'Aceptar',
+	                  	}).then(function () {
+	                  		var $url_path = '{!! url('/') !!}';
+	                        window.location.href = $url_path+"/administration/student/list";
+	                    });
 	                },
 	                error: function(e){
 						console.log(e);
 						swal.fire({
 							title: 'Ocurrio un error!',
-							text:  'Los datos no han sido registrados!, verifique los campos',
+							text:  e['responseText']['Error'],
 							icon: 'error',
 							confirmButtonText: 'Aceptar',
 	                    })
