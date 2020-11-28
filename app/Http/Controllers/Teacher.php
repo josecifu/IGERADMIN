@@ -525,9 +525,7 @@ class Teacher extends Controller
         $test = test::find($id);
         $questions = Question::where('Test_id',$id)->get();
         $Models = [];
-        foreach ($questions as $value) {
-            dd($value->Title);
-        }
+        
         if (session()->get('rol_Name')=="Voluntario") {
             return view('Teacher/QuestionTest',compact('test','questions','curso'));
         }else{
@@ -537,8 +535,10 @@ class Teacher extends Controller
     public function QualifyTest()
     {
         $id = 1;    //este proviene de la ruta como parametro
-        $answers = Asign_answer_test_student::where([['Studen_id',$id],['State','Active']])->get();
+        $answers = Asign_answer_test_student::where([['Studen_id',$id],['State','Complete']])->get();
+        
         $Models = [];
+        $test = "";
         foreach ($answers as $key => $value) {
             $question = Question::find($value->Question_id);
             $data = [
@@ -558,13 +558,19 @@ class Teacher extends Controller
     public function SaveQualifyTest(Request $request)
     {
         $data = $request->data;
+        $total = 0;
         foreach ($data as $value){
             $value = $value[0];
             $respuesta = Asign_answer_test_student::find($value['id']);
+            $question = Question::find ($respuesta->Question_id);
+            if ($question->Score < $value['Punteo']) {
+                return response()->json(["Error"=>"La calificación excede el punteo de la pregunta: ".$question->Title]);
+            }
             $respuesta->Score = $value['Punteo'];
+            $respuesta->State = "Qualified";
             $respuesta->save();
         }
-        return response()->json(["Accion Completada"]);
+        return response()->json("Accion Completad");
     }
     public function createExam($id)
     {
