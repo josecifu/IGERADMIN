@@ -235,7 +235,9 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([ 
             'Name' => 'Espacio de trabajo',
             'State' => '1',
-            'Url' => 'teacher/home/workspace',  //34
+            // 'Url' => 'teacher/home/workspace',  //34
+            'Type' => '3',
+            'Url' => 'listCourse(4)',
             'menu_id' => '32'          
         ]); 
         DB::table('menus')->insert([
