@@ -20,7 +20,6 @@ use App\Models\Note;
 use App\Models\Assign_activity;
 use App\Models\Asign_teacher_course;
 
-
 class Student extends Controller
 {
     #FUNCIONES DE ESTUDIANTE
@@ -39,7 +38,7 @@ class Student extends Controller
         $cantActivities = 0;
         $pos = 0;
         $models = [];
-        
+        $Titles = [];
         foreach ($courses as $course)
         {
             
@@ -69,7 +68,7 @@ class Student extends Controller
             if($cantActivities<count($Activities))
             {
                 $cantActivities=count($Activities);
-                $Titles = [];
+               
                 $Modal = [];
                 foreach($Activities as $Activity)
                 {

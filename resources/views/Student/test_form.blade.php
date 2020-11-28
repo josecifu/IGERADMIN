@@ -66,10 +66,10 @@
                                         	@if($Question->Type=="V/F")
 											<div class="radio-inline">
 												<label class="radio radio-primary">
-												<input type="radio" id="AnswerVF{{$key}}1" value="V" name="AnswerRadio{{$key}}"/>
+												<input type="radio" id="AnswerVF{{$key}}1" value="Verdadero" name="AnswerRadio{{$key}}"/>
 												<span></span>Verdadero</label>
 												<label class="radio radio-primary">
-												<input type="radio" id="AnswerVF{{$key}}2" value="F" name="AnswerRadio{{$key}}"/>
+												<input type="radio" id="AnswerVF{{$key}}2" value="Falso" name="AnswerRadio{{$key}}"/>
 												<span></span>Falso</label>
 											</div>
                                         	@elseif($Question->Type=="Respuesta Abierta")
@@ -322,7 +322,7 @@
 						});
 					@endif
 				@endforeach
-				@if($test->Order =="true")
+				@if($test->Order =="false")
 				Swal.fire({
 					title: "¡Advertencia!",
 					text: "Al iniciar el exámen, no podra regresar ninguna pregunta",

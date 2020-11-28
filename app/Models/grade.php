@@ -30,7 +30,7 @@ class grade extends Model
     }
     public function Students()
     {
-        return $this->belongsToMany('App\Models\User', 'App\Models\Assign_student_grade')->get();
+        return $this->belongsToMany('App\Models\User', 'App\Models\Assign_student_grade')->where(['Year'=>'2021'])->wherePivot('State','Active')->get();
     }
     public function CoursesList()
     {

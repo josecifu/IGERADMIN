@@ -538,7 +538,6 @@ class Teacher extends Controller
     {
         $id = 1;    //este proviene de la ruta como parametro
         $answers = Asign_answer_test_student::where([['Studen_id',$id],['State','Active']])->get();
-        $test;
         $Models = [];
         foreach ($answers as $key => $value) {
             $question = Question::find($value->Question_id);
@@ -703,11 +702,7 @@ class Teacher extends Controller
             $total += $value['Punteo'];
         }
         if ($total > $scoreT->Score) {
-<<<<<<< HEAD
             return response()->json(["Error"=>"La suma del punteo de las preguntas excede al punteo total del exámen: ".$scoreT->Score]);
-=======
-            return response()->json(["Error"=>"La suma del punteo de las preguntas excede al punteo total del exámen: ". $scoreT->Score]);
->>>>>>> bee878297d6fe7576d9f939f185b5babfbe1e3eb
         }else{
             foreach ($data as $value) {
                 $value = $value[0];
