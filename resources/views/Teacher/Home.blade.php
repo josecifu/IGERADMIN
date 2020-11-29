@@ -204,6 +204,7 @@
                                                 <!--begin: Datatable-->
                                                 <table class="table table-bordered table-checkable" id="kt_datatable" style="margin-top: 13px !important">
                                                     <thead>
+                                                        @if(isset($Title['No']))
                                                         <tr>
                                                             @foreach($Titles as $Title)
                                                             <th colspan="{{$Title['No']}}" >{{ $Title['Name'] }}</th>
@@ -218,8 +219,8 @@
                                                                 <th><center>{{$title->Title}}</center></th>
                                                                 @endforeach
                                                             @endforeach
-                                                          
                                                         <tr>
+                                                        @endif
                                                     </thead>
                                                     <tbody>
                                                         @if($Models)
