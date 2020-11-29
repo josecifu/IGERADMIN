@@ -155,7 +155,8 @@ class Teacher extends Controller
         foreach ($usuario_rol as $v) {
             $usuario = User::find($v->user_id);
             $persona = Person::find($usuario->Person_id);
-            $curses = User::find($v->user_id)->CoursesTeacher();
+            // $curses = User::find($v->user_id)->CoursesTeacher();
+            $curses = Asign_teacher_course::where([['user_id',$v->user_id],['State','Active']])->get();
             $dataT = [];
             foreach ($curses as $value) {
                 $curso = course::find($value->Course_id);
@@ -1035,5 +1036,77 @@ class Teacher extends Controller
                 "Courses" => $courses,
             ]);
         // }    
+    }
+    public function AdministrationCourses($id)
+    {
+        $buttons =[];
+        $button = [
+            "Name" => 'Listado Voluntarios',
+            "Link" => 'administration/teacher/list',
+            "Type" => "add"
+        ];
+        array_push($buttons,$button);
+        $assignT = Asign_teacher_course::where([['user_id',$id],['State','Active']])->get();
+        $cursosasignados = [];
+        if(!$assignT->isEmpty()){
+            foreach ($assignT as $value) {
+                $course = course::find($value->Course_id);
+                $data = [
+                    'id' => $course->id,
+                    "nombre" => $course->Name.' - '.$course->Grade()->GradeNamePeriod(),
+                ];
+                array_push($cursosasignados,$data);
+            }
+        }
+        return view('Administration/Teachers/AdministrationCourses',compact('buttons','cursosasignados','id'));
+    }
+    public function SaveAdministrationCourses(Request $request)  #REGISTRO Y ASIGNACIÓN DE VOLUNTARIOS
+    {
+        $id = user::find($request->session()->get('User_id')); 
+        $data = $request->data[0];
+        $Cursos = $data['Curso'];
+        $code = $data['Code'];
+        $vol = user::find($code);
+        $Cursos = explode(";",$Cursos);
+        if (empty($Cursos[0])) {
+            return response()->json(["Error"=>"La asignación no debe estar vacia"]);
+        }
+        //LOGICA
+        try {
+              DB::beginTransaction();
+                $delete = Asign_teacher_course::where([['user_id',$code],['State','Active']])->get()->except($Cursos);
+                foreach ($delete as $value) {
+                    $deleteassign = Asign_teacher_course::find($value->id);
+                    $deleteassign->State = "Deactivated";
+                    $deleteassign->save();
+                }
+                for ($i=0; $i < count($Cursos) ; $i++) {
+                    $verificar = Asign_teacher_course::where([['Course_id',$Cursos[$i]],['State','Active']])->first();
+                    if (!isset($verificar)) {
+                        $usuario_curso = new Asign_teacher_course;
+                        $curso = course::find($Cursos[$i]);
+                        $grado = grade::find($curso->Grade_id)->GradeName();
+                        $usuario_curso->user_id = $vol->id;
+                        $usuario_curso->Course_id = $Cursos[$i];
+                        $usuario_curso->State = "Active";
+                        $usuario_curso->save();
+                        #logs registro de asignación
+                        $log = new logs;
+                        $log->Table = "Voluntario";
+                        $log->User_ID = $id->name;
+                        $log->Description = "Se asigno el usuario: ".$vol->name.
+                        " al curso de ".$curso->Name." del grado de ".$grado;
+                        $log->Type = "Assign";
+                        $log->save();
+                    }
+                    else if (isset($delete)){
+
+                    }
+                }
+                DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+        }
+        return response()->json(["Accion completada"]);
     }
 }

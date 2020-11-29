@@ -325,7 +325,11 @@ class Student extends Controller
         return view('Student/teacher_information',compact('models'));
     }
 
-    public function statistics(){}
+    public function statistics()
+    {
+        $models = [];
+        return view('Administration/Student/statistics',compact('models'));
+    }
 
 
 

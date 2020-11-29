@@ -71,7 +71,7 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([//9
             'Name' => 'Estadisticas generales',
             'State' => '1',
-            'Url' => 'administration/students/statistics',  
+            'Url' => 'administration/student/statistics',  
             'menu_id' => '4'          
         ]);
             DB::table('menus')->insert([ //10
