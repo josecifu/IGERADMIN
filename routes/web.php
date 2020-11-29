@@ -38,6 +38,7 @@ Route::group([ 'prefix' => 'student'], function(){
 	Route::get('/profile/edit/{model}',$route.'\Student@edit_profile')->name('EditData');
 	Route::post('/profile/update', $route.'\Student@update_profile')->name('UpdateData');
 	Route::post('/test/view/answers/save', $route.'\Student@save_answer')->name('SaveAnswer');
+	Route::get('/course/list',$route.'\Student@teacher_information')->name('StudentCourseList');
 	
 });
 Route::group([ 'prefix' => 'teacher'], function(){									// =======================================
@@ -56,8 +57,10 @@ Route::group([ 'prefix' => 'teacher'], function(){									// ==================
 	Route::get('/delete/activity/{curso}/{model}', $route.'\Teacher@deleteActivity')->name('TeacherdeleteActivity');
 	Route::post('/update/activity', $route.'\Teacher@updateActivity')->name('TeacherupdateActivity');
 	Route::post('/save/question/test', $route.'\Teacher@SaveAssignQuestion')->name('TeacherSaveAssignQuestion');
-	Route::get('/view/qualify/test/{model}', $route.'\Teacher@QualifyTest');
-	Route::post('/qualify/question', $route.'\Teacher@SaveQualifyTest');
+	Route::get('/view/qualify/test/{model}', $route.'\Teacher@QualifyTest')->name('TeacherViewQualify');
+	Route::post('/qualify/question', $route.'\Teacher@SaveQualifyTest')->name('TeacherSaveQualify');
+	Route::get('/view/pre-qualify/test', $route.'\Teacher@Pre-QualifyTest')->name('TeacherViewPreQualify');
+	Route::get('/send/state/test/{model}', $route.'\Teacher@SendQualify')->name('TeacherSendQualify');
 });
 Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	

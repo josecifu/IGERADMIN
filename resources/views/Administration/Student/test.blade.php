@@ -134,11 +134,6 @@
                                             <span class="label label-lg label-light-primary label-inline">{{$model['score']}}</span>
                                         </center>
                                     </td>
-                                    <td>
-                                        <center>
-                                            <button type="button" class="btn btn-outline-info" data-toggle="tooltip" title="" data-placement="left">Ver pregunta</button>
-                                        </center>
-                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>

@@ -598,7 +598,6 @@
 				if(posCourse==1)
 				{
 					var Id = $('#courseselect1').val();
-					console.log(Id);
 					var $url_path = '{!! url('/') !!}';
                     window.location.href = $url_path+"/teacher/score/list/"+Id;
 				}
@@ -621,7 +620,14 @@
                     window.location.href = $url_path+"/teacher/home/workspace/"+Id;
 				}
 			}//fin de la funcion
-		
+			@if(Session::has('error'))
+				Swal.fire({
+					title: "{{Session::get('error')}}",
+					text: "",
+					icon: "error",
+					confirmButtonText: "Aceptar",
+				})
+			@endif
 		</script>
 
 		@section('scripts')

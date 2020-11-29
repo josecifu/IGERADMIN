@@ -58,7 +58,7 @@
 														<label class="col-3">Punteo</label>
 														<div class="col-9">
 															<div class="input-group input-group-solid">
-																<input type="number" name="Punteo" id="Punteo" class="form-control form-control-solid" placeholder="Punteo Total del examen" />
+																<input type="number" min="1" max="100" name="Punteo" id="Punteo" class="form-control form-control-solid" placeholder="Punteo Total del examen" />
 															</div>
 														</div>
 													</div>
@@ -117,7 +117,7 @@
 														<label class="col-3">Numero de Preguntas</label>
 														<div class="col-9">
 															<div class="input-group input-group-solid">
-																<input type="number" name="NoPreguntas" id="NoPreguntas" class="form-control form-control-solid" placeholder="Cantidad de preguntas" />
+																<input type="number" min="1" name="NoPreguntas" id="NoPreguntas" class="form-control form-control-solid" placeholder="Cantidad de preguntas" />
 															</div>
 														</div>
 													</div>
@@ -165,15 +165,14 @@
 				applyClass: 'btn-primary',
 				cancelClass: 'btn-secondary'
 			});
-			// minimum setup
-			$('#HoraInicio, #HoraFinal').timepicker();
+			
 
 			// minimum setup
 			$('#HoraInicio, #HoraFinal').timepicker({
-				minuteStep: 1,
-				defaultTime: '',
-				showSeconds: true,
-				showMeridian: false,
+				minuteStep: 10,
+				defaultTime: '7:00',
+				showSeconds: false,
+				showMeridian: true,
 				snapToStep: true
 			});
 			
@@ -345,7 +344,6 @@ var KTWizard1 = function () {
 
          function crearDatos()
          {
-			
 			var Titulo = $('#Titulo').val(); 
             var Punteo = $('#Punteo').val();
             var Fechas = $('#Fechas').val();
@@ -396,7 +394,6 @@ var KTWizard1 = function () {
 					}//fin else
                 },
                 error: function(e){
-					console.log(e);
 					swal.fire({
 						title: 'Ocurrio un error!',
 						text:  'Los datos no han sido registrados!, verifique los campos',
@@ -406,10 +403,6 @@ var KTWizard1 = function () {
                 }
             });
 		} 
-		$('#actividad').on('change', function() {
-			console.log($('#actividad').val());
-			console.log($('#virtual').is(":checked"));
-		});
 		$('#virtual').on('change', function() {
 			if ($('#virtual').is(":checked")) {
 				$('#virtualFecha').css("visibility", "visible");
