@@ -25,20 +25,17 @@
 						<a href="{{url('student/home/dashboard')}}" class="btn btn-danger font-weight-bolder mr-2"><i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
 					</div>
 				</div>
-				<!--end::Card-->
-			</div>
-		</div>
-
-		<div class="content flex-column-fluid" id="kt_content">
+			</div><br>
+			<!--end::Card-->
 			<!--begin::Card-->
 			@foreach($models as $model)
-			<div class="card card-custom gutter-b">
+			<div class="card card-custom gutter-b col-xl-6 loat-left">
 				<div class="card-body">
 					<div class="d-flex">
 						<!--begin::Pic-->
 						<div class="flex-shrink-0 mr-7">
 							<div class="symbol symbol-50 symbol-lg-120">
-								@if("Masculino"=="Masculino")
+								@if($model['gender']=="Masculino")
 									<img src="{{ asset ('assets/media/svg/avatars/Teacher-boy-1.svg')}}" class="h-75 align-self-end" alt="" />
 								@else
 									<img src="{{ asset ('assets/media/svg/avatars/Teacher-girl-1.svg')}}" class="h-75 align-self-end" alt="" />
@@ -89,9 +86,4 @@
 			@endforeach
 			<!--end::Card-->
 		</div>
-
-
-
-
-
 	@stop
