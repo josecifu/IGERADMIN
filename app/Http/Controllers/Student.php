@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Logs;
+use App\Models\logs;
 use App\Models\Rol;
 use App\Models\Assign_user_rol;
 use App\Models\User;
@@ -559,7 +559,7 @@ class Student extends Controller
             'Tipo',
             'Fecha y hora'
         ];
-        $logs = Logs::where('Table','Estudiante')->orWhere('Table','Usuario')->orWhere('Table','Rol')->orWhere('Table','Grado')->get();
+        $logs = logs::where('Table','Estudiante')->orWhere('Table','Usuario')->orWhere('Table','Rol')->orWhere('Table','Grado')->get();
         foreach ($logs as $log)
         {
             $data = [
@@ -636,19 +636,19 @@ class Student extends Controller
             $student_grades->Year = $year;
             $student_grades->State ="Active";
             $student_grades->save();
-            $log = new Logs;
+            $log = new logs;
             $log->Table = "Estudiante";
             $log->User_ID = $responsible_user->name;
             $log->Description = "Se registro un nuevo estudiante: ".$student->Names." ".$student->LastNames;
             $log->Type = "Crear";
             $log->save();
-            $log = new Logs;
+            $log = new logs;
             $log->Table = "Usuario";
             $log->User_ID = $responsible_user->name;
             $log->Description = "Se registro un nuevo usuario: ".$user->name;
             $log->Type = "Crear";
             $log->save();
-            $log = new Logs;
+            $log = new logs;
             $log->Table = "Rol";
             $log->User_ID = $responsible_user->name;
             $log->Description = "Se ha asignado el rol Estudiante al usuario: ".$user->name;
