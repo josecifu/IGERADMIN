@@ -59,7 +59,16 @@ class LoginController extends Controller
     }   
     public function ChangePassword(Request $request)
     {
-        dd($request->data);
+        try {
+            $data = $request->data[0];
+            $user = user::find($data->id);
+            $user->password = bcrypt($data->pass);
+            $user->save();
+        } catch (Exception $e) {
+            return response()->json(['Error' => "No se ha podido restablecer la contraseña."], 500);
+      
+        }
+        return response()->json(['Message' =>"Se ha modificado la contraseña con exito, por favor inicie con su nueva contraseña."]);
     }
     protected function authenticated(Request $request, $user)
     {

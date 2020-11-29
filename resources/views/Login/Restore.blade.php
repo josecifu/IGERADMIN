@@ -260,18 +260,18 @@ License: You must have a valid license purchased only from themeforest(the above
 						success: function(e){
 							Swal.fire({
 								title: 'Modificado!',
-								text: '¡Se ha modificado la contraseña con éxito!',
+								text: e['Message'],
 								icon: 'success',
 								confirmButtonText: 'Aceptar',
 							}).then(function () {
 								   
 								  var $url_path = '{!! url('/') !!}';
-								  window.location.href = $url_path+"/administration/dashboard";
+								  window.location.href = $url_path+"/login";
 								});
 						},
 						error: function(e){
 							swal.fire({
-								text: "Error, no se ha podido modificar las contraseñas!",
+								text: e.responseJSON['Error'],
 								icon: "error",
 								buttonsStyling: false,
 								confirmButtonText: "Entendido!",
