@@ -55,7 +55,7 @@ class LoginController extends Controller
         if (! $request->hasValidSignature()) {
             abort(403);
         }
-        return view('Administration/Login/Restore',compact('userid'));
+        return view('Login/Restore',compact('userid'));
     }   
     public function ChangePassword(Request $request)
     {
