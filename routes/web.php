@@ -29,7 +29,7 @@ Route::get('/logout', $route.'\LoginController@logout')->name('logout');
 Route::group([ 'prefix' => 'student','middleware' => 'auth'], function(){
 	$route = "App\Http\Controllers";
 	Route::get('/home/dashboard',$route.'\Student@dashboard')->name('StudentDashboard');
-	Route::get('/home/workspace/{model}',$route.'\Student@workspace')->name('WorkSpace');
+	Route::get('/home/workspace',$route.'\Student@workspace')->name('StudentWorkspace');
 	Route::get('/test/list',$route.'\Student@all_tests')->name('StudentAllTest');
 	Route::get('/test/view',$route.'\Student@student_test_list')->name('TestStudentView');
 	Route::get('/test/view/questions/{model}',$route.'\Student@test_questions')->name('TestQuestions');
