@@ -21,7 +21,6 @@
                                 <div class="mr-3">
                                     <div class="flex-grow-1 font-weight-bold text-dark-50 py-2 py-lg-2 mr-5">
                                         {{$test->Title}}<br>
-                                        Nombre del estudiante: {{$student->Names}} {{$student->LastNames}}<br>
                                         Curso: {{$course->Name}}<br>
                                         Profesor: {{$teacher->Names}} {{$teacher->LastNames}}<br>
                                         Valor: {{$test->Score}}<br>
@@ -42,7 +41,7 @@
                     <!--end::Title-->
                     <div class="card-toolbar">
                         <div class="card-toolbar">
-                            <a href="{{url('administration/student/list/test/'.$course->id)}}" class="btn btn-danger font-weight-bolder mr-2">
+                            <a href="{{url('student/test/list')}}" class="btn btn-danger font-weight-bolder mr-2">
                             <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
                         </div>
                         <!--begin::Dropdown-->
@@ -116,27 +115,12 @@
                                     </td>
                                     <td>
                                         <center>
-                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['type']}}</span>
-                                        </center>
-                                    </td>
-                                    <td>
-                                        <center>
                                             <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['answer']}}</span>
                                         </center>
                                     </td>
                                     <td>
                                         <center>
-                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['correct']}}</span>
-                                        </center>
-                                    </td>
-                                    <td>
-                                        <center>
                                             <span class="label label-lg label-light-primary label-inline">{{$model['score']}}</span>
-                                        </center>
-                                    </td>
-                                    <td>
-                                        <center>
-                                            <button type="button" class="btn btn-outline-info" data-toggle="tooltip" title="" data-placement="left">Ver pregunta</button>
                                         </center>
                                     </td>
                                 </tr>

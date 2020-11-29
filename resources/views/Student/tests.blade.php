@@ -76,12 +76,13 @@
                                             <span class="ml-3 font-weight-bolder">20</span>
                                         </div>
                                     </div>
-                                    <!--ebd::Progress-->
+                                    <!--end::Progress-->
                                 </div>
                                 <!--end::Body-->
                                 <!--begin::Footer-->
                                 <div class="card-footer d-flex align-items-center">
-                                    <a href="" class="btn btn-block btn-sm btn-light-info font-weight-bolder text-uppercase py-4">Ver examen</a>
+
+                                    <button type="button" onclick="verExamen({{$model['id']}},{{$assign->id}});" class="btn btn-block btn-sm btn-light-info font-weight-bolder text-uppercase py-4">Ver examen</button>
                                 </div>
                                 <!--end::Footer-->
                             </div>
@@ -128,4 +129,41 @@
                 </div>
             </div>
         </div>
+    @stop
+    @section('scripts')
+        <!--begin::Page Vendors(used by this page)-->
+        <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
+        <!--end::Page Vendors-->
+        <script type="text/javascript">
+            "use strict";
+            var KTDatatablesDataSourceHtml = function() {
+                var initTable1 = function() {
+                    var table = $('#kt_datatable');
+                    // begin first table
+                    table.DataTable({
+                        responsive: true,
+                        "language": {
+                            "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                        },
+                        columnDefs: [
+                            {
+                            },
+                        ],
+                    });
+                };
+                return {
+                    //main function to initiate the module
+                    init: function() {
+                        initTable1();
+                    },
+                };
+            }();
+            jQuery(document).ready(function() {
+                KTDatatablesDataSourceHtml.init();
+            });
+            function verExamen($id,$assign) {
+                var $url_path = '{!! url('/') !!}';
+                window.location.href = $url_path+"/student/test_review/"+$id+"/"+$assign;
+            }
+       </script>
     @stop

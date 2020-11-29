@@ -23,6 +23,12 @@ use App\Models\Asign_teacher_course;
 class Student extends Controller
 {
     #FUNCIONES DE ESTUDIANTE
+    public function statistics()
+    {
+        $models = [];
+        return view('Administration/Student/statistics',compact('models'));
+    }
+
     public function dashboard(Request $request)
     {
         $id = $request->session()->get('User_id');
@@ -173,52 +179,12 @@ class Student extends Controller
         $Course = $test->Course()->Name;
         return view('Student/test_form',compact('titles','buttons','test','Course'));
     }
+
     public function WorkSpace(Request $request)
     {
         return view('Student/workspace');
     }
-    public function save_answer(Request $request)
-    {
-        $id = $request->session()->get('User_id');
-        try
-        {
-            DB::beginTransaction();
-            $totalScore=0;
-            $test="";
-            $asign = Assign_student_grade::where('user_id',$id)->first();
-            foreach($request->data as $Answer)
-            {
-                $question = question::find($Answer['QuestionId']);
-                $score = 0;
-                if($question->Answers == $Answer['Answer'])
-                {
-                    $score = $question->Score;
-                }
-                $totalScore=$totalScore+$score;
-                $reply = new Asign_answer_test_student;
-                $reply->Studen_id = $asign->id;
-                $reply->Question_id = $Answer['QuestionId'];
-                $reply->Score = $score;
-                $reply->Answers = $Answer['Answer'];
-                $reply->State = "Complete";
-                $reply->save();
-                $test = $question->Test();
-            }
-            $note = new Note;
-            $note->Student_id = $asign->id;
-            $note->Test_id = $test->id;
-            $note->Score = $totalScore;
-            $note->Course_id = $test->Course()->id;
-            $note->State = "Complete";   
-            $note->save();             
-            DB::commit();
-        }
-        catch (Exception $e)
-        {
-            DB::rollBack();
-        }
-        return response()->json(["Accion exitosa"]);
-    }
+
 
     public function student_test_list(Request $request)
     {
@@ -273,6 +239,49 @@ class Student extends Controller
         return view('Student/test_list',compact('models'));
     }
 
+    public function save_answer(Request $request)
+    {
+        $id = $request->session()->get('User_id');
+        try
+        {
+            DB::beginTransaction();
+            $totalScore=0;
+            $test="";
+            $asign = Assign_student_grade::where('user_id',$id)->first();
+            foreach($request->data as $Answer)
+            {
+                $question = question::find($Answer['QuestionId']);
+                $score = 0;
+                if($question->Answers == $Answer['Answer'])
+                {
+                    $score = $question->Score;
+                }
+                $totalScore=$totalScore+$score;
+                $reply = new Asign_answer_test_student;
+                $reply->Studen_id = $asign->id;
+                $reply->Question_id = $Answer['QuestionId'];
+                $reply->Score = $score;
+                $reply->Answers = $Answer['Answer'];
+                $reply->State = "Complete";
+                $reply->save();
+                $test = $question->Test();
+            }
+            $note = new Note;
+            $note->Student_id = $asign->id;
+            $note->Test_id = $test->id;
+            $note->Score = $totalScore;
+            $note->Course_id = $test->Course()->id;
+            $note->State = "Complete";   
+            $note->save();             
+            DB::commit();
+        }
+        catch (Exception $e)
+        {
+            DB::rollBack();
+        }
+        return response()->json(["Accion exitosa"]);
+    }
+
     public function all_tests(Request $request)
     {
         $id = $request->session()->get('User_id');
@@ -283,7 +292,7 @@ class Student extends Controller
         { 
             if($course->Tests())
             {
-                foreach($course->Tests() as $test)
+                foreach($course->Tests()->where('State','Complete') as $test)
                 {
                     $query =[
                         "id" => $test->id,
@@ -299,7 +308,38 @@ class Student extends Controller
                 }
             }     
         }
-        return view('Student/tests',compact('models'));
+        return view('Student/tests',compact('models','assign'));
+    }
+
+    public function test_review($id,$assign)
+    {
+        $models = [];
+        $titles = [
+            'Preguntas',
+            'Respuestas del estudiante',
+            'Punteo Obtenido',
+        ];
+        $assign_student = Assign_student_grade::find($assign);
+        $user_student = User::find($assign_student->user_id);
+        $test = test::find($id);
+        $activity = Assign_activity::find($test->Activity_id);
+        $course = Course::find($activity->Course_id);
+        $assign_teacher = Asign_teacher_course::where('Course_id',$course->id)->first();
+        $user_student = User::find($assign_teacher->user_id);
+        $teacher = Person::find($user_student->Person_id);
+        $questions = $test->Questions();
+        foreach($questions as $question)
+        {
+            $answer = Asign_answer_test_student::where(['Studen_id'=>$assign,'Question_id'=>$question->id])->first();
+            $query = [
+                "id" => $question->id,
+                "question" => $question->Title,
+                "answer" => $answer->Answers ?? 'No contestada',
+                "score" => $answer->Score ?? '0',
+            ];
+            array_push($models,$query);
+        }
+        return view('Student/test_review',compact('models','titles','test','course','teacher'));
     }
 
     public function teacher_information(Request $request)
@@ -325,11 +365,7 @@ class Student extends Controller
         return view('Student/teacher_information',compact('models'));
     }
 
-    public function statistics()
-    {
-        $models = [];
-        return view('Administration/Student/statistics',compact('models'));
-    }
+
 
 
 
