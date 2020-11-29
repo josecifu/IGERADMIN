@@ -16,6 +16,7 @@ class AddPersonUsers extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->unsignedBigInteger('Person_id'); 
             $table->foreign('Person_id')->references('id')->on('people');
+            $table->string('PasswordRestore')->nullable(); 
         });
                     
     }

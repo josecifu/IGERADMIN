@@ -206,9 +206,20 @@
                                                     <thead>
                                                         <tr>
                                                             @foreach($Titles as $Title)
-                                                            <th>{{ $Title }}</th>
+                                                            <th colspan="{{$Title['No']}}" >{{ $Title['Name'] }}</th>
                                                             @endforeach
                                                         </tr>
+                                                        <tr>
+                                                            @foreach($Titles as $Title)
+                                                                @if($Title['No']==0)
+                                                                <th><center>No existen exámenes asignados</center></th>
+                                                                @endif
+                                                                @foreach($Title['Test'] as $title)
+                                                                <th><center>{{$title->Title}}</center></th>
+                                                                @endforeach
+                                                            @endforeach
+                                                          
+                                                        <tr>
                                                     </thead>
                                                     <tbody>
                                                         @if($Models)
@@ -443,28 +454,7 @@
                 responsive: true,
                 pageLength: 5,
                 order: [[2, 'asc']],
-                drawCallback: function(settings) {
-                    var api = this.api();
-                    var rows = api.rows({page: 'current'}).nodes();
-                    var last = null;
-    
-                    api.column(2, {page: 'current'}).data().each(function(group, i) {
-                        if (last !== group) {
-                            $(rows).eq(i).before(
-                                '<tr class="group"><td colspan="5">' + group + '</td></tr>',
-                            );
-                            last = group;
-                        }
-                    });
-                },
-                columnDefs: [
-                    {
-                        // hide columns by index number
-                        targets: [0, 2],
-                        visible: false,
-                    },
-                    
-                ],
+                
             });
         };
     

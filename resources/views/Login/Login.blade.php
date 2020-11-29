@@ -83,7 +83,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									<div class="form-group">
 										<div class="d-flex justify-content-between mt-n5">
 											<label class="font-size-h6 font-weight-bolder text-dark pt-5">Contraseña</label>
-											<a href="javascript:;" class="text-primary font-size-h6 font-weight-bolder text-hover-primary pt-5" id="kt_login_forgot"> Olvido su contraseña ?</a>
+											<a href="javascript:;" class="text-primary font-size-h6 font-weight-bolder text-hover-primary pt-5" id="kt_login_forgot"> ¿Olvido su contraseña ?</a>
 										</div>
 										<input class="form-control form-control-solid h-auto py-7 px-6 rounded-lg" type="password" name="password" autocomplete="off" />
 									</div>
@@ -114,7 +114,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									<!--end::Form group-->
 									<!--begin::Form group-->
 									<div class="form-group">
-										<input class="form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6" type="email" placeholder="Email" name="email" autocomplete="off" />
+										<input class="form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6" type="email" placeholder="Correo electronico" name="email" autocomplete="off" />
 									</div>
 									<!--end::Form group-->
 									<!--begin::Form group-->
@@ -151,19 +151,19 @@ License: You must have a valid license purchased only from themeforest(the above
 								<form class="form" novalidate="novalidate" id="kt_login_forgot_form">
 									<!--begin::Title-->
 									<div class="text-center pb-8">
-										<h2 class="font-weight-bolder text-dark font-size-h2 font-size-h1-lg">Forgotten Password ?</h2>
-										<p class="text-muted font-weight-bold font-size-h4">Enter your email to reset your password</p>
+										<h2 class="font-weight-bolder text-dark font-size-h2 font-size-h1-lg">¿Olvido su contraseña?</h2>
+										<p class="text-muted font-weight-bold font-size-h4">Ingrese su correo para restablecer su contraseña</p>
 									</div>
 									<!--end::Title-->
 									<!--begin::Form group-->
 									<div class="form-group">
-										<input class="form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6" type="email" placeholder="Email" name="email" autocomplete="off" />
+										<input  id="EmailForgot" class="form-control form-control-solid h-auto py-7 px-6 rounded-lg font-size-h6" type="email" placeholder="Correo electronico" name="email" autocomplete="off" />
 									</div>
 									<!--end::Form group-->
 									<!--begin::Form group-->
 									<div class="form-group d-flex flex-wrap flex-center pb-lg-0 pb-3">
-										<button type="button" id="kt_login_forgot_submit" class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mx-4">Submit</button>
-										<button type="button" id="kt_login_forgot_cancel" class="btn btn-light-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mx-4">Cancel</button>
+										<button type="button" id="kt_login_forgot_submit" class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mx-4">Aceptar</button>
+										<button type="button" id="kt_login_forgot_cancel" class="btn btn-light-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mx-4" style="color:white;">Cancelar</button>
 									</div>
 									<!--end::Form group-->
 								</form>
@@ -207,6 +207,13 @@ License: You must have a valid license purchased only from themeforest(the above
 		<!--begin::Page Scripts(used by this page)-->
 		
 		<script type="text/javascript">
+			$( document ).ready(function() {
+				$.ajaxSetup({
+					  headers: {
+						  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					  }
+				  }); 
+			   });
 	"use strict";
 
 // Class Definition
@@ -234,17 +241,17 @@ var KTLogin = function() {
 			KTUtil.getById('kt_login_signin_form'),
 			{
 				fields: {
-					username: {
+					name: {
 						validators: {
 							notEmpty: {
-								message: 'Username is required'
+								message: 'El usuario es requerido'
 							}
 						}
 					},
 					password: {
 						validators: {
 							notEmpty: {
-								message: 'Password is required'
+								message: 'La contraseña es requerida'
 							}
 						}
 					}
@@ -263,25 +270,17 @@ var KTLogin = function() {
 
             validation.validate().then(function(status) {
 		        if (status == 'Valid') {
-                    swal.fire({
-		                text: "All is cool! Now you submit this form",
-		                icon: "success",
-		                buttonsStyling: false,
-		                confirmButtonText: "Ok, got it!",
-                        customClass: {
-    						confirmButton: "btn font-weight-bold btn-light-primary"
-    					}
-		            }).then(function() {
-						KTUtil.scrollTop();
-					});
-				} else {
+					$( "#kt_login_signin_form" ).submit();
+				}
+				else
+				{
 					swal.fire({
-		                text: "Sorry, looks like there are some errors detected, please try again.",
+		                text: "Existen errores compruebe los campos requeridos.",
 		                icon: "error",
 		                buttonsStyling: false,
-		                confirmButtonText: "Ok, got it!",
+		                confirmButtonText: "Aceptar!",
                         customClass: {
-    						confirmButton: "btn font-weight-bold btn-light-primary"
+    						confirmButton: "btn font-weight-bold btn-light-warning"
     					}
 		            }).then(function() {
 						KTUtil.scrollTop();
@@ -292,7 +291,7 @@ var KTLogin = function() {
 
         // Handle forgot button
         $('#kt_login_forgot').on('click', function (e) {
-            e.preventDefault();
+			e.preventDefault();
             _showForm('forgot');
         });
 
@@ -312,27 +311,18 @@ var KTLogin = function() {
 			form,
 			{
 				fields: {
-					fullname: {
+					name: {
 						validators: {
 							notEmpty: {
-								message: 'Username is required'
+								message: 'El usuario es requerido'
 							}
 						}
 					},
-					email: {
-                        validators: {
-							notEmpty: {
-								message: 'Email address is required'
-							},
-                            emailAddress: {
-								message: 'The value is not a valid email address'
-							}
-						}
-					},
+			
                     password: {
                         validators: {
                             notEmpty: {
-                                message: 'The password is required'
+                                message: 'La contraseña es requerida'
                             }
                         }
                     },
@@ -415,10 +405,10 @@ var KTLogin = function() {
 					email: {
 						validators: {
 							notEmpty: {
-								message: 'Email address is required'
+								message: 'El correo es requerido para restaruar la contraseña'
 							},
                             emailAddress: {
-								message: 'The value is not a valid email address'
+								message: 'El correo proporcionado no es valido'
 							}
 						}
 					}
@@ -436,14 +426,36 @@ var KTLogin = function() {
 
             validation.validate().then(function(status) {
 		        if (status == 'Valid') {
-                    // Submit form
-                    KTUtil.scrollTop();
+					var $email = $('#EmailForgot').val();
+					$.ajax({
+						url:'/restore/username',
+						type:'POST',
+						data: {"_token":"{{ csrf_token() }}","email":$email},
+						dataType: "JSON",
+						success: function(e){
+							swal.fire({
+								title: '¡Enviado!',
+								text:   e['Message'],
+								icon: 'success',
+								confirmButtonText: 'Aceptar',
+							})
+						},
+						error: function(e){
+							swal.fire({
+								title: '¡Error!',
+								text:   e.responseJSON['Error'],
+								icon: 'error',
+								confirmButtonText: 'Aceptar',
+							})
+						   
+						}
+					});
 				} else {
 					swal.fire({
-		                text: "Sorry, looks like there are some errors detected, please try again.",
+		                text: "Se han detectado errores",
 		                icon: "error",
 		                buttonsStyling: false,
-		                confirmButtonText: "Ok, got it!",
+		                confirmButtonText: "Aceptar",
                         customClass: {
     						confirmButton: "btn font-weight-bold btn-light-primary"
     					}
@@ -479,3 +491,4 @@ var KTLogin = function() {
 jQuery(document).ready(function() {
     KTLogin.init();
 });
+</script>

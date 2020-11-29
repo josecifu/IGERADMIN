@@ -15,6 +15,12 @@ use Illuminate\Support\Facades\Route;
 $route = "App\Http\Controllers";
 #Login
 Route::get('/login', $route.'\LoginController@index')->name('login');
+#Restore
+Route::post('/restore/username', $route.'\LoginController@restore')->name('restorepassword');
+#Restore
+Route::get('/restore/password/{model}', $route.'\LoginController@restorepass')->name('restorepass');
+
+#Dashboard
 Route::redirect('/', '/administration/home/dashboard');
 Route::get('/', $route.'\Administration@Dashboard')->name('home')->middleware('auth');
 #Signin
