@@ -561,6 +561,7 @@ class PeriodSeeder extends Seeder
             "Grade"=>$Grades
         ];
         array_push($LevelList,$Level);
+
         $periodsList = ["13-01-001 (Viernes IGER)","13-01-004 (Sábados IGER)","13-01-006 (Domingos MA)","13-01-019 (Domingos IGER)"];
         foreach ($periodsList as $key => $period) {
             $idPeriod = DB::table('periods')->insertGetId([
@@ -569,6 +570,7 @@ class PeriodSeeder extends Seeder
             ]);
             foreach ($LevelList as $value) {
                 $insert=false;
+               
                 if($key==0 && $value['Name'] =="Básico")
                 {
                     $insert=true;
@@ -585,14 +587,14 @@ class PeriodSeeder extends Seeder
                 {
                     $insert=true;
                 }
-                if($insert)
+                if($insert==true)
                 {
                     $id = DB::table('levels')->insertGetId([
                         'Name' => $value['Name'],
                         'Period_id' =>  $idPeriod,
                         'State' => 'Active',       
                     ]);
-                        foreach ($value['Grade'] as $key => $grade) {
+                        foreach ($value['Grade'] as $grade) {
                             $idGrade =DB::table('grades')->insertGetId([
                                 'Name' => $grade['Grade'],
                                 'Level_id' => $id,
