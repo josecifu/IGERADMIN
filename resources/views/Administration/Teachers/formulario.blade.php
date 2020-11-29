@@ -122,12 +122,12 @@
 																		<i class="la la-phone"></i>
 																	</span>
 																</div>
-																<input type="number" name="Telefono" id="Telefono" class="form-control form-control-solid" placeholder="Phone" />
+																<input type="number" name="Telefono" id="Telefono" class="form-control form-control-solid" placeholder="Teléfono"/>
 															</div>
 														</div>
 													</div>
 													<div class="form-group row">
-														<label class="col-3 col-form-label">Genero</label>
+														<label class="col-3 col-form-label">Género</label>
 														<div class="col-9 col-form-label">
 															<div class="radio-inline">
 																<label class="radio radio-primary">
@@ -506,7 +506,7 @@ var KTWizard1 = function () {
                 dataType: "JSON",
                 success: function(e){
                 swal.fire({ title: "Accion completada", 
-                  text: "Se ha guardado con exito el Voluntario!", 
+                  text: "El voluntario a sido registrado con éxito!", 
                   type: "success"
                         }).then(function () {
                           var $url_path = '{!! url('/') !!}';
@@ -631,10 +631,8 @@ var KTWizard1 = function () {
 				// init dual listbox
 				cursosduallist = new DualListbox($this.get(0), {
 					addEvent: function (value) {
-						console.log(value);
 					},
 					removeEvent: function (value) {
-						console.log(value);
 					},
 					availableTitle: 'Listado de cursos',
 					selectedTitle: 'Cursos por asignar',
@@ -646,9 +644,7 @@ var KTWizard1 = function () {
 					
 				});
 				
-			};
-		
-		
+			};		
 			return {
 				// public functions
 				init: function () {

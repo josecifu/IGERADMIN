@@ -260,7 +260,6 @@
                 ]).then((result) => {
                     if (result.value) {
                     const answers = JSON.stringify(result.value)
-                    console.log(result.value);
                     const swalWithBootstrapButtons = Swal.mixin({
                         customClass: {
                         confirmButton: 'btn btn-success',
