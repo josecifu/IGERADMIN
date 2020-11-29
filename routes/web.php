@@ -15,6 +15,12 @@ use Illuminate\Support\Facades\Route;
 $route = "App\Http\Controllers";
 #Login
 Route::get('/login', $route.'\LoginController@index')->name('login');
+#Restore
+Route::post('/restore/username', $route.'\LoginController@restore')->name('restorepassword');
+#Restore
+Route::get('/restore/password/{model}', $route.'\LoginController@restorepass')->name('restorepass');
+
+#Dashboard
 Route::redirect('/', '/administration/home/dashboard');
 Route::get('/', $route.'\Administration@Dashboard')->name('home')->middleware('auth');
 #Signin
@@ -32,6 +38,7 @@ Route::group([ 'prefix' => 'student'], function(){
 	Route::get('/profile/edit/{model}',$route.'\Student@edit_profile')->name('EditData');
 	Route::post('/profile/update', $route.'\Student@update_profile')->name('UpdateData');
 	Route::post('/test/view/answers/save', $route.'\Student@save_answer')->name('SaveAnswer');
+	Route::get('/course/list',$route.'\Student@teacher_information')->name('StudentCourseList');
 	
 });
 Route::group([ 'prefix' => 'teacher'], function(){									// =======================================

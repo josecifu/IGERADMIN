@@ -82,7 +82,7 @@ class Teacher extends Controller
     }
     public function dashboard(Request $request)
     {
-        $Titles =['Id','Nombres','Curso','Examen 1','Examen 2'];
+        $Titles =['Id','Alumno','Curso'];
         $Models = [];
         $data = user::find($request->session()->get('User_id'));
         $DataTeacher=[];
@@ -94,8 +94,26 @@ class Teacher extends Controller
                 "CountCourses" => count($data->CoursesTeacherData()),
                 "CountTest" =>count($data->CoursesTeacherData()),
             ];
+            $dataActivity = [];
             foreach($data->CoursesTeacherData() as $value)
             {
+               
+                $testData = [];
+                $Activities = Assign_activity::where([['Course_id',$value->id],['State','Active']])->get();
+                foreach($Activities as $Activity)
+                {
+                    if(!in_array($Activity->Name,$dataActivity))
+                    {
+                        array_push($dataActivity,$Activity->Name);
+                        $act = [
+                            "Name" =>$Activity->Name,
+                            "No" =>count($Activity->Tests()),
+                            "Test" => $Activity->Tests(),
+                        ];
+                        array_push($Titles,$act);
+                    }
+                }
+               
                     foreach($value->Grade()->Students() as $Student)
                     {
                         $model = [
@@ -107,6 +125,7 @@ class Teacher extends Controller
                     }
             }
         }
+       
         return view('Teacher/Home',compact('Titles','Models','DataTeacher'));
     }
     public function list() //Visualizcion tabla Voluntarios con usuario

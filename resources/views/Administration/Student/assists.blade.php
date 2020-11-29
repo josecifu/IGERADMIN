@@ -4,7 +4,7 @@
     Estudiantes
     @stop
     @section('breadcrumb1')
-    Curso/Notas
+    Listado/Notas
     @stop
     @section('breadcrumb2')
     Estudiante
@@ -20,12 +20,12 @@
                             <i class="flaticon2-favourite text-primary"></i>
                         </span>
                         <h3 class="card-label">
-                            Listado de cursos y notas de: {{$student->Names}} {{$student->LastNames}}
+                            Listado de asistencias de {{$grade}}
                         </h3>
                     </div>
                     <div class="card-toolbar">
                         <div class="card-toolbar">
-                            <a href="{{url('administration/student/score/'.$grade->id)}}" class="btn btn-danger font-weight-bolder mr-2">
+                            <a href="{{url('administration/student/list')}}" class="btn btn-danger font-weight-bolder mr-2">
                             <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
                         </div>
                         <!--begin::Dropdown-->
@@ -75,34 +75,20 @@
                 </div>
                 <div class="card-body">
                     <!--begin: Datatable-->
-                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
-                        <thead>
+                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 15px !important">
+                        <thead style="background:#e5e5e5">
                             <tr>
-                                <th rowspan="2"><center>Cursos</center></th>
                                 @foreach($titles as $title)
-                                    <th colspan="{{$title['no']}}"><center>{{$title['activity']}}</center></th>
+                                <th>{{$title}}</th>
                                 @endforeach
                             </tr>
-                            <tr>
-                                @foreach($titles as $title)
-                                    @if($title['no']==0)
-                                    <th><center>No existen examenes asignados</center></th>
-                                    @endif
-                                    @foreach($title['test'] as $t)
-                                    <th><center>{{$t->Title}}</center></th>
-                                    @endforeach
-                                @endforeach
-                              </tr>
                         </thead>
                         <tbody>
                             @foreach($models as $model)
                             <tr>
-                                <td>{{$model['course']}}</td>
-                                @foreach($model['scores'] as $score)
-                                <td>
-                                    <center>{{$score['note']}}</center>
-                                </td>
-                                @endforeach
+                                <td>{{$model['name']}}</td>
+                                <td>{{$model['lastname']}}</td>
+                                <td>{{$model['assist']}}</td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -128,17 +114,6 @@
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                         },
-                        columnDefs: [
-                            {
-                                targets: -1,
-                                title: 'Actividades',
-                                orderable: false,
-                                render: function(data, type, full, meta) {
-                                    return '\
-                                    ';
-                                },
-                            },
-                        ],
                     });
                 };
                 return {

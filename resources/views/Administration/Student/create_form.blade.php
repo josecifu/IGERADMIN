@@ -187,7 +187,7 @@
 									<!--end::Wizard Step 2-->
 									<!--begin::Wizard Step 3-->
 									<div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
-										<h3>Ingrese los datos de asignación</h3><br>
+										<h3>Seleccione los datos de asignación</h3><br>
 										<div class="my-5">
 											<div class="form-group row">
 												<label class="col-form-label text-right col-lg-3 col-sm-12">Círculo de estudio</label>
@@ -345,7 +345,7 @@
 									KTUtil.scrollTop();
 								} else {
 									Swal.fire({
-										text: "Porfavor completar los campos requeridos",
+										text: "Por favor, complete los campos requeridos!",
 										icon: "error",
 										buttonsStyling: false,
 										confirmButtonText: "Aceptar",
@@ -367,7 +367,7 @@
 					// Submit event
 					_wizardObj.on('submit', function (wizard) {
 						Swal.fire({
-							text: "Por favor complete el registro!",
+							text: "Por favor, complete el registro!",
 							icon: "success",
 							showCancelButton: true,
 							buttonsStyling: false,

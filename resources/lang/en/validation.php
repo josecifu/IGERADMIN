@@ -133,6 +133,14 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'name' => [
+            'required' => 'El nombe de usuario es necesario',
+        ],
+        'password' => [
+            'required' => 'La contraseña es necesaria',
+        ],
+      
+        
     ],
 
     /*
