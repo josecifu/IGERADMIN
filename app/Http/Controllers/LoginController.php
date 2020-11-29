@@ -58,7 +58,7 @@ class LoginController extends Controller
         
        
 
-        return response('Te has suscrito al evento.');
+        dd($userid);
     }   
     protected function authenticated(Request $request, $user)
     {
