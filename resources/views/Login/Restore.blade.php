@@ -137,7 +137,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									<!--end::Form group-->
 									<!--begin::Form group-->
 									<div class="form-group d-flex flex-wrap flex-center pb-lg-0 pb-3">
-										<button type="button" id="kt_login_signup_submit" class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mx-4">Submit</button>
+										<button type="button" onclick="change();" class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mx-4">Submit</button>
 										<button type="button" id="kt_login_signup_cancel" class="btn btn-light-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mx-4">Cancel</button>
 									</div>
 									<!--end::Form group-->
@@ -162,7 +162,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									<!--end::Form group-->
 									<!--begin::Form group-->
 									<div class="form-group d-flex flex-wrap flex-center pb-lg-0 pb-3">
-										<button type="button" onclick="change();" class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mx-4">Aceptar</button>
+										<button type="button" onclick="" class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mx-4">Aceptar</button>
 										<button type="button" id="kt_login_forgot_cancel" class="btn btn-light-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mx-4" style="color:white;">Cancelar</button>
 									</div>
 									<!--end::Form group-->
