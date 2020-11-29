@@ -85,7 +85,7 @@ License: You must have a valid license purchased only from themeforest(the above
 											<label class="font-size-h6 font-weight-bolder text-dark pt-5">Vuela a escribir la contraseña:</label>
 											
 										</div>
-										<input class="form-control form-control-solid h-auto py-7 px-6 rounded-lg" type="password2" name="password2"  id="pass3" autocomplete="off" />
+										<input class="form-control form-control-solid h-auto py-7 px-6 rounded-lg" type="password" name="password3"  id="pass3" autocomplete="off" />
 									</div>
 									<!--end::Form group-->
 									<!--begin::Action-->
