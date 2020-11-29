@@ -48,7 +48,7 @@ class LoginController extends Controller
         else{
             return response()->json(['Error' => "No se ha encontrado ningun usuario con ese correo electronico, por favor ponte en contacto con secretaria."], 500);
         }
-        return response()->json(["Se ha enviado un correo con el link de restauración de la contraseña."]);
+        return response()->json(['Message' =>"Se ha enviado un correo con el link de restauración de la contraseña."]);
     }
     public function restorepass(Request $request, $userid)
     {
