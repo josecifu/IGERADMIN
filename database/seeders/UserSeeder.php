@@ -20,20 +20,7 @@ class UserSeeder extends Seeder
             'Person_id' => 1,       
             'State' => 'Active',         
         ]);
-        DB::table('users')->insert([
-            'name' => 'Estudiante',
-            'Email' => 'Estudiante@admin.com',
-            'Password' => bcrypt('estudiante'),    
-            'Person_id' => 2,       
-            'State' => 'Active',         
-        ]);
-         DB::table('users')->insert([
-            'name' => 'Voluntario',
-            'Email' => 'Voluntario@admin.com',
-            'Password' => bcrypt('voluntario'),    
-            'Person_id' => 3,       
-            'State' => 'Active',         
-        ]);
+       
         $this->command->info('Se ha creado el usuario de administrador con exito');
     }
 }
