@@ -100,6 +100,8 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/create',$route.'\Teacher@create')->name('CreateTeacher');
 		Route::post('/save', $route.'\Teacher@save')->name('SaveTeacher');
 		Route::get('/edit/{model}',$route.'\Teacher@edit')->name('EditTeacher');
+		Route::get('/assign/courses/{model}',$route.'\Teacher@AdministrationCourses')->name('AdministrationCourses');
+		Route::post('/save/assign/courses',$route.'\Teacher@SaveAdministrationCourses')->name('SaveAdministrationCourses');
 		Route::post('/update', $route.'\Teacher@update')->name('UpdateTeacher');
 		Route::get('/score/{model}',$route.'\Teacher@score')->name('ScoreTeacher');
 		Route::get('/logs',$route.'\Teacher@logs')->name('LogsTeacher');
