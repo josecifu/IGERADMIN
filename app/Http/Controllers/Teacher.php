@@ -125,7 +125,6 @@ class Teacher extends Controller
                     }
             }
         }
-       
         return view('Teacher/Home',compact('Titles','Models','DataTeacher'));
     }
     public function list() //Visualizcion tabla Voluntarios con usuario
@@ -349,6 +348,9 @@ class Teacher extends Controller
     public function score(Request $request, $id)      //VISUALIZACIÓN DE NOTAS DE LAS UNIDADES
     {
         $Models = [];
+        $buttons =[];
+        $Titles = [];
+        $Modal = [];
         if(session()->get('rol_Name')=="Voluntario"){
             $teacher = $request->session()->get('User_id');
             $assignV = Asign_teacher_course::where('Course_id',$id)->first();
@@ -360,6 +362,18 @@ class Teacher extends Controller
                 return redirect('/teacher/home/dashboard')->withError('No tiene cursos asignados');
             }
         } else {
+            $button = [
+                "Name" => 'Crear Actividad',
+                "Link" => "create()",
+                "Type" => "addFunction"
+            ];
+            array_push($buttons,$button);
+            $button = [
+                "Name" => 'Ver detalles de actividad',
+                "Link" => 'modal()',
+                "Type" => "addFunction1"
+            ];
+            array_push($buttons,$button);
             $course = course::find($id);
             $assignV = Asign_teacher_course::where('Course_id',$id)->first();
             if(isset($assignV)){
@@ -369,9 +383,6 @@ class Teacher extends Controller
                 return redirect('/administration/teacher/list')->withError('El curso no tiene ningún voluntario asignado');
             }
         }
-        $Titles = [];
-        $Models = [];
-        $Modal = [];
         $Activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
         if(!$Activities->isempty()){
             $gradeStudents = grade::find($course->Grade_id)->Students();
@@ -411,19 +422,6 @@ class Teacher extends Controller
                 array_push($Models,$model);
             }
         }
-        $buttons =[];
-        $button = [
-            "Name" => 'Crear Actividad',
-            "Link" => "create()",
-            "Type" => "addFunction"
-        ];
-        array_push($buttons,$button);
-        $button = [
-            "Name" => 'Ver detalles de actividad',
-            "Link" => 'modal()',
-            "Type" => "addFunction1"
-        ];
-        array_push($buttons,$button);
         $button = [
             "Name" => 'Enviar notas a revisión',
             "Link" => '/teacher/send/state/test/'.$id,

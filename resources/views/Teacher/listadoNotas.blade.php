@@ -85,8 +85,6 @@
                                                 </div>
                                                 <!--end::Dropdown Menu-->
                                             </div>
-                                            <a href="#" onclick="create();" class="btn btn-primary font-weight-bolder">
-                                                <i class="la la-plus"></i>Crear Actividad</a>
                                             <!--end::Dropdown-->
                                         </div>
                                     </div>
