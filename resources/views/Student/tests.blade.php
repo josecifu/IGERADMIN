@@ -73,7 +73,7 @@
                                             <div class="progress progress-xs mt-2 mb-2 w-100">
                                                 <div class="progress-bar bg-success" role="progressbar" style="width:80%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
-                                            <span class="ml-3 font-weight-bolder">20</span>
+                                            <span class="ml-3 font-weight-bolder">80</span>
                                         </div>
                                     </div>
                                     <!--end::Progress-->
@@ -81,7 +81,6 @@
                                 <!--end::Body-->
                                 <!--begin::Footer-->
                                 <div class="card-footer d-flex align-items-center">
-
                                     <button type="button" onclick="verExamen({{$model['id']}},{{$assign->id}});" class="btn btn-block btn-sm btn-light-info font-weight-bolder text-uppercase py-4">Ver examen</button>
                                 </div>
                                 <!--end::Footer-->

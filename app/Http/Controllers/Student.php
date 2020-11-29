@@ -180,7 +180,7 @@ class Student extends Controller
         return view('Student/test_form',compact('titles','buttons','test','Course'));
     }
 
-    public function WorkSpace(Request $request)
+    public function workSpace(Request $request)
     {
         return view('Student/workspace');
     }
@@ -364,6 +364,11 @@ class Student extends Controller
         }
         return view('Student/teacher_information',compact('models'));
     }
+
+
+
+
+
 
 
 
