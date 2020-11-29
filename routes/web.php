@@ -43,7 +43,7 @@ Route::group([ 'prefix' => 'student','middleware' => 'auth'], function(){
 });
 Route::group([ 'prefix' => 'teacher','middleware' => 'auth'], function(){									// =======================================
 	$route = "App\Http\Controllers";
-	Route::get('/home/dashboard',$route.'\Teacher@dashboard')->name('TeacherDashboard');
+	Route::get('/home/dashboard',$route.'\Teacher@dashboard')->name('TeacherDashboard') ;
 	Route::get('/home/workspace',$route.'\Teacher@workspaceT')->name('Teacherworkspace');
 	Route::get('/score/list/{model}',$route.'\Teacher@score')->name('TeacherScore');
 	Route::get('/test/view/{model}',$route.'\Teacher@ViewTestsGeplande')->name('TeacherViewTestsGeplande');

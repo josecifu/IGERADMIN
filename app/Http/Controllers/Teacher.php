@@ -63,6 +63,10 @@ class Teacher extends Controller
         array_push($buttons,$button);
         return view('Administration/Teachers/spaceWork',compact('buttons'));
     }
+    public function __construct()
+	{
+		$this->middleware('auth');
+	} 
     public function workspaceT(Request $request, $id)
     {
         $id = user::find($request->session()->get('User_id'));
@@ -82,7 +86,7 @@ class Teacher extends Controller
     }
     public function dashboard(Request $request)
     {
-        $Titles =['Id','Alumno','Curso'];
+        $Titles =[];
         $Models = [];
         $data = user::find($request->session()->get('User_id'));
         $DataTeacher=[];
@@ -95,10 +99,11 @@ class Teacher extends Controller
                 "CountTest" =>count($data->CoursesTeacherData()),
             ];
             $dataActivity = [];
+            $dataTest = [];
+            $dataAll = [];
+            $TestData =[];
             foreach($data->CoursesTeacherData() as $value)
             {
-               
-                $testData = [];
                 $Activities = Assign_activity::where([['Course_id',$value->id],['State','Active']])->get();
                 foreach($Activities as $Activity)
                 {
@@ -107,23 +112,25 @@ class Teacher extends Controller
                         array_push($dataActivity,$Activity->Name);
                         $act = [
                             "Name" =>$Activity->Name,
-                            "No" =>count($Activity->Tests()),
-                            "Test" => $Activity->Tests(),
+                            "No" =>count($Activity->Tests()) ?? 0,
                         ];
                         array_push($Titles,$act);
                     }
-                }
-               
-                    foreach($value->Grade()->Students() as $Student)
+                    foreach($Activity->Tests() as $test)
                     {
-                        $model = [
-                            "Id" =>$value->id,
-                            "Name" =>$Student->person()->Names." ".$Student->person()->LastNames,
-                            "Curse" => $value->Name." - ".$value->Grade()->GradeNamePeriod(),
-                        ];
-                        array_push($Models,$model);
+                        if(!in_array($test->Title,$TestData))
+                        {
+                            $dat = [
+                                "Activity"=>$Activity->Name,
+                                "Test" =>$test->Title
+                            ];
+                                
+                            array_push($TestData,$dat);
+                        }
                     }
+                }
             }
+            dd($TestData);
         }
         return view('Teacher/Home',compact('Titles','Models','DataTeacher'));
     }

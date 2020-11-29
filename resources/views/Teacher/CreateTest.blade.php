@@ -64,8 +64,8 @@
 													</div>
 													<div class="form-group row">
 														<label class="col-3">Actividad</label>
-														<div class="col-lg-4 col-md-9 col-sm-12">
-															<select class="form-control" id="actividad" name="param">
+														<div class="col-lg-9 col-md-9 col-sm-12">
+															<select class="form-control select2" id="actividad" style="width: 100%;" name="param">
 																<option value="">--Seleccione una opción</option>
 																@foreach($actividades as $a)
 																	<option value="{{$a['id']}}">{{$a['Nombre']}}</option>
@@ -114,6 +114,17 @@
 															<div class="input-group input-group-solid">
 																<input type="number" name="NoPreguntas" id="NoPreguntas" class="form-control form-control-solid" placeholder="Cantidad de preguntas" />
 															</div>
+														</div>
+													</div>
+													<div class="form-group row" id="OrdenQuestionCheck" style="visibility: hidden;">
+														<label class="col-3 col-form-label">Permitir cambio entre preguntas</label>
+														<div class="col-3">
+															<span class="switch switch-info">
+																<label>
+																	<input type="checkbox" id="OrderQuestions" checked="checked" name="OrderQuestions" />
+																	<span></span>
+																</label>
+															</span>
 														</div>
 													</div>
 												</div>
@@ -309,6 +320,10 @@ var KTWizard1 = function () {
 
 	jQuery(document).ready(function () {
 		KTWizard1.init();
+		$('#actividad').select2({
+			minimumResultsForSearch: -1,
+			placeholder: "Seleccione una actividad"
+		});
 	});
 
 
@@ -333,6 +348,8 @@ var KTWizard1 = function () {
             var actividad = $('#actividad').val();
 			var Preguntas = $('#NoPreguntas').val();
 			var tipoexamen = $('#virtual').is(":checked");
+			var OrderQuestions = $('#OrderQuestions').is(":checked");
+			
             var data = [{
 				Titulo: Titulo,
 				Punteo: Punteo,
@@ -343,6 +360,7 @@ var KTWizard1 = function () {
                 Preguntas: Preguntas,
 				tipoexamen: tipoexamen,
 				curso: {{$id}},
+				OrderQuestions:OrderQuestions
             }];
             $.ajax({
                 url:'/administration/teacher/save/test',
@@ -392,13 +410,16 @@ var KTWizard1 = function () {
 				$('#virtualHI').css("visibility", "visible");
 				$('#virtualHF').css("visibility", "visible");
 				$('#virtualPreguntas').css("visibility", "visible");
+				$('#OrdenQuestionCheck').css("visibility", "visible");
 			}else{
 				$('#virtualFecha').css("visibility", "hidden");
 				$('#virtualHI').css("visibility", "hidden");
 				$('#virtualHF').css("visibility", "hidden");
 				$('#virtualPreguntas').css("visibility", "hidden");
+				$('#OrdenQuestionCheck').css("visibility", "hidden");
 			}
 		});
+		
 		
     </script>
 	@stop
