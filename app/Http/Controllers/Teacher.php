@@ -116,23 +116,42 @@ class Teacher extends Controller
                         ];
                         array_push($Titles,$act);
                     }
-                    foreach($Activity->Tests() as $test)
+                    if(count($Activity->Tests())>0)
                     {
-                        if(!in_array($test->Title,$TestData))
+                        foreach($Activity->Tests() as $test)
                         {
-                            $dat = [
-                                "Activity"=>$Activity->Name,
-                                "Test" =>$test->Title
-                            ];
-                                
-                            array_push($TestData,$dat);
+                            if(!in_array($test->Title,$TestData))
+                            {
+                                $dat = [
+                                    "Activity"=>$Activity->Name,
+                                    "Test" =>$test->Title
+                                ];
+                                    
+                                array_push($TestData,$dat);
+                            }
                         }
                     }
+                    else
+                    {
+                        $dat = [
+                            "Activity"=>$Activity->Name,
+                            "Test" =>"No existen examenes asignados"
+                        ];
+                         array_push($TestData,$dat);
+                    }
+                }
+                foreach($value->Grade()->Students() as $student)
+                {
+                    $notes = notes::where(['Student_id'=> $student->Asssign_Grade()->id, "Course_id" => $value->id])->get();
+                    $model = [
+                        "Name"=> $student->LastNames." ".$student->Names,
+                        "Curse"=>$value->Name,
+                        "Notes" =>"0"
+                    ];
                 }
             }
-            dd($TestData);
         }
-        return view('Teacher/Home',compact('Titles','Models','DataTeacher'));
+        return view('Teacher/Home',compact('Titles','Models','DataTeacher','TestData'));
     }
     public function list() //Visualizcion tabla Voluntarios con usuario
     {

@@ -208,17 +208,23 @@
                                                         <tr>
                                                             <th colspan="2" ></th>
                                                             @foreach($Titles as $Title)
-                                                            <th colspan="{{$Title['No']}}" >{{ $Title['Name'] }}</th>
+                                                            <th colspan="2" >{{ $Title['Name'] }}</th>
                                                             @endforeach
                                                         </tr>
                                                         <tr>
                                                             <th>Alumno</th>
                                                             <th>Curso</th>
-                                                            @foreach($Titles as $Title)
-                                                                @if($Title['No']==0)
-                                                                <th><center>No existen exámenes asignados</center></th>
-                                                                @endif
-                                                               
+                                                            @foreach($TestData as $TestTitles)
+                                                            @php
+                                                            $Test=[];
+                                                            if(!in_array($TestTitles['Test'],$Test)) 
+                                                            {
+                                                            array_push($Test,$TestTitles['Test']);  
+                                                            @endphp
+                                                                <th>{{$TestTitles['Test']}}</th>
+                                                            @php
+                                                            }
+                                                            @endphp   
                                                             @endforeach
                                                         <tr>
                                                         
@@ -227,7 +233,6 @@
                                                         @if($Models)
                                                             @foreach($Models as $Model)
                                                             <tr>
-                                                                <td>{{$Model['Id']}}</td>
                                                                 <td>{{$Model['Name']}}</td>
                                                                 <td>{{$Model['Curse']}}</td>
                                                                 <td><center><span class="label label-warning label-pill label-inline mr-2">Sin contestar</span></center></td>
