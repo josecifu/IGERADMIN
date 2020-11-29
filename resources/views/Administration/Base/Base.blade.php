@@ -653,14 +653,18 @@
 				if(posGrade==3)
 				{
 					var Id = $('#courseselect1').val();
-					var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/teacher/score/"+Id;
+					if(Id > 0){
+						var $url_path = '{!! url('/') !!}';
+                    	window.location.href = $url_path+"/administration/teacher/score/"+Id;
+					}	
 				}
 				if(posGrade==4)
 				{
 					var Id = $('#courseselect1').val();
 					var $url_path = '{!! url('/') !!}';
+					if(Id > 0){
                     window.location.href = $url_path+"/administration/teacher/test/"+Id;
+					}
 				}
 				if(posGrade==5)
 				{

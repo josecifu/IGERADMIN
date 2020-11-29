@@ -445,7 +445,7 @@
 						})
 					} else {
 						swal.fire({ title: "Accion completada", 
-						text: "Las preguntas han sido asignadas!", 
+						text: "¡Las preguntas han sido asignadas!", 
 						type: "success"
                         }).then(function () {
                         var $url_path = '{!! url('/') !!}';
@@ -455,10 +455,9 @@
                      
                 },
                 error: function(e){
-					console.log(e);
 					swal.fire({
 						title: 'Ocurrio un error!',
-						text:  'Los datos no han sido registrados!, verifique los campos',
+						text:  '¡Los datos no han sido registrados!, verifique los campos',
 						icon: 'error',
 						confirmButtonText: 'Aceptar',
                     })

@@ -112,7 +112,7 @@
                                                     @foreach($Models as $key => $q)
                                                         <div class="card">
                                                             <div class="card-header">
-                                                                    <div class="card-title" data-toggle="collapse" data-target="#collapseOne{{$key}}">{{$q['Pregunta']}}  - valor {{$q['valor']}} pts - Tipo:{{$q['Tipo']}}</div>
+                                                                    <div class="card-title" data-toggle="collapse" data-target="#collapseOne{{$key}}">{{$q['Pregunta']}}  - valor: {{$q['valor']}} pts - Tipo: {{$q['Tipo']}}</div>
                                                             </div>
                                                              <div id="collapseOne{{$key}}" data-parent="#accordionExample1"> <!-- style="text-align: center" -->
                                                                 <div class="card-body">
@@ -120,8 +120,8 @@
                                                                     <label>Respuesta del estudiante: {{$q['RespuestaE']}}</label>
                                                                     <div class="form-group row">
                                                                         <label class="col-2 col-form-label">Punteo: </label>
-                                                                        <div class="col-1">
-                                                                            <input name="score{{$key}}" id="score{{$key}}"  value="{{$q['Punteo']}}" class="form-control" type="text" style="text-align: center"/>
+                                                                        <div class="col-2">
+                                                                            <input name="score{{$key}}" id="score{{$key}}"  value="{{$q['Punteo']}}" class="form-control" type="number" style="text-align: center"/>
                                                                         </div>
                                                                     </div>
                                                                     <input name="answer{{$key}}" id="answer{{$key}}"  value="{{$q['id']}}" class="form-control" type="hidden" style="text-align: center"/>
@@ -154,6 +154,7 @@
            
             function calificar() {
                 var modelo=[];
+                var code = {{$id}};
                 for (let i = 0; i < {{count($Models)}}; i++) {
                     var id = $('#answer'+i).val();
                     var Punteo = $('#score'+i).val();
@@ -166,7 +167,7 @@
                 $.ajax({
                 url:'/teacher/qualify/question',
                 type:'POST',
-                data: {"_token":"{{ csrf_token() }}","data":modelo},
+                data: {"_token":"{{ csrf_token() }}","data":modelo,'id':code},
                 dataType: "JSON",
                 success: function(e){
                         if (e.Error) {

@@ -111,8 +111,6 @@
                                                             <div id="collapseOne{{$key}}" class="collapse" data-parent="#accordionExample1">
                                                                 <div class="card-body">
                                                                     {!! $q->Content !!}
-                                                                    <input type="number">
-                                                                    <button>Hola</button>
                                                                 </div>
                                                             </div>
                                                         </div>

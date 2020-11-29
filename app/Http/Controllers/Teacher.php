@@ -80,52 +80,6 @@ class Teacher extends Controller
         $teacher = Person::find($id->Person_id);
         return view('/Teacher/spaceWork',compact('info','teacher','id'));
     }
-    public function TeacherTests(Request $request)
-    {  
-        $id = user::find($request->session()->get('User_id'));
-        $vol = Person::find($id->Person_id);
-        $Nombre = $vol->Names.' '. $vol->LastNames;
-        $assign = user::find($request->session()->get('User_id'))->CoursesTeacher();
-        $course = "";
-        foreach ($assign as $value) {
-            $course = course::find($value->Course_id);
-        }
-        $Titles = [];
-        $Models = [];
-        $Activities = Assign_activity::where('Course_id',$course->id)->get();
-        foreach($Activities as $Activity)
-        {
-            $act = [
-                "Name" =>$Activity->Name,
-                "No" =>count($Activity->Tests()),
-                "Test" => $Activity->Tests(),
-            ];
-            foreach($Activity->Tests() as $Test)
-            {
-                $model =[
-                    "Id" => $Test->id,
-                    "NoQuestions" => $Test->NoQuestions(),
-                ];
-                array_push($Models,$model);
-            }
-            array_push($Titles,$act);
-        }
-        $buttons =[];
-        $button = [
-            "Name" => 'Crear Actividad',
-            "Link" => 'create()',
-            "Type" => "addFunction1"
-        ];
-        array_push($buttons,$button);
-        $button = [
-            "Name" => 'Crear Examen',
-            "Link" => '/administration/teacher/create/test/'."$course->id",
-            "Type" => "add"
-        ];
-        array_push($buttons,$button);
-        $grado = grade::find($course->Grade_id)->GradeName();
-        return view('/Teacher/ViewTests',compact('Titles','buttons','Nombre','course','grado','Models','id'));
-    }
     public function dashboard(Request $request)
     {
         $Titles =['Id','Nombres','Curso','Examen 1','Examen 2'];
@@ -383,7 +337,7 @@ class Teacher extends Controller
                 $userV = user::find($assignV->user_id);
                 $vol = Person::find($userV->id);
             }else{
-                return redirect('/teacher/home/dashboard')->withErrors('No tiene cursos asignados');
+                return redirect('/teacher/home/dashboard')->withError('No tiene cursos asignados');
             }
         } else {
             $course = course::find($id);
@@ -392,40 +346,50 @@ class Teacher extends Controller
                 $userV = user::find($assignV->user_id);
                 $vol = Person::find($userV->id);
             }else{
-                return redirect('/administration/teacher/list')->withErrors('No se ha asignado un voluntario al curso');
+                return redirect('/administration/teacher/list')->withError('El curso no tiene ningún voluntario asignado');
             }
         }
         $Titles = [];
         $Models = [];
         $Modal = [];
-        $Activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->orWhere('State','Fisico')->get();
-        $gradeStudents = grade::find($course->Grade_id)->Students();
-        foreach($Activities as $Activity)
-        {
-            $moda = [
-                'id' => $Activity->id,
-                "Name" => $Activity->Name,
-            ];
-            array_push($Modal,$moda);
-            $act = [
-                "Name" =>$Activity->Name,
-                "No" =>count($Activity->Tests()),
-                "Test" => $Activity->Tests(),
-            ];
-            array_push($Titles,$act);
-        }
-        foreach($gradeStudents as $student)
-        {
-            $notas=[];
-            foreach($Activity->Tests() as $v)
+        $Activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
+        if(!$Activities->isempty()){
+            $gradeStudents = grade::find($course->Grade_id)->Students();
+            foreach($Activities as $Activity)
             {
-                array_push($notas,0);
+                $moda = [
+                    'id' => $Activity->id,
+                    "Name" => $Activity->Name,
+                ];
+                array_push($Modal,$moda);
+                $act = [
+                    "Name" =>$Activity->Name,
+                    "No" =>count($Activity->Tests()),
+                    "Test" => $Activity->Tests(),
+                ];
+                array_push($Titles,$act);
             }
-            $model =[
-                'Alumno' => $student->person()->Names." ".$student->person()->LastNames,
-                'Notas' =>$notas,
-            ];
-            array_push($Models,$model);
+            foreach($gradeStudents as $student)
+            {
+                $notas=[];
+                foreach($Activity->Tests() as $v)
+                {
+                    $note = Note::where('Test_id',$v->id)->first();
+                    if(!isset($note)){
+                        array_push($notas,0);
+                    }
+                    else if($note->State == "Pre-Qualified"){
+                        array_push($notas,$note->Score);
+                    }else{
+                        array_push($notas,"El examen no se ha calificado");
+                    }
+                }
+                $model =[
+                    'Alumno' => $student->person()->Names." ".$student->person()->LastNames,
+                    'Notas' =>$notas,
+                ];
+                array_push($Models,$model);
+            }
         }
         $buttons =[];
         $button = [
@@ -438,6 +402,12 @@ class Teacher extends Controller
             "Name" => 'Ver detalles de actividad',
             "Link" => 'modal()',
             "Type" => "addFunction1"
+        ];
+        array_push($buttons,$button);
+        $button = [
+            "Name" => 'Enviar notas a revisión',
+            "Link" => '/teacher/send/state/test/'.$id,
+            "Type" => "btn1"
         ];
         array_push($buttons,$button);
         $Nombre = $vol->Names.' '.$vol->LastNames;
@@ -465,8 +435,20 @@ class Teacher extends Controller
                     "Type" => "add"
                 ];
                 array_push($buttons,$button);
+                $button = [
+                    "Name" => 'Exámenes pre-calificados',
+                    "Link" => 'teacher/create/test/'."$course->id",
+                    "Type" => "btn1"
+                ];
+                array_push($buttons,$button);
+                $button = [
+                    "Name" => 'Crear Examen',
+                    "Link" => 'teacher/create/test/'."$course->id",
+                    "Type" => "add"
+                ];
+                array_push($buttons,$button);
             }else{
-                return redirect('/teacher/home/dashboard')->withErrors(['Error', 'No tiene cursos asignados']);
+                return redirect('/teacher/home/dashboard')->withError('No tiene cursos asignados');
             }
         } else{
             $assign = Asign_teacher_course::where([['Course_id',$id],['State','Active']])->first();
@@ -487,7 +469,7 @@ class Teacher extends Controller
                 $vol = Person::find($userV->Person_id);
                 $course = course::find($id);
             }else{
-                return redirect('/administration/teacher/list')->withErrors(['No hay voluntario asignado al curso']);
+                return redirect('/administration/teacher/list')->withError('El curso no tiene ningún voluntario asignado');
             }
         }
         $Titles = [];
@@ -536,7 +518,9 @@ class Teacher extends Controller
     {
         $id = 1;    //este proviene de la ruta como parametro
         $answers = Asign_answer_test_student::where([['Studen_id',$id],['State','Complete']])->get();
-        
+        if($answers->isempty()){
+            return redirect('/teacher/home/dashboard')->withError('Examen ya calificado');
+        }
         $Models = [];
         $test = "";
         foreach ($answers as $key => $value) {
@@ -546,18 +530,19 @@ class Teacher extends Controller
                 'Pregunta' => $question->Title,
                 'valor' => $question->Score,
                 'Tipo' => $question->Type,
-                'RespuestaC' => $question->Answers,
+                'RespuestaC' => $question->CorrectAnswers,
                 'RespuestaE' => $value->Answers,
                 'Punteo' => $value->Score,
             ];
             array_push($Models,$data);
             $test = test::find($question->Test_id);
         }
-        return view('Teacher/QualifyTestStudent',compact('test','Models'));
+        return view('Teacher/QualifyTestStudent',compact('test','Models','id'));
     }
     public function SaveQualifyTest(Request $request)
     {
         $data = $request->data;
+        $id = $request->id;
         $total = 0;
         foreach ($data as $value){
             $value = $value[0];
@@ -566,27 +551,41 @@ class Teacher extends Controller
             if ($question->Score < $value['Punteo']) {
                 return response()->json(["Error"=>"La calificación excede el punteo de la pregunta: ".$question->Title]);
             }
+            if($value['Punteo'] == " " || $value['Punteo'] < 0) {
+                return response()->json(["Error"=>"El punteo no puede ser vacio o negativo en la pregunta: ".$question->Title]);
+            }
+            $total += $value['Punteo'];
             $respuesta->Score = $value['Punteo'];
             $respuesta->State = "Qualified";
             $respuesta->save();
         }
+        $nota = Note::where('Student_id',$id)->first();
+        $nota->State = "Pre-Qualified";
+        $nota->Score = $total;
+        $nota->save();
         return response()->json("Accion Completad");
+    }
+    public function SendQualify(Request $request,$id)
+    {
+        $curso = course::find($id);
+        $nota = Note::where([['Course_id',$curso->id],['State','Pre-Qualified']])->get();
+        if($nota->isempty()){
+            return redirect('/teacher/score/list/'.$id)->withError('No existen notas de examenes calificados');    
+        }
+        foreach ($nota as $n) {
+            $n->State = "Qualified";
+            $n->save();
+        }
+        return redirect('/teacher/score/list/'.$id)->withError('Notas de '.$curso->Name.' enviadas al circulo de estudio');
     }
     public function createExam($id)
     {
-        // $buttons =[];
-        // $button = [
-        //     "Name" => 'Listado Voluntarios',
-        //     "Link" => 'administration/teacher/list',
-        //     "Type" => "add"
-        // ];  
-        // array_push($buttons,$button);
         $actividad = Assign_activity::where('Course_id',$id)->where('State','Active')->get();
         if ($actividad->isempty()) {
             if(session()->get('rol_Name')=="Voluntario"){
-                return redirect('/teacher/score/list/'.$id)->withErrors(['El curso no tiene actividades creadas']);
+                return redirect('/teacher/score/list/'.$id)->withError('El curso no tiene actividades creadas');
             }else{
-                return redirect('/administration/teacher/score/'.$id)->withErrors(['El curso no tiene actividades creadas']);
+                return redirect('/administration/teacher/score/'.$id)->withError('El curso no tiene actividades creadas');
             }
         } else {
             $actividades=[];
@@ -622,8 +621,11 @@ class Teacher extends Controller
         foreach ($scores as $value) {
             $total += $value->Score;
         }
-        if ($total > $activity->Score) {
-            return response()->json(["Error"=>"El punteo del examen excede el punteo total de la actividad: ".$activity->Score]);
+        if($Punteo <= 0){
+            return response()->json(["Error"=>"El punteo debe ser mayor a 0"]);
+        }
+        else if ($total > $activity->Score) {
+            return response()->json(["Error"=>"El examen excede el punteo total de la actividad, Punteo total: ".$activity->Score]);
         } else {
             if ($data['tipoexamen'] == 'true') {
                 if ($data['Preguntas'] <= 0) {
@@ -632,6 +634,7 @@ class Teacher extends Controller
                 $Fechas = explode(' - ',$data['Fechas']);
                 $HoraI = $data['HoraI'];
                 $HoraF = $data['HoraF'];
+                $actual = new DateTime(null, new DateTimeZone('America/Guatemala'));
                 try {
                     DB::beginTransaction();
                     $examen = new test;
@@ -708,8 +711,12 @@ class Teacher extends Controller
             $total += $value['Punteo'];
         }
         if ($total > $scoreT->Score) {
-            return response()->json(["Error"=>"La suma del punteo de las preguntas excede al punteo total del exámen: ".$scoreT->Score]);
-        }else{
+            return response()->json(["Error"=>"La suma total del punteo de las preguntas es mayor al punteo total del examen: ".$scoreT->Score]);
+        }
+        else if($total < $scoreT->Score){
+            return response()->json(["Error"=>"La suma del punteo de las preguntas es menor al punteo total del examen: ".$scoreT->Score]);
+        }
+        else{
             foreach ($data as $value) {
                 $value = $value[0];
                 $preguntas = new Question;
@@ -719,14 +726,14 @@ class Teacher extends Controller
                 $preguntas->Type = $value['TipoPregunta'];
                 if ($value['TipoPregunta'] == 'Multiple') {
                     $temp = "";
-                    $preguntas->Answers = $value['Respuesta'];
+                    $preguntas->CorrectAnswers = $value['Respuesta'];
                     for ($i=0; $i < count($value['PosibleR']) ; $i++) { 
                         $temp = $temp . $value['PosibleR'][$i] . ',';
                     }
-                    $preguntas->CorrectAnswers = $temp;
+                    $preguntas->Answers = $temp;
                 }
                 else if($value['TipoPregunta'] == 'V/F'){
-                    $preguntas->Answers = $value['RespuestaVF'];;
+                    $preguntas->CorrectAnswers = $value['RespuestaVF'];;
                 }
                 $preguntas->Test_id = $test;
                 $preguntas->save();
@@ -746,8 +753,14 @@ class Teacher extends Controller
         $Actividad = $data['Actividad'];
         $Punteo = $data['Punteo'];
         if($Punteo < 1 || $Punteo > 100 || $Actividad == ""){
-            return response()->json(["id"=>"Ingrese datos validos o un punteo entre 1 y 100"]);
+            return response()->json(["id"=>"Ingrese un nombre valido o un punteo entre 1 y 100"]);
         }else{
+            $verificar = Assign_activity::where([['Course_id',$id],['State','Active']])->get();
+            foreach ($verificar as $value) {
+                if($value->Name == $Actividad){
+                    return response()->json(["id"=>"El nombre de la actividad ya existe"]);
+                }
+            }
             $assignA = new Assign_activity;
             $assignA->Name = $Actividad;
             $assignA->Score = $Punteo;
@@ -789,7 +802,7 @@ class Teacher extends Controller
     public function DetailActivity($curso,$id)
     {
         if ($id == 0) {
-            return redirect('/administration/teacher/score/'.$curso)->withErrors('No hay actividades asignadas');
+            return redirect('/administration/teacher/score/'.$curso)->withError('No hay actividades asignadas');
         } else {
             $course = course::find($curso);
             $Titles =['Id','Actividad','Examenes de la actividad','Punteo Total','Acciones'];
@@ -804,7 +817,7 @@ class Teacher extends Controller
             }else{
                 foreach ($test as $value) {
                     $data = [
-                        'Test' => $value->Title,
+                        'Test' => $value->Title.' - '.$value->Score.' pts',
                     ];
                     array_push($Models,$data);
                 }
@@ -940,7 +953,7 @@ class Teacher extends Controller
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
-        $Titles =['Id','Usuario Responsable','Descripcion','Tipo','Hora y fecha de creacion', 'Acciones'];
+        $Titles =['Id del registro','Usuario Responsable','Descripcion','Tipo','Hora y fecha de creacion'];
         $logs = logs::where('Table','Voluntario')->get();
         $Models = [];
         foreach ($logs as $l) {
