@@ -35,7 +35,7 @@ class LoginController extends Controller
             $url=  URL::temporarySignedRoute(
                 'restorepass', 
                 now()->addMinutes(5), 
-                ['user' => auth()->user(),'model'=>1]
+                ['user' => auth()->user(),'model'=>$user->id]
             );
             $info=[
                 "Url"=>$url,
@@ -46,20 +46,30 @@ class LoginController extends Controller
             Mail::to($request->email)->send($ContactFormmail);
         }
         else{
-            return response()->json(['Error' => "No se ha encontrado ningun usuario con ese correo electronico, por favor ponte en contacto con secretaria."], 500);
+            return response()->json(['Error' => "No se ha encontrado ningun usuario con ese correo electronico, por favor ponte en contacto con administración."], 500);
         }
-        return response()->json(["Se ha enviado un correo con el link de restauración de la contraseña."]);
+        return response()->json(['Message' =>"Se ha enviado un correo con el link de restauración de la contraseña."]);
     }
     public function restorepass(Request $request, $userid)
     {
         if (! $request->hasValidSignature()) {
             abort(403);
         }
-        
-       
-
-        return response('Te has suscrito al evento.');
+        return view('Login/Restore',compact('userid'));
     }   
+    public function ChangePassword(Request $request)
+    {
+        try {
+            $data = $request->data[0];
+            $user = user::find($data['id']);
+            $user->password = bcrypt($data['pass']);
+            $user->save();
+        } catch (Exception $e) {
+            return response()->json(['Error' => "No se ha podido restablecer la contraseña."], 500);
+      
+        }
+        return response()->json(['Message' =>"Se ha modificado la contraseña con exito, por favor inicie con su nueva contraseña."]);
+    }
     protected function authenticated(Request $request, $user)
     {
         

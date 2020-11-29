@@ -216,7 +216,7 @@
 									<!--begin::Wizard Actions-->
 									<div class="d-flex justify-content-between border-top mt-5 pt-10">
 										<div class="mr-2">
-											<button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev">Anterior</button>
+											<button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev" style="color: white;">Anterior</button>
 										</div>
 										<div>
 											<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Guardar Registro</button>

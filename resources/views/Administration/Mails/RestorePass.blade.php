@@ -109,7 +109,7 @@ div[style*="margin: 16px 0;"] { margin: 0 !important; }
                 <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;">
                     <tr>
                         <td align="center" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding-top: 25px;">
-                            <img src="http://104.248.119.105/assets/media/Img/Mail/restore.png" width="125" height="120" style="display: block; border: 0px;" /><br>
+                            <img src="104.248.119.105/assets/media/Img/Mails/restore.png" width="125" height="120" style="display: block; border: 0px;" /><br>
                             <h2 style="font-size: 30px; font-weight: 800; line-height: 36px; color: #333333; margin: 0;">
                                 Restablecer contraseña
                             </h2>
@@ -118,7 +118,7 @@ div[style*="margin: 16px 0;"] { margin: 0 !important; }
                     <tr>
                         <td align="left" style="font-family: Open Sans, Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; padding-top: 10px;">
                             <p style="font-size: 16px; font-weight: 400; line-height: 24px; color: #777777;">
-                                Estimado {{$info['Name']}} se ha solicitado restablecer la contraseña:<br>
+                                Estimado <b>{{$info['Name']}}</b> se ha solicitado restablecer la contraseña:<br>
                                 Ingrese al siguiente link: <a href="{{$info['Url']}}">{{$info['Url']}}</a> para restablecer la contraseña.
                             </p>
                         </td>
@@ -190,7 +190,7 @@ div[style*="margin: 16px 0;"] { margin: 0 !important; }
                 <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;">
                     <tr>
                         <td align="center">
-                            <a href="https://www.igerquetzaltenango.com" target="_blank"><img src="http://104.248.119.105/assets/media/logos/Logo-Iger.png" alt="Colegio Mi Pequeño Mundo y Nuevo Mundo" style="display: inline-block; height: 125px;width:270px;"></a>
+                            <a href="https://www.igerquetzaltenango.com" target="_blank"><img src="104.248.119.105/assets/media/logos/Logo-Iger.png" alt="IGER" style="display: inline-block; height: 250px;width:270px;"></a>
                         </td>
                     </tr>
                     <tr>

@@ -17,9 +17,8 @@ $route = "App\Http\Controllers";
 Route::get('/login', $route.'\LoginController@index')->name('login');
 #Restore
 Route::post('/restore/username', $route.'\LoginController@restore')->name('restorepassword');
-#Restore
 Route::get('/restore/password/{model}', $route.'\LoginController@restorepass')->name('restorepass');
-
+Route::post('/password/change', $route.'\LoginController@ChangePassword')->name('ChangePassword');
 #Dashboard
 Route::redirect('/', '/administration/home/dashboard');
 Route::get('/', $route.'\Administration@Dashboard')->name('home')->middleware('auth');
@@ -27,7 +26,7 @@ Route::get('/', $route.'\Administration@Dashboard')->name('home')->middleware('a
 Route::post('/signin',  $route.'\LoginController@login')->name('signin');
 #logout
 Route::get('/logout', $route.'\LoginController@logout')->name('logout');
-Route::group([ 'prefix' => 'student'], function(){
+Route::group([ 'prefix' => 'student','middleware' => 'auth'], function(){
 	$route = "App\Http\Controllers";
 	Route::get('/home/dashboard',$route.'\Student@dashboard')->name('StudentDashboard');
 	Route::get('/home/workspace/{model}',$route.'\Student@workspace')->name('WorkSpace');
@@ -42,7 +41,7 @@ Route::group([ 'prefix' => 'student'], function(){
 	Route::post('/profile/update', $route.'\Student@update_profile')->name('UpdateProfileStudent');
 	
 });
-Route::group([ 'prefix' => 'teacher'], function(){									// =======================================
+Route::group([ 'prefix' => 'teacher','middleware' => 'auth'], function(){									// =======================================
 	$route = "App\Http\Controllers";
 	Route::get('/home/dashboard',$route.'\Teacher@dashboard')->name('TeacherDashboard');
 	Route::get('/home/workspace',$route.'\Teacher@workspaceT')->name('Teacherworkspace');

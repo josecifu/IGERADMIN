@@ -10,7 +10,7 @@ class level extends Model
     use HasFactory;
     public function Grades()
     {
-        return $this->hasMany('App\Models\grade')->get();
+        return $this->hasMany('App\Models\grade')->where('State','Active')->get();
     }
     public function Period()
     {

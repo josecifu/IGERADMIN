@@ -50,14 +50,25 @@ class Administration extends Controller
         {
             return redirect('teacher/home/dashboard');
         }
-        $buttons =[];
-        $button = [
-            "Name" => 'Añadir un estudiante',
-            "Link" => 'administration/home/dashboard',
-            "Type" => "add"
+     
+        $Month = [];
+        $M = [
+            "Type"=>"New",
+            "Title"=>"Nuevo Estudiante",
+            "User" =>"Administrador",
+            "Date" => "29 de noviembre de 2020",
+            "Url" => "administration/home/dashboard",
+            "State" => "Success"
         ];
-        array_push($buttons,$button);
-        return view('Administration.Dashboard.Home',compact('buttons'));
+        array_push($Month,$M);
+        $Logs =[
+            "Month" =>$Month,
+            "Week" =>[],
+            "Days" =>[],
+            "Test" =>[],
+            "Timeline"=>[],
+        ];
+        return view('Administration.Dashboard.Home',compact('Logs'));
     }
     public function AttendantList(Request $request)
     {
@@ -239,7 +250,7 @@ class Administration extends Controller
                 else
                 $levels =$value2->Name;
                 if($idLvl!="")
-                $idLvl = $idLvl.", ".$value2->id;
+                $idLvl = $idLvl.",".$value2->id;
                 else
                 $idLvl =$value2->id;
             }
@@ -248,7 +259,7 @@ class Administration extends Controller
                 "Jornada" => $value->Name,  
                 "idLvl" =>$idLvl,
                 "Niveles" => $levels,
-                "Grados" => count($value->Grades())
+                "Grados" =>$value->NoGrades()
             ];
             array_push($Models,$m);
         }
@@ -298,7 +309,7 @@ class Administration extends Controller
             ];
             array_push($Models,$m);
         }
-        return view('Administration.Grades.List',compact('Titles','Models', 'level','period','buttons','type'));
+        return view('Administration.Grades.List',compact('Titles','Models', 'level','period','buttons','type','id'));
     }
     public function SaveCourses(Request $request)
     {
@@ -411,6 +422,12 @@ class Administration extends Controller
             $period = period::find($id);
             $period->State= "Delete";
             $period->save();
+        }
+        if($type=="deletelevel")
+        {
+            $level = level::find($id);
+            $level->State= "Delete";
+            $level->save();
         }
         if($type=="active")
         {

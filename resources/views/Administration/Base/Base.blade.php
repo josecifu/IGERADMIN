@@ -197,7 +197,7 @@
 												<div class="form-group row">
 													<label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el dia:</label>
 													<div class="col-lg-9 col-md-9 col-sm-12">
-														<select class="form-control selectpicker" data-size="10" title="Ninguna jornada ha sido seleccionada" data-live-search="true" id="periodselect1">
+														<select class="form-control selectpicker" data-size="10" title="Ningun circulo de estudio ha sido seleccionado" data-live-search="true" id="periodselect1">
 														   
 														</select>
 														
@@ -605,22 +605,22 @@
 				else if(pos==2)
 				{
 					$('#Title1').text("Visualizacion de notas por grado");
-					$('#Title2').html("Visualice el listado de notas por la jornada, nivel y grados");
+					$('#Title2').html("Visualice el listado de notas por circulo de estudio, nivel y grados");
 				}
 				else if(pos==3)
 				{
 					$('#Title1').text("Visualizacion de Notas por grado");
-					$('#Title2').html("Visualice el listado de notas por la jornada, grados del nivel y curso seleccionado");
+					$('#Title2').html("Visualice el listado de notas por circulo de estudio, grados del nivel y curso seleccionado");
 				}
 				else if(pos==4)
 				{			
 					$('#Title1').text("Visualización de examenes por grado y Voluntarios");
-					$('#Title2').html("Visualice el listado de examenes por grados del nivel y jornada seleccionado");
+					$('#Title2').html("Visualice el listado de examenes por grados del nivel y circulo de estudio seleccionado");
 				}
 				else if(pos==5)
 				{			
 					$('#Title1').text("Visualización de examenes por grado y curso");
-					$('#Title2').html("Visualice el listado de examenes por curso, grados, nivel y dia seleccionado");
+					$('#Title2').html("Visualice el listado de examenes por curso, grados, nivel y circulo de estudio seleccionado");
 				}
 				
 				$.ajax ({
