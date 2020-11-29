@@ -61,8 +61,8 @@ class LoginController extends Controller
     {
         try {
             $data = $request->data[0];
-            $user = user::find($data->id);
-            $user->password = bcrypt($data->pass);
+            $user = user::find($data['id']);
+            $user->password = bcrypt($data['pass']);
             $user->save();
         } catch (Exception $e) {
             return response()->json(['Error' => "No se ha podido restablecer la contraseña."], 500);
