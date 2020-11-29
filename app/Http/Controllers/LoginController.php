@@ -35,7 +35,7 @@ class LoginController extends Controller
             $url=  URL::temporarySignedRoute(
                 'restorepass', 
                 now()->addMinutes(5), 
-                ['user' => auth()->user(),'model'=>1]
+                ['user' => auth()->user(),'model'=>$user->id]
             );
             $info=[
                 "Url"=>$url,
@@ -55,11 +55,12 @@ class LoginController extends Controller
         if (! $request->hasValidSignature()) {
             abort(403);
         }
-        
-       
-
-        dd($userid);
+        return view('Administration/Login/Restore',compact('userid'));
     }   
+    public function ChangePassword(Request $request)
+    {
+        dd($request);
+    }
     protected function authenticated(Request $request, $user)
     {
         
