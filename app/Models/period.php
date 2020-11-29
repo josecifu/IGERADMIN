@@ -10,7 +10,7 @@ class period extends Model
     use HasFactory;
     public function Grades()
     {
-        return $this->hasManyThrough('App\Models\grade', 'App\Models\level')->where('State','Active')->get();
+        return $this->hasManyThrough('App\Models\grade', 'App\Models\level')->get();
     }
     public function NoGrades()
     {

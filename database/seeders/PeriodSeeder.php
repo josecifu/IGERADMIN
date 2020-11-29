@@ -344,7 +344,7 @@ class PeriodSeeder extends Seeder
             ];
         array_push($courses,$course);
         $Grade =[
-            "Grade"=>"Segundo",
+            "Grade"=>"Tercero",
             "Courses"=>$courses
             ];
         array_push($Grades,$Grade);  

@@ -612,9 +612,9 @@ class Administration extends Controller
         $data = period::where('State','Active')->get();
         foreach($data as $value)
         {
-            foreach($value->Grades() as $grade)
+            foreach($value->Grades()->where('State','Active') as $grade)
             {
-                foreach($grade->Students() as $Student)
+                foreach($grade->Students()->where('State','Active') as $Student)
                 {
                     $model = [
                         "Id" =>$value->id,
