@@ -59,7 +59,7 @@ class LoginController extends Controller
     }   
     public function ChangePassword(Request $request)
     {
-        dd($request);
+        dd($request->data);
     }
     protected function authenticated(Request $request, $user)
     {
