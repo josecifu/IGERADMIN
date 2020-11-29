@@ -26,7 +26,7 @@ Route::get('/', $route.'\Administration@Dashboard')->name('home')->middleware('a
 Route::post('/signin',  $route.'\LoginController@login')->name('signin');
 #logout
 Route::get('/logout', $route.'\LoginController@logout')->name('logout');
-Route::group([ 'prefix' => 'student'], function(){
+Route::group([ 'prefix' => 'student','middleware' => 'auth'], function(){
 	$route = "App\Http\Controllers";
 	Route::get('/home/dashboard',$route.'\Student@dashboard')->name('StudentDashboard');
 	Route::get('/home/workspace/{model}',$route.'\Student@workspace')->name('WorkSpace');
@@ -40,7 +40,7 @@ Route::group([ 'prefix' => 'student'], function(){
 	Route::get('/course/list',$route.'\Student@teacher_information')->name('StudentCourseList');
 	
 });
-Route::group([ 'prefix' => 'teacher'], function(){									// =======================================
+Route::group([ 'prefix' => 'teacher','middleware' => 'auth'], function(){									// =======================================
 	$route = "App\Http\Controllers";
 	Route::get('/home/dashboard',$route.'\Teacher@dashboard')->name('TeacherDashboard');
 	Route::get('/home/workspace',$route.'\Teacher@workspaceT')->name('Teacherworkspace');

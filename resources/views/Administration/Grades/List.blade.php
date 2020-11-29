@@ -319,7 +319,6 @@
         }
         function EditGrade($id,$Name)
         {
-            console.log("HOLA");
             Swal.mixin({
                 input: 'text',
                 confirmButtonText: 'Siguiente  &rarr;',
@@ -506,7 +505,7 @@
                   
                   swalWithBootstrapButtons.fire({
                     title: '¿Está seguro de los datos?',
-                    text: "El nombre de la jornada: "+result.value[0],
+                    text: "El nombre del circulo de estudio: "+result.value[0],
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Si, crearlo!',
@@ -594,7 +593,7 @@ $('#CoursesModal{{$Model['Id']}}').on('shown.bs.modal', function () {
                     }).then(function () {
                            
                           var $url_path = '{!! url('/') !!}';
-                          window.location.href = $url_path+"/administration/configurations/level/list";
+                          window.location.href = $url_path+"/administration/configurations/level/list/grades/level/"+{{$id}};
                         });
                      
                 },

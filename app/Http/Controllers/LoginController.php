@@ -46,7 +46,7 @@ class LoginController extends Controller
             Mail::to($request->email)->send($ContactFormmail);
         }
         else{
-            return response()->json(['Error' => "No se ha encontrado ningun usuario con ese correo electronico, por favor ponte en contacto con secretaria."], 500);
+            return response()->json(['Error' => "No se ha encontrado ningun usuario con ese correo electronico, por favor ponte en contacto con administración."], 500);
         }
         return response()->json(['Message' =>"Se ha enviado un correo con el link de restauración de la contraseña."]);
     }

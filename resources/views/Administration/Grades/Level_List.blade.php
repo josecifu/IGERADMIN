@@ -109,9 +109,9 @@
                                                         <td>{{$Model['Jornada']}}</td>
                                                         <td>{{$Model['Niveles']}}</td>
                                                         @if($Model['Grados']!=0)
-                                                        <td><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" data-target="#kt_select_modal{{$Model['Id']}}">{{$Model['Grados']}}</button></center></td>
+                                                        <td><center><button type="button" class="btn btn-outline-info"  data-toggle="modal" data-target="#kt_select_modal{{$Model['Id']}}">{{$Model['Grados']}} grados asignados</button></center></td>
                                                         @else
-                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver grados asignados" data-placement="left">{{$Model['Grados']}}</button></center></td>
+                                                        <td><center><button type="button" disabled class="btn btn-outline-info"   data-toggle="tooltip" title="Ver grados asignados" data-placement="left">No hay grados asignados</button></center></td>
                                                         @endif
                                                         <td nowrap="nowrap"></td>
                                                     </tr>
@@ -130,7 +130,7 @@
                                                                         <div class="form-group row">
                                                                             <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el nivel</label>
                                                                             <div class="col-lg-9 col-md-9 col-sm-12">
-                                                                                <select class="form-control selectpicker" data-size="10" data-live-search="true" id="lvlselect{{$Model['Id']}}">
+                                                                                <select class="form-control selectpicker"  title="Seleccione un nivel" data-size="10" data-live-search="true" id="lvlselectview{{$Model['Id']}}">
                                                                                     @php
                                                                                     $lvls = explode(',',$Model['Niveles']);
                                                                                     $idlvs = explode(',',$Model['idLvl']);  
@@ -167,7 +167,7 @@
                                                                         <div class="form-group row">
                                                                             <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el nivel</label>
                                                                             <div class="col-lg-9 col-md-9 col-sm-12">
-                                                                                <select class="form-control selectpicker" data-size="10" data-live-search="true" id="lvlselectGrades{{$Model['Id']}}">
+                                                                                <select class="form-control selectpicker"title="Seleccione un nivel" data-size="10" data-live-search="true" id="lvlselectGrades{{$Model['Id']}}">
                                                                                     @php
                                                                                     $lvls = explode(',',$Model['Niveles']);
                                                                                     $idlvs = explode(',',$Model['idLvl']);  
@@ -214,13 +214,13 @@
                                                                         <div class="form-group row">
                                                                             <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el nivel</label>
                                                                             <div class="col-lg-9 col-md-9 col-sm-12">
-                                                                                <select class="form-control selectpicker" data-size="10" data-live-search="true" id="lvlselect{{$Model['Id']}}">
+                                                                                <select class="form-control selectpicker" title="Seleccione un nivel" data-size="10" data-live-search="true" id="lvlselectdelete{{$Model['Id']}}">
                                                                                     @php
                                                                                     $lvls = explode(',',$Model['Niveles']);
                                                                                     $idlvs = explode(',',$Model['idLvl']);  
                                                                                     @endphp
                                                                                     @foreach($lvls as $key => $lvl)
-                                                                                    <option value="{{ $idlvs[$key]}} ">{{$lvl}} </option>
+                                                                                    <option value="{{$idlvs[$key]}}">{{$lvl}} </option>
                                                                                     @endforeach
                                                                                 </select>
                                                                                 <span class="form-text text-muted">Seleccione el nivel que desea eliminar</span>
@@ -230,7 +230,7 @@
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                                        <button type="button" class="btn btn-danger mr-2" onclick="DeleteGrade({{$Model['Id']}},'{{$Model['Jornada']}}');">Eliminar grado</button>
+                                                                        <button type="button" class="btn btn-danger mr-2" onclick="DeleteLevel({{$Model['Id']}},'{{$Model['Jornada']}}');">Eliminar nivel</button>
                                                                     </div>
                                                                 </form>
                                                             </div>
@@ -302,7 +302,6 @@
                                                     <li class="nav-item"><a class="nav-link" href="#" onclick="Addlevel(\''+full[0]+'\')"><i class="nav-icon la la-mail-reply-all"></i><span class="nav-text" style="padding-left:10px;"> Agregar un nivel a el circulo de estudio</span></a></li>\
                                                     <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#kt_grades_modal'+full[0]+'"><i class="nav-icon la la-plus-square-o"></i><span class="nav-text" style="padding-left:10px;"> Agregar grados a un nivel del circulo de estudio</span></a></li>\
                                                     <li class="nav-item"><a class="nav-link" href="javascript:;" data-toggle="modal" data-target="#kt_delete_lvl_modal'+full[0]+'"><i class="nav-icon la la-trash"></i><span class="nav-text" style="padding-left:10px;"> Eliminar un nivel</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')"><i class="nav-icon la la-trash"></i><span class="nav-text" style="padding-left:10px;"> Eliminar un grado</span></a></li>\
                                                 </ul>\
                                             </div>\
                                         </div>\
@@ -750,8 +749,54 @@
         function ViewGrades($id)
         {
             var $url_path = '{!! url('/') !!}';
-            window.location.href = $url_path+"/administration/configurations/level/list/grades/level/"+$id;
+            var levelid = $("#lvlselectview"+$id).val();
+            window.location.href = $url_path+"/administration/configurations/level/list/grades/level/"+levelid;
                                     
+        }
+        function DeleteLevel($id,$name)
+        {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                  confirmButton: 'btn btn-success',
+                  cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+              })
+              var level = $("#lvlselectdelete"+$id+ " option:selected").text();
+              var levelid = $("#lvlselectdelete"+$id).val();
+              console.log(levelid);
+            swalWithBootstrapButtons.fire({
+                title: '¿Está seguro de eliminar el nivel?',
+                text: "El nombre del nivel : "+level+" del circulo :"+$name+" se eliminaran todos los cursos asignados a este grado.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Si, ¡eliminar!',
+                cancelButtonText: 'No, ¡cancelar!',
+                reverseButtons: true
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    swalWithBootstrapButtons.fire({
+                        title: '¡Eliminado!',
+                        text: '¡Se ha eliminado con exito!',
+                        icon: 'success',
+                        confirmButtonText: 'Aceptar',
+                    }).then(function () {
+                          var $url_path = '{!! url('/') !!}';
+                          
+                          window.location.href = $url_path+"/administration/configurations/level/list/change/"+levelid+"/deletelevel";
+                          console.log("ENVIO");
+                        });
+                } else if (
+                  result.dismiss === Swal.DismissReason.cancel
+                ) {
+                  swalWithBootstrapButtons.fire({
+                    title: 'Cancelado!',
+                    text:  'El nivel no ha sido eliminado!',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                })
+                }
+              })
         }
         function DeleteGrade($id,$name)
         {
@@ -762,10 +807,10 @@
                 },
                 buttonsStyling: false
               })
-              console.log($("#lvlselect"+$id+ " option:selected").text());
+              var level = $("#lvlselectdelete"+$id+ " option:selected").text();
             swalWithBootstrapButtons.fire({
-                title: '¿Está seguro de eliminar el grado?',
-                text: "El nombre del dia: "+$name,
+                title: '¿Está seguro de eliminar el nivel?',
+                text: "El nombre del nivel : "+level+" del circulo :"+$name,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Si, ¡eliminar!',
@@ -786,7 +831,7 @@
                     }).then(function () {
                            
                           var $url_path = '{!! url('/') !!}';
-                          window.location.href = $url_path+"/administration/configurations/level/list/change/"+$id+"/delete";
+                          window.location.href = $url_path+"/administration/configurations/level/list/change/"+$id+"/deletelevel";
                         });
                 } else if (
                   result.dismiss === Swal.DismissReason.cancel
