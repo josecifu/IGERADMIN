@@ -10,7 +10,7 @@ use App\Models\User;
 use App\Models\Person;
 use App\Models\Assign_student_grade;
 use App\Models\Period;
-use App\Models\Grade;
+use App\Models\grade;
 use App\Models\Level;
 use App\Models\Course;
 use App\Models\Asign_answer_test_student;
