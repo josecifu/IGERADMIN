@@ -1,13 +1,13 @@
 @extends('Administration.Base/BaseStudent')
 {{-- Page title --}}
   @section('title')
-  Inicio
+  Examenes
   @stop
   @section('breadcrumb1')
-  Tablero
+  Evaluaciones
   @stop
   @section('breadcrumb2')
-  Principal
+  Programadas
   @stop
   {{-- Page content --}}
   @section('content')

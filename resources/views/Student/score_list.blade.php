@@ -1,13 +1,13 @@
 @extends('Administration.Base/BaseStudent')
 {{-- Page title --}}
     @section('title')
-    Estudiantes
-    @stop
-    @section('breadcrumb1')
     Notas
     @stop
+    @section('breadcrumb1')
+    Listado
+    @stop
     @section('breadcrumb2')
-    Estudiante
+    Cursos
     @stop
     {{-- Page content --}}
     @section('content')
