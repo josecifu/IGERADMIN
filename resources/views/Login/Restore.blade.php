@@ -90,7 +90,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									<!--end::Form group-->
 									<!--begin::Action-->
 									<div class="text-center pt-2">
-										<button id="kt_login_signin_submit" class="btn btn-dark font-weight-bolder font-size-h6 px-8 py-4 my-3">Cambiar contraseña</button>
+										<button onclick="change();" class="btn btn-dark font-weight-bolder font-size-h6 px-8 py-4 my-3">Cambiar contraseña</button>
 									</div>
 									<!--end::Action-->
 								</form>
