@@ -612,15 +612,23 @@ class Teacher extends Controller
     public function SendQualify(Request $request,$id)
     {
         $curso = course::find($id);
-        $nota = Note::where([['Course_id',$curso->id],['State','Pre-Qualified']])->get();
+        $nota = Note::where('Course_id',$curso->id)->get();
         if($nota->isempty()){
-            return redirect('/teacher/score/list/'.$id)->withError('No existen notas de examenes calificados');    
+            return redirect('/teacher/score/list/'.$id)->withError('No existen notas de examenes calificados');
+        }
+        foreach ($nota as $value) {
+            if ($value->State != 'Qualified' && $value->State != 'Pre-Qualified') {
+                $test = test::find($value->Test_id);
+                $assignT = Assign_student_grade::find($value->Student_id);
+                $student = User::find($assignT->user_id)->person();
+                return redirect('/teacher/score/list/'.$id)->withError('El examen: '.$test->Title.' del estudiante: '.$student->Names.' '.$student->LastNames);
+            }            
         }
         foreach ($nota as $n) {
             $n->State = "Qualified";
             $n->save();
         }
-        return redirect('/teacher/score/list/'.$id)->withError('Notas de '.$curso->Name.' enviadas al circulo de estudio');
+        return redirect('/teacher/score/list/'.$id)->witherror('Notas de '.$curso->Name.' enviadas al circulo de estudio');
     }
     public function createExam($id)
     {
