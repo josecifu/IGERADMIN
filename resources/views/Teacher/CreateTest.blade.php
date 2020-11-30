@@ -116,6 +116,17 @@
 															</div>
 														</div>
 													</div>
+													<div class="form-group row" id="OrdenQuestionCheck" style="visibility: hidden;">
+														<label class="col-3 col-form-label">Permitir cambio entre preguntas</label>
+														<div class="col-3">
+															<span class="switch switch-info">
+																<label>
+																	<input type="checkbox" id="OrderQuestions" checked="checked" name="OrderQuestions" />
+																	<span></span>
+																</label>
+															</span>
+														</div>
+													</div>
 												</div>
 											</div>
 											<!--end::Wizard Step 1-->
@@ -333,6 +344,7 @@ var KTWizard1 = function () {
             var actividad = $('#actividad').val();
 			var Preguntas = $('#NoPreguntas').val();
 			var tipoexamen = $('#virtual').is(":checked");
+			var OrderQuestions = $('#OrderQuestions').is(":checked");
             var data = [{
 				Titulo: Titulo,
 				Punteo: Punteo,
@@ -343,9 +355,10 @@ var KTWizard1 = function () {
                 Preguntas: Preguntas,
 				tipoexamen: tipoexamen,
 				curso: {{$id}},
+				OrderQuestions:OrderQuestions
             }];
             $.ajax({
-                url:'/administration/teacher/save/test',
+                url:'/teacher/save/test',
                 type:'POST',
                 data: {"_token":"{{ csrf_token() }}","data":data},
                 dataType: "JSON",
@@ -392,11 +405,13 @@ var KTWizard1 = function () {
 				$('#virtualHI').css("visibility", "visible");
 				$('#virtualHF').css("visibility", "visible");
 				$('#virtualPreguntas').css("visibility", "visible");
+				$('#OrdenQuestionCheck').css("visibility", "visible");
 			}else{
 				$('#virtualFecha').css("visibility", "hidden");
 				$('#virtualHI').css("visibility", "hidden");
 				$('#virtualHF').css("visibility", "hidden");
 				$('#virtualPreguntas').css("visibility", "hidden");
+				$('#OrdenQuestionCheck').css("visibility", "hidden");
 			}
 		});
 		
