@@ -222,7 +222,38 @@
                                                         </div>
                                                     </div>
                                                     <!--end::Modal-->
-                                                  
+                                                    <!--begin::Modal-->
+                                                    <div class="modal fade" id="kt_delete_course_modal{{$Model['Id']}}" role="dialog" aria-hidden="true">
+                                                        <div class="modal-dialog modal-lg" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">Seleccione el curso que desea eliminar del grado: {{$Model['Grade']}} {{$Model['Lvl']}}</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <i aria-hidden="true" class="ki ki-close"></i>
+                                                                    </button>
+                                                                </div>
+                                                                <form class="form">
+                                                                    <div class="modal-body">
+                                                                        <div class="form-group row">
+                                                                            <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione la curso:</label>
+                                                                            <div class="col-lg-9 col-md-9 col-sm-12">
+                                                                                <select class="form-control selectpicker" title="Seleccione un curso" data-size="10" data-live-search="true" id="courseselectdelete{{$Model['Id']}}">
+                                                                                    
+                                                                                </select>
+                                                                                <span class="form-text text-muted">Seleccione el curso que desea eliminar</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                                        <button type="button" class="btn btn-danger mr-2" onclick="deleteCourse({{$Model['Id']}},'{{$Model['Grade']}}');">Eliminar curso</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--end::Modal-->
                                                     @endforeach
                                                 @endif
                     </tbody>
@@ -268,7 +299,7 @@
                                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right" >\
                                                 <ul class="nav nav-hoverable flex-column" >\
                                                     <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#CoursesModal'+full[0]+'"><i class="nav-icon la la-mail-reply-all"></i><span class="nav-text" style="padding-left:10px;"> Agregar cursos al grado</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')"><i class="nav-icon la la-trash"></i><span class="nav-text" style="padding-left:10px;"> Eliminar una materia</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="javascript:;"data-toggle="modal" data-target="#kt_delete_course_modal'+full[0]+'" onclick="ListCourse(\''+full[0]+'\')"><i class="nav-icon la la-trash"></i><span class="nav-text" style="padding-left:10px;"> Eliminar un curso</span></a></li>\
                                                 </ul>\
                                             </div>\
                                         </div>\
@@ -310,7 +341,50 @@
             });
 
       
-       
+            function DeleteCourse($id,$name)
+            {
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                      confirmButton: 'btn btn-success',
+                      cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                  })
+                  var level = $("#courseselectdelete"+$id+ " option:selected").text();
+                  var levelid = $("#courseselectdelete"+$id).val();
+                  console.log(levelid);
+                swalWithBootstrapButtons.fire({
+                    title: '¿Está seguro de eliminar el curso?',
+                    text: "El nombre del curso : "+level+" del grado :"+$name+" se eliminaran todas las notas anexadas a este curso!.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si, ¡eliminar!',
+                    cancelButtonText: 'No, ¡cancelar!',
+                    reverseButtons: true
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                        swalWithBootstrapButtons.fire({
+                            title: '¡Eliminado!',
+                            text: '¡Se ha eliminado con exito!',
+                            icon: 'success',
+                            confirmButtonText: 'Aceptar',
+                        }).then(function () {
+                              var $url_path = '{!! url('/') !!}';
+                              
+                              window.location.href = $url_path+"/administration/configurations/level/list/change/"+levelid+"/deletecourse";
+                            });
+                    } else if (
+                      result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                      swalWithBootstrapButtons.fire({
+                        title: 'Cancelado!',
+                        text:  'El nivel no ha sido eliminado!',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar',
+                    })
+                    }
+                  })
+            }
         function ViewTeachers($lvl)
         {
             var lvl = $('#lvlselect'+$lvl).val();
@@ -575,7 +649,24 @@ $('#CoursesModal{{$Model['Id']}}').on('shown.bs.modal', function () {
     });  
 });
 @endforeach
-          
+function ListCourse(id,Grade) {
+    $.ajax ({
+        url: '{{route('LoadCourses')}}',
+        type: 'POST',
+        data: {
+            "_token": "{{ csrf_token() }}",
+            "GradeId"      : Grade,
+        },
+        success: (e) => {
+            
+            $('#courseselectdelete'+id).empty();
+            $.each(e['Courses'], function(fetch, data) {
+                $('#courseselectdelete'+id).append('<option value="'+data.Id+'" >'+data.Name+'</option>');
+            });
+            $('#courseselectdelete'+id).selectpicker('refresh');
+        }
+    });
+}
          function AddCourses(id)
          {
             var courses = $('#CoursesList'+id).val();
