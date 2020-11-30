@@ -210,7 +210,7 @@ class Administration extends Controller
     }
     public function LoadCourses(Request $request)
     {
-        $CoursesData = course::where('Grade_id',$request['GradeId'])->get();
+        $CoursesData = course::where(['Grade_id'=>$request['GradeId'],'State'=>"active"])->get();
         $courses =[];
         foreach ($CoursesData as $value) {
             $course = [
@@ -428,6 +428,24 @@ class Administration extends Controller
             $level = level::find($id);
             $level->State= "Delete";
             $level->save();
+        }
+        if($type=="deletecourse")
+        {
+            $course = course::find($id);
+            $id= grade::find( $course->Grade_id)->Level()->id;
+            $course->State= "Delete";
+            $course->save();
+            return redirect()->route('ViewGradesLvl',$id);
+           
+        }
+        if($type=="deletegrade")
+        {
+            $grade = grade::find($id);
+            $id= $grade->Level()->id;
+            $grade->State= "Delete";
+            $grade->save();
+            return redirect()->route('ViewGradesLvl',$id);
+           
         }
         if($type=="active")
         {

@@ -207,6 +207,7 @@ class Student extends Controller
                     $EndDate = date("d-m-Y H:i:00",strtotime($test->EndDate)); 
                     $date_testend = strtotime($EndDate);
                     $start = true;
+                    $timezone = date_default_timezone_get();
                     if($date_now >= $date_teststart)
                     {
                         if($date_now >= $date_teststart2)
