@@ -142,7 +142,7 @@ class Teacher extends Controller
                 }
                 foreach($value->Grade()->Students() as $student)
                 {
-                    $notes = notes::where(['Student_id'=> $student->Asssign_Grade()->id, "Course_id" => $value->id])->get();
+                    $notes = Note::where(['Student_id'=> $student->Asssign_Grade()->id, "Course_id" => $value->id])->get();
                     $model = [
                         "Name"=> $student->LastNames." ".$student->Names,
                         "Curse"=>$value->Name,
@@ -426,28 +426,40 @@ class Teacher extends Controller
                 ];
                 array_push($Titles,$act);
             }
-            foreach($gradeStudents as $student)
-            {
-                $notas=[];
-                foreach($Activity->Tests() as $v)
+                foreach($gradeStudents as $student)
                 {
-                    $note = Note::where('Test_id',$v->id)->first();
-                    if(!isset($note)){
-                        array_push($notas,0);
+                    $notas=[];
+                    foreach($Activities as $Activity)
+                    {
+                        if(count($Activity->Tests())>0)
+                        {
+                            foreach($Activity->Tests() as $v)
+                            {
+                                $note = Note::where('Test_id',$v->id)->first();
+                                if($note==null){
+                                    array_push($notas,0);
+                                }
+                                else if($note->State == "Pre-Qualified"){
+                                    array_push($notas,$note->Score);
+                                }else{
+                                    array_push($notas,"El examen no se ha calificado");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            array_push($notas,"-");
+                        }
                     }
-                    else if($note->State == "Pre-Qualified"){
-                        array_push($notas,$note->Score);
-                    }else{
-                        array_push($notas,"El examen no se ha calificado");
-                    }
+                    $model =[
+                        'Alumno' => $student->person()->Names." ".$student->person()->LastNames,
+                        'Notas' =>$notas,
+                    ];
+                    array_push($Models,$model);
                 }
-                $model =[
-                    'Alumno' => $student->person()->Names." ".$student->person()->LastNames,
-                    'Notas' =>$notas,
-                ];
-                array_push($Models,$model);
-            }
+            
         }
+        
         $button = [
             "Name" => 'Enviar notas a revisión',
             "Link" => '/teacher/send/state/test/'.$id,
@@ -461,6 +473,77 @@ class Teacher extends Controller
         }else{
             return view('Administration/Teachers/listadoNotas',compact('buttons','Modal','Titles','Models','Nombre','course','grado'));
         }
+    }
+    function TestScore(Request $request,$id) 
+    {
+        $Models = [];
+        $buttons =[];
+        $Titles = [];
+        $Modal = [];
+        $teacher = user::find($request->session()->get('User_id'));
+        $assignV = Asign_teacher_course::where('Course_id',$id)->first();
+        $vol = $teacher->Person();
+        $course = course::find($id);
+        $Activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
+        if(!$Activities->isempty()){
+            $gradeStudents = grade::find($course->Grade_id)->Students();
+            foreach($Activities as $Activity)
+            {
+                $moda = [
+                    'id' => $Activity->id,
+                    "Name" => $Activity->Name,
+                ];
+                array_push($Modal,$moda);
+                $act = [
+                    "Name" =>$Activity->Name,
+                    "No" =>count($Activity->Tests()),
+                    "Test" => $Activity->Tests(),
+                ];
+                array_push($Titles,$act);
+            }
+                foreach($gradeStudents as $student)
+                {
+                    $notas=[];
+                    foreach($Activities as $Activity)
+                    {
+                        if(count($Activity->Tests())>0)
+                        {
+                            foreach($Activity->Tests() as $v)
+                            {
+                                $note = Note::where('Test_id',$v->id)->first();
+                                if($note==null){
+                                    array_push($notas,0);
+                                }
+                                else if($note->State == "Pre-Qualified"){
+                                    array_push($notas,$note->Score);
+                                }else{
+                                    array_push($notas,"El examen no se ha calificado");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            array_push($notas,"-");
+                        }
+                    }
+                    $model =[
+                        'Alumno' => $student->person()->Names." ".$student->person()->LastNames,
+                        'Notas' =>$notas,
+                    ];
+                    array_push($Models,$model);
+                }
+            
+        }
+        
+        $button = [
+            "Name" => 'Enviar notas a revisión',
+            "Link" => '/teacher/send/state/test/'.$id,
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $Nombre = $vol->Names.' '.$vol->LastNames;
+        $grado = grade::find($course->Grade_id)->GradeName();
+        return view('Teacher/Test/ListTestScore',compact('buttons','Modal','Titles','Models','Nombre','course','grado'));
     }
             #===================    CRUD EXAMENES ================
 

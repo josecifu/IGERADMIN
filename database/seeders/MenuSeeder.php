@@ -149,7 +149,7 @@ class MenuSeeder extends Seeder
             'Icon' => 'pe-7s-home',
             'Url' => 'administration/configurations',
             'State' => '1',     
-            'Order' => '4',      
+            'Order' => '5',      
         ]);
         DB::table('menus')->insert([ 
             'Name' => 'Ver asignaciones de circulos de estudio, niveles y grados',
@@ -171,7 +171,7 @@ class MenuSeeder extends Seeder
             'Icon' => 'pe-7s-home',
             'Url' => 'student/home',
             'State' => '1',     
-            'Order' => '4',      
+            'Order' => '6',      
         ]);
         DB::table('menus')->insert([ 
             'Name' => 'Tablero',
@@ -190,7 +190,7 @@ class MenuSeeder extends Seeder
             'Icon' => 'pe-7s-home',
             'Url' => 'student/score',
             'State' => '1',     
-            'Order' => '4',      
+            'Order' => '7',      
         ]);
         DB::table('menus')->insert([ 
             'Name' => 'Visualizar notas',
@@ -203,7 +203,7 @@ class MenuSeeder extends Seeder
             'Icon' => 'pe-7s-home',
             'Url' => 'student/test',
             'State' => '1',     
-            'Order' => '4',      
+            'Order' => '8',      
         ]);
         DB::table('menus')->insert([ 
             'Name' => 'Visualizar examenes programados',
@@ -224,7 +224,7 @@ class MenuSeeder extends Seeder
             'Icon' => 'pe-7s-home',
             'Url' => 'teacher/home',
             'State' => '1',     
-            'Order' => '4',      
+            'Order' => '9',      
         ]);
         DB::table('menus')->insert([ 
             'Name' => 'Tablero',
@@ -245,7 +245,7 @@ class MenuSeeder extends Seeder
             'Icon' => 'pe-7s-home',
             'Url' => 'teacher/score',
             'State' => '1',     
-            'Order' => '4',      
+            'Order' => '10',      
         ]);
         DB::table('menus')->insert([ 
             'Name' => 'Visualizar notas',
@@ -260,7 +260,7 @@ class MenuSeeder extends Seeder
             'Icon' => 'pe-7s-home',
             'Url' => 'teacher/test',
             'State' => '1',     
-            'Order' => '4',      
+            'Order' => '11',      
         ]);
         DB::table('menus')->insert([ 
             'Name' => 'Visualizar examenes programados',
@@ -276,6 +276,14 @@ class MenuSeeder extends Seeder
             // 'Url' => 'teacher/test/list/vol',  //39
             'Type' => '3',
             'Url' => 'listCourse(2)',
+            'menu_id' => '37'      
+        ]); 
+        DB::table('menus')->insert([ 
+            'Name' => 'Calificar examenes',
+            'State' => '1',
+            // 'Url' => 'teacher/test/list/vol',  //40
+            'Type' => '3',
+            'Url' => 'listCourse(5)',
             'menu_id' => '37'      
         ]); 
     }

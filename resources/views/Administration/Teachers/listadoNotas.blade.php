@@ -120,7 +120,11 @@
                                                     <tr>
                                                         <td>{{$model['Alumno']}}</td>
                                                         @foreach($model['Notas'] as $nota)
+                                                            @if($nota=="-")
+                                                            <td style="background-color: gray"></td>
+                                                            @else
                                                             <td><center>{{$nota}}</center></td>
+                                                            @endif
                                                         @endforeach
                                                         <td nowrap="nowrap"></td>
                                                     </tr>

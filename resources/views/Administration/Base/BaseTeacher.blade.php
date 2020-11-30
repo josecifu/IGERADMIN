@@ -580,6 +580,9 @@
 				else if(pos == 4){
 					$('#Title1').text("Espacio de trabajo del curso: ");
 				}
+				else if(pos == 5){
+					$('#Title1').text("Calificar examenes de un curso: ");
+				}
 			} // Fin de la funcion
 
 			$.ajax ({
@@ -618,6 +621,12 @@
 					var Id = $('#courseselect1').val();
 					var $url_path = '{!! url('/') !!}';
                     window.location.href = $url_path+"/teacher/home/workspace/"+Id;
+				}
+				if(posCourse==5)
+				{
+					var Id = $('#courseselect1').val();
+					var $url_path = '{!! url('/') !!}';
+                    window.location.href = $url_path+"/teacher/test/score/"+Id;
 				}
 			}//fin de la funcion
 			@if(Session::has('error'))
