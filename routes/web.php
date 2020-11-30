@@ -61,11 +61,8 @@ Route::group([ 'prefix' => 'teacher','middleware' => 'auth'], function(){							
 	Route::post('/qualify/question', $route.'\Teacher@SaveQualifyTest')->name('TeacherSaveQualify');
 	Route::get('/view/pre-qualify/test', $route.'\Teacher@Pre-QualifyTest')->name('TeacherViewPreQualify');
 	Route::get('/send/state/test/{model}', $route.'\Teacher@SendQualify')->name('TeacherSendQualify');
-<<<<<<< HEAD
 	Route::get('/test/score/{model}', $route.'\Teacher@TestScore')->name('TestScore');
-=======
 	Route::post('/save/test', $route.'\Teacher@saveExam')->name('TeachersaveExam');
->>>>>>> bf60e0f8a13facc04db589d71b49ccceadff759d
 });
 Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	

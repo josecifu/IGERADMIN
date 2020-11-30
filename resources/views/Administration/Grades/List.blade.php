@@ -247,7 +247,7 @@
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                                        <button type="button" class="btn btn-danger mr-2" onclick="deleteCourse({{$Model['Id']}},'{{$Model['Grade']}}');">Eliminar curso</button>
+                                                                        <button type="button" class="btn btn-danger mr-2" onclick="DeleteCourse({{$Model['Id']}},'{{$Model['Grade']}}');">Eliminar curso</button>
                                                                     </div>
                                                                 </form>
                                                             </div>
@@ -307,11 +307,11 @@
                                             <i class="la la-edit"></i>\
                                         </a>\
                                         @if($type=="Active")
-                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Eliminar Grado" data-placement="left">\
+                                        <a href="javascript:;" onclick="deleteGrade(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Eliminar Grado" data-placement="left">\
                                         <i class="la la-trash"></i>\
                                         </a>\
                                         @else
-                                        <a href="javascript:;" onclick="ActivePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Activar circulo de estudio" data-placement="left">\
+                                        <a href="javascript:;" onclick="ActiveGrade(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Activar Grado" data-placement="left">\
                                         <i class="la la-check-circle"></i>\
                                         </a>\
                                         @endif';
@@ -355,7 +355,7 @@
                   console.log(levelid);
                 swalWithBootstrapButtons.fire({
                     title: '¿Está seguro de eliminar el curso?',
-                    text: "El nombre del curso : "+level+" del grado :"+$name+" se eliminaran todas las notas anexadas a este curso!.",
+                    text: "El nombre del curso : "+level+" del grado :"+$name+", ¡se eliminaran todas las notas anexadas a este curso!.",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Si, ¡eliminar!',
@@ -378,7 +378,7 @@
                     ) {
                       swalWithBootstrapButtons.fire({
                         title: 'Cancelado!',
-                        text:  'El nivel no ha sido eliminado!',
+                        text:  'El curso no ha sido eliminado!',
                         icon: 'error',
                         confirmButtonText: 'Aceptar',
                     })
@@ -431,7 +431,7 @@
                             }];
                 
                             $.ajax({
-                                url:'/administration/configurations/period/update',
+                                url:'/administration/configurations/grade/update',
                                 type:'POST',
                                 data: {"_token":"{{ csrf_token() }}","data":data},
                                 dataType: "JSON",
@@ -649,7 +649,7 @@ $('#CoursesModal{{$Model['Id']}}').on('shown.bs.modal', function () {
     });  
 });
 @endforeach
-function ListCourse(id,Grade) {
+function ListCourse(Grade) {
     $.ajax ({
         url: '{{route('LoadCourses')}}',
         type: 'POST',
@@ -659,11 +659,11 @@ function ListCourse(id,Grade) {
         },
         success: (e) => {
             
-            $('#courseselectdelete'+id).empty();
+            $('#courseselectdelete'+Grade).empty();
             $.each(e['Courses'], function(fetch, data) {
-                $('#courseselectdelete'+id).append('<option value="'+data.Id+'" >'+data.Name+'</option>');
+                $('#courseselectdelete'+Grade).append('<option value="'+data.Id+'" >'+data.Name+'</option>');
             });
-            $('#courseselectdelete'+id).selectpicker('refresh');
+            $('#courseselectdelete'+Grade).selectpicker('refresh');
         }
     });
 }
@@ -699,6 +699,98 @@ function ListCourse(id,Grade) {
                 }
             });
          }
+         function deleteGrade($id,$name)
+        {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                  confirmButton: 'btn btn-success',
+                  cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+              })
+            swalWithBootstrapButtons.fire({
+                title: '¿Está seguro de eliminar el grado?',
+                text: "El nombre del grado: "+$name,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Si, ¡eliminar!',
+                cancelButtonText: 'No, ¡cancelar!',
+                reverseButtons: true
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    var Code = $id;
+                    var data = [{
+                        Code: Code,
+                        Name: result.value[0],
+                    }];
+                    swalWithBootstrapButtons.fire({
+                        title: '¡Eliminado!',
+                        text: '¡Se ha eliminado con exito!',
+                        icon: 'success',
+                        confirmButtonText: 'Aceptar',
+                    }).then(function () {
+                           
+                          var $url_path = '{!! url('/') !!}';
+                          window.location.href = $url_path+"/administration/configurations/level/list/change/"+$id+"/deletegrade";
+                        });
+                } else if (
+                  result.dismiss === Swal.DismissReason.cancel
+                ) {
+                  swalWithBootstrapButtons.fire({
+                    title: 'Cancelado!',
+                    text:  'El grado no ha sido eliminado!',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                })
+                }
+              })
+        }
+        function ActiveGrade($id,$name)
+        {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                  confirmButton: 'btn btn-success',
+                  cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+              })
+            swalWithBootstrapButtons.fire({
+                title: '¿Está seguro de activar el circulo de estudio?',
+                text: "El nombre del dia: "+$name,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Si, ¡activar!',
+                cancelButtonText: 'No, ¡cancelar!',
+                reverseButtons: true
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    var Code = $id;
+                    var data = [{
+                        Code: Code,
+                        Name: result.value[0],
+                    }];
+                    swalWithBootstrapButtons.fire({
+                        title: '¡Activada!',
+                        text: '¡Se ha activado con exito!',
+                        icon: 'success',
+                        confirmButtonText: 'Aceptar',
+                    }).then(function () {
+                           
+                          var $url_path = '{!! url('/') !!}';
+                          window.location.href = $url_path+"/administration/configurations/level/list/change/"+$id+"/active";
+                        });
+                } else if (
+                  result.dismiss === Swal.DismissReason.cancel
+                ) {
+                  swalWithBootstrapButtons.fire({
+                    title: '¡Cancelado!',
+                    text:  '¡El circulo de estudio no ha sido activado!',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                })
+                }
+              })
+        }
          $(function () {
             $('[data-toggle="tooltip"]').tooltip()
           })

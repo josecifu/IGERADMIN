@@ -26,7 +26,7 @@ class grade extends Model
     }
     public function Courses()
     {
-        return $this->hasMany(course::class)->get();
+        return $this->hasMany(course::class)->where('State',"Active")->get();
     }
     public function Students()
     {
