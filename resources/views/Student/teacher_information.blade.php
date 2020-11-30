@@ -4,10 +4,10 @@
 	Inicio
 	@stop
 	@section('breadcrumb1')
-	Informacion
+	Cursos
 	@stop
 	@section('breadcrumb2')
-	Cursos
+	Informacion
 	@stop
 	{{-- Page content --}}
 	@section('content')
@@ -29,16 +29,16 @@
 			<!--end::Card-->
 			<!--begin::Card-->
 			@foreach($models as $model)
-			<div class="card card-custom gutter-b col-xl-6 loat-left">
+			<div class="card card-custom gutter-b">
 				<div class="card-body">
 					<div class="d-flex">
 						<!--begin::Pic-->
 						<div class="flex-shrink-0 mr-7">
 							<div class="symbol symbol-50 symbol-lg-120">
-								@if($model['gender']=="Masculino")
-									<img src="{{ asset ('assets/media/svg/avatars/Teacher-boy-1.svg')}}" class="h-75 align-self-end" alt="" />
-								@else
+								@if($model['gender']=="Femenino")
 									<img src="{{ asset ('assets/media/svg/avatars/Teacher-girl-1.svg')}}" class="h-75 align-self-end" alt="" />
+								@else
+									<img src="{{ asset ('assets/media/svg/avatars/Teacher-boy-1.svg')}}" class="h-75 align-self-end" alt="" />
 								@endif								
 							</div>
 						</div>

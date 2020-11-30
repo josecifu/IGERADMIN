@@ -64,8 +64,8 @@
 													</div>
 													<div class="form-group row">
 														<label class="col-3">Actividad</label>
-														<div class="col-lg-4 col-md-9 col-sm-12">
-															<select class="form-control" id="actividad" name="param">
+														<div class="col-lg-9 col-md-9 col-sm-12">
+															<select class="form-control select2" id="actividad" style="width: 100%;" name="param">
 																<option value="">--Seleccione una opción</option>
 																@foreach($actividades as $a)
 																	<option value="{{$a['id']}}">{{$a['Nombre']}}</option>
@@ -320,6 +320,10 @@ var KTWizard1 = function () {
 
 	jQuery(document).ready(function () {
 		KTWizard1.init();
+		$('#actividad').select2({
+			minimumResultsForSearch: -1,
+			placeholder: "Seleccione una actividad"
+		});
 	});
 
 
@@ -414,6 +418,7 @@ var KTWizard1 = function () {
 				$('#OrdenQuestionCheck').css("visibility", "hidden");
 			}
 		});
+		
 		
     </script>
 	@stop

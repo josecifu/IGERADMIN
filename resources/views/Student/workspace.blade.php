@@ -6,7 +6,7 @@
     Espacio de Trabajo
     @stop
     @section('breadcrumb2')
-    Voluntario
+    Estudiante
     @stop
     {{-- Page content --}}
     @section('content')
@@ -42,7 +42,7 @@
 							<a href="#" class="btn btn-hover-light-primary font-weight-bold py-3 px-6 mb-2 text-center btn-block">Cambiar Nombre de Usuario</a>
 							<a href="#" class="btn btn-hover-light-primary font-weight-bold py-3 px-6 mb-2 text-center btn-block">Cambiar Número de Teléfono</a>
 							<a href="#" class="btn btn-hover-light-primary font-weight-bold py-3 px-6 mb-2 text-center btn-block">Cambiar Contraseña</a>
-							<a href="#" class="btn btn-hover-light-primary font-weight-bold py-3 px-6 mb-2 text-center btn-block">Actulizar Correo Eléctronico</a>
+							<a href="#" class="btn btn-hover-light-primary font-weight-bold py-3 px-6 mb-2 text-center btn-block">Actualizar Correo Eléctronico</a>
 							<!--end::Nav-->
 						</div>
 						<!--end::Body-->
@@ -84,7 +84,7 @@
 										</div>
 										<!--end::Info-->
 										<!--begin::Label-->
-										<span class="label label-lg label-light-primary label-inline font-weight-bold py-4">Approved</span>
+										<span class="label label-lg label-light-primary label-inline font-weight-bold py-4">Aprobado</span>
 										<!--end::Label-->
 									</div>
 									<!--end::Section-->
@@ -115,7 +115,7 @@
 										</div>
 										<!--end::Info-->
 										<!--begin::Label-->
-										<span class="label label-lg label-light-warning label-inline font-weight-bold py-4">In Progress</span>
+										<span class="label label-lg label-light-warning label-inline font-weight-bold py-4">En progreso</span>
 										<!--end::Label-->
 									</div>
 									<!--end::Section-->
@@ -146,7 +146,7 @@
 										</div>
 										<!--end::Info-->
 										<!--begin::Label-->
-										<span class="label label-lg label-light-success label-inline font-weight-bold py-4">Success</span>
+										<span class="label label-lg label-light-success label-inline font-weight-bold py-4">Aceptado</span>
 										<!--end::Label-->
 									</div>
 									<!--end::Section-->
@@ -177,24 +177,10 @@
 										</div>
 										<!--end::Info-->
 										<!--begin::Label-->
-										<span class="label label-lg label-light-danger label-inline font-weight-bold py-4">Rejected</span>
+										<span class="label label-lg label-light-danger label-inline font-weight-bold py-4">Rechazado</span>
 										<!--end::Label-->
 									</div>
 									<!--end::Section-->
-								</div>
-								<!--end::Content-->
-							</div>
-							<!--end: Item-->
-							<!--begin: Item-->
-							<div class="">
-								<!--begin::Content-->
-								<div class="d-flex align-items-center flex-grow-1">
-									<!--begin::Checkbox-->
-									<label class="checkbox checkbox-lg checkbox-lg flex-shrink-0 mr-4">
-										<input type="checkbox" value="1" />
-										<span></span>
-									</label>
-									<!--end::Checkbox-->
 								</div>
 								<!--end::Content-->
 							</div>

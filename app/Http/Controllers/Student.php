@@ -180,7 +180,7 @@ class Student extends Controller
         return view('Student/test_form',compact('titles','buttons','test','Course'));
     }
 
-    public function WorkSpace(Request $request)
+    public function workSpace(Request $request)
     {
         return view('Student/workspace');
     }
@@ -352,18 +352,37 @@ class Student extends Controller
         {
             $assign_teacher = Asign_teacher_course::where('Course_id',$course->id)->get('user_id');
             $user = User::find($assign_teacher)->first();
-            $teacher = Person::find($user->Person_id);
-            $query =[
-                'course' => $course->Name,
-                'teacher' => $teacher->Names." ".$teacher->LastNames,
-                'phone' => $teacher->Phone,
-                'gender' => $teacher->Gender,
-                'email' => $user->email
-            ];
-            array_push($models,$query);
+            if ($user==null)
+            {
+                $query =[
+                    'course' => $course->Name,
+                    'teacher' => 'Ningun profesor/@ asignado',
+                    'phone' => 'Ninguno',
+                    'gender' => 'Ninguno',
+                    'email' => 'Ninguno'
+                ];
+                array_push($models,$query);
+            }
+            else
+            {
+                $teacher = Person::find($user->Person_id);
+                $query =[
+                    'course' => $course->Name,
+                    'teacher' => $teacher->Names." ".$teacher->LastNames,
+                    'phone' => $teacher->Phone,
+                    'gender' => $teacher->Gender,
+                    'email' => $user->email
+                ];
+                array_push($models,$query);
+            }
         }
         return view('Student/teacher_information',compact('models'));
     }
+
+
+
+
+
 
 
 
@@ -904,7 +923,7 @@ class Student extends Controller
         $student = Person::find($user->Person_id);
         $titles = [];
         $models = [];
-
+        $grade = Assign_student_grade::find($id)->Grade();
         return view('Administration/Student/course_scores',compact('models','titles','student','grade'));
     }
 }
