@@ -142,7 +142,7 @@ class Teacher extends Controller
                 }
                 foreach($value->Grade()->Students() as $student)
                 {
-                    $notes = notes::where(['Student_id'=> $student->Asssign_Grade()->id, "Course_id" => $value->id])->get();
+                    $notes = note::where(['Student_id'=> $student->Asssign_Grade()->id, "Course_id" => $value->id])->get();
                     $model = [
                         "Name"=> $student->LastNames." ".$student->Names,
                         "Curse"=>$value->Name,
@@ -229,6 +229,9 @@ class Teacher extends Controller
         $Cursos = $data['Curso'];
         $Cursos = explode(";",$Cursos);
         $masculino = $data['masculino'];
+        if(empty($Cursos[0])){
+            return response()->json(["Error" => "La asignación de cursos no puede quedar vacia"]);
+        }
         //LOGICA
         try {
               DB::beginTransaction();
