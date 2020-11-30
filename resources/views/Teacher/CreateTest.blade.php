@@ -349,7 +349,6 @@ var KTWizard1 = function () {
 			var Preguntas = $('#NoPreguntas').val();
 			var tipoexamen = $('#virtual').is(":checked");
 			var OrderQuestions = $('#OrderQuestions').is(":checked");
-			
             var data = [{
 				Titulo: Titulo,
 				Punteo: Punteo,
@@ -363,7 +362,7 @@ var KTWizard1 = function () {
 				OrderQuestions:OrderQuestions
             }];
             $.ajax({
-                url:'/administration/teacher/save/test',
+                url:'/teacher/save/test',
                 type:'POST',
                 data: {"_token":"{{ csrf_token() }}","data":data},
                 dataType: "JSON",
