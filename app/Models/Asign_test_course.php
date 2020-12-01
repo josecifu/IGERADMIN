@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Asign_test_course extends Model
 {
     use HasFactory;
+    public function Course(){
+        return $this->hasOne('App\Models\course')->first();
+    }
 }
