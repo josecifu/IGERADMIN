@@ -29,6 +29,11 @@ class Student extends Controller
         return view('Administration/Student/statistics',compact('models'));
     }
 
+    public function workSpace(Request $request)
+    {
+        return view('Student/workspace');
+    }
+
     public function dashboard(Request $request)
     {
         $id = $request->session()->get('User_id');
@@ -39,7 +44,7 @@ class Student extends Controller
         { 
             if($course->Tests())
             {
-                foreach($course->Tests() as $test)
+                foreach($course->Tests()->where('State','Active') as $test)
                 {
                     $fecha_actual = date("d-m-Y");
                     $StartDate = date("d-m-Y",strtotime($test->StartDate." - 5 days"));
@@ -73,7 +78,7 @@ class Student extends Controller
                         }
                     }
                 }
-            }     
+            }
         }
         return view('Student/home',compact('models'));
     }
@@ -131,18 +136,6 @@ class Student extends Controller
             {
                 $pos++;
             }
-
-
-
-
-
-
-
-
-
-
-
-
 /*
             $scores = [];
             $notes = Note::where('Course_id',$course->id)->get();
@@ -164,27 +157,30 @@ class Student extends Controller
         return view('Student/score_list',compact('models','titles'));
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function test_questions(Request $request,$id)
     {
         $models = [];
         $titles = [];
-        $buttons=[];
-        $button = [
-            "Name" => 'Regresar al listado de examenes',
-            "Link" => 'student/test/view',
-            "Type" => "btn1"
-        ];
-        array_push($buttons,$button);
         $test = Test::find($id);
         $Course = $test->Course()->Name;
-        return view('Student/test_form',compact('titles','buttons','test','Course'));
+        return view('Student/test_form',compact('titles','test','Course'));
     }
-
-    public function workSpace(Request $request)
-    {
-        return view('Student/workspace');
-    }
-
 
     public function student_test_list(Request $request)
     {
@@ -196,7 +192,7 @@ class Student extends Controller
         { 
             if($course->Tests())
             {
-                foreach($course->Tests() as $test)
+                foreach($course->Tests()->where('State','Active') as $test)
                 {
                     $fecha_actual = date("d-m-Y");
                     $StartDate = date("d-m-Y",strtotime($test->StartDate." - 5 days")); 
@@ -234,7 +230,7 @@ class Student extends Controller
                         }
                     }
                 }
-            }     
+            }
         }
         return view('Student/test_list',compact('models'));
     }
@@ -265,6 +261,8 @@ class Student extends Controller
                 $reply->State = "Complete";
                 $reply->save();
                 $test = $question->Test();
+                $data = array('State' => 'Complete');
+                Test::where('id',$test->id)->update($data);
             }
             $note = new Note;
             $note->Student_id = $asign->id;
@@ -272,7 +270,7 @@ class Student extends Controller
             $note->Score = $totalScore;
             $note->Course_id = $test->Course()->id;
             $note->State = "Complete";   
-            $note->save();             
+            $note->save();
             DB::commit();
         }
         catch (Exception $e)
@@ -298,8 +296,7 @@ class Student extends Controller
                         "id" => $test->id,
                         "course" => $course->Name,
                         "test" => $test->Title,
-                        "start" => $test->StartDate,
-                        "end" => $test->EndDate,
+                        "date" => $test->StartDate,
                         "score" => $test->Score,
                         "activity" => $test->Activity()->Name,
                         "teacher" => $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames
@@ -316,6 +313,7 @@ class Student extends Controller
         $models = [];
         $titles = [
             'Preguntas',
+            'Respuestas Correctas',
             'Respuestas del estudiante',
             'Punteo Obtenido',
         ];
@@ -334,6 +332,7 @@ class Student extends Controller
             $query = [
                 "id" => $question->id,
                 "question" => $question->Title,
+                "correct" => $question->CorrectAnswers  ?? 'Ninguno',
                 "answer" => $answer->Answers ?? 'No contestada',
                 "score" => $answer->Score ?? '0',
             ];
@@ -341,6 +340,13 @@ class Student extends Controller
         }
         return view('Student/test_review',compact('models','titles','test','course','teacher'));
     }
+
+                            #funciones terminadas
+/*-------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------*/
 
     public function teacher_information(Request $request)
     {
@@ -379,65 +385,6 @@ class Student extends Controller
         return view('Student/teacher_information',compact('models'));
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                            #funciones terminadas
-/*-------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------*/
     #FUNCIONES DE ADMINISTRACION
     public function list()
     {

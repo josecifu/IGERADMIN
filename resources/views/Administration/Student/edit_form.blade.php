@@ -373,7 +373,7 @@
                     error: function(e){
                         swal.fire({
                             title: 'Ocurrio un error!',
-                            text:  'Los datos no han sido registrados, verifique los campos.',
+                            text:  'Lo siento, el nombre de usuario que ingreso ya esta registrado!',
                             icon: 'error',
                             confirmButtonText: 'Aceptar',
                         })
