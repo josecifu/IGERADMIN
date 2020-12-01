@@ -202,31 +202,37 @@
                                             </div>
                                             <div class="card-body">
                                                 <!--begin: Datatable-->
-                                                <table class="table table-bordered table-checkable" id="kt_datatable" style="margin-top: 13px !important">
+                                                <table class="table table-bordered table-checkable" id="TestTables" style="margin-top: 13px !important">
                                                     <thead>
-                                                        @if(isset($Title['No']))
+                                                        
                                                         <tr>
+                                                            <th colspan="2" ></th>
                                                             @foreach($Titles as $Title)
-                                                            <th colspan="{{$Title['No']}}" >{{ $Title['Name'] }}</th>
+                                                            <th colspan="2" >{{ $Title['Name'] }}</th>
                                                             @endforeach
                                                         </tr>
                                                         <tr>
-                                                            @foreach($Titles as $Title)
-                                                                @if($Title['No']==0)
-                                                                <th><center>No existen exámenes asignados</center></th>
-                                                                @endif
-                                                                @foreach($Title['Test'] as $title)
-                                                                <th><center>{{$title->Title}}</center></th>
-                                                                @endforeach
+                                                            <th>Alumno</th>
+                                                            <th>Curso</th>
+                                                            @foreach($TestData as $TestTitles)
+                                                            @php
+                                                            $Test=[];
+                                                            if(!in_array($TestTitles['Test'],$Test)) 
+                                                            {
+                                                            array_push($Test,$TestTitles['Test']);  
+                                                            @endphp
+                                                                <th>{{$TestTitles['Test']}}</th>
+                                                            @php
+                                                            }
+                                                            @endphp   
                                                             @endforeach
                                                         <tr>
-                                                        @endif
+                                                        
                                                     </thead>
                                                     <tbody>
                                                         @if($Models)
                                                             @foreach($Models as $Model)
                                                             <tr>
-                                                                <td>{{$Model['Id']}}</td>
                                                                 <td>{{$Model['Name']}}</td>
                                                                 <td>{{$Model['Curse']}}</td>
                                                                 <td><center><span class="label label-warning label-pill label-inline mr-2">Sin contestar</span></center></td>
@@ -440,7 +446,7 @@
     var KTDatatablesAdvancedRowGrouping = function() {
     
         var init = function() {
-            var table = $('#kt_datatable');
+            var table = $('#TestTables');
     
             // begin first table
             table.DataTable({
@@ -453,8 +459,29 @@
                     "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                 },
                 responsive: true,
-                pageLength: 5,
-                order: [[2, 'asc']],
+                    pageLength: 25,
+                    order: [[2, 'asc']],
+                    drawCallback: function(settings) {
+                        var api = this.api();
+                        var rows = api.rows({page: 'current'}).nodes();
+                        var last = null;
+
+                        api.column(2, {page: 'current'}).data().each(function(group, i) {
+                            if (last !== group) {
+                                $(rows).eq(i).before(
+                                    '<tr class="group"><td colspan="10">' + group + '</td></tr>',
+                                );
+                                last = group;
+                            }
+                        });
+                    },
+                    columnDefs: [
+                        {
+                            // hide columns by index number
+                            targets: [0, 2],
+                            visible: false,
+                        },
+              
                 
             });
         };

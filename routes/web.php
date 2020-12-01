@@ -43,7 +43,7 @@ Route::group([ 'prefix' => 'student','middleware' => 'auth'], function(){
 });
 Route::group([ 'prefix' => 'teacher','middleware' => 'auth'], function(){									// =======================================
 	$route = "App\Http\Controllers";
-	Route::get('/home/dashboard',$route.'\Teacher@dashboard')->name('TeacherDashboard');
+	Route::get('/home/dashboard',$route.'\Teacher@dashboard')->name('TeacherDashboard') ;
 	Route::get('/home/workspace',$route.'\Teacher@workspaceT')->name('Teacherworkspace');
 	Route::get('/score/list/{model}',$route.'\Teacher@score')->name('TeacherScore');
 	Route::get('/test/view/{model}',$route.'\Teacher@ViewTestsGeplande')->name('TeacherViewTestsGeplande');
@@ -57,10 +57,12 @@ Route::group([ 'prefix' => 'teacher','middleware' => 'auth'], function(){							
 	Route::get('/delete/activity/{curso}/{model}', $route.'\Teacher@deleteActivity')->name('TeacherdeleteActivity');
 	Route::post('/update/activity', $route.'\Teacher@updateActivity')->name('TeacherupdateActivity');
 	Route::post('/save/question/test', $route.'\Teacher@SaveAssignQuestion')->name('TeacherSaveAssignQuestion');
-	Route::get('/view/qualify/test/{model}', $route.'\Teacher@QualifyTest')->name('TeacherViewQualify');
+	Route::get('/view/qualify/test/{model}/{test}', $route.'\Teacher@QualifyTest')->name('TeacherViewQualify');
 	Route::post('/qualify/question', $route.'\Teacher@SaveQualifyTest')->name('TeacherSaveQualify');
 	Route::get('/view/pre-qualify/test', $route.'\Teacher@Pre-QualifyTest')->name('TeacherViewPreQualify');
 	Route::get('/send/state/test/{model}', $route.'\Teacher@SendQualify')->name('TeacherSendQualify');
+	Route::get('/test/score/{model}', $route.'\Teacher@TestScore')->name('TestScore');
+	Route::post('/save/test', $route.'\Teacher@saveExam')->name('TeachersaveExam');
 });
 Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	
@@ -145,6 +147,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	//Configuraciones
 	Route::group([ 'prefix' => 'configurations'], function(){
 		$route = "App\Http\Controllers";
+		
 		Route::get('list',$route.'\Administration@Configurations')->name('Configurations');
 		Route::get('level/list',$route.'\Administration@LevelList')->name('LevelList');
 		Route::get('level/list/deletes',$route.'\Administration@LevelListDelete')->name('LevelListDelete');
@@ -152,6 +155,8 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('level/list/grades/level/{id}',$route.'\Administration@ViewGradesLvl')->name('ViewGradesLvl');
 		Route::post('level/save', $route.'\Administration@LevelSave')->name('LevelSave');
 		Route::post('level/list/grades/courses/save',$route.'\Administration@SaveCourses')->name('SaveCourses');
+		Route::post('grade/update', $route.'\Administration@GradeUpdate')->name('GradeUpdate');
+		Route::post('grade/save', $route.'\Administration@GradeSave')->name('GradeSave');
 		Route::post('period/save', $route.'\Administration@PeriodSave')->name('PeriodSave');
 		Route::post('period/update', $route.'\Administration@PeriodUpdate')->name('PeriodUpdate');
 		Route::post('period/grades/add', $route.'\Administration@GradesPeriod')->name('GradesPeriod');

@@ -252,7 +252,7 @@ class Student extends Controller
             {
                 $question = question::find($Answer['QuestionId']);
                 $score = 0;
-                if($question->Answers == $Answer['Answer'])
+                if($question->CorrectAnswers == $Answer['Answer'])
                 {
                     $score = $question->Score;
                 }

@@ -210,7 +210,7 @@ class Administration extends Controller
     }
     public function LoadCourses(Request $request)
     {
-        $CoursesData = course::where('Grade_id',$request['GradeId'])->get();
+        $CoursesData = course::where(['Grade_id'=>$request['GradeId'],'State'=>"active"])->get();
         $courses =[];
         foreach ($CoursesData as $value) {
             $course = [
@@ -311,6 +311,17 @@ class Administration extends Controller
         }
         return view('Administration.Grades.List',compact('Titles','Models', 'level','period','buttons','type','id'));
     }
+    public function GradeSave(Request $request)
+    {
+        $Grade = new grade;
+        $data = $request->data[0];
+        $Grade->Name = $data['Name'];
+        $Grade->State = "Active";
+        $Grade->Level_id =  $data['id'];
+        $Grade->save();
+        
+        return response()->json(["Accion completada"]);
+    }
     public function SaveCourses(Request $request)
     {
         $courses =$request->data;
@@ -378,13 +389,21 @@ class Administration extends Controller
     public function addGrade(Request $request)
     {
         
-        $Grade = new Grade;
+        $Grade = new grade;
         $data = $request->data[0];
         $Grade->Name = $data['Name'];
-        $Grade->State = "Section";
         $Grade->State = "Active";
         $Grade->Level_id =  $data['id'];
         $Grade->save();
+        return response()->json(["Accion completada"]);
+    }
+    public function GradeUpdate(Request $request)
+    {
+        $data = $request->data[0];
+        $model = grade::find($data['Code']);
+        $model->Name = $data['Name'];
+        $model->State = "Active";
+        $model->save();
         return response()->json(["Accion completada"]);
     }
     public function LevelSave(Request $request)
@@ -397,6 +416,7 @@ class Administration extends Controller
         $level->save();
         return response()->json(["Accion completada"]);
     }
+
     public function PeriodSave(Request $request)
     {
         $period = new period;
@@ -428,6 +448,24 @@ class Administration extends Controller
             $level = level::find($id);
             $level->State= "Delete";
             $level->save();
+        }
+        if($type=="deletecourse")
+        {
+            $course = course::find($id);
+            $id= grade::find( $course->Grade_id)->Level()->id;
+            $course->State= "Delete";
+            $course->save();
+            return redirect()->route('ViewGradesLvl',$id);
+           
+        }
+        if($type=="deletegrade")
+        {
+            $grade = grade::find($id);
+            $id= $grade->Level()->id;
+            $grade->State= "Delete";
+            $grade->save();
+            return redirect()->route('ViewGradesLvl',$id);
+           
         }
         if($type=="active")
         {

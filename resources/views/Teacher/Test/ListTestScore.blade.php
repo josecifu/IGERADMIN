@@ -1,4 +1,4 @@
-@extends('Administration.Base/Base')
+@extends('Administration.Base/BaseTeacher')
 {{-- Page title --}}
     @section('title')
     Inicio
@@ -85,8 +85,6 @@
                                                 </div>
                                                 <!--end::Dropdown Menu-->
                                             </div>
-                                            <a href="#" onclick="create();" class="btn btn-primary font-weight-bolder">
-                                                <i class="la la-plus"></i>Crear Actividad</a>
                                             <!--end::Dropdown-->
                                         </div>
                                     </div>
@@ -120,10 +118,16 @@
                                                     <tr>
                                                         <td>{{$model['Alumno']}}</td>
                                                         @foreach($model['Notas'] as $nota)
-                                                            @if($nota=="-")
-                                                            <td style="background-color: gray"></td>
+                                                            @if($nota['Student_id']== "0" )
+                                                            <td><center> El examen no ha sido contestado</center></td>
+                                                            @elseif($nota['Student_id'] == "No" )
+                                                                <td style="background-color: #E2E4ED"></td>
                                                             @else
-                                                            <td><center>{{$nota}}</center></td>
+                                                            <td>
+                                                                <center>
+                                                                    <a href="{{url('/teacher/view/qualify/test/'.$nota['Student_id'].'/'.$nota['Test_id'])}}" class="btn btn-success btn-sm mr-3">
+                                                                        <i class="flaticon-list-3"></i>Calificar examen </a>
+                                                                </center></td>
                                                             @endif
                                                         @endforeach
                                                         <td nowrap="nowrap"></td>
@@ -264,6 +268,7 @@
                 ]).then((result) => {
                     if (result.value) {
                     const answers = JSON.stringify(result.value)
+                    console.log(result.value);
                     const swalWithBootstrapButtons = Swal.mixin({
                         customClass: {
                         confirmButton: 'btn btn-success',
@@ -288,7 +293,7 @@
                             }];
                 
                             $.ajax({
-                                url:'/administration/teacher/save/activity/'+{{$course->id}},
+                                url:'/teacher/save/activity/'+{{$course->id}},
                                 type:'POST',
                                 data: {"_token":"{{ csrf_token() }}","data":data},
                                 dataType: "JSON",
@@ -306,27 +311,27 @@
                                         text: 'Se ha creado con exito!',
                                         icon: 'success',
                                         confirmButtonText: 'Aceptar',
-                                        }).then(function () {
+                                        }).then(function () {    
                                             var $url_path = '{!! url('/') !!}';
-                                            window.location.href = $url_path+"/administration/teacher/score/"+{{$course->id}};
+                                            window.location.href = $url_path+"/teacher/score/list/"+{{$course->id}};
                                         });
-                                    }//fin else                                    
+                                    }//fin else
                                 },
                                 error: function(e){
                                     swalWithBootstrapButtons.fire({
-                                        title: 'Cancelado!',
+                                        title: 'Error!',
                                         text:   e.responseJSON['error'],
                                         icon: 'error',
                                         confirmButtonText: 'Aceptar',
-                                    }) 
+                                    })
+                                
                                 }
                             });
-                        } else if (
-                        result.dismiss === Swal.DismissReason.cancel
-                        ) {
+                        
+                        } else {
                         swalWithBootstrapButtons.fire({
                             title: 'Cancelado!',
-                            text:  'El dia no ha sido creada!',
+                            text:  'La actividad no ha sido creada!',
                             icon: 'error',
                             confirmButtonText: 'Aceptar',
                         })
@@ -334,14 +339,14 @@
                     })
                     }
                 })
-            }
+            }//fin funcion crear
             function modal() {
                 $("#kt_grades_modal1").modal("show");
             }
             function detalleActividad() {
                 var id = $('#detailA').val();
                 var $url_path = '{!! url('/') !!}';
-                window.location.href = $url_path+"/administration/teacher/detail/activity/"+{{$course->id}}+"/"+id;   
+                window.location.href = $url_path+"/teacher/detail/activity/"+{{$course->id}}+"/"+id;   
             }
        </script>
 

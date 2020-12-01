@@ -505,14 +505,22 @@ var KTWizard1 = function () {
                 data: {"_token":"{{ csrf_token() }}","data":data},
                 dataType: "JSON",
                 success: function(e){
-                swal.fire({ title: "Accion completada", 
-                  text: "El voluntario a sido registrado con éxito!", 
-                  type: "success"
+					if(e.Error){
+						swal.fire({
+						title: 'Error!',
+						text: e.Error,
+						icon: 'error',
+						confirmButtonText: 'Aceptar',
+						})
+					}else{
+						swal.fire({ title: "Accion completada", 
+						text: "El voluntario a sido registrado con éxito!", 
+						type: "success"
                         }).then(function () {
                           var $url_path = '{!! url('/') !!}';
                           window.location.href = $url_path+"/administration/teacher/list";
                         });
-                     
+					}//fin else 
                 },
                 error: function(e){
 					console.log(e);
