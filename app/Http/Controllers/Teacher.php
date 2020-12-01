@@ -443,7 +443,7 @@ class Teacher extends Controller
                                 if($note==null){
                                     array_push($notas,0);
                                 }
-                                else if($note->State == "Pre-Qualified"){
+                                else if($note->State == "Pre-Qualified" || $note->State == "Complete" || $note->State == "Qualified"){
                                     array_push($notas,$note->Score);
                                 }else{
                                     array_push($notas,"El examen no se ha calificado");
@@ -515,14 +515,30 @@ class Teacher extends Controller
                             foreach($Activity->Tests() as $v)
                             {
                                 $assign = Assign_student_grade::where([['user_id',$student->id],['State','Active']])->first();
-                                $notes = note::where([['Test_id',$v->id],['Student_id',$assign->id],['State','Complete']])->first();
-
-                                if($notes==null){
-                                    $n=["Student_id" => "0" ,"Test_id"=> "0"];
-                                    array_push($notas,$n);
-                                }else{
-                                    $n=["Student_id" => $assign->id,"Test_id"=>$v->id];
-                                    array_push($notas,$n);
+                                $notes = note::where([['Test_id',$v->id],['Student_id',$assign->id]])->first();
+                                if($v->State == "Fisico"){
+                                    if($notes==null){
+                                        $n=["Student_id" => "Fisico", "Student"=>$assign->id, "Curso_id"=>$id,"Test_id"=> $v->id];
+                                        array_push($notas,$n);
+                                    } 
+                                    elseif($notes->State == "Pre-Qualified" || $notes->State == "Qualified"){
+                                        $n=["Student_id" => "Pre" ,"Test_id"=> "Pre"];
+                                        array_push($notas,$n);
+                                    }
+                                }
+                                else{
+                                    if($notes==null){
+                                        $n=["Student_id" => "0" ,"Test_id"=> "0"];
+                                        array_push($notas,$n);
+                                    } 
+                                    elseif($notes->State == "Pre-Qualified" || $notes->State == "Qualified"){
+                                        $n=["Student_id" => "Pre" ,"Test_id"=> "Pre"];
+                                        array_push($notas,$n);
+                                    }
+                                    else{
+                                        $n=["Student_id" => $assign->id,"Test_id"=>$v->id];
+                                        array_push($notas,$n);
+                                    }
                                 }
                             }
                         }
@@ -691,7 +707,7 @@ class Teacher extends Controller
     public function SendQualify(Request $request,$id)
     {
         $curso = course::find($id);
-        $nota = Note::where('Course_id',$curso->id)->get();
+        $nota = Note::where('Course_id',$id)->get();
         if($nota->isempty()){
             return redirect('/teacher/score/list/'.$id)->withError('No existen notas de examenes calificados');
         }
@@ -873,6 +889,32 @@ class Teacher extends Controller
         }
         
     }
+    public function SaveScorePhysic(Request $request)
+    {
+        $data = $request->data[0];
+        $student = $data['Estudiante'];
+        $course = $data['Curso'];
+        $test = $data['Test'];
+        $score = $data['Punteo'];
+        $examen = test::find($test);
+        if($score == ""){
+            return response()->json(["Error"=>"Ingrese un punteo valido"]);
+        }
+        elseif($score > $examen->Score){
+            return response()->json(["Error"=>"El punteo es mayor al punteo total del examen: ".$examen->Score]);
+        }
+        else{
+            $note = new Note;
+            $note->Student_id = $student;
+            $note->Score = $score;
+            $note->Course_id = $course;
+            $note->State = "Qualified";
+            $note->Test_id = $test;
+            $note->Save();
+            return response()->json("Accion Completada");
+        }
+        
+    }
     public function createActivity($id)
     {
         return view('Administration/Teachers/CreateActivity',compact('id'));
@@ -906,29 +948,6 @@ class Teacher extends Controller
             $log->save();
             return response()->json(["Acción Completada"]);
         }
-    }
-    public function ViewTestsGeplande($id)
-    {
-        $Titles = ['id','Examen','Fecha y hora de Inicio','Fecha y hora de Final','Acciones'];
-        $Models=[];        
-        $actividades = Assign_activity::where([['Course_id',$id],['State','Active']])->first();
-        if (isset($actividades)) {
-            $examenes = test::where([['Activity_id',$actividades->id],['State','Active']])->get();
-            foreach ($examenes as $value) {
-                $fechainicio = explode(" ", $value->StartDate);
-                $actual = new DateTime(null, new DateTimeZone('America/Guatemala'));
-                if(date($fechainicio[0]) >= $actual->format('m/d/Y')){
-                    $data=[
-                        "id" => $value->id,
-                        "examen" => $value->Title,
-                        "FI" => $value->StartDate,
-                        "FF" => $value->EndDate,
-                    ];
-                    array_push($Models,$data);
-                }
-            }
-        }
-        return view('Teacher/geplandeTests',compact('Titles','Models'));
     }
     public function DetailActivity($curso,$id)
     {
@@ -1004,6 +1023,29 @@ class Teacher extends Controller
         }else{
             return redirect()->route('ScoreTeacher',$curso);
         }
+    }
+    public function ViewTestsGeplande($id)
+    {
+        $Titles = ['id','Examen','Fecha y hora de Inicio','Fecha y hora de Final','Acciones'];
+        $Models=[];        
+        $actividades = Assign_activity::where([['Course_id',$id],['State','Active']])->first();
+        if (isset($actividades)) {
+            $examenes = test::where([['Activity_id',$actividades->id],['State','Active']])->get();
+            foreach ($examenes as $value) {
+                $fechainicio = explode(" ", $value->StartDate);
+                $actual = new DateTime(null, new DateTimeZone('America/Guatemala'));
+                if(date($fechainicio[0]) >= $actual->format('m/d/Y')){
+                    $data=[
+                        "id" => $value->id,
+                        "examen" => $value->Title,
+                        "FI" => $value->StartDate,
+                        "FF" => $value->EndDate,
+                    ];
+                    array_push($Models,$data);
+                }
+            }
+        }
+        return view('Teacher/geplandeTests',compact('Titles','Models'));
     }
 
     public function Desactive()         //vista usuarios desactivados
