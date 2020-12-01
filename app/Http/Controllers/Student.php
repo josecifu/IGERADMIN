@@ -270,7 +270,7 @@ class Student extends Controller
             $note->Student_id = $asign->id;
             $note->Test_id = $test->id;
             $note->Score = $totalScore;
-            $note->Course_id = $test->Course()->id;
+            $note->Course_id = $test->Course();
             $note->State = "Complete";   
             $note->save();             
             DB::commit();
