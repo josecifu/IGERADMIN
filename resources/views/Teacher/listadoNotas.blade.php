@@ -120,8 +120,10 @@
                                                         @foreach($model['Notas'] as $nota)
                                                             @if($nota=='0')
                                                             <td><center>{{$nota}}</center></td>
+                                                            @elseif(intval($nota) > 0)
+                                                            <td><center>{{$nota}}</center></td>
                                                             @else
-                                                            <td style="background-color: #E2E4ED"></td>
+                                                                <td style="background-color: #E2E4ED"></td>
                                                             @endif
                                                         @endforeach
                                                         <td nowrap="nowrap"></td>

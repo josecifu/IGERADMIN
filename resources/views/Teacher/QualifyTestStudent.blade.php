@@ -38,8 +38,6 @@
                                         <div class="card-title">
                                             <div class="card-toolbar">
                                                 <!--begin::Dropdown-->
-                                                <a href="#" class="btn btn-danger font-weight-bolder mr-2">
-                                                <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
                                                 <!--end::Dropdown-->
                                             </div>
                                         </div>
