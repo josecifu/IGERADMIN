@@ -72,7 +72,7 @@
                     </div>
                     <!--end::Dropdown-->
                     <!--begin::Button-->
-                    <a href="#" onclick="addGrade();"class="btn btn-primary font-weight-bolder">
+                    <a href="#" onclick="create();"class="btn btn-primary font-weight-bolder">
                     <i class="la la-plus"></i>Añadir un grado</a>
                     <!--end::Button-->
                 </div>
@@ -416,7 +416,7 @@
                       })
                       swalWithBootstrapButtons.fire({
                         title: '¿Está seguro de los datos?',
-                        text: "El nombre de la jornada: "+result.value[0],
+                        text: "El nombre del grado: "+result.value[0],
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonText: 'Si, modificar!',
@@ -444,7 +444,7 @@
                                     }).then(function () {
                                            
                                           var $url_path = '{!! url('/') !!}';
-                                          window.location.href = $url_path+"/administration/configurations/level/list";
+                                          window.location.href = $url_path+"/administration/configurations/level/list/grades/level/{{$id}}";
                                         });
                                 },
                                 error: function(e){
@@ -462,7 +462,7 @@
                         ) {
                           swalWithBootstrapButtons.fire({
                             title: 'Cancelado!',
-                            text:  'La jornada no ha sido modificada!',
+                            text:  'El grado no ha sido modificado!',
                             icon: 'error',
                             confirmButtonText: 'Aceptar',
                         })
@@ -562,7 +562,7 @@
                 progressSteps: ['1']
               }).queue([
                 {
-                  title: 'Ingrese el nombre de la jornada:',
+                  title: 'Ingrese el nombre del grado:',
                  
                 }
               ]).then((result) => {
@@ -579,7 +579,7 @@
                   
                   swalWithBootstrapButtons.fire({
                     title: '¿Está seguro de los datos?',
-                    text: "El nombre del circulo de estudio: "+result.value[0],
+                    text: "El nombre del grado: "+result.value[0],
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Si, crearlo!',
@@ -590,10 +590,11 @@
                         var data = [{
                             //Usuario
                             Name: result.value[0],
+                            id:{{$id}}
                         }];
             
                         $.ajax({
-                            url:'/administration/configurations/period/save',
+                            url:'/administration/configurations/grade/save',
                             type:'POST',
                             data: {"_token":"{{ csrf_token() }}","data":data},
                             dataType: "JSON",
@@ -606,7 +607,8 @@
                                 }).then(function () {
                                        
                                       var $url_path = '{!! url('/') !!}';
-                                      window.location.href = $url_path+"/administration/configurations/level/list";
+                                      window.location.href = $url_path+"/administration/configurations/level/list/grades/level/{{$id}}";
+                                        
                                     });
                                  
                             },

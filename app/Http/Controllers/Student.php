@@ -207,7 +207,6 @@ class Student extends Controller
                     $EndDate = date("d-m-Y H:i:00",strtotime($test->EndDate)); 
                     $date_testend = strtotime($EndDate);
                     $start = true;
-                    $timezone = date_default_timezone_get();
                     if($date_now >= $date_teststart)
                     {
                         if($date_now >= $date_teststart2)
@@ -253,7 +252,7 @@ class Student extends Controller
             {
                 $question = question::find($Answer['QuestionId']);
                 $score = 0;
-                if($question->Answers == $Answer['Answer'])
+                if($question->CorrectAnswers == $Answer['Answer'])
                 {
                     $score = $question->Score;
                 }
