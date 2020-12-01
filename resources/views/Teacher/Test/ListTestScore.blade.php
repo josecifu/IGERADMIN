@@ -118,15 +118,16 @@
                                                     <tr>
                                                         <td>{{$model['Alumno']}}</td>
                                                         @foreach($model['Notas'] as $nota)
-                                                            @if($nota=='0')
+                                                            @if($nota['Student_id']== "0" )
+                                                            <td><center> El examen no ha sido contestado</center></td>
+                                                            @elseif($nota['Student_id'] == "No" )
+                                                                <td style="background-color: #E2E4ED"></td>
+                                                            @else
                                                             <td>
-                                                                
                                                                 <center>
-                                                                    <a href="#" class="btn btn-success btn-sm mr-3">
+                                                                    <a href="{{url('/teacher/view/qualify/test/'.$nota['Student_id'].'/'.$nota['Test_id'])}}" class="btn btn-success btn-sm mr-3">
                                                                         <i class="flaticon-list-3"></i>Calificar examen </a>
                                                                 </center></td>
-                                                            @else
-                                                            <td style="background-color: #E2E4ED"></td>
                                                             @endif
                                                         @endforeach
                                                         <td nowrap="nowrap"></td>

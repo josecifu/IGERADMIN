@@ -144,10 +144,10 @@
                                     <!--begin::Wizard Actions-->
                                     <div class="d-flex justify-content-between border-top mt-5 pt-10">
                                         <div class="mr-2">
-                                            <button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev">Anterior</button>
+                                            <button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev" style="color:white;">Anterior</button>
                                         </div>
                                         <div>
-                                            <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Guardar</button>
+                                            <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Guardar Cambios</button>
                                             <button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>
                                         </div>
                                     </div>
@@ -361,18 +361,19 @@
                     data: {"_token":"{{ csrf_token() }}","data":data},
                     dataType: "JSON",
                     success: function(e){
-                    swal.fire({ title: "Accion completada!", 
-                      text: "Los datos han sido actualizados correctamente!", 
-                      type: "Aceptar"
-                            }).then(function () {
-                              var $url_path = '{!! url('/') !!}';
-                              window.location.href = $url_path+"/administration/student/list";
-                            });
+                    swal.fire({
+                        title: "Accion completada!", 
+                        text: "Los datos han sido actualizados correctamente!", 
+                        confirmButtonText: 'Aceptar',
+                        }).then(function () {
+                            var $url_path = '{!! url('/') !!}';
+                            window.location.href = $url_path+"/administration/student/list";
+                        });
                     },
                     error: function(e){
                         swal.fire({
                             title: 'Ocurrio un error!',
-                            text:  e['responseJSON']['Error'],
+                            text:  'Los datos no han sido registrados, verifique los campos.',
                             icon: 'error',
                             confirmButtonText: 'Aceptar',
                         })

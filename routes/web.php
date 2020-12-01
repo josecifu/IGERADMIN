@@ -57,7 +57,7 @@ Route::group([ 'prefix' => 'teacher','middleware' => 'auth'], function(){							
 	Route::get('/delete/activity/{curso}/{model}', $route.'\Teacher@deleteActivity')->name('TeacherdeleteActivity');
 	Route::post('/update/activity', $route.'\Teacher@updateActivity')->name('TeacherupdateActivity');
 	Route::post('/save/question/test', $route.'\Teacher@SaveAssignQuestion')->name('TeacherSaveAssignQuestion');
-	Route::get('/view/qualify/test/{model}', $route.'\Teacher@QualifyTest')->name('TeacherViewQualify');
+	Route::get('/view/qualify/test/{model}/{test}', $route.'\Teacher@QualifyTest')->name('TeacherViewQualify');
 	Route::post('/qualify/question', $route.'\Teacher@SaveQualifyTest')->name('TeacherSaveQualify');
 	Route::get('/view/pre-qualify/test', $route.'\Teacher@Pre-QualifyTest')->name('TeacherViewPreQualify');
 	Route::get('/send/state/test/{model}', $route.'\Teacher@SendQualify')->name('TeacherSendQualify');
