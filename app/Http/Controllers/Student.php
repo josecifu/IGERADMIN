@@ -755,10 +755,6 @@ class Student extends Controller
             'name' => $username,
             'email' => $email
         );
-        if ($registered_user!=null)
-        {
-            return response()->json(['Error' => "Lo siento, el nombre de usuario que ingreso ya esta registrado!"], 500);
-        }
         User::where('Person_id', $personid)->update($data_user);
         $data_student = array(
             'Names' => $names,

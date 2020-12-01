@@ -86,9 +86,9 @@
                                 <td>{{$model['lastname']}}</td>
                                 <td>{{$model['conexion']}}</td>
                                 <td>
-                                    <a href="{{url('/administration/student/score/course/'.$model['assign'])}}">
-                                        <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Ver notas</button>
-                                    </a>
+                                    <center><a href="{{url('/administration/student/score/course/'.$model['assign'])}}">
+                                        <button type="button" class="btn btn-outline-info" data-toggle="" data-target="">Notas</button></a>
+                                    </center>
                                 </td>
                             </tr>
                             @endforeach
