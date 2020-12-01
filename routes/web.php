@@ -147,6 +147,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	//Configuraciones
 	Route::group([ 'prefix' => 'configurations'], function(){
 		$route = "App\Http\Controllers";
+		
 		Route::get('list',$route.'\Administration@Configurations')->name('Configurations');
 		Route::get('level/list',$route.'\Administration@LevelList')->name('LevelList');
 		Route::get('level/list/deletes',$route.'\Administration@LevelListDelete')->name('LevelListDelete');
@@ -154,6 +155,8 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('level/list/grades/level/{id}',$route.'\Administration@ViewGradesLvl')->name('ViewGradesLvl');
 		Route::post('level/save', $route.'\Administration@LevelSave')->name('LevelSave');
 		Route::post('level/list/grades/courses/save',$route.'\Administration@SaveCourses')->name('SaveCourses');
+		Route::post('grade/update', $route.'\Administration@GradeUpdate')->name('GradeUpdate');
+		Route::post('grade/save', $route.'\Administration@GradeSave')->name('GradeSave');
 		Route::post('period/save', $route.'\Administration@PeriodSave')->name('PeriodSave');
 		Route::post('period/update', $route.'\Administration@PeriodUpdate')->name('PeriodUpdate');
 		Route::post('period/grades/add', $route.'\Administration@GradesPeriod')->name('GradesPeriod');
