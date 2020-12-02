@@ -15,7 +15,6 @@
         <div class="content flex-column-fluid" id="kt_content">
             <div class="alert alert-custom alert-white alert-shadow fade show gutter-b" role="alert">
                 <div class="alert-icon">
-                   
                 </div>
                 <div class="alert-text"><center><h1>{{$test->Title}}- {{$Course}}</h1><h2>Fecha de finalización: {{$test->EndDate}}</h2></center></div>
             </div>
@@ -58,9 +57,9 @@
                                         	Valor: {!! $Question->Score !!}
                                         </h3>
                                         <div class="form-group">
-                                                <div class="card-body" style="border-style: solid;border-color: #E26207;">
-                                                    {!! $Question->Content !!}
-                                                </div>
+                                            <div class="card-body" style="border-style: solid;border-color: #E26207;">
+                                                {!! $Question->Content !!}
+                                            </div>
                                         </div>
                                         <!--begin::Answer-->
                                         	@if($Question->Type=="V/F")
@@ -80,7 +79,7 @@
 											</div>
 											@elseif($Question->Type=="Multiple")
 											<div class="form-group row">
-												<label class="col-3">Actividad</label>
+												<label class="col-3">Opciones:</label>
 												<div class="col-lg-9 col-md-9 col-sm-12">
 													<select class="form-control" id="AnswerSelect{{$key}}" style="width:100%" name="param">
 														<option value="">--Seleccione una opción</option>
@@ -93,7 +92,6 @@
 													</select>
 												</div>
 											</div>
-											
                                         	@endif
                                         <!--end::Answer-->
                                     </div>
@@ -105,7 +103,6 @@
 											@if($test->Order=="true")
                                             <button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev" style="color:white;">Pregunta anterior</button>
 											@endif
-											
 										</div>
                                         <div>
                                             <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Subir examen</button>
@@ -185,31 +182,6 @@
 						if (wizard.getStep() > wizard.getNewStep()) {
 							return; // Skip if stepped back
 						}
-						/*
-						// Validate form before change wizard step
-						var validator = _validations[wizard.getStep() - 1]; // get validator for currnt step
-						if (validator) {
-							validator.validate().then(function (status) {
-								if (status == 'Valid') {
-									wizard.goTo(wizard.getNewStep());
-									KTUtil.scrollTop();
-								} else {
-									Swal.fire({
-										text: "Por favor responda las preguntas",
-										icon: "error",
-										buttonsStyling: false,
-										confirmButtonText: "Ok, lo tengo!",
-										customClass: {
-											confirmButton: "btn font-weight-bold btn-light"
-										}
-									}).then(function () {
-										KTUtil.scrollTop();
-									});
-								}
-							});
-						}
-						return false;  // Do not change wizard step, further action will be handled by he validator
-						*/
 					});
 					// Change event
 					_wizardObj.on('changed', function (wizard) {
@@ -238,7 +210,7 @@
 									buttonsStyling: false,
 									confirmButtonText: "Aceptar",
 									customClass: {
-										confirmButton: "btn font-weight-bold btn-primary",
+									confirmButton: "btn font-weight-bold btn-primary",
 									}
 								});
 							}
@@ -257,11 +229,9 @@
 			}();
 			function crearDatos()
 			{
-				
 				var Answers = [];
 				var question;
 				@foreach($test->Questions() as $key => $Question)
-				
 				@if($Question->Type=="V/F")
 					question =$("input[name='AnswerRadio{{$key}}']:checked").val();  
 				@elseif($Question->Type=="Respuesta Abierta")
@@ -289,15 +259,15 @@
 							confirmButtonText: 'Aceptar',
 							})
 						} else {
-							swal.fire({ title: "Accion completada", 
-							text: "Se ha creado el examen!", 
-							type: "success"
+							swal.fire({ title: "Accion completada",
+							text: "Se han guardados sus respuestas!",
+							confirmButtonText: 'Aceptar',
 							}).then(function () {
 								var $url_path = '{!! url('/') !!}';
 								if(e.id){
 									window.location.href = $url_path+"/administration/teacher/assign/question/test/"+e.id+"/"+Preguntas;
 								}else{
-									window.location.href = $url_path+"/administration/teacher/test/";
+									window.location.href = $url_path+"/student/home/dashboard/";
 								}
 							});
 						}//fin else

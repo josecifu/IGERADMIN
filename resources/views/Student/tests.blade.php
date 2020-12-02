@@ -28,7 +28,7 @@
                     <div class="row">
                         @foreach($models as $model)
                         <!--begin::Course-->
-                        <div class="col-xl-4">
+                        <div class="col-xl-5">
                             <!--begin::Card-->
                             <div class="card card-custom gutter-b card-stretch">
                                 <!--begin::Body-->
@@ -57,12 +57,8 @@
                                     <!--begin::Data-->
                                     <div class="d-flex mb-5">
                                         <div class="d-flex align-items-center mr-7">
-                                            <span class="font-weight-bold mr-4">Inicio</span>
-                                            <span class="btn btn-light-success btn-sm font-weight-bold btn-upper btn-text">{{$model['start']}}</span>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <span class="font-weight-bold mr-4">Final</span>
-                                            <span class="btn btn-light-danger btn-sm font-weight-bold btn-upper btn-text">{{$model['end']}}</span>
+                                            <span class="font-weight-bold mr-4">Fecha:</span>
+                                            <span class="btn btn-light-success btn-sm font-weight-bold btn-upper btn-text">{{$model['date']}}</span>
                                         </div>
                                     </div>
                                     <!--end::Data-->
@@ -71,9 +67,9 @@
                                         <span class="d-block font-weight-bold mr-5">Punteo Obtenido</span>
                                         <div class="d-flex flex-row-fluid align-items-center">
                                             <div class="progress progress-xs mt-2 mb-2 w-100">
-                                                <div class="progress-bar bg-success" role="progressbar" style="width:80%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="progress-bar bg-success" role="progressbar" style="width:1000%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
-                                            <span class="ml-3 font-weight-bolder">80</span>
+                                            <span class="ml-3 font-weight-bolder">100%</span>
                                         </div>
                                     </div>
                                     <!--end::Progress-->
@@ -92,38 +88,7 @@
                     </div>
                     <!--end::Row-->
                     <!--begin::Pagination-->
-                    <div class="d-flex justify-content-between align-items-center flex-wrap">
-                        <div class="d-flex flex-wrap mr-3">
-                            <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-2 my-1">
-                                <i class="ki ki-bold-double-arrow-back icon-xs"></i>
-                            </a>
-                            <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-2 my-1">
-                                <i class="ki ki-bold-arrow-back icon-xs"></i>
-                            </a>
-                            <a href="#" class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1">...</a>
-                            <a href="#" class="btn btn-icon btn-sm border-0 btn-hover-primary active mr-2 my-1">4</a>
-                            <a href="#" class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1">5</a>
-                            <a href="#" class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1">6</a>
-                            <a href="#" class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1">7</a>
-                            <a href="#" class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1">...</a>
-                            <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-2 my-1">
-                                <i class="ki ki-bold-arrow-next icon-xs"></i>
-                            </a>
-                            <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-2 my-1">
-                                <i class="ki ki-bold-double-arrow-next icon-xs"></i>
-                            </a>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <select class="form-control form-control-sm text-primary font-weight-bold mr-4 border-0 bg-light-primary" style="width:75px;">
-                                <option value="10">10</option>
-                                <option value="20">20</option>
-                                <option value="30">30</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>
-                            <span class="text-muted">Mostrando 10 de 230 registros</span>
-                        </div>
-                    </div>
+
                     <!--end::Pagination-->
                 </div>
             </div>

@@ -119,13 +119,25 @@
                                                         <td>{{$model['Alumno']}}</td>
                                                         @foreach($model['Notas'] as $nota)
                                                             @if($nota['Student_id']== "0" )
-                                                            <td><center> El examen no ha sido contestado</center></td>
+                                                                <td><center> El examen no ha sido contestado</center></td>
+                                                            @elseif($nota['Student_id'] == "Pre" )
+                                                                <td>
+                                                                    <center>
+                                                                        <a href="#" disable class="btn btn-success btn-sm mr-3">
+                                                                        <i class="flaticon2-checkmark"></i>Examen Calificado</a>
+                                                                    </center></td>
+                                                            @elseif($nota['Student_id'] == "Fisico" )
+                                                                <td>
+                                                                    <center>
+                                                                        <a onclick="create({{$nota['Student']}},{{$nota['Curso_id']}},{{$nota['Test_id']}});" disable class="btn btn-outline-info btn-sm mr-3">
+                                                                        <i class="flaticon-list-3"></i>Calificar examen fisico</a>
+                                                                    </center></td>
                                                             @elseif($nota['Student_id'] == "No" )
                                                                 <td style="background-color: #E2E4ED"></td>
                                                             @else
                                                             <td>
                                                                 <center>
-                                                                    <a href="{{url('/teacher/view/qualify/test/'.$nota['Student_id'].'/'.$nota['Test_id'])}}" class="btn btn-success btn-sm mr-3">
+                                                                    <a href="{{url('/teacher/view/qualify/test/'.$nota['Student_id'].'/'.$nota['Test_id'])}}" class="btn btn-outline-info btn-sm mr-3">
                                                                         <i class="flaticon-list-3"></i>Calificar examen </a>
                                                                 </center></td>
                                                             @endif
@@ -140,38 +152,6 @@
                                     </div>
                                 </div>
                                 <!--end::Card-->
-                            </div>
-                            <div class="modal fade" id="kt_grades_modal1" role="dialog" aria-hidden="true">
-                                <div class="modal-dialog modal-lg" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Visualizar actividades del curso {{$course->Name}}</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <i aria-hidden="true" class="ki ki-close"></i>
-                                            </button>
-                                        </div>
-                                        <form class="form">
-                                            <div class="modal-body">
-                                                <div class="form-group row">
-                                                    <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el nivel</label>
-                                                    <div class="col-lg-9 col-md-9 col-sm-12">
-                                                        <select class="form-control selectpicker" data-size="10" data-live-search="true" id="detailA">
-                                                            <option value="0">--Seleccione una opción</option>
-                                                            @foreach($Modal as $m)
-                                                                <option value="{{ $m['id']}} ">{{$m['Name']}} </option>
-                                                            @endforeach
-                                                        </select>
-                                                        <span class="form-text text-muted">Visualice los detalles de la actividad seleccionada</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                <button type="button" class="btn btn-primary mr-2" onclick="detalleActividad();">Visualizar</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
                             </div>
 
     @stop
@@ -250,25 +230,21 @@
             $(document).ready(function() {
                 $('#username').editable();
             });
-            function create()
+            function create($student, $course, $test)
             {
                 Swal.mixin({
                     input: 'text',
                     confirmButtonText: 'Siguiente  &rarr;',
                     showCancelButton: true,
-                    progressSteps: ['1','2',]
+                    progressSteps: ['1',]
                 }).queue([
                     {
-                    title: 'Ingrese nombre de la actividad:',
+                    title: 'Ingrese el punteo del examen fisico:',
                     
-                    },
-                    {
-                    title: 'Ingrese Punteo total de la actividad:',
                     },
                 ]).then((result) => {
                     if (result.value) {
                     const answers = JSON.stringify(result.value)
-                    console.log(result.value);
                     const swalWithBootstrapButtons = Swal.mixin({
                         customClass: {
                         confirmButton: 'btn btn-success',
@@ -279,29 +255,31 @@
                     
                     swalWithBootstrapButtons.fire({
                         title: '¿Está seguro de los datos?',
-                        text: "El nombre de la actividad: "+result.value[0]+" y el punteo: "+result.value[1],
+                        text: "Punteo: "+result.value[0],
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonText: 'Si, crearlo!',
+                        confirmButtonText: 'Si, Ingresar!',
                         cancelButtonText: 'No, cancelar!',
                         reverseButtons: true
                     }).then((result2) => {
                         if (result2.isConfirmed) {
                             var data = [{
-                                Actividad: result.value[0],
-                                Punteo: result.value[1],
+                                Estudiante: $student,
+                                Curso: $course,
+                                Test: $test,
+                                Punteo: result.value[0],
                             }];
-                
+                            console.log(data);
                             $.ajax({
-                                url:'/teacher/save/activity/'+{{$course->id}},
+                                url:'/teacher/save/score/physical',
                                 type:'POST',
                                 data: {"_token":"{{ csrf_token() }}","data":data},
                                 dataType: "JSON",
                                 success: function(e){
-                                    if(e.id){
+                                    if(e.Error){
                                         swalWithBootstrapButtons.fire({
                                         title: 'Error!',
-                                        text: e.id,
+                                        text: e.Error,
                                         icon: 'error',
                                         confirmButtonText: 'Aceptar',
                                         })
@@ -311,27 +289,27 @@
                                         text: 'Se ha creado con exito!',
                                         icon: 'success',
                                         confirmButtonText: 'Aceptar',
-                                        }).then(function () {    
+                                        }).then(function () {
                                             var $url_path = '{!! url('/') !!}';
-                                            window.location.href = $url_path+"/teacher/score/list/"+{{$course->id}};
+                                            window.location.href = $url_path+"/teacher/test/score/"+$course;
                                         });
-                                    }//fin else
+                                    }//fin else                                    
                                 },
                                 error: function(e){
                                     swalWithBootstrapButtons.fire({
-                                        title: 'Error!',
+                                        title: 'Cancelado!',
                                         text:   e.responseJSON['error'],
                                         icon: 'error',
                                         confirmButtonText: 'Aceptar',
-                                    })
-                                
+                                    }) 
                                 }
                             });
-                        
-                        } else {
+                        } else if (
+                        result.dismiss === Swal.DismissReason.cancel
+                        ) {
                         swalWithBootstrapButtons.fire({
                             title: 'Cancelado!',
-                            text:  'La actividad no ha sido creada!',
+                            text:  'El dia no ha sido creada!',
                             icon: 'error',
                             confirmButtonText: 'Aceptar',
                         })
@@ -339,14 +317,6 @@
                     })
                     }
                 })
-            }//fin funcion crear
-            function modal() {
-                $("#kt_grades_modal1").modal("show");
-            }
-            function detalleActividad() {
-                var id = $('#detailA').val();
-                var $url_path = '{!! url('/') !!}';
-                window.location.href = $url_path+"/teacher/detail/activity/"+{{$course->id}}+"/"+id;   
             }
        </script>
 
