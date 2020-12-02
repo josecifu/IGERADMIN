@@ -135,9 +135,8 @@ class Student extends Controller
                     foreach($value['test'] as $test)
                     {
                         $id = $request->session()->get('User_id');
-                        $models = [];
                         $assign = Assign_student_grade::where('user_id',$id)->first();
-                        $note = Note::where(['Test_id'=>$test->id,"Student_id"=>$assign->id,"State"=>"Approved"])->first();
+                        $note = Note::where(['Test_id'=>$test->id,'Course_id'=>$course->id,"Student_id"=>$assign->id,"State"=>"Approved"])->first();
                         if($note)
                         array_push($notes,$note->Score);
                         else
