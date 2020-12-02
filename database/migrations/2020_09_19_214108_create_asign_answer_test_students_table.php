@@ -20,7 +20,7 @@ class CreateAsignAnswerTestStudentsTable extends Migration
             $table->unsignedInteger('Question_id'); 
             $table->foreign('Question_id')->references('id')->on('questions');
             $table->string('Score')->nullable();
-            $table->string('Answers');
+            $table->string('Answers')->nullable();
             $table->string('State');
             $table->timestamps();
         });
