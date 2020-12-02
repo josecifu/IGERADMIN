@@ -149,7 +149,7 @@ class Student extends Controller
                     array_push($notes,"N");
                 }
             }
-<<<<<<< HEAD
+            
             $model = [
                 "Course"=>$course->Name,
                 "Notes" =>$notes
@@ -158,12 +158,6 @@ class Student extends Controller
         }
 
 
-=======
-            else
-            {
-                $pos++;
-            }
->>>>>>> 3fe6f6569acecf365422fbcc850133a6dfcb7af2
 /*
             $scores = [];
             $notes = Note::where('Course_id',$course->id)->get();
