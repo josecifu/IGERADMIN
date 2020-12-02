@@ -75,13 +75,13 @@ class Administration extends Controller
         $buttons =[];
         $button = [
             "Name" => 'Añadir un encargado de circulo',
-            "Link" => 'administration/attendant/create',
+            "Link" => 'administration/workspace/attendant/create',
             "Type" => "add"
         ];
         array_push($buttons,$button);
         $button = [
             "Name" => 'Ver encargados de circulo eliminados',
-            "Link" => 'administration/attendant/deletes',
+            "Link" => 'administration/workspace/attendant/deletes',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
