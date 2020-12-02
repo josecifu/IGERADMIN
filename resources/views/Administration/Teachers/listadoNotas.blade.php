@@ -117,18 +117,20 @@
                                             <tbody>
                                                 
                                                     @foreach( $Models as $model)
-                                                    <tr>
-                                                        <td>{{$model['Alumno']}}</td>
-                                                        @foreach($model['Notas'] as $nota)
-                                                            @if($nota=="-")
-                                                            <td style="background-color: gray"></td>
-                                                            @else
-                                                            <td><center>{{$nota}}</center></td>
-                                                            @endif
-                                                        @endforeach
-                                                        <td nowrap="nowrap"></td>
-                                                    </tr>
-                                                   @endforeach                                                    
+                                                        <tr>
+                                                            <td>{{$model['Alumno']}}</td>
+                                                            @foreach($model['Notas'] as $nota)
+                                                                @if($nota=='0')
+                                                                <td><center>{{$nota}}</center></td>
+                                                                @elseif(intval($nota) > 0)
+                                                                <td><center>{{$nota}}</center></td>
+                                                                @else
+                                                                    <td style="background-color: #E2E4ED"></td>
+                                                                @endif
+                                                            @endforeach
+                                                            <td nowrap="nowrap"></td>
+                                                        </tr>
+                                                    @endforeach                                                    
                                                 </div>
                                             </tbody>
                                         </table>
@@ -246,95 +248,95 @@
             $(document).ready(function() {
                 $('#username').editable();
             });
-            function create()
-            {
-                Swal.mixin({
-                    input: 'text',
-                    confirmButtonText: 'Siguiente  &rarr;',
-                    showCancelButton: true,
-                    progressSteps: ['1','2',]
-                }).queue([
-                    {
-                    title: 'Ingrese nombre de la actividad:',
-                    
-                    },
-                    {
-                    title: 'Ingrese Punteo total de la actividad:',
-                    },
-                ]).then((result) => {
-                    if (result.value) {
-                    const answers = JSON.stringify(result.value)
-                    const swalWithBootstrapButtons = Swal.mixin({
-                        customClass: {
-                        confirmButton: 'btn btn-success',
-                        cancelButton: 'btn btn-danger'
-                        },
-                        buttonsStyling: false
-                    })
-                    
-                    swalWithBootstrapButtons.fire({
-                        title: '¿Está seguro de los datos?',
-                        text: "El nombre de la actividad: "+result.value[0]+" y el punteo: "+result.value[1],
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Si, crearlo!',
-                        cancelButtonText: 'No, cancelar!',
-                        reverseButtons: true
-                    }).then((result2) => {
-                        if (result2.isConfirmed) {
-                            var data = [{
-                                Actividad: result.value[0],
-                                Punteo: result.value[1],
-                            }];
+        function create()
+        {
+            Swal.mixin({
+                input: 'text',
+                confirmButtonText: 'Siguiente  &rarr;',
+                showCancelButton: true,
+                progressSteps: ['1','2',]
+            }).queue([
+                {
+                title: 'Ingrese nombre de la actividad:',
                 
-                            $.ajax({
-                                url:'/administration/teacher/save/activity/'+{{$course->id}},
-                                type:'POST',
-                                data: {"_token":"{{ csrf_token() }}","data":data},
-                                dataType: "JSON",
-                                success: function(e){
-                                    if(e.id){
-                                        swalWithBootstrapButtons.fire({
-                                        title: 'Error!',
-                                        text: e.id,
-                                        icon: 'error',
-                                        confirmButtonText: 'Aceptar',
-                                        })
-                                    }else{
-                                        swalWithBootstrapButtons.fire({
-                                        title: 'Creado!',
-                                        text: 'Se ha creado con exito!',
-                                        icon: 'success',
-                                        confirmButtonText: 'Aceptar',
-                                        }).then(function () {
-                                            var $url_path = '{!! url('/') !!}';
-                                            window.location.href = $url_path+"/administration/teacher/score/"+{{$course->id}};
-                                        });
-                                    }//fin else                                    
-                                },
-                                error: function(e){
+                },
+                {
+                title: 'Ingrese Punteo total de la actividad:',
+                },
+            ]).then((result) => {
+                if (result.value) {
+                const answers = JSON.stringify(result.value)
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                })
+                
+                swalWithBootstrapButtons.fire({
+                    title: '¿Está seguro de los datos?',
+                    text: "El nombre de la actividad: "+result.value[0]+" y el punteo: "+result.value[1],
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Si, crearlo!',
+                    cancelButtonText: 'No, cancelar!',
+                    reverseButtons: true
+                }).then((result2) => {
+                    if (result2.isConfirmed) {
+                        var data = [{
+                            Actividad: result.value[0],
+                            Punteo: result.value[1],
+                        }];
+            
+                        $.ajax({
+                            url:'/administration/teacher/save/activity/'+{{$course->id}},
+                            type:'POST',
+                            data: {"_token":"{{ csrf_token() }}","data":data},
+                            dataType: "JSON",
+                            success: function(e){
+                                if(e.id){
                                     swalWithBootstrapButtons.fire({
-                                        title: 'Cancelado!',
-                                        text:   e.responseJSON['error'],
-                                        icon: 'error',
-                                        confirmButtonText: 'Aceptar',
-                                    }) 
-                                }
-                            });
-                        } else if (
-                        result.dismiss === Swal.DismissReason.cancel
-                        ) {
-                        swalWithBootstrapButtons.fire({
-                            title: 'Cancelado!',
-                            text:  'El dia no ha sido creada!',
-                            icon: 'error',
-                            confirmButtonText: 'Aceptar',
-                        })
-                        }
+                                    title: 'Error!',
+                                    text: e.id,
+                                    icon: 'error',
+                                    confirmButtonText: 'Aceptar',
+                                    })
+                                }else{
+                                    swalWithBootstrapButtons.fire({
+                                    title: 'Creado!',
+                                    text: 'Se ha creado con exito!',
+                                    icon: 'success',
+                                    confirmButtonText: 'Aceptar',
+                                    }).then(function () {
+                                        var $url_path = '{!! url('/') !!}';
+                                        window.location.href = $url_path+"/administration/teacher/score/"+{{$course->id}};
+                                    });
+                                }//fin else                                    
+                            },
+                            error: function(e){
+                                swalWithBootstrapButtons.fire({
+                                    title: 'Cancelado!',
+                                    text:   e.responseJSON['error'],
+                                    icon: 'error',
+                                    confirmButtonText: 'Aceptar',
+                                }) 
+                            }
+                        });
+                    } else if (
+                    result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                    swalWithBootstrapButtons.fire({
+                        title: 'Cancelado!',
+                        text:  'El dia no ha sido creada!',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar',
                     })
                     }
                 })
-            }
+                }
+            })
+        }
             function modal() {
                 $("#kt_grades_modal1").modal("show");
             }

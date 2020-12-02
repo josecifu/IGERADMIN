@@ -114,6 +114,10 @@
                                                             </div>
                                                              <div id="collapseOne{{$key}}" data-parent="#accordionExample1"> <!-- style="text-align: center" -->
                                                                 <div class="card-body">
+                                                                    <h5>{{$q['Title']}}</h5><br>
+                                                                    <div class="container">
+                                                                    {!! $q['Content'] !!}
+                                                                    </div><br>
                                                                     <h5>Respuesta Correcta: {{$q['RespuestaC']}}</h5>
                                                                     <label>Respuesta del estudiante: {{$q['RespuestaE']}}</label>
                                                                     <div class="form-group row">
@@ -152,7 +156,7 @@
            
             function calificar() {
                 var modelo=[];
-                var code = {{$id}};
+                var code = {{$nota}};
                 for (let i = 0; i < {{count($Models)}}; i++) {
                     var id = $('#answer'+i).val();
                     var Punteo = $('#score'+i).val();

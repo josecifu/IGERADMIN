@@ -94,16 +94,26 @@ class Student extends Controller
         $assign = Assign_student_grade::where('user_id',$id)->first();
         $grade = Assign_student_grade::find($assign->id)->Grade();
         $courses = $grade->Courses();
+        $data = [];
         foreach ($courses as $course)
         {
             $activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
             foreach($activities as $activity)
             {
-                $data = [];
+               
                 $testData = [];
                 if(!in_array($activity->Name,$data))
                 {
                     array_push($data,$activity->Name);
+                    $act = [
+                        'activity' => $activity->Name,
+                        'no' => count($activity->Tests()),
+                        'test' => $activity->Tests(),
+                    ];
+                    if(!in_array($act,$titles))
+                    {
+                    array_push($titles,$act);
+                    }
                 }
                 foreach($activity->Tests() as $test)
                 {
@@ -112,30 +122,42 @@ class Student extends Controller
                         array_push($testData,$test->Name);
                     }
                 }
-                $act = [
-                    'activity' => $activity->Name,
-                    'no' => count($activity->Tests()),
-                    'test' => $activity->Tests(),
-                ];
-                array_push($titles,$act);
+               
             }
-            if($cantActivities < count($activities))
-            {
-                $cantActivities = count($activities);
-                $Modal = [];
-                foreach($activities as $activity)
+        }
+
+        foreach ($courses as $course)
+        {    
+            $notes =[];
+            foreach ($titles as $value) {
+                if(count($value['test'])>0)
                 {
-                    $moda = [
-                        'id' => $activity->id,
-                        'Name' => $activity->Name,
-                    ];
-                    array_push($Modal,$moda);
+                    foreach($value['test'] as $test)
+                    {
+                        $id = $request->session()->get('User_id');
+                        $models = [];
+                        $assign = Assign_student_grade::where('user_id',$id)->first();
+                        $note = Note::where(['Test_id'=>$test->id,"Student_id"=>$assign->id,"State"=>"Approved"])->first();
+                        if($note)
+                        array_push($notes,$note->Score);
+                        else
+                        array_push($notes,"No existe notas para este curso");
+                    }
+                }
+                else
+                {
+                    array_push($notes,"N");
                 }
             }
-            else
-            {
-                $pos++;
-            }
+            
+            $model = [
+                "Course"=>$course->Name,
+                "Notes" =>$notes
+            ];
+            array_push($models,$model);
+        }
+
+
 /*
             $scores = [];
             $notes = Note::where('Course_id',$course->id)->get();
@@ -153,7 +175,7 @@ class Student extends Controller
             ];
             array_push($models,$query);  
 */          
-        }
+        
         return view('Student/score_list',compact('models','titles'));
     }
 

@@ -583,12 +583,6 @@ class Teacher extends Controller
                     "Type" => "add"
                 ];
                 array_push($buttons,$button);
-                $button = [
-                    "Name" => 'Exámenes pre-calificados',
-                    "Link" => 'teacher/create/test/'."$course->id",
-                    "Type" => "btn1"
-                ];
-                array_push($buttons,$button);
             }else{
                 return redirect('/teacher/home/dashboard')->withError('No tiene cursos asignados');
             }
@@ -659,6 +653,8 @@ class Teacher extends Controller
     public function QualifyTest($id,$idtest)
     {
         $test = test::find($idtest);
+        $note = Note::where([['Student_id',$id],['Test_id',$idtest]])->first();
+        $nota = $note->id;
         $Models = [];
         foreach ($test->Questions() as $value) {
             $answers = Asign_answer_test_student::where([['Studen_id',$id],['Question_id',$value->id],['State','Complete']])->first();
@@ -670,13 +666,15 @@ class Teacher extends Controller
                 'Pregunta' => $value->Title,
                 'valor' => $value->Score,
                 'Tipo' => $value->Type,
+                'Title' => $value->Title,
+                'Content' => $value->Content,
                 'RespuestaC' => $value->CorrectAnswers,
                 'RespuestaE' => $answers->Answers,
                 'Punteo' => $answers->Score,
             ];
             array_push($Models,$data);
         }
-        return view('Teacher/QualifyTestStudent',compact('test','Models','id'));
+        return view('Teacher/QualifyTestStudent',compact('test','Models','nota'));
     }
     public function SaveQualifyTest(Request $request)
     {
@@ -698,11 +696,11 @@ class Teacher extends Controller
             $respuesta->State = "Qualified";
             $respuesta->save();
         }
-        $nota = Note::where('Student_id',$id)->first();
+        $nota = Note::find($id);
         $nota->State = "Pre-Qualified";
         $nota->Score = $total;
         $nota->save();
-        return response()->json("Accion Completad");
+        return response()->json("Accion Completada");
     }
     public function SendQualify(Request $request,$id)
     {
@@ -716,7 +714,7 @@ class Teacher extends Controller
                 $test = test::find($value->Test_id);
                 $assignT = Assign_student_grade::find($value->Student_id);
                 $student = User::find($assignT->user_id)->person();
-                return redirect('/teacher/score/list/'.$id)->withError('El examen: '.$test->Title.' del estudiante: '.$student->Names.' '.$student->LastNames);
+                return redirect('/teacher/test/score/'.$id)->withError('El examen: '.$test->Title.' del estudiante: '.$student->Names.' '.$student->LastNames.' aún no ha sido calificado');
             }            
         }
         foreach ($nota as $n) {
@@ -768,7 +766,10 @@ class Teacher extends Controller
         foreach ($scores as $value) {
             $total += $value->Score;
         }
-        if($Punteo <= 0){
+        if($actividad == ""){
+            return response()->json(["Error"=>"El nombre del examen no puede quedar vacio"]);
+        }
+        else if($Punteo <= 0){
             return response()->json(["Error"=>"El punteo debe ser mayor a 0"]);
         }
         else if ($total > $activity->Score) {
@@ -777,6 +778,9 @@ class Teacher extends Controller
             if ($data['tipoexamen'] == 'true') {
                 if ($data['Preguntas'] <= 0) {
                     return response()->json(["Error"=>"Ingrese una cantidad valida de preguntas"]);    
+                }
+                elseif($data['Preguntas'] > 25){
+                    return response()->json(["Error"=>"Vaya!, demasiadas preguntas, prueba con 25"]);    
                 }
                 $Fechas = explode(' - ',$data['Fechas']);
                 $HoraI = $data['HoraI'];
@@ -897,7 +901,7 @@ class Teacher extends Controller
         $test = $data['Test'];
         $score = $data['Punteo'];
         $examen = test::find($test);
-        if($score == ""){
+        if($score == "" || $score < 0){
             return response()->json(["Error"=>"Ingrese un punteo valido"]);
         }
         elseif($score > $examen->Score){
@@ -1146,6 +1150,38 @@ class Teacher extends Controller
         return view('Administration/Teachers/statistics');
     }
 
+    public function viewProfile(Request $request)
+    {
+        $Titles = ['Titulo','Contenido'];
+        $user = user::find($request->session()->get('User_id')); 
+        $person = Person::find($user->Person_id);
+        $curses = Asign_teacher_course::where([['user_id',$user->id],['State','Active']])->get();
+        $dataT = [];
+        foreach ($curses as $value) {
+            $curso = course::find($value->Course_id);
+            $dataC = [
+                'Curso' => $curso->Name." - ".$curso->Grade()->GradeNamePeriod(),
+            ];
+            array_push($dataT,$dataC);
+        }
+        $info = [
+            'Id' => $person->id,
+            'Name' => $person->Names,
+            'Apellido' => $person->LastNames,
+            'Telefono' => $person->Phone,
+            'Usuario' => $user->name,
+            'Correo' => $user->email,
+            'Curses' => $dataT,
+        ];
+        $data = [
+            'Email' => $user->email,
+            'Phone' => $person->Phone,
+        ];
+        return view('/Teacher/Profile',compact('data','Titles'));
+    }
+    public function editProfile(Request $request){
+
+    }
     public function LoadCourses(Request $request)       // CARGAR CURSOS FORMULARIO DE ASIGNACIÓN
     {
         $assignT = Asign_teacher_course::where('State','Active')->get();
