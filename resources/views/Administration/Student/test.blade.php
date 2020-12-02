@@ -26,13 +26,15 @@
                                         Profesor: {{$teacher->Names}} {{$teacher->LastNames}}<br>
                                         Valor: {{$test->Score}}<br>
                                         <!--begin::Progress-->
+                                        @foreach($scores as $score)
                                         <div class="d-flex mt-4 mt-sm-0">
                                             <span class="font-weight-bold mr-4">Nota Final</span>
                                             <div class="progress progress-xs mt-2 mb-2 flex-shrink-0 w-150px w-xl-500px">
-                                                <div class="progress-bar bg-success" role="progressbar" style="width:78%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="progress-bar bg-success" role="progressbar" style="width:{{$score['percentage']}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
-                                            <span class="font-weight-bolder ml-4">78%</span>
+                                            <span class="font-weight-bolder ml-4">{{$score['final']}}</span>
                                         </div>
+                                        @endforeach
                                         <!--end::Progress-->
                                     </div>
                                 </div>

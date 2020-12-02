@@ -67,9 +67,9 @@
                                         <span class="d-block font-weight-bold mr-5">Punteo Obtenido</span>
                                         <div class="d-flex flex-row-fluid align-items-center">
                                             <div class="progress progress-xs mt-2 mb-2 w-100">
-                                                <div class="progress-bar bg-success" role="progressbar" style="width:1000%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="progress-bar bg-success" role="progressbar" style="width:{{$model['percentage']}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
-                                            <span class="ml-3 font-weight-bolder">100%</span>
+                                            <span class="ml-3 font-weight-bolder">{{$model['final']}}</span>
                                         </div>
                                     </div>
                                     <!--end::Progress-->

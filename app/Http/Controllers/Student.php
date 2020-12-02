@@ -248,7 +248,7 @@ class Student extends Controller
             {
                 $question = question::find($Answer['QuestionId']);
                 $score = 0;
-                if($question->CorrectAnswers == $Answer['Answer'])
+                if(($Answer['Answer'] == $question->CorrectAnswers) && ($Answer['Answer'] != null))
                 {
                     $score = $question->Score;
                 }
@@ -261,6 +261,7 @@ class Student extends Controller
                 $reply->State = "Complete";
                 $reply->save();
                 $test = $question->Test();
+                //$data = array('State' => 'Progress');
                 $data = array('State' => 'Complete');
                 Test::where('id',$test->id)->update($data);
             }
@@ -280,6 +281,13 @@ class Student extends Controller
         return response()->json(["Accion exitosa"]);
     }
 
+                            #funciones terminadas
+/*-------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------*/
+
     public function all_tests(Request $request)
     {
         $id = $request->session()->get('User_id');
@@ -290,20 +298,27 @@ class Student extends Controller
         { 
             if($course->Tests())
             {
+                //->where('State','Approved')
                 foreach($course->Tests()->where('State','Complete') as $test)
                 {
-                    $query =[
-                        "id" => $test->id,
-                        "course" => $course->Name,
-                        "test" => $test->Title,
-                        "date" => $test->StartDate,
-                        "score" => $test->Score,
-                        "activity" => $test->Activity()->Name,
-                        "teacher" => $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames
-                    ];
-                    array_push($models,$query);
+                    $notes = Note::where('Test_id',$test->id)->get('Score');
+                    foreach ($notes as $note)
+                    {                       
+                        $query =[
+                            'id' => $test->id,
+                            'course' => $course->Name,
+                            'test' => $test->Title,
+                            'date' => date("d-m-Y",strtotime($test->StartDate)),
+                            'score' => $test->Score,
+                            'activity' => $test->Activity()->Name,
+                            'teacher' => $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames,
+                            'final' => $note->Score,
+                            'percentage' => (100/($note->Score))
+                        ];
+                        array_push($models,$query);
+                    }
                 }
-            }     
+            }
         }
         return view('Student/tests',compact('models','assign'));
     }
@@ -311,6 +326,7 @@ class Student extends Controller
     public function test_review($id,$assign)
     {
         $models = [];
+        $scores = [];
         $titles = [
             'Preguntas',
             'Respuestas Correctas',
@@ -326,6 +342,16 @@ class Student extends Controller
         $user_student = User::find($assign_teacher->user_id);
         $teacher = Person::find($user_student->Person_id);
         $questions = $test->Questions();
+        //->where('State','Complete')
+        $notes = Note::where('Test_id',$test->id)->where('State','Complete')->get();
+        foreach ($notes as $note)
+        {
+            $consult = [
+                'final' => $note->Score,
+                'percentage' => (100/($note->Score))
+            ];
+            array_push($scores,$consult);
+        }
         foreach($questions as $question)
         {
             $answer = Asign_answer_test_student::where(['Studen_id'=>$assign,'Question_id'=>$question->id])->first();
@@ -338,15 +364,8 @@ class Student extends Controller
             ];
             array_push($models,$query);
         }
-        return view('Student/test_review',compact('models','titles','test','course','teacher'));
+        return view('Student/test_review',compact('models','titles','test','course','teacher','scores'));
     }
-
-                            #funciones terminadas
-/*-------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------*/
 
     public function teacher_information(Request $request)
     {
@@ -409,10 +428,10 @@ class Student extends Controller
         array_push($buttons,$button);        
         $models = [];
         $titles = [
-            'Id',
+            'No',
             'Nombres',
             'Apellidos',
-            'No. Teléfono',
+            'Teléfono',
             'Usuario',
             'Correo electrónico',
             'Grado',
@@ -468,10 +487,10 @@ class Student extends Controller
         array_push($buttons,$button); 
         $models = [];
         $titles = [
-            'Id',
+            'No',
             'Nombres',
             'Apellidos',
-            'No. Teléfono',
+            'Teléfono',
             'Usuario',
             'Correo electrónico',
             'Última conexión',
@@ -800,6 +819,7 @@ class Student extends Controller
     public function test($id,$assign)
     {
         $models = [];
+        $scores = [];
         $titles = [
             'Preguntas',
             'Tipo de Pregunta',
@@ -817,6 +837,16 @@ class Student extends Controller
         $user_student = User::find($assign_teacher->user_id);
         $teacher = Person::find($user_student->Person_id);
         $questions = $test->Questions();
+        //->where('State','Complete')
+        $notes = Note::where('Test_id',$test->id)->where('State','Complete')->get();
+        foreach ($notes as $note)
+        {
+            $consult = [
+                'final' => $note->Score,
+                'percentage' => (100/($note->Score))
+            ];
+            array_push($scores,$consult);
+        }
         foreach($questions as $question)
         {
             $answer = Asign_answer_test_student::where(['Studen_id'=>$assign,'Question_id'=>$question->id])->first();
@@ -830,7 +860,7 @@ class Student extends Controller
             ];
             array_push($models,$query);
         }
-        return view('Administration/Student/test',compact('models','titles','student','test','course','teacher'));
+        return view('Administration/Student/test',compact('models','titles','student','test','course','teacher','scores'));
     }
 
     public function score($id)
