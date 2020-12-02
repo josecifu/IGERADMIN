@@ -12,6 +12,30 @@
     {{-- Page content --}}
     @section('content')
         <div class="row">
+          <div class="container">
+            <h2>Estadisticas del voluntario: </h2>
+          </div>
+        
+        </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <!--begin::Card-->
+                <div class="card card-custom gutter-b">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <h3 class="card-label">Actividades Creadas por mes</h3>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <!--begin::Chart-->
+                    <div id="chart_3"></div>
+                    <!--end::Chart-->
+                  </div>
+                </div>
+                <!--end::Card-->
+              </div>
+            </div>
+        <div class="row">
             <div class="col-lg-6">
                 <!--begin::Card-->
                 <div class="card card-custom gutter-b">

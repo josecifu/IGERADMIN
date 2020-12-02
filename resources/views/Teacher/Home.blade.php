@@ -75,7 +75,7 @@
                                                             <!--begin::Actions-->
                                                             <div class="my-lg-0 my-1">
                                                                 
-                                                                <a href="#" class="btn btn-sm btn-primary font-weight-bolder text-uppercase">Ver perfil</a>
+                                                                <a href="/teacher/view/profile" class="btn btn-sm btn-primary font-weight-bolder text-uppercase">Ver perfil</a>
                                                             </div>
                                                             <!--end::Actions-->
                                                         </div>
