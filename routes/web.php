@@ -144,7 +144,9 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 			$route = "App\Http\Controllers";
 			#Dashboad
 			Route::get('/list', $route.'\Administration@AttendantList')->name('AttendantList');
-			Route::get('/create', $route.'\Administration@AttendantList')->name('AttendantCreate');
+			Route::get('/create', $route.'\Administration@AttendantCreate')->name('AttendantCreate');
+			Route::get('/deletes', $route.'\Administration@AttendantDeletes')->name('AttendantDeletes');
+			Route::post('/save', $route.'\Administration@AttendantSave')->name('AttendantSave');
 		});
 	});
 	//Configuraciones

@@ -34,6 +34,9 @@ use App\Models\Assign_student_grade;
 use App\Models\Assign_period_grade;
 //Modelo Asignacion nivel grado
 use App\Models\Assign_level_grade;
+//Modelo asignacion de circulo de estudio
+use App\Models\Assign_attendant_periods;
+
 use Illuminate\Support\Facades\DB;
 
 class Administration extends Controller
@@ -70,6 +73,52 @@ class Administration extends Controller
         ];
         return view('Administration.Dashboard.Home',compact('Logs'));
     }
+    public function AttendantDeletes(Request $request)
+    {
+        $buttons =[];
+        $button = [
+            "Name" => 'Añadir un encargado de circulo',
+            "Link" => 'administration/workspace/attendant/create',
+            "Type" => "add"
+        ];
+        array_push($buttons,$button);
+        $button = [
+            "Name" => 'Ver encargados de circulo activos',
+            "Link" => 'administration/workspace/attendant/list',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $ModelsData = rol::find(4);
+        $Models =[];
+        $Titles =['Id','Nombres','Teléfono','Correo electronico',"Usuario","Ultima Conexión",'Circulos encargados','Acciones'];
+        $usuario_rol = Assign_user_rol::where('Rol_id',4)->where('State','Delete')->get('user_id');
+        foreach ($usuario_rol as $v) {
+            $usuario = User::find($v->user_id);
+            $persona = Person::find($usuario->Person_id);
+            $periods = Assign_attendant_periods::where([['user_id',$v->user_id],['State','Active']])->get();
+            $dataT = [];
+            foreach ($periods as $value) {
+                $period = period::find($value->Period_id);
+                $dataC = [
+                    'Circulo' => $period->Name,
+                ];
+                array_push($dataT,$dataC);
+            }
+            $data = [
+                'Id' => $persona->id,
+                'Name' => $persona->Names,
+                'LastName' => $persona->LastNames,
+                'Phone' => $persona->Phone,
+                'Use' => $usuario->name,
+                'Email' => $usuario->email,
+                'Conection' => "$usuario->email",
+                'Attendant' => $dataT,
+            ];
+            array_push($Models,$data);
+            
+        }
+        return view('Administration.Attendant.List',compact('buttons','Titles','Models'));
+    }
     public function AttendantList(Request $request)
     {
         $buttons =[];
@@ -87,19 +136,138 @@ class Administration extends Controller
         array_push($buttons,$button);
         $ModelsData = rol::find(4);
         $Models =[];
-        $Titles =['Id','Nombres','Correo electronico','Teléfono','Circulos encargados','Acciones'];
-        foreach ($ModelsData->Users()  as $value) {
-            $model = [
-                "Id" =>$value->id,
-                "Name" =>$value->name,
+        $Titles =['Id','Nombres','Teléfono','Correo electronico',"Usuario","Ultima Conexión",'Circulos encargados','Acciones'];
+        $usuario_rol = Assign_user_rol::where('Rol_id',4)->where('State','Active')->get('user_id');
+        foreach ($usuario_rol as $v) {
+            $usuario = User::find($v->user_id);
+            $persona = Person::find($usuario->Person_id);
+            $periods = Assign_attendant_periods::where([['user_id',$v->user_id],['State','Active']])->get();
+            $dataT = [];
+            foreach ($periods as $value) {
+                $period = period::find($value->Period_id);
+                $dataC = [
+                    'Circulo' => $period->Name,
+                ];
+                array_push($dataT,$dataC);
+            }
+            $data = [
+                'Id' => $persona->id,
+                'Name' => $persona->Names,
+                'LastName' => $persona->LastNames,
+                'Phone' => $persona->Phone,
+                'User' => $usuario->name,
+                'Email' => $usuario->email,
+                'Conection' => "$usuario->email",
+                'Attendant' => $dataT,
             ];
-            array_push($Models,$model);
-         } 
+            array_push($Models,$data);
+            
+        }
         return view('Administration.Attendant.List',compact('buttons','Titles','Models'));
+    }
+    public function AttendantCreate(Request $request)
+    {
+        $buttons =[];
+        $button = [
+            "Name" => 'Listado de encargados de circulo',
+            "Link" => 'administration/workspace/attendant/list',
+            "Type" => "add"
+        ];  
+        array_push($buttons,$button);
+        return view('Administration.Attendant.Create',compact('buttons'));
     }
     public function test($test)
     {
         return view('Administration.Tests.'.$test);
+    }
+    Public function AttendantSave(Request $request)
+    {
+        $id = user::find($request->session()->get('User_id')); 
+        $data = $request->data[0];
+        $Nombres= $data['Nombre'];
+        $Apellidos= $data['Apellido'];
+        $Telefono= $data['Telefono'];
+        $Usuario= $data['Usuario'];
+        $Email= $data['Email'];
+        $Contraseña = $data['Contraseña'];
+        $Periods = $data['Period'];
+        $Periods = explode(";",$Periods);
+        $masculino = $data['masculino'];
+        if(empty($Periods[0])){
+            return response()->json(["Error" => "La asignación de circulos de estudio no puede quedar vacia"]);
+        }
+        //LOGICA
+        try {
+              DB::beginTransaction();
+                //Tabla peronas
+                $person = new Person;
+                $person->Names = $Nombres;
+                $person->LastNames = $Apellidos;
+                $person->Phone = $Telefono;
+                if ($masculino == "true") {
+                    $person->Gender = 'Masculino';
+                } else {
+                    $person->Gender = 'Femenino';
+                }
+                $person->save();
+                //Tabla usuarios
+                $user = new User;
+                $user->name = $Usuario;
+                $user->email = $Email;
+                $user->password = bcrypt($Contraseña);
+                $user->State = "Active";
+                $user->Person_id =  $person->id;
+                $user->save();
+                //Tabla asignacion usuario a un rol
+                $usuario_rol = new Assign_user_rol;
+                $usuario_rol->rol_id = 4;
+                $usuario_rol->user_id = $user->id;
+                $usuario_rol->State = "Active";
+                $usuario_rol->save();
+                #Tabla logs
+                $log = new logs;
+                $log->Table = "Attendant";
+                $log->User_ID = $id->name;
+                $log->Description = "Se registraron los nuevos datos del encargado de circulo: ".$Nombres." ".$Apellidos;
+                $log->Type = "Create";
+                $log->save();
+                $log = new logs;
+                $log->Table = "Attendant";
+                $log->User_ID = $id->name;
+                $log->Description = "Se creo un nuevo usuario con nombre: ".$user->name." y correo: ".$user->email." del encargado de circulo: ".$Nombres;
+                $log->Type = "Create";
+                $log->save();
+                $log = new logs;
+                $log->Table = "Attendant";
+                $log->User_ID = $id->name;
+                $log->Description = "Se asigno el rol encargado de circulo al usuario: ".$user->name;
+                $log->Type = "Assign";
+                $log->save();
+                for ($i=0; $i < count($Periods) ; $i++) {
+                    $verificar = Assign_attendant_periods::where([['Course_id',$Periods[$i]],['State','Active']])->first();
+                    if (!isset($verificar)) {
+                        $user_Attendant = new Assign_attendant_periods;
+                        $period = course::find($Periods[$i]);
+                        $grado = grade::find($period->Grade_id)->GradeName();
+                        $user_Attendant->user_id = $user->id;
+                        $user_Attendant->Period_id = $Periods[$i];
+                        $user_Attendant->State = "Active";
+                        $user_Attendant->save();
+                        #logs registro de asignación
+                        $log = new logs;
+                        $log->Table = "Voluntario";
+                        $log->User_ID = $id->name;
+                        $log->Description = "Se asigno el usuario: ".$user->name.
+                        " al curso de ".$curso->Name." del grado de ".$grado;
+                        $log->Type = "Assign";
+                        $log->save();
+                    }
+                }
+                DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+        }
+        return response()->json(["Accion completada"]);
     }
     public function GradesPeriod(Request $request)
     {
