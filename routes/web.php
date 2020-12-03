@@ -46,6 +46,7 @@ Route::group([ 'prefix' => 'teacher','middleware' => 'auth'], function(){							
 	Route::get('/home/dashboard',$route.'\Teacher@dashboard')->name('TeacherDashboard') ;
 	Route::get('/home/workspace',$route.'\Teacher@workspaceT')->name('Teacherworkspace');
 	Route::get('/view/profile',$route.'\Teacher@viewProfile')->name('TeacherProfile');
+	Route::post('/save/profile',$route.'\Teacher@SaveviewProfile')->name('TeachersaveProfile');
 	Route::get('/score/list/{model}',$route.'\Teacher@score')->name('TeacherScore');
 	Route::get('/test/view/{model}',$route.'\Teacher@ViewTestsGeplande')->name('TeacherViewTestsGeplande');
 	Route::get('/test/list/{model}',$route.'\Teacher@TestTeacher')->name('TeacherTests');
