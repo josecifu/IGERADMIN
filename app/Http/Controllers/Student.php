@@ -22,13 +22,13 @@ use App\Models\Asign_teacher_course;
 
 class Student extends Controller
 {
-    #FUNCIONES DE ESTUDIANTE
     public function statistics()
     {
         $models = [];
         return view('Administration/Student/statistics',compact('models'));
     }
 
+    #FUNCIONES DE ESTUDIANTE
     public function workSpace(Request $request)
     {
         return view('Student/workspace');
@@ -88,9 +88,6 @@ class Student extends Controller
         $id = $request->session()->get('User_id');
         $models = [];
         $titles = [];
-        $Modal = [];
-        $cantActivities = 0;
-        $pos = 0;
         $assign = Assign_student_grade::where('user_id',$id)->first();
         $grade = Assign_student_grade::find($assign->id)->Grade();
         $courses = $grade->Courses();
@@ -100,19 +97,18 @@ class Student extends Controller
             $activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
             foreach($activities as $activity)
             {
-               
                 $testData = [];
                 if(!in_array($activity->Name,$data))
                 {
                     array_push($data,$activity->Name);
                     $act = [
                         'activity' => $activity->Name,
-                        'no' => count($activity->Tests()),
-                        'test' => $activity->Tests(),
+                        'no' => count($activity->Tests()->where('State','Approved')),
+                        'test' => $activity->Tests()->where('State','Approved'),
                     ];
                     if(!in_array($act,$titles))
                     {
-                    array_push($titles,$act);
+                        array_push($titles,$act);
                     }
                 }
                 foreach($activity->Tests() as $test)
@@ -122,14 +118,14 @@ class Student extends Controller
                         array_push($testData,$test->Name);
                     }
                 }
-               
             }
         }
-
+        dd($titles);
         foreach ($courses as $course)
         {    
             $notes =[];
-            foreach ($titles as $value) {
+            foreach ($titles as $value)
+            {
                 if(count($value['test'])>0)
                 {
                     foreach($value['test'] as $test)
@@ -138,9 +134,13 @@ class Student extends Controller
                         $assign = Assign_student_grade::where('user_id',$id)->first();
                         $note = Note::where(['Test_id'=>$test->id,'Course_id'=>$course->id,"Student_id"=>$assign->id,"State"=>"Approved"])->first();
                         if($note)
-                        array_push($notes,$note->Score);
+                        {
+                            array_push($notes,$note->Score);
+                        }
                         else
-                        array_push($notes,"No existe notas para este curso");
+                        {
+                            array_push($notes,"No existe notas para este curso");
+                        }
                     }
                 }
                 else
@@ -148,33 +148,13 @@ class Student extends Controller
                     array_push($notes,"N");
                 }
             }
-            
             $model = [
+                "id" => $course->id,
                 "Course"=>$course->Name,
                 "Notes" =>$notes
             ];
             array_push($models,$model);
         }
-
-
-/*
-            $scores = [];
-            $notes = Note::where('Course_id',$course->id)->get();
-            foreach($notes as $note)
-            {
-                $cons = [
-                    'note' => $note->Score ?? '0'
-                ];
-                array_push($scores,$cons);
-            }
-            $query = [
-                'id' => $course->Grade_id,
-                'course' => $course->Name,
-                'scores' => $scores
-            ];
-            array_push($models,$query);  
-*/          
-        
         return view('Student/score_list',compact('models','titles'));
     }
 
@@ -193,6 +173,41 @@ class Student extends Controller
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            #funciones terminadas
+/*-------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------*/
 
     public function test_questions(Request $request,$id)
     {
@@ -269,7 +284,7 @@ class Student extends Controller
             {
                 $question = question::find($Answer['QuestionId']);
                 $score = 0;
-                if($question->CorrectAnswers == $Answer['Answer'])
+                if(($Answer['Answer'] == $question->CorrectAnswers) && ($Answer['Answer'] != null))
                 {
                     $score = $question->Score;
                 }
@@ -311,20 +326,26 @@ class Student extends Controller
         { 
             if($course->Tests())
             {
-                foreach($course->Tests()->where('State','Complete') as $test)
+                foreach($course->Tests()->where('State','Approved') as $test)
                 {
-                    $query =[
-                        "id" => $test->id,
-                        "course" => $course->Name,
-                        "test" => $test->Title,
-                        "date" => $test->StartDate,
-                        "score" => $test->Score,
-                        "activity" => $test->Activity()->Name,
-                        "teacher" => $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames
-                    ];
-                    array_push($models,$query);
+                    $notes = Note::where('Test_id',$test->id)->get('Score');
+                    foreach ($notes as $note)
+                    {                       
+                        $query =[
+                            'id' => $test->id,
+                            'course' => $course->Name,
+                            'test' => $test->Title,
+                            'date' => date("d-m-Y",strtotime($test->StartDate)),
+                            'score' => $test->Score,
+                            'activity' => $test->Activity()->Name,
+                            'teacher' => $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames,
+                            'final' => $note->Score,
+                            'percentage' => (100/($test->Score))*($note->Score)
+                        ];
+                        array_push($models,$query);
+                    }
                 }
-            }     
+            }
         }
         return view('Student/tests',compact('models','assign'));
     }
@@ -332,6 +353,7 @@ class Student extends Controller
     public function test_review($id,$assign)
     {
         $models = [];
+        $scores = [];
         $titles = [
             'Preguntas',
             'Respuestas Correctas',
@@ -347,6 +369,15 @@ class Student extends Controller
         $user_student = User::find($assign_teacher->user_id);
         $teacher = Person::find($user_student->Person_id);
         $questions = $test->Questions();
+        $notes = Note::where('Test_id',$test->id)->where('State','Approved')->get();
+        foreach ($notes as $note)
+        {
+            $consult = [
+                'final' => $note->Score,
+                'percentage' => (100/($test->Score))*($note->Score)
+            ];
+            array_push($scores,$consult);
+        }
         foreach($questions as $question)
         {
             $answer = Asign_answer_test_student::where(['Studen_id'=>$assign,'Question_id'=>$question->id])->first();
@@ -359,15 +390,8 @@ class Student extends Controller
             ];
             array_push($models,$query);
         }
-        return view('Student/test_review',compact('models','titles','test','course','teacher'));
+        return view('Student/test_review',compact('models','titles','test','course','teacher','scores'));
     }
-
-                            #funciones terminadas
-/*-------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------*/
 
     public function teacher_information(Request $request)
     {
@@ -417,23 +441,23 @@ class Student extends Controller
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver lista de estudiantes deshabilitados',
+            "Name" => 'Listado de estudiantes eliminados',
             "Link" => 'administration/student/list/eliminated',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver logs',
+            "Name" => 'Historial de registros',
             "Link" => 'administration/student/logs',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);        
         $models = [];
         $titles = [
-            'Id',
+            'No',
             'Nombres',
             'Apellidos',
-            'No. Teléfono',
+            'Teléfono',
             'Usuario',
             'Correo electrónico',
             'Grado',
@@ -476,23 +500,23 @@ class Student extends Controller
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver lista de estudiantes deshabilitados',
+            "Name" => 'Listado de estudiantes eliminados',
             "Link" => 'administration/student/list/eliminated',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver logs',
+            "Name" => 'Historial de registros',
             "Link" => 'administration/student/logs',
             "Type" => "btn1"
         ];
         array_push($buttons,$button); 
         $models = [];
         $titles = [
-            'Id',
+            'No',
             'Nombres',
             'Apellidos',
-            'No. Teléfono',
+            'Teléfono',
             'Usuario',
             'Correo electrónico',
             'Última conexión',
@@ -528,17 +552,29 @@ class Student extends Controller
     {
         $buttons = [];
         $button = [
-            "Name" => 'Ver lista de estudiantes activos',
+            "Name" => 'Añadir nuevo estudiante',
+            "Link" => 'administration/student/create',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $button = [
+            "Name" => 'Listado de estudiantes activos',
             "Link" => 'administration/student/list',
             "Type" => "btn1"
         ];
         array_push($buttons,$button); 
+        $button = [
+            "Name" => 'Historial de registros',
+            "Link" => 'administration/student/logs',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
         $models = [];
         $titles = [
-            'Id',
+            'No',
             'Nombres',
             'Apellidos',
-            'No. Teléfono',
+            'Teléfono',
             'Usuario',
             'Correo electrónico',
             'Última conexión',
@@ -573,14 +609,20 @@ class Student extends Controller
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver lista de estudiantes deshabilitados',
+            "Name" => 'Listado de estudiantes eliminados',
             "Link" => 'administration/student/list/eliminated',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $button = [
+            "Name" => 'Historial de registros',
+            "Link" => 'administration/student/logs',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
         $models = [];
         $titles = [
-            'Id',
+            'No',
             'Responsable',
             'Actividad',
             'Tipo',
@@ -630,11 +672,11 @@ class Student extends Controller
             $student->Phone = $phone;
             if ($gender == "true")
             {
-                $student->Gender = 'Femenino';
+                $student->Gender = 'Masculino';
             }
             else
             {
-                $student->Gender = 'Masculino';
+                $student->Gender = 'Femenino';
             }
             $student->save();
             $user = new User;
@@ -776,7 +818,7 @@ class Student extends Controller
         return redirect()->route('ListEliminatedStudents');
     }
 
-    public function test_list($id)
+    public function test_list($id)                                              //obtener nota del parcial
     {
         $titles = [];
         $models = [];
@@ -785,8 +827,8 @@ class Student extends Controller
         {
             $data = [
                 "name" =>$activity->Name,
-                "no" =>count($activity->Tests()->where('State','Complete')),
-                "test" => $activity->Tests()->where('State','Complete'),
+                "no" =>count($activity->Tests()->where('State','Approved')),
+                "test" => $activity->Tests()->where('State','Approved'),
             ];
             array_push($titles,$data);
         }
@@ -796,7 +838,7 @@ class Student extends Controller
             $tests = [];
             foreach($activities as $activity)
             {
-                foreach($activity->Tests()->where('State','Complete') as $test)
+                foreach($activity->Tests()->where('State','Approved') as $test)
                 {
                     $values =[
                         "Id" => $test->id,
@@ -805,12 +847,14 @@ class Student extends Controller
                     array_push($tests,$values);
                 }
             }
+            $note = Note::where('Student_id',$student->Asssign_Grade()->id)->where('State','Approved')->first();
             $query = [
-                "id" =>$student->person()->id,
-                "assign" =>$student->Asssign_Grade()->id,
-                "name" =>$student->person()->Names,
+                'id' => $student->person()->id,
+                'assign' => $student->Asssign_Grade()->id,
+                'name' => $student->person()->Names,
                 'lastname' => $student->person()->LastNames,
-                "tests"=>$tests
+                'note' => $note->Score,
+                'tests' => $tests
             ];
             array_push($models,$query);
         }
@@ -821,11 +865,12 @@ class Student extends Controller
     public function test($id,$assign)
     {
         $models = [];
+        $scores = [];
         $titles = [
             'Preguntas',
             'Tipo de Pregunta',
-            'Respuestas del estudiante',
             'Respuestas Correctas',
+            'Respuestas del estudiante',
             'Punteo Obtenido',
         ];
         $assign_student = Assign_student_grade::find($assign);
@@ -838,6 +883,15 @@ class Student extends Controller
         $user_student = User::find($assign_teacher->user_id);
         $teacher = Person::find($user_student->Person_id);
         $questions = $test->Questions();
+        $notes = Note::where('Test_id',$test->id)->where('State','Approved')->get();
+        foreach ($notes as $note)
+        {
+            $consult = [
+                'final' => $note->Score,
+                'percentage' => (100/($test->Score))*($note->Score)
+            ];
+            array_push($scores,$consult);
+        }
         foreach($questions as $question)
         {
             $answer = Asign_answer_test_student::where(['Studen_id'=>$assign,'Question_id'=>$question->id])->first();
@@ -845,13 +899,13 @@ class Student extends Controller
                 "id" => $question->id,
                 "question" => $question->Title,
                 "type" => $question->Type,
-                "answer" => $answer->Answers ?? 'No contestada',
                 "correct" => $question->CorrectAnswers  ?? 'Ninguno',
+                "answer" => $answer->Answers ?? 'No contestada',
                 "score" => $answer->Score ?? '0',
             ];
             array_push($models,$query);
         }
-        return view('Administration/Student/test',compact('models','titles','student','test','course','teacher'));
+        return view('Administration/Student/test',compact('models','titles','student','test','course','teacher','scores'));
     }
 
     public function score($id)
@@ -880,6 +934,52 @@ class Student extends Controller
         return view('Administration/Student/score',compact('models','titles','grade'));
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function course_scores($id)
     {
         $assign = Assign_student_grade::find($id);
@@ -887,7 +987,72 @@ class Student extends Controller
         $student = Person::find($user->Person_id);
         $titles = [];
         $models = [];
-        $grade = Assign_student_grade::find($id)->Grade();
+        $grade = Assign_student_grade::find($assign->id)->Grade();
+        $courses = $grade->Courses();
+        $data = [];
+        foreach ($courses as $course)
+        {
+            $activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
+            foreach($activities as $activity)
+            {  
+                $testData = [];
+                if(!in_array($activity->Name,$data))
+                {
+                    array_push($data,$activity->Name);
+                    $act = [
+                        'activity' => $activity->Name,
+                        'no' => count($activity->Tests()),
+                        'test' => $activity->Tests(),
+                    ];
+                    if(!in_array($act,$titles))
+                    {
+                        array_push($titles,$act);
+                    }
+                }
+                foreach($activity->Tests() as $test)
+                {
+                    if(!in_array($test->Name,$testData))
+                    {
+                        array_push($testData,$test->Name);
+                    }
+                }
+            }
+        }
+        foreach ($courses as $course)
+        {    
+            $notes =[];
+            foreach ($titles as $value)
+            {
+                if(count($value['test'])>0)
+                {
+                    foreach($value['test'] as $test)
+                    {
+                        $id = $request->session()->get('User_id');
+                        $assign = Assign_student_grade::where('user_id',$id)->first();
+                        $note = Note::where(['Test_id'=>$test->id,'Course_id'=>$course->id,"Student_id"=>$assign->id,"State"=>"Approved"])->first();
+                        if($note)
+                        {
+                            array_push($notes,$note->Score);
+                        }
+                        else
+                        {
+                            array_push($notes,"No existe notas para este curso");
+                        }
+                    }
+                }
+                else
+                {
+                    array_push($notes,"N");
+                }
+            }
+            $model = [
+                "Course"=>$course->Name,
+                "Notes" =>$notes
+            ];
+            array_push($models,$model);
+        }
+
+        //$grade = Assign_student_grade::find($id)->Grade();
         return view('Administration/Student/course_scores',compact('models','titles','student','grade'));
     }
 }

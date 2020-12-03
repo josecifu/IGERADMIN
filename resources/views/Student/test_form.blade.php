@@ -260,7 +260,7 @@
 							})
 						} else {
 							swal.fire({ title: "Accion completada",
-							text: "Se han guardados sus respuestas!",
+							text: "Se han guardados las respuestas!",
 							confirmButtonText: 'Aceptar',
 							}).then(function () {
 								var $url_path = '{!! url('/') !!}';

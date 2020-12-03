@@ -103,7 +103,7 @@
                                     @foreach($model['tests'] as $test)
                                     <td>
                                         <center>
-                                            <button type="button" class="btn btn-outline-info"  onclick="verExamen({{$test['Id']}},{{$model['assign']}});">0</button>
+                                            <button type="button" class="btn btn-outline-info"  onclick="verExamen({{$test['Id']}},{{$model['assign']}});">{{$model['note']}}</button>
                                         </center>
                                     </td>   
                                     @endforeach

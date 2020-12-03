@@ -128,10 +128,10 @@
 													<div class="radio-inline">
 														<label class="radio radio-primary">
 														<input type="radio" id="Genero" name="radios5"/>
-														<span></span>Femenino</label>
+														<span></span>Masculino</label>
 														<label class="radio radio-primary">
 														<input type="radio" id="Sexo" name="radios5"/>
-														<span></span>Masculino</label>
+														<span></span>Femenino</label>
 													</div>
 												</div>
 											</div>

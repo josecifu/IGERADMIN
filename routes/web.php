@@ -36,7 +36,7 @@ Route::group([ 'prefix' => 'student','middleware' => 'auth'], function(){
 	Route::get('/score/list',$route.'\Student@score_list')->name('ScoreList');
 	Route::post('/test/view/answers/save', $route.'\Student@save_answer')->name('SaveAnswer');
 	Route::get('/course/list',$route.'\Student@teacher_information')->name('StudentCourseList');
-	Route::get('/test_review/{model}/{assign}',$route.'\Student@test_review')->name('ViewTestStudent');
+	Route::get('/test/review/{model}/{assign}',$route.'\Student@test_review')->name('ViewTestStudent');
 	Route::get('/profile/edit/{model}',$route.'\Student@edit_profile')->name('EditProfileStudent');
 	Route::post('/profile/update', $route.'\Student@update_profile')->name('UpdateProfileStudent');
 	
