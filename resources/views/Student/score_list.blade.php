@@ -31,7 +31,6 @@
                     <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
                             <tr>
-                                
                                 <th rowspan="1"></th>
                                 @foreach($titles as $t)
                                     <th colspan="{{$t['no']}}"><center>{{$t['activity']}}</center></th>
@@ -40,7 +39,6 @@
                             <tr>
                                 <th><center>Cursos</center></th>
                                 @foreach($titles as $title)
-                                   
                                     @if($title['no']=='0')
                                     <th><center>No existen examenes asignados </center></th>
                                     @endif
@@ -57,7 +55,6 @@
                             <tr>
                                 <td>{{$model['Course']}}</td>
                                 @foreach($model['Notes'] as $score)
-                                
                                     @if($score=='N')
                                     <td style="background-color: #E4E6EF"> </td>
                                     @elseif($score==0)
@@ -65,14 +62,12 @@
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width:0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
-                                        
                                     </td>
                                     @else
                                     <td>
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: {{$score}}%" aria-valuenow="{{$score}}" aria-valuemin="0" aria-valuemax="100">{{$score}} Pts</div>
-                                        </div>
-                                        
+                                        </div>  
                                     </td>
                                     @endif
                                 </td>

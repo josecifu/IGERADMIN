@@ -123,12 +123,12 @@
                                     </td>
                                     <td>
                                         <center>
-                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['answer']}}</span>
+                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['correct']}}</span>
                                         </center>
                                     </td>
                                     <td>
                                         <center>
-                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['correct']}}</span>
+                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['answer']}}</span>
                                         </center>
                                     </td>
                                     <td>

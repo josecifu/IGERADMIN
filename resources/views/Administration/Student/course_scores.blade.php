@@ -78,29 +78,46 @@
                     <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
                         <thead>
                             <tr>
-                                <th rowspan="2"><center>Cursos</center></th>
-                                @foreach($titles as $title)
-                                    <th colspan="{{$title['no']}}"><center>{{$title['activity']}}</center></th>
+                                <th rowspan="1"></th>
+                                @foreach($titles as $t)
+                                    <th colspan="{{$t['no']}}"><center>{{$t['activity']}}</center></th>
                                 @endforeach
                             </tr>
                             <tr>
+                                <th><center>Cursos</center></th>
                                 @foreach($titles as $title)
-                                    @if($title['no']==0)
-                                    <th><center>No existen examenes asignados</center></th>
+                                   
+                                    @if($title['no']=='0')
+                                    <th><center>No existen examenes asignados </center></th>
                                     @endif
-                                    @foreach($title['test'] as $t)
-                                    <th><center>{{$t->Title}}</center></th>
-                                    @endforeach
+                                    @if($title['test'])
+                                        @foreach($title['test'] as $t)
+                                        <th><center>{{$t->Title}}</center></th>
+                                        @endforeach
+                                    @endif
                                 @endforeach
                               </tr>
                         </thead>
                         <tbody>
                             @foreach($models as $model)
                             <tr>
-                                <td>{{$model['course']}}</td>
-                                @foreach($model['scores'] as $score)
-                                <td>
-                                    <center>{{$score['note']}}</center>
+                                <td>{{$model['Course']}}</td>
+                                @foreach($model['Notes'] as $score)
+                                    @if($score=='N')
+                                    <td style="background-color: #E4E6EF"> </td>
+                                    @elseif($score==0)
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width:0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </td>
+                                    @else
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: {{$score}}%" aria-valuenow="{{$score}}" aria-valuemin="0" aria-valuemax="100">{{$score}} Pts</div>
+                                        </div>
+                                    </td>
+                                    @endif
                                 </td>
                                 @endforeach
                             </tr>
@@ -130,13 +147,6 @@
                         },
                         columnDefs: [
                             {
-                                targets: -1,
-                                title: 'Actividades',
-                                orderable: false,
-                                render: function(data, type, full, meta) {
-                                    return '\
-                                    ';
-                                },
                             },
                         ],
                     });

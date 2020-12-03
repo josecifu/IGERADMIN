@@ -127,7 +127,7 @@
             });
             function verExamen($id,$assign) {
                 var $url_path = '{!! url('/') !!}';
-                window.location.href = $url_path+"/student/test_review/"+$id+"/"+$assign;
+                window.location.href = $url_path+"/student/test/review/"+$id+"/"+$assign;
             }
        </script>
     @stop
