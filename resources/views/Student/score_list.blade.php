@@ -55,14 +55,14 @@
                             <tr>
                                 <td>{{$model['Course']}}</td>
                                 @foreach($model['Notes'] as $score)
-                                    @if($score=='N')
-                                    <td style="background-color: #E4E6EF"> </td>
-                                    @elseif(intval($score)>0)
+                                    @if(isset($score['Note']))
                                     <td>
                                         <div class="progress">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: {{$score}}%" aria-valuenow="{{$score}}" aria-valuemin="0" aria-valuemax="100">{{$score}} Pts</div>
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: {{$score['Porcentage']}}%" aria-valuenow="{{$score['Note']}}" aria-valuemin="0" aria-valuemax="{{$score['Max']}}">{{$score['Note']}} Pts</div>
                                         </div>  
                                     </td>
+                                    @elseif($score=='N')
+                                    <td style="background-color: #E4E6EF"> </td>
                                     @else
                                     <td>
                                         <center><span class="label label-warning label-pill label-inline mr-2"> {{$score}}</span></center>

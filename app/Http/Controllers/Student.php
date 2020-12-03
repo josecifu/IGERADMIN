@@ -138,10 +138,16 @@ class Student extends Controller
                         
                         if($note!=null)
                         {
-                            array_push($notes,$note->Score);
+                            $n = [
+                                "Note"=>$note->Score,
+                                "Max"=>$test->Score,
+                                "Porcentage"=> ((100*intval($note->Score))/intval($test->Score)),
+                            ];
+                            array_push($notes,$n);
                         }
                         else
                         {
+                            
                             array_push($notes,"No existe notas para este curso");
                         }
                     }
