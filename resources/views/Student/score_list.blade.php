@@ -57,17 +57,16 @@
                                 @foreach($model['Notes'] as $score)
                                     @if($score=='N')
                                     <td style="background-color: #E4E6EF"> </td>
-                                    @elseif($score==0)
-                                    <td>
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width:0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                    @else
+                                    @elseif(intval($score)>0)
                                     <td>
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: {{$score}}%" aria-valuenow="{{$score}}" aria-valuemin="0" aria-valuemax="100">{{$score}} Pts</div>
                                         </div>  
+                                    </td>
+                                    @else
+                                    <td>
+                                        <center><span class="label label-warning label-pill label-inline mr-2"> {{$score}}</span></center>
+                                       
                                     </td>
                                     @endif
                                 </td>

@@ -288,6 +288,7 @@ class Teacher extends Controller
                         $usuario_curso->user_id = $user->id;
                         $usuario_curso->Course_id = $Cursos[$i];
                         $usuario_curso->State = "Active";
+                        $usuario_curso->Year = date("YY");
                         $usuario_curso->save();
                         #logs registro de asignación
                         $log = new logs;
@@ -407,7 +408,7 @@ class Teacher extends Controller
             $assignV = Asign_teacher_course::where('Course_id',$id)->first();
             if(isset($assignV)){
                 $userV = user::find($assignV->user_id);
-                $vol = Person::find($userV->id);
+                $vol = $userV->person();
             }else{
                 return redirect('/administration/teacher/list')->withError('El curso no tiene ningún voluntario asignado');
             }
