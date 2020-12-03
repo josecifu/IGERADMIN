@@ -103,8 +103,8 @@ class Student extends Controller
                     array_push($data,$activity->Name);
                     $act = [
                         'activity' => $activity->Name,
-                        'no' => count($activity->Tests()->where('State','Approved')),
-                        'test' => $activity->Tests()->where('State','Approved'),
+                        'no' => count($activity->Tests()),
+                        'test' => $activity->Tests(),
                     ];
                     if(!in_array($act,$titles))
                     {
@@ -120,25 +120,34 @@ class Student extends Controller
                 }
             }
         }
-        dd($titles);
+        
         foreach ($courses as $course)
         {    
             $notes =[];
             foreach ($titles as $value)
             {
+                
                 if(count($value['test'])>0)
                 {
+                    
                     foreach($value['test'] as $test)
                     {
                         $id = $request->session()->get('User_id');
                         $assign = Assign_student_grade::where('user_id',$id)->first();
                         $note = Note::where(['Test_id'=>$test->id,'Course_id'=>$course->id,"Student_id"=>$assign->id,"State"=>"Approved"])->first();
-                        if($note)
+                        
+                        if($note!=null)
                         {
-                            array_push($notes,$note->Score);
+                            $n = [
+                                "Note"=>$note->Score,
+                                "Max"=>$test->Score,
+                                "Porcentage"=> ((100*intval($note->Score))/intval($test->Score)),
+                            ];
+                            array_push($notes,$n);
                         }
                         else
                         {
+                            
                             array_push($notes,"No existe notas para este curso");
                         }
                     }
@@ -155,6 +164,7 @@ class Student extends Controller
             ];
             array_push($models,$model);
         }
+       
         return view('Student/score_list',compact('models','titles'));
     }
 

@@ -70,7 +70,7 @@
 										<div class="wizard-step" data-wizard-type="step">
 											<div class="wizard-label">
 												<i class="wizard-icon flaticon-clipboard"></i>
-												<h3 class="wizard-title">3. Asginación de curso</h3>
+												<h3 class="wizard-title">3. Asginación de circulos de estudio a encargados</h3>
 											</div>
 										</div>
 										<!--end::Wizard Step 3 Nav-->
@@ -190,54 +190,34 @@
 											<!--end::Wizard Step 2-->
 											<!--begin::Wizard Step 3-->
 											<div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
-												<h1>Detalle Asignación:</h1>
+												
 												<div class="my-5">
-													<div class="form-group row">
-														<label class="col-form-label text-right col-lg-3 col-sm-12">Circulo de estudio</label>
-														<div class="col-lg-9 col-md-9 col-sm-12">
-															<select class="form-control selectpicker" data-size="10" title="No se ha seleccionado ningún día" data-live-search="true" id="Jornada">
-															</select>
-														</div>
-													</div>
-													<div class="form-group row">
-														<label class="col-form-label text-right col-lg-3 col-sm-12">Nivel</label>
-														<div class="col-lg-9 col-md-9 col-sm-12">
-															<select class="form-control" id="Nivel" name="Nivel">
-															</select>
-														</div>
-													</div>	
-													<div class="form-group row">
-														<label class="col-form-label text-right col-lg-3 col-sm-12">Grado</label>
-														<div class="col-lg-9 col-md-9 col-sm-12">
-															<select class="form-control" id="Grado" name="Grado">
-															</select>
-														</div>
-													</div>
+													
 													
 													<!--begin::Card-->
-								<div class="card card-custom gutter-b">
-									<div class="card-header">
-										<div class="card-title">
-											<h3 class="card-label">Asignacion de cursos para voluntarios</h3>
+									<div class="card card-custom gutter-b">
+										<div class="card-header">
+											<div class="card-title">
+												<h3 class="card-label">Asignacion de circulos de estudio a encargados</h3>
+											</div>
 										</div>
-									</div>
-									<div class="card-body">
-										<div class="row">
-											<div class="col-lg-12">
-												<div class="card card-custom card-stretch gutter-b example example-compact">
-													
-													<div class="card-body">
-														<select id="kt_dual_listbox_1" class="dual-listbox" multiple="multiple">
-															
-														</select>
+										<div class="card-body">
+											<div class="row">
+												<div class="col-lg-12">
+													<div class="card card-custom card-stretch gutter-b example example-compact">
 														
+														<div class="card-body">
+															<select id="kt_dual_listbox_1" class="dual-listbox" multiple="multiple">
+																
+															</select>
+															
+														</div>
 													</div>
 												</div>
+												
 											</div>
-											
 										</div>
 									</div>
-								</div>
 								<!--end::Card-->													
 												</div>
 											</div>
@@ -461,7 +441,8 @@ var KTWizard1 = function () {
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
-            }); 
+			}); 
+			ListPeriods();
          });
 
          function crearDatos()
@@ -473,22 +454,22 @@ var KTWizard1 = function () {
             var ContraseñaPersona = $('#Contraseña').val();
             var EmailPersona = $('#Email').val();
 			var Cursos = cursosduallist.selected;
-			var selectedCourse ="";
+			var selectedPeriod ="";
 			$.each(Cursos, function(fetch, data){
-				if(selectedCourse=="")
+				if(selectedPeriod=="")
 				{
-					selectedCourse=data.dataset.id;
+					selectedPeriod=data.dataset.id;
 				}
 				else
 				{
 
-					selectedCourse = selectedCourse+";"+data.dataset.id;
+					selectedPeriod = selectedPeriod+";"+data.dataset.id;
 				}
 			});
 			var masculino = $('#masculino').is(":checked");
             var data = [{
                 //Persona
-				Curso: selectedCourse,
+				Period: selectedPeriod,
                 Nombre: NombrePersona,
                 Apellido: ApellidosPersona,
 				Telefono: TelefonoPersona,
@@ -500,7 +481,7 @@ var KTWizard1 = function () {
             }];
 
             $.ajax({
-                url:'/administration/teacher/save',
+                url:'/administration/workspace/attendant/save',
                 type:'POST',
                 data: {"_token":"{{ csrf_token() }}","data":data},
                 dataType: "JSON",
@@ -514,7 +495,7 @@ var KTWizard1 = function () {
 						})
 					}else{
 						swal.fire({ title: "Accion completada", 
-						text: "El voluntario a sido registrado con éxito!", 
+						text: "El encargado de circulo a sido registrado con éxito!", 
 						type: "success"
                         }).then(function () {
                           var $url_path = '{!! url('/') !!}';
@@ -533,57 +514,26 @@ var KTWizard1 = function () {
                 }
             });
 		 }
-		 $.ajax ({
-			url: '{{route('LoadPeriods')}}',
-			type: 'GET',
-			success: (e) => {
-				$('#Jornada').empty();
-				$.each(e['Periods'], function(fetch, data){
-				  $('#Jornada').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
-				});
-				$('#Jornada').selectpicker('refresh');
-			}
-		});
-		function ListLevel(Period)
+		
+		
+		function ListPeriods()
 		{
 			$.ajax ({
-				url: '{{route('LoadLevels')}}',
-				type: 'POST',
-				data: {
-					"_token": "{{ csrf_token() }}",
-					"PeriodId"      : Period,
-				},
+				url: '{{route('LoadPeriods')}}',
+				type: 'GET',
 				success: (e) => {
-					$('#Nivel').empty();
-					$('#Nivel').append('<option value="" >--Seleccione una opcion</option>');
-					$.each(e['Levels'], function(fetch, data){
-						$('#Nivel').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
+					var options = [];
+					$.each(e['Periods'], function(fetch, data){
+						options.push({
+							text: data.Name,
+							value: data.Id
+						});
 					});
-					$('#Nivel').selectpicker('refresh');
-				}
-			});	
-		}
-		function ListGrades(Level)
-		{
-			$.ajax ({
-				url: '{{route('LoadGrades')}}',
-				type: 'POST',
-				data: {
-					"_token": "{{ csrf_token() }}",
-					"LvlId"      : Level,
-				},
-				success: (e) => {
-					$('#Grado').empty();
-					$('#Grado').append('<option value="" >--Seleccione una opcion</option>');
-					$.each(e['Grades'], function(fetch, data){
-					$('#Grado').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
-					});
-					$('#Grado').selectpicker('refresh');
+					cursosduallist.available = [];
+					cursosduallist._splitOptions(options);
+					cursosduallist.redraw();
 				}
 			});
-		}
-		function ListCourses(Grade)
-		{
 			$.ajax ({
 				url: '{{route('LoadCoursesTeacher')}}',
 				type: 'POST',
@@ -606,16 +556,7 @@ var KTWizard1 = function () {
 				}
 			});
 		}
-		$('#Jornada').on('change', function() {
-			ListLevel($('#Jornada').val());
-		});
-		$('#Nivel').on('change', function() {
-			ListGrades($('#Nivel').val());
-		});
-		$('#Grado').on('change', function() {
-			ListCourses($('#Grado').val());
-		});
-		
+	
 		'use strict';
 
 		// Class definition
@@ -642,8 +583,8 @@ var KTWizard1 = function () {
 					},
 					removeEvent: function (value) {
 					},
-					availableTitle: 'Listado de cursos',
-					selectedTitle: 'Cursos por asignar',
+					availableTitle: 'Listado de circulos de estudio',
+					selectedTitle: 'Circulos de estudio por asignar',
 					addButtonText: 'Agregar',
 					searchPlaceholder: 'Buscar',
 					removeButtonText: 'Quitar',

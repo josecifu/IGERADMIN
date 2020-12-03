@@ -67,7 +67,7 @@
                     </div>
                     <!--end::Dropdown-->
                     <!--begin::Button-->
-                    <a href="#" onclick="addGrade();"class="btn btn-primary font-weight-bolder">
+                    <a href="{{url('administration/workspace/attendant/create')}}"class="btn btn-primary font-weight-bolder">
                     <i class="la la-plus"></i>Añadir un encargado de circulo</a>
                     <!--end::Button-->
                 </div>
@@ -86,116 +86,26 @@
                         @if($Models)
                                                     @foreach($Models as $Model)
                                                     <tr>
-                                                        <td>{{$Model['Id']}}</td>
-                                                        
+                                                        <td>{{$Model['Id']}}</td>                                                  
+                                                        <td>{{$Model['Name']}} {{$Model['LastName']}}</td>
+                                                        <td>{{$Model['Phone']}}</td>
+                                                        <td>{{$Model['Email']}}</td>
+                                                        <td>{{$Model['User']}}</td>
+                                                        <td>{{$Model['Conection']}}</td>
+                                                        <td>
+                                                            @if($Model['Attendant'])
+                                                            <ul>
+                                                                @foreach($Model['Attendant'] as $m)
+                                                                    <li>{{$m['Circulo']}}</li>    
+                                                                @endforeach
+                                                            </ul>
+                                                            @else
+                                                            <p style="text-align: center;">  Ningun circulo de estudio asignado</p>
+                                                                
+                                                            @endif
+                                                            
                                                         <td nowrap="nowrap"></td>
                                                     </tr>
-                                                    <!--begin::Modal-->
-                                                    <div class="modal fade" id="CoursesModal{{$Model['Id']}}" role="dialog" aria-hidden="true">
-                                                        <div class="modal-dialog modal-lg" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title">Añadir cursos a </h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <i aria-hidden="true" class="ki ki-close"></i>
-                                                                    </button>
-                                                                </div>
-                                                                <form class="form">
-                                                                    <div class="modal-body">
-                                                                        <div class="form-group row">
-                                                                            <label class="col-form-label text-right col-lg-3 col-sm-12">Ingrese el nombre de los cursos</label>
-                                                                            <div class="col-lg-9 col-md-9 col-sm-12">
-                                                                             <select class="form-control select2" id="CoursesList{{$Model['Id']}}" multiple name="param">
-                                                                              <option label="Label"></option>
-                                                                           
-                                                                           
-                                                                             </select>
-                                                                            </div>
-                                                                           </div>
-                                                                        
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                                        <button type="button" class="btn btn-primary mr-2" onclick="AddCourses({{$Model['Id']}});">Agregar cursos</button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--end::Modal-->
-                                                   
-                                                    <!--begin::Modal-->
-                                                    <div class="modal fade" id="EditModal{{$Model['Id']}}" role="dialog" aria-hidden="true">
-                                                        <div class="modal-dialog modal-lg" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title">Editar  </h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <i aria-hidden="true" class="ki ki-close"></i>
-                                                                    </button>
-                                                                </div>
-                                                                <form class="form">
-                                                                    <div class="modal-body">
-                                                                        <div class="form-group row">
-                                                                            <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el nivel</label>
-                                                                            <div class="col-lg-9 col-md-9 col-sm-12">
-                                                                                <select class="form-control selectpicker" data-size="10" data-live-search="true" id="lvlselect{{$Model['Id']}}">
-                                                                                  
-                                                                                </select>
-                                                                                <span class="form-text text-muted">Visualice los grados del nivel seleccionado</span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="form-group row">
-                                                                            <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el nivel</label>
-                                                                            <div class="col-lg-9 col-md-9 col-sm-12">
-                                                                                <select class="form-control selectpicker" data-size="10" data-live-search="true" id="lvlselect{{$Model['Id']}}">
-                                                                                  
-                                                                                </select>
-                                                                                <span class="form-text text-muted">Visualice los grados del nivel seleccionado</span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                                        <button type="button" class="btn btn-primary mr-2" onclick="ViewGrades({{$Model['Id']}});">Editar</button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--end::Modal-->
-                                                    <!--begin::Modal-->
-                                                    <div class="modal fade" id="kt_select_modal{{$Model['Id']}}" role="dialog" aria-hidden="true">
-                                                        <div class="modal-dialog modal-lg" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title">Visualizar grados del dia {{$Model['Id']}}</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <i aria-hidden="true" class="ki ki-close"></i>
-                                                                    </button>
-                                                                </div>
-                                                                <form class="form">
-                                                                    <div class="modal-body">
-                                                                        <div class="form-group row">
-                                                                            <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el nivel</label>
-                                                                            <div class="col-lg-9 col-md-9 col-sm-12">
-                                                                                <select class="form-control selectpicker" data-size="10" data-live-search="true" id="lvlselect{{$Model['Id']}}">
-                                                                                  
-                                                                                </select>
-                                                                                <span class="form-text text-muted">Visualice los grados del nivel seleccionado</span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                                        <button type="button" class="btn btn-primary mr-2" onclick="ViewGrades({{$Model['Id']}});">Visualizar</button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--end::Modal-->
-                                                  
                                                     @endforeach
                                                 @endif
                     </tbody>
