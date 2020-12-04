@@ -1166,19 +1166,34 @@ class Teacher extends Controller
             array_push($dataT,$dataC);
         }
         $info = [
-            'Id' => $person->id,
-            'Name' => $person->Names,
-            'Apellido' => $person->LastNames,
-            'Telefono' => $person->Phone,
-            'Usuario' => $user->name,
-            'Correo' => $user->email,
-            'Curses' => $dataT,
+            'titulo' => 'Cursos Asignados',
+            'cursos' => $dataT,
         ];
         $data = [
             'Email' => $user->email,
             'Phone' => $person->Phone,
+            'Name' => $person->Names,
+            'LastNames' => $person->LastNames,
+            'User' => $user->name,
+            
         ];
-        return view('/Teacher/Profile',compact('data','Titles'));
+        return view('/Teacher/Profile',compact('info','data','Titles'));
+    }
+    public function SaveviewProfile(Request $request)
+    {
+        $user = user::find($request->session()->get('User_id')); 
+        $person = Person::find($user->Person_id);
+        $data = $request->data[0];
+        $telefono = $data['Telefono'];
+        $correo = $data['Email'];
+        if($telefono == "" || $correo ==""){
+            return response()->json(["Error"=>"Los campos no pueden estar vacios"]);
+        }
+        $user->email = $correo;
+        $user->save();
+        $person->Phone = $telefono;
+        $person->save();
+        return response()->json(["Accion completada"]);
     }
     public function editProfile(Request $request){
 
