@@ -127,6 +127,12 @@ class MenuSeeder extends Seeder
             'menu_id' => '16'          
         ]);  
         DB::table('menus')->insert([ //18
+            'Name' => 'Ver listado de notas aprobadas',
+            'State' => '1',
+            'Url' => 'administration/workspace/attendant/notes',  
+            'menu_id' => '16'          
+        ]);  
+        DB::table('menus')->insert([ //19
             'Name' => 'Ver inscripciones',
             'State' => '1',
             'Url' => 'administration/workspace/inscriptions',  

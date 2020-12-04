@@ -92,79 +92,100 @@ class Student extends Controller
         $grade = Assign_student_grade::find($assign->id)->Grade();
         $courses = $grade->Courses();
         $data = [];
+        
         foreach ($courses as $course)
         {
             $activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
             foreach($activities as $activity)
             {
-                $testData = [];
+                
                 if(!in_array($activity->Name,$data))
                 {
                     array_push($data,$activity->Name);
-                    $act = [
-                        'activity' => $activity->Name,
-                        'no' => count($activity->Tests()),
-                        'test' => $activity->Tests(),
-                    ];
-                    if(!in_array($act,$titles))
-                    {
-                        array_push($titles,$act);
-                    }
-                }
-                foreach($activity->Tests() as $test)
-                {
-                    if(!in_array($test->Name,$testData))
-                    {
-                        array_push($testData,$test->Name);
-                    }
                 }
             }
         }
-        
-        foreach ($courses as $course)
-        {    
-            $notes =[];
-            foreach ($titles as $value)
+        $notesStuden =[];
+        foreach ($data as $period)
+        {
+            $testData = [];
+            foreach ($courses as $key=> $course)
+            {    
+               
+                        $asignactivity = Assign_activity::where(['Name'=>$period,'Course_id'=>$course->id])->first();
+                        $tests = test::where('Activity_id',$asignactivity->id)->get();
+                        if(count($tests)>0)
+                        {
+                            foreach ($tests as $test) 
+                            {
+                                if(!in_array($test->Title,$testData))
+                                { 
+                                    array_push($testData,$test->Title);
+                                }
+                            }
+                        }
+            }
+            if(count($testData)<=0)
             {
-                
-                if(count($value['test'])>0)
+                $testData = ["Sin examenes"];
+            }
+            $title=[
+                "Activity" => $period,
+                "No" => count($testData),
+                "Test"=>$testData 
+            ];
+            array_push($titles,$title);
+        }
+        foreach ($titles as $value) {
+            foreach ($value['Test'] as $test)
+            {
+                foreach ($courses as $key=> $course)
                 {
-                    
-                    foreach($value['test'] as $test)
+                    $notes =[]; 
+                    $id = $request->session()->get('User_id');
+                    $assign = Assign_student_grade::where('user_id',$id)->first();
+                    $asignactivity = Assign_activity::where(['Name'=>$value['Activity'],'Course_id'=>$course->id])->first();
+                    $testInfo = test::where(['Activity_id'=>$asignactivity->id,'Title'=> $test])->first();
+                    if($testInfo!=null)
                     {
-                        $id = $request->session()->get('User_id');
-                        $assign = Assign_student_grade::where('user_id',$id)->first();
-                        $note = Note::where(['Test_id'=>$test->id,'Course_id'=>$course->id,"Student_id"=>$assign->id,"State"=>"Approved"])->first();
-                        
+                        $note = Note::where(['Test_id'=>$testInfo->id,'Course_id'=>$course->id,"Student_id"=>$assign->id,"State"=>"Approved"])->first();
                         if($note!=null)
                         {
                             $n = [
                                 "Note"=>$note->Score,
-                                "Max"=>$test->Score,
-                                "Porcentage"=> ((100*intval($note->Score))/intval($test->Score)),
+                                "Max"=>$testInfo->Score,
+                                "Porcentage"=> ((100*intval($note->Score))/intval($testInfo->Score)),
                             ];
                             array_push($notes,$n);
                         }
                         else
                         {
-                            
                             array_push($notes,"No existe notas para este curso");
                         }
                     }
+                    else
+                    {
+                        array_push($notes,"N");
+                    }
+                    if(!isset($notesStuden[$key]))
+                    {
+                        $notesStuden[$key]=[];
+                    }
+                    array_push($notesStuden[$key],$notes);
                 }
-                else
-                {
-                    array_push($notes,"N");
-                }
-            }
+            }    
+        }
+
+        foreach ($courses as $key=> $course)
+        {  
             $model = [
                 "id" => $course->id,
                 "Course"=>$course->Name,
-                "Notes" =>$notes
+                "Notes" =>$notesStuden[$key]
             ];
             array_push($models,$model);
         }
-       
+
         return view('Student/score_list',compact('models','titles'));
     }
 
@@ -1003,6 +1024,7 @@ class Student extends Controller
         foreach ($courses as $course)
         {
             $activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
+
             foreach($activities as $activity)
             {  
                 $testData = [];

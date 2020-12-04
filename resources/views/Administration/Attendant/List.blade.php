@@ -20,7 +20,7 @@
                     <span class="card-icon">
                         <i class="flaticon2-favourite text-primary"></i>
                     </span>
-                    <h3 class="card-label">Listado Encargados de circulo</h3>
+                    <h3 class="card-label">Listado Encargados de circulo - @if($type=="Active") Activos @else Eliminados @endif</h3>
                 </div>
                 <div class="card-toolbar">
                     <!--begin::Dropdown-->
@@ -144,20 +144,29 @@
                                 orderable: false,
                                 render: function(data, type, full, meta) {
                                     return '\
+                                        @if($type=="Active")
                                         <div class="dropdown dropdown-inline">\
                                             <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">\
                                                 <i class="la la-cog"></i>\
                                             </a>\
                                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right" >\
                                                 <ul class="nav nav-hoverable flex-column" >\
-                                                    <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#CoursesModal'+full[0]+'"><i class="nav-icon la la-mail-reply-all"></i><span class="nav-text" style="padding-left:10px;"> Agregar cursos a el grado</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#CoursesModal'+full[0]+'"><i class="nav-icon la la-mail-reply-all"></i><span class="nav-text" style="padding-left:10px;"> Asignación de circulos de estudio</span></a></li>\
                                                 </ul>\
                                             </div>\
                                         </div>\
-                                        <a href="javascript:;" data-toggle="modal" data-target="#EditModal'+full[0]+'"  class="btn btn-sm btn-clean btn-icon" >\
+                                        <a href="/administration/workspace/attendant/edit/'+full[0]+'" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip"  title="Editar encargado de circulo" data-placement="top">\
                                             <i class="la la-edit"></i>\
                                         </a>\
-                                        ';
+                                        <a href="javascript:;" onclick="DeleteAttendant(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Eliminar encargado de circulo" data-placement="top">\
+                                        <i class="la la-trash"></i>\
+                                        </a>\
+                                        @else
+                                        <center><a href="javascript:;" onclick="ActiveAttendant(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Activar encargado de circulo" data-placement="top">\
+                                        <i class="la la-check-circle"></i>\
+                                        </a></center>\
+                                        @endif';
+                                        
                                 },
                             },
                            
@@ -190,85 +199,47 @@
             var $url_path = '{!! url('/') !!}';
             window.location.href = $url_path+"/administration/configurations/level/list/grades/level/"+lvl;
         }
-        function edit($id,$Name)
+       
+        function DeleteAttendant($id,$name)
         {
-            Swal.mixin({
-                input: 'text',
-                confirmButtonText: 'Siguiente  &rarr;',
-                showCancelButton: true,
-                progressSteps: ['1',]
-            }).queue([
-                
-                {
-                        title: 'Ingrese el nuevo nombre del grado:',
-                        text: 'Nombre anterior:' + $Name
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                  confirmButton: 'btn btn-success',
+                  cancelButton: 'btn btn-danger'
                 },
-                ]).then((result) => {
-                    if (result.value) {
-                      const answers = JSON.stringify(result.value)
-                      const swalWithBootstrapButtons = Swal.mixin({
-                        customClass: {
-                          confirmButton: 'btn btn-success',
-                          cancelButton: 'btn btn-danger'
-                        },
-                        buttonsStyling: false
-                      })
-                      swalWithBootstrapButtons.fire({
-                        title: '¿Está seguro de los datos?',
-                        text: "El nombre de la jornada: "+result.value[0],
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Si, modificar!',
-                        cancelButtonText: 'No, cancelar!',
-                        reverseButtons: true
-                      }).then((result2) => {
-                        if (result2.isConfirmed) {
-                            var Code = $id;
-                            var data = [{
-                                Code: Code,
-                                Name: result.value[0],
-                            }];
-                
-                            $.ajax({
-                                url:'/administration/configurations/period/update',
-                                type:'POST',
-                                data: {"_token":"{{ csrf_token() }}","data":data},
-                                dataType: "JSON",
-                                success: function(e){
-                                    swalWithBootstrapButtons.fire({
-                                        title: 'Modificado!',
-                                        text: 'Se ha modificado con exito!',
-                                        icon: 'success',
-                                        confirmButtonText: 'Aceptar',
-                                    }).then(function () {
-                                           
-                                          var $url_path = '{!! url('/') !!}';
-                                          window.location.href = $url_path+"/administration/configurations/level/list";
-                                        });
-                                },
-                                error: function(e){
-                                    swalWithBootstrapButtons.fire({
-                                        title: 'Cancelado!',
-                                        text:   e.responseJSON['error'],
-                                        icon: 'error',
-                                        confirmButtonText: 'Aceptar',
-                                    })
-                                   
-                                }
-                            });
-                        } else if (
-                          result.dismiss === Swal.DismissReason.cancel
-                        ) {
-                          swalWithBootstrapButtons.fire({
-                            title: 'Cancelado!',
-                            text:  'La jornada no ha sido modificada!',
-                            icon: 'error',
-                            confirmButtonText: 'Aceptar',
-                        })
-                        }
-                      })
-                    }
-                  })
+                buttonsStyling: false
+              })
+            swalWithBootstrapButtons.fire({
+                title: '¿Está seguro de eliminar el encargado de circulo?',
+                text: "El nombre del encargado : "+$name+".",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Si, ¡eliminar!',
+                cancelButtonText: 'No, ¡cancelar!',
+                reverseButtons: true
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    swalWithBootstrapButtons.fire({
+                        title: '¡Eliminado!',
+                        text: '¡Se ha eliminado con exito!',
+                        icon: 'success',
+                        confirmButtonText: 'Aceptar',
+                    }).then(function () {
+                          var $url_path = '{!! url('/') !!}';
+                          console.log("HOLA");
+                          window.location.href = $url_path+"/administration/workspace/attendant/change/"+$id+"/deleteattendant";
+                        });
+                } else if (
+                  result.dismiss === Swal.DismissReason.cancel
+                ) {
+                  swalWithBootstrapButtons.fire({
+                    title: 'Cancelado!',
+                    text:  'El encargado de circulo no ha sido eliminado!',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                })
+                }
+              })
         }
         function Addgrade($id)
         {
@@ -481,6 +452,55 @@ $('#CoursesModal{{$Model['Id']}}').on('shown.bs.modal', function () {
                 }
             });
          }
+         function ActiveAttendant($id,$name)
+        {
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                  confirmButton: 'btn btn-success',
+                  cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+              })
+            swalWithBootstrapButtons.fire({
+                title: '¿Está seguro de activar el encargado de circulo de estudio?',
+                text: "El nombre del encargado: "+$name,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Si, ¡activar!',
+                cancelButtonText: 'No, ¡cancelar!',
+                reverseButtons: true
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    var Code = $id;
+                    var data = [{
+                        Code: Code,
+                        Name: result.value[0],
+                    }];
+                    swalWithBootstrapButtons.fire({
+                        title: '¡Activada!',
+                        text: '¡Se ha activado con exito!',
+                        icon: 'success',
+                        confirmButtonText: 'Aceptar',
+                    }).then(function () {
+                           
+                          var $url_path = '{!! url('/') !!}';
+                          window.location.href = $url_path+"/administration/workspace/attendant/change/"+$id+"/active";
+                        });
+                } else if (
+                  result.dismiss === Swal.DismissReason.cancel
+                ) {
+                  swalWithBootstrapButtons.fire({
+                    title: '¡Cancelado!',
+                    text:  '¡El circulo de estudio no ha sido activado!',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                })
+                }
+              })
+        }
+         $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+          })
        </script>
         <!--end::Page Scripts-->
       

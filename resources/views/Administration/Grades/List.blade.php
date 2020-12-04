@@ -25,7 +25,7 @@
                     <span class="card-icon">
                         <i class="flaticon2-favourite text-primary"></i>
                     </span>
-                    <h3 class="card-label">Listado de grados y cursos del nivel {{$level}} del dia {{$period}}</h3>
+                    <h3 class="card-label">Listado de grados y cursos del nivel {{$level}} del dia {{$period}} </h3>
                 </div>
                 <div class="card-toolbar">
                     <!--begin::Dropdown-->

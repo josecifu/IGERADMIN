@@ -33,18 +33,18 @@
                             <tr>
                                 <th rowspan="1"></th>
                                 @foreach($titles as $t)
-                                    <th colspan="{{$t['no']}}"><center>{{$t['activity']}}</center></th>
+                                    <th colspan="{{$t['No']}}"><center>{{$t['Activity']}}</center></th>
                                 @endforeach
                             </tr>
                             <tr>
                                 <th><center>Cursos</center></th>
                                 @foreach($titles as $title)
-                                    @if($title['no']=='0')
+                                    @if($title['No']=='0')
                                     <th><center>No existen examenes asignados </center></th>
                                     @endif
-                                    @if($title['test'])
-                                        @foreach($title['test'] as $t)
-                                        <th><center>{{$t->Title}}</center></th>
+                                    @if($title['Test'])
+                                        @foreach($title['Test'] as $t)
+                                        <th><center>{{$t}}</center></th>
                                         @endforeach
                                     @endif
                                 @endforeach
@@ -55,21 +55,23 @@
                             <tr>
                                 <td>{{$model['Course']}}</td>
                                 @foreach($model['Notes'] as $score)
-                                    @if(isset($score['Note']))
-                                    <td>
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: {{$score['Porcentage']}}%" aria-valuenow="{{$score['Note']}}" aria-valuemin="0" aria-valuemax="{{$score['Max']}}">{{$score['Note']}} Pts</div>
-                                        </div>  
-                                    </td>
-                                    @elseif($score=='N')
+                                    @if($score[0]=='N')
                                     <td style="background-color: #E4E6EF"> </td>
+                                    @elseif(isset($score[0]['Porcentage']))
+                                    <td>
+                                        
+                                        <div class="progress" >
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: {{$score[0]['Porcentage']}}%" aria-valuenow="{{$score[0]['Note']}}" aria-valuemin="0" aria-valuemax="{{$score[0]['Max']}}">{{$score[0]['Note']}} Pts</div>
+                                        </div>  
+                                   
+                                    </td>
                                     @else
                                     <td>
-                                        <center><span class="label label-warning label-pill label-inline mr-2"> {{$score}}</span></center>
+                                        <center><span class="label label-warning label-pill label-inline mr-2"> {{$score[0]}}</span></center>
                                        
                                     </td>
                                     @endif
-                                </td>
+                                
                                 @endforeach
                             </tr>
                             @endforeach

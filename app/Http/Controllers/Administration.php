@@ -73,6 +73,23 @@ class Administration extends Controller
         ];
         return view('Administration.Dashboard.Home',compact('Logs'));
     }
+    public function AttendantEdit(Request $request,$id)
+    {
+        $buttons =[];
+        $button = [
+            "Name" => 'Listado de encargados de circulo',
+            "Link" => 'administration/workspace/attendant',
+            "Type" => "add"
+        ];
+        array_push($buttons,$button);
+        $ModelsP = Person::find($id);
+        $User = User::where('Person_id',$id)->first();
+        $ModelsU = [
+                'Usuario' => $User->name,
+                'Email' => $User->email,
+            ];
+        return view('Administration/Attendant/Edit',compact('ModelsP','ModelsU','buttons'));
+    }
     public function AttendantDeletes(Request $request)
     {
         $buttons =[];
@@ -91,33 +108,42 @@ class Administration extends Controller
         $ModelsData = rol::find(4);
         $Models =[];
         $Titles =['Id','Nombres','Teléfono','Correo electronico',"Usuario","Ultima Conexión",'Circulos encargados','Acciones'];
-        $usuario_rol = Assign_user_rol::where('Rol_id',4)->where('State','Delete')->get('user_id');
+        $usuario_rol = Assign_user_rol::where('Rol_id',4)->where('State','Active')->get('user_id');
         foreach ($usuario_rol as $v) {
+           
             $usuario = User::find($v->user_id);
-            $persona = Person::find($usuario->Person_id);
-            $periods = Assign_attendant_periods::where([['user_id',$v->user_id],['State','Active']])->get();
-            $dataT = [];
-            foreach ($periods as $value) {
-                $period = period::find($value->Period_id);
-                $dataC = [
-                    'Circulo' => $period->Name,
+            if($usuario->State=="Delete")
+            {
+                $persona = Person::find($usuario->Person_id);
+                $periods = Assign_attendant_periods::where([['user_id',$v->user_id],['State','Delete']])->get();
+                $dataT = [];
+                foreach ($periods as $value) {
+                    $period = period::find($value->Period_id);
+                    $dataC = [
+                        'Circulo' => $period->Name,
+                    ];
+                    array_push($dataT,$dataC);
+                }
+                $data = [
+                    'Id' => $persona->id,
+                    'Name' => $persona->Names,
+                    'LastName' => $persona->LastNames,
+                    'Phone' => $persona->Phone,
+                    'User' => $usuario->name,
+                    'Email' => $usuario->email,
+                    'Conection' => "$usuario->email",
+                    'Attendant' => $dataT,
                 ];
-                array_push($dataT,$dataC);
+                array_push($Models,$data);
+                
             }
-            $data = [
-                'Id' => $persona->id,
-                'Name' => $persona->Names,
-                'LastName' => $persona->LastNames,
-                'Phone' => $persona->Phone,
-                'Use' => $usuario->name,
-                'Email' => $usuario->email,
-                'Conection' => "$usuario->email",
-                'Attendant' => $dataT,
-            ];
-            array_push($Models,$data);
-            
         }
-        return view('Administration.Attendant.List',compact('buttons','Titles','Models'));
+        $type="Deletes";
+        return view('Administration.Attendant.List',compact('buttons','Titles','Models','type'));
+    }
+    public function AttendantNotes()
+    {
+        dd("HOLA");
     }
     public function AttendantList(Request $request)
     {
@@ -140,30 +166,34 @@ class Administration extends Controller
         $usuario_rol = Assign_user_rol::where('Rol_id',4)->where('State','Active')->get('user_id');
         foreach ($usuario_rol as $v) {
             $usuario = User::find($v->user_id);
-            $persona = Person::find($usuario->Person_id);
-            $periods = Assign_attendant_periods::where([['user_id',$v->user_id],['State','Active']])->get();
-            $dataT = [];
-            foreach ($periods as $value) {
-                $period = period::find($value->Period_id);
-                $dataC = [
-                    'Circulo' => $period->Name,
+            if($usuario->State=="Active")
+            {
+                $persona = Person::find($usuario->Person_id);
+                $periods = Assign_attendant_periods::where([['user_id',$v->user_id],['State','Active']])->get();
+                $dataT = [];
+                foreach ($periods as $value) {
+                    $period = period::find($value->Period_id);
+                    $dataC = [
+                        'Circulo' => $period->Name,
+                    ];
+                    array_push($dataT,$dataC);
+                }
+                $data = [
+                    'Id' => $persona->id,
+                    'Name' => $persona->Names,
+                    'LastName' => $persona->LastNames,
+                    'Phone' => $persona->Phone,
+                    'User' => $usuario->name,
+                    'Email' => $usuario->email,
+                    'Conection' => "$usuario->email",
+                    'Attendant' => $dataT,
                 ];
-                array_push($dataT,$dataC);
+                array_push($Models,$data);
+                
             }
-            $data = [
-                'Id' => $persona->id,
-                'Name' => $persona->Names,
-                'LastName' => $persona->LastNames,
-                'Phone' => $persona->Phone,
-                'User' => $usuario->name,
-                'Email' => $usuario->email,
-                'Conection' => "$usuario->email",
-                'Attendant' => $dataT,
-            ];
-            array_push($Models,$data);
-            
         }
-        return view('Administration.Attendant.List',compact('buttons','Titles','Models'));
+            $type="Active";
+        return view('Administration.Attendant.List',compact('buttons','Titles','Models','type'));
     }
     public function AttendantCreate(Request $request)
     {
@@ -179,6 +209,41 @@ class Administration extends Controller
     public function test($test)
     {
         return view('Administration.Tests.'.$test);
+    }
+    public function AttendantChange(Request $request,$id,$type)
+    {
+        if($type=="deleteattendant")
+        {
+            $attendant = person::find($id)->User();
+            $attendant->State= "Delete";
+            $attendant->save();
+            $assigns = Assign_attendant_periods::where(['user_id'=>$attendant->id,'State'=>'Active'])->get();
+            foreach ($assigns as $value) {
+                $value->State= "Delete";
+                $value->save();
+            }
+            return redirect()->route('AttendantList');
+        }
+        if($type=="active")
+        {
+            $attendant = person::find($id)->User();
+            $attendant->State= "Active";
+            $attendant->save();
+            $assigns = Assign_attendant_periods::where(['user_id'=>$attendant->id,'State'=>'Delete'])->get();
+            foreach ($assigns as $value) {
+                $check = Assign_attendant_periods::where(['Period_id'=>$value->Period_id,'State'=>'Active'])->first();
+                if($check==null)
+                {
+                    $value->State= "Active";
+                    $value->save();
+                }
+                else
+                {
+                    $value->delete();
+                }
+            }
+        }
+        return redirect()->route('AttendantDeletes');
     }
     Public function AttendantSave(Request $request)
     {
@@ -244,7 +309,7 @@ class Administration extends Controller
                 $log->Type = "Assign";
                 $log->save();
                 for ($i=0; $i < count($Periods) ; $i++) {
-                    $verificar = Assign_attendant_periods::where([['Course_id',$Periods[$i]],['State','Active']])->first();
+                    $verificar = Assign_attendant_periods::where([['Period_id',$Periods[$i]],['State','Active']])->first();
                     if (!isset($verificar)) {
                         $user_Attendant = new Assign_attendant_periods;
                         $period = course::find($Periods[$i]);
@@ -255,10 +320,10 @@ class Administration extends Controller
                         $user_Attendant->save();
                         #logs registro de asignación
                         $log = new logs;
-                        $log->Table = "Voluntario";
+                        $log->Table = "Attendant";
                         $log->User_ID = $id->name;
                         $log->Description = "Se asigno el usuario: ".$user->name.
-                        " al curso de ".$curso->Name." del grado de ".$grado;
+                        " al circulo de estudio  ".$Periods[$i];
                         $log->Type = "Assign";
                         $log->save();
                     }
