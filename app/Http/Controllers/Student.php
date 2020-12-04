@@ -185,10 +185,6 @@ class Student extends Controller
             ];
             array_push($models,$model);
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> 984676b550f695a066f53c30f08ac315502dcd7f
         return view('Student/score_list',compact('models','titles'));
     }
 
