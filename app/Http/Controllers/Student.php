@@ -275,7 +275,7 @@ class Student extends Controller
         return view('Student/test_list',compact('models'));
     }
 
-    public function save_answer(Request $request)
+    public function save_answer(Request $request)                   //una vez contestado que ya no aparezca
     {
         $id = $request->session()->get('User_id');
         try
@@ -301,8 +301,6 @@ class Student extends Controller
                 $reply->State = "Complete";
                 $reply->save();
                 $test = $question->Test();
-                $data = array('State' => 'Complete');
-                Test::where('id',$test->id)->update($data);
             }
             $note = new Note;
             $note->Student_id = $asign->id;
@@ -330,11 +328,11 @@ class Student extends Controller
         { 
             if($course->Tests())
             {
-                foreach($course->Tests()->where('State','Approved') as $test)
+                foreach($course->Tests()->where('State','Qualified') as $test)
                 {
                     $notes = Note::where('Test_id',$test->id)->get('Score');
-                    foreach ($notes as $note)
-                    {                       
+                    foreach ($notes->where('State','Approved') as $note)
+                    {
                         $query =[
                             'id' => $test->id,
                             'course' => $course->Name,
@@ -343,8 +341,8 @@ class Student extends Controller
                             'score' => $test->Score,
                             'activity' => $test->Activity()->Name,
                             'teacher' => $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames,
-                            'final' => $note->Score,
-                            'percentage' => (100/($test->Score))*($note->Score)
+                            'final' => $note->Score ?? 'sin calificar',
+                            'percentage' => (100/($test->Score))*($note->Score) ?? '0'
                         ];
                         array_push($models,$query);
                     }
@@ -842,7 +840,7 @@ class Student extends Controller
             $tests = [];
             foreach($activities as $activity)
             {
-                foreach($activity->Tests() as $test)
+                foreach($activity->Tests()->whereIn('State',['Qualified','Fisico']) as $test)
                 {
                     $values =[
                         'Id' => $test->id,
