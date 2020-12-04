@@ -845,8 +845,9 @@ class Student extends Controller
                 foreach($activity->Tests() as $test)
                 {
                     $values =[
-                        "Id" => $test->id,
-                        "NoQuestions" => $test->NoQuestions(),
+                        'Id' => $test->id,
+                        'state' => $test->State,
+                        'NoQuestions' => $test->NoQuestions(),
                     ];
                     array_push($tests,$values);
                 }
