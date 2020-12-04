@@ -97,9 +97,6 @@ class Student extends Controller
             $activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
             foreach($activities as $activity)
             {
-
-
-
                 $testData = [];
                 if(!in_array($activity->Name,$data))
                 {
@@ -134,7 +131,7 @@ class Student extends Controller
                     {
                         $id = $request->session()->get('User_id');
                         $assign = Assign_student_grade::where('user_id',$id)->first();
-                        $note = Note::where(['Test_id'=>$test->id,'Course_id'=>$course->id,"Student_id"=>$assign->id,"State"=>"Approved"])->first();
+                        $note = Note::where(['Test_id'=>$test->id,'Course_id'=>$course->id,"Student_id"=>$assign->id,"State"=>"Approved"])->first();       
                         if($note!=null)
                         {
                             $n = [
@@ -145,7 +142,7 @@ class Student extends Controller
                             array_push($notes,$n);
                         }
                         else
-                        {   
+                        {
                             array_push($notes,"No existe notas para este curso");
                         }
                     }
@@ -825,7 +822,7 @@ class Student extends Controller
         return redirect()->route('ListEliminatedStudents');
     }
 
-    public function test_list($id)                                              //mostrar examenes fisicos y virtuales
+    public function test_list($id)                                              //obtener nota del parcial
     {
         $titles = [];
         $models = [];
@@ -848,9 +845,8 @@ class Student extends Controller
                 foreach($activity->Tests() as $test)
                 {
                     $values =[
-                        'Id' => $test->id,
-                        'state' => $test->State,
-                        'NoQuestions' => $test->NoQuestions(),
+                        "Id" => $test->id,
+                        "NoQuestions" => $test->NoQuestions(),
                     ];
                     array_push($tests,$values);
                 }
@@ -860,7 +856,7 @@ class Student extends Controller
                 'assign' => $student->Asssign_Grade()->id,
                 'name' => $student->person()->Names,
                 'lastname' => $student->person()->LastNames,
-                'note' => 'Sin nota',
+                'note' => 'sin nota',
                 'tests' => $tests
             ];
             array_push($models,$query);
@@ -1031,12 +1027,12 @@ class Student extends Controller
             foreach ($titles as $value)
             {
                 if(count($value['test'])>0)
-                {   
+                {
                     foreach($value['test'] as $test)
                     {
                         $id = $request->session()->get('User_id');
                         $assign = Assign_student_grade::where('user_id',$id)->first();
-                        $note = Note::where(['Test_id'=>$test->id,'Course_id'=>$course->id,"Student_id"=>$assign->id,"State"=>"Approved"])->first();
+                        $note = Note::where(['Test_id'=>$test->id,'Course_id'=>$course->id,"Student_id"=>$assign->id,"State"=>"Approved"])->first();       
                         if($note!=null)
                         {
                             $n = [
@@ -1047,7 +1043,7 @@ class Student extends Controller
                             array_push($notes,$n);
                         }
                         else
-                        {   
+                        {
                             array_push($notes,"No existe notas para este curso");
                         }
                     }
