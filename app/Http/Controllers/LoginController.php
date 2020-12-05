@@ -57,6 +57,10 @@ class LoginController extends Controller
         }
         return view('Login/Restore',compact('userid'));
     }   
+    public function PassReset(Request $request, $userid)
+    {
+    return view('Login/Restore',compact('userid'));
+    }
     public function ChangePassword(Request $request)
     {
         try {
@@ -78,6 +82,10 @@ class LoginController extends Controller
             $user->setSession($rols->toArray());
             $rol =$rols->toArray();
             $rol=$rol[0]['Name'];
+            if($user->PasswordRestore="Change")
+            {
+                return redirect('password/change/user');
+            }
             if($rol=="Estudiante")
             {
                 return redirect('student/home/dashboard');

@@ -628,7 +628,13 @@
 				{			
 					$('#Title1').text("Visualización de notas aprobadas y reprobadas");
 					$('#Title2').html("Visualice el listado de notas y examenes por curso, grados, nivel y circulo de estudio seleccionado");
-					url = '{{route('LoadPeriodsAttendant')}}';
+				
+				}
+				else if(pos==7)
+				{			
+					$('#Title1').text("Visualización de notas aprobadas y reprobadas");
+					$('#Title2').html("Visualice el listado de notas y examenes por curso, grados, nivel y circulo de estudio encargado");
+					
 				}
 				$.ajax ({
 					url: url,
@@ -749,7 +755,7 @@
 				});
 			}
 			$('#gradeselect1').on('change', function() {
-				if(posGrade==3 || posGrade==4 || posGrade==5 ) {
+				if(posGrade==3 || posGrade==4 || posGrade==5 || posGrade==6 ) {
 					$('#SelectCourse').css("visibility", "visible");
 					ListCourse($('#gradeselect1').val());
 				}

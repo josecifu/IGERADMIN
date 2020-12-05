@@ -497,6 +497,7 @@ var KTWizard1 = function () {
 						swal.fire({ title: "Accion completada", 
 						text: "El encargado de circulo a sido registrado con éxito!", 
 						type: "success"
+						confirmButtonText: 'Aceptar',
                         }).then(function () {
                           var $url_path = '{!! url('/') !!}';
                           window.location.href = $url_path+"/administration/workspace/attendant/list";

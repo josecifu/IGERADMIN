@@ -414,7 +414,15 @@ class Administration extends Controller
         return response()->json(["Accion completada"]);
     }
     
-    
+    public function AttendantSavePeriods(Request $request)
+    {
+        dd($request);
+        $logs = new Log;
+        $logs->Table = "Attendant";
+        $logs->User_Id = $request->session()->get('User_Id');
+        $logs->Description = "Se modifico la asignacion de cursos, se agrego el curso no.".$rols->id." con nombre ".$rols->Name;
+        $logs->save();
+    }
 
     public function Create_permission()
     {
@@ -450,6 +458,7 @@ class Administration extends Controller
             "Levels" => $Models,
             ]);
     }
+    
     public function LoadPeriodsAttendant()
     {
         $PeriodsData = period::where('State','Active')->get();
