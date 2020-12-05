@@ -129,6 +129,7 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([ //18
             'Name' => 'Ver listado de notas aprobadas',
             'State' => '1',
+            'Type' => '4',
             'Url' => 'ListGrade(6)',  
             'menu_id' => '16'          
         ]);  
