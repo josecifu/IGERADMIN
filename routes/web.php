@@ -18,6 +18,7 @@ Route::get('/login', $route.'\LoginController@index')->name('login');
 #Restore
 Route::post('/restore/username', $route.'\LoginController@restore')->name('restorepassword');
 Route::get('/restore/password/{model}', $route.'\LoginController@restorepass')->name('restorepass');
+Route::get('/password/change/user', $route.'\LoginController@ChangePassword')->name('ChangePassword');
 Route::post('/password/change', $route.'\LoginController@ChangePassword')->name('ChangePassword');
 #Dashboard
 Route::redirect('/', '/administration/home/dashboard');
@@ -153,6 +154,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 			Route::get('/edit/{model}', $route.'\Administration@AttendantEdit')->name('AttendantEdit');
 			Route::get('/change/{model}/{type}', $route.'\Administration@AttendantChange')->name('AttendantChange');
 			Route::get('/load/periods', $route.'\Administration@LoadPeriodsAttendant')->name('LoadPeriodsAttendant');
+			Route::post('/workspace/attendant/save/assign/periods', $route.'\Administration@AttendantSavePeriods')->name('AttendantSavePeriods');
 		});
 	});
 	//Configuraciones
