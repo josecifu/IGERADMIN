@@ -1,13 +1,13 @@
 @extends('Administration.Base/Base')
 {{-- Page title --}}
     @section('title')
-    Voluntario
+    Encargado de circulo
     @stop
     @section('breadcrumb1')
-    Registro
+    Administración
     @stop
     @section('breadcrumb2')
-    Ingreso de datos
+    Creacion de encargado
     @stop
     {{-- Page content --}}
 	@section('content')
@@ -17,7 +17,7 @@
 				<div class="content flex-column-fluid" id="kt_content">
 						<div class="card-header">
 							<div class="card-toolbar">
-								<a href="{{url('administration/teacher/list')}}" class="btn btn-danger font-weight-bolder mr-2">
+								<a href="{{url('administration/workspace/attendant/list')}}" class="btn btn-danger font-weight-bolder mr-2">
 								<i class="ki ki-long-arrow-back icon-sm"></i>Cancelar</a>
 							</div>
 						</div>
@@ -534,27 +534,7 @@ var KTWizard1 = function () {
 					cursosduallist.redraw();
 				}
 			});
-			$.ajax ({
-				url: '{{route('LoadCoursesTeacher')}}',
-				type: 'POST',
-				data: {
-					"_token": "{{ csrf_token() }}",
-					"GradeId"      : Grade,
-				},
-				success: (e) => {
-					var options = [];
-					$.each(e['Courses'], function(fetch, data){
-						options.push({
-							text: data.Name + " - "+ data.Grade,
-							value: data.Id
-						});
-					});
-					cursosduallist.available = [];
-					cursosduallist._splitOptions(options);
-					cursosduallist.redraw();
-					
-				}
-			});
+			
 		}
 	
 		'use strict';
