@@ -380,7 +380,7 @@ class Teacher extends Controller
     public function changePassword($id)
     {
         $user = User::where('Person_id',$id)->first();
-        $user->State = "ChangePassword";
+        $user->PasswordRestore = "Change";
         $user->Save();
         Session::put([
             'message' => "Cambio de contraseña habilitado",
@@ -550,7 +550,7 @@ class Teacher extends Controller
                                         array_push($notas,$n);
                                     }
                                     else{
-                                        $n=["Student_id" => $assign->id,"Test_id"=>$v->id];
+                                        $n=["Student_id" => $assign->id,"Test_id"=>$v->id, "Curso_id"=>$id];
                                         array_push($notas,$n);
                                     }
                                 }
@@ -664,7 +664,7 @@ class Teacher extends Controller
             return view('Administration/Teachers/QuestionTest',compact('test','questions','curso'));
         }
     }
-    public function QualifyTest($id,$idtest)
+    public function QualifyTest($id,$idtest,$course)
     {
         $test = test::find($idtest);
         $note = Note::where([['Student_id',$id],['Test_id',$idtest]])->first();
@@ -688,7 +688,7 @@ class Teacher extends Controller
             ];
             array_push($Models,$data);
         }
-        return view('Teacher/QualifyTestStudent',compact('test','Models','nota'));
+        return view('Teacher/QualifyTestStudent',compact('test','Models','nota','course'));
     }
     public function SaveQualifyTest(Request $request)
     {
@@ -736,7 +736,7 @@ class Teacher extends Controller
             $n->save();
         }
         Session::put([
-            'message' => "Notas de '.$curso->Name.' enviadas al circulo de estudio",
+            'message' => "Notas de: $curso->Name enviadas al circulo de estudio",
              ]);
         return redirect('/teacher/score/list/'.$id);
     }

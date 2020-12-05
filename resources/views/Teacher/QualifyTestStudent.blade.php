@@ -185,7 +185,7 @@
                             type: "success"
                             }).then(function () {
                             var $url_path = '{!! url('/') !!}';
-                                window.location.href = $url_path+"/teacher/home/dashboard";
+                                window.location.href = $url_path+"/teacher/test/score/"+{{$course}};    
                             });
                         }
                         

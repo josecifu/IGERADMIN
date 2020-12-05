@@ -137,7 +137,7 @@
                                                             @else
                                                             <td>
                                                                 <center>
-                                                                    <a href="{{url('/teacher/view/qualify/test/'.$nota['Student_id'].'/'.$nota['Test_id'])}}" class="btn btn-outline-info btn-sm mr-3">
+                                                                    <a href="{{url('/teacher/view/qualify/test/'.$nota['Student_id'].'/'.$nota['Test_id'].'/'.$nota['Curso_id'])}}" class="btn btn-outline-info btn-sm mr-3">
                                                                         <i class="flaticon-list-3"></i>Calificar examen </a>
                                                                 </center></td>
                                                             @endif
