@@ -11,37 +11,30 @@
     @stop
     {{-- Page content --}}
     @section('content')
-        <div class="row">
-          <div class="container">
-            <h2>Estadisticas del voluntario: </h2>
-          </div>
-        
-        </div>
-            <div class="row">
-              <div class="col-lg-6">
-                <!--begin::Card-->
-                <div class="card card-custom gutter-b">
-                  <div class="card-header">
-                    <div class="card-title">
-                      <h3 class="card-label">Actividades Creadas por mes</h3>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <!--begin::Chart-->
-                    <div id="chart_3"></div>
-                    <!--end::Chart-->
-                  </div>
-                </div>
-                <!--end::Card-->
-              </div>
-            </div>
-        <div class="row">
-            <div class="col-lg-6">
-                <!--begin::Card-->
-                <div class="card card-custom gutter-b">
+    <div class="content flex-column-fluid" id="kt_content">
+    <div class="row">
+									<div class="col-lg-6">
+										<!--begin::Card-->
+										<div class="card card-custom gutter-b">
+											<div class="card-header">
+												<div class="card-title">
+													<h3 class="card-label">Actividad de voluntarios</h3>
+												</div>
+											</div>
+											<div class="card-body">
+												<!--begin::Chart-->
+												<div id="chart_3"></div>
+												<!--end::Chart-->
+											</div>
+										</div>
+										<!--end::Card-->
+									</div>
+									<div class="col-lg-6">
+										<!--begin::Card-->
+                    <div class="card card-custom gutter-b">
                     <div class="card-header">
                         <div class="card-title">
-                            <h3 class="card-label">Pie Chart</h3>
+                            <h3 class="card-label">Voluntarios por circulo de estudio</h3>
                         </div>
                     </div>
                     <div class="card-body">
@@ -51,34 +44,12 @@
                     </div>
                 </div>
                 <!--end::Card-->
-            </div>
-        </div>
+									</div>
+								</div>
+    </div>
+       
         
 	@stop
-	@section('scripts')
-    <script type="text/javascript">
-    var options = {
-          series: [44, 55, 13, 43, 22],
-          chart: {
-          width: 380,
-          type: 'pie',
-        },
-        labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
-        responsive: [{
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200
-            },
-            legend: {
-              position: 'bottom'
-            }
-          }
-        }]
-        };
-
-        var chart = new ApexCharts(document.querySelector("#chart_12"), options);
-        chart.render();
-    </script>
-      
+  @section('scripts')
+    <script src="{{ asset ('assets/js/pages/features/charts/apexcharts.js')}}"></script>
 	@stop

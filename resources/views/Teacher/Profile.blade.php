@@ -148,12 +148,12 @@
                                         <!--begin::Header-->
                                         <div class="card-header py-3">
                                             <div class="card-title align-items-start flex-column">
-                                                <h3 class="card-label font-weight-bolder text-dark">Personal Information</h3>
-                                                <span class="text-muted font-weight-bold font-size-sm mt-1">Update your personal informaiton</span>
+                                                <h3 class="card-label font-weight-bolder text-dark">Información Personal</h3>
+                                                <span class="text-muted font-weight-bold font-size-sm mt-1">Actualice su información personal</span>
                                             </div>
                                             <div class="card-toolbar">
-                                                <button onclick="crearDatos();" class="btn btn-success mr-2">Save Changes</button>
-                                                <button type="reset" class="btn btn-secondary">Cancel</button>
+                                                <button onclick="crearDatos();" class="btn btn-success mr-2">Guardar Cambios</button>
+                                                <button type="reset" class="btn btn-secondary">Cancelar</button>
                                             </div>
                                         </div>
                                         <!--end::Header-->
