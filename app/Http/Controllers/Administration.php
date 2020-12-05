@@ -115,7 +115,7 @@ class Administration extends Controller
         }
         $Timeline = [];
         $logs = logs::where('Table','Encargado de circulo')->get();
-        dd($logs);
+        
         foreach ($logs as $value) {
             setlocale(LC_TIME, "spanish");
             $newDate = date("d-m-Y", strtotime($value->created_at));	
@@ -125,14 +125,14 @@ class Administration extends Controller
                 "Description"=>$value->Description,
                 
             ];
-            array_push($Month,$M);
+            array_push($Timeline,$M);
         }
         $Logs =[
             "Month" =>$Month,
             "Week" =>[],
             "Days" =>[],
             "Test" => $Tests,
-            "Timeline"=>[],
+            "Timeline"=>$Timeline,
         ];
 
         return view('Administration.Dashboard.Home',compact('Logs'));

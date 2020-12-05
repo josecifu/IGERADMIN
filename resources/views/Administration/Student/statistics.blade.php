@@ -89,7 +89,7 @@
                                 <!--begin::Body-->
                                 <div class="card-body">
                                     <!--begin::Chart-->
-                                    <div id="kt_charts_widget_1_chart" class="d-flex justify-content-center">
+                                    <div id="kt_charts_widget_1_chart1" class="d-flex justify-content-center">
                                     </div>
                                     <!--end::Chart-->
                                 </div>
@@ -150,13 +150,31 @@
 	@stop
     @section('scripts')
         <script type="text/javascript">
-            var options = {
+           
+
+             // Charts widgets
+    var _initChartsWidget1 = function () {
+        var element = document.getElementById("kt_charts_widget_1_chart1");
+
+        if (!element) {
+            return;
+        }
+
+        var options = {
                 series: [{
                     name: 'Femenino',
-                    data: [50, 50, 50, 50, 50, 50]
+                    data: [
+                        @foreach($countsfemale as $famale)
+                        {{$famale}},
+                        @endforeach
+                        ]
                 }, {
                     name: 'Masculino',
-                    data: [50, 50, 50, 50, 50, 50]
+                    data: [
+                        @foreach($countsmale as $male)
+                        {{$male}},
+                        @endforeach
+                    ]
                 }],
                 chart: {
                     type: 'bar',
@@ -209,7 +227,7 @@
                     }
                 },
                 fill: {
-                    opacity: 0
+                    opacity: 1
                 },
                 states: {
                     normal: {
@@ -239,11 +257,11 @@
                     },
                     y: {
                         formatter: function (val) {
-                            return "$" + val + " thousands"
+                            return "" + val + " Alumnos"
                         }
                     }
                 },
-                colors: [KTApp.getSettings()['colors']['theme']['base']['success'], KTApp.getSettings()['colors']['gray']['gray-300']],
+                colors: [KTApp.getSettings()['colors']['theme']['base']['info'], KTApp.getSettings()['colors']['theme']['base']['warning']],
                 grid: {
                     borderColor: KTApp.getSettings()['colors']['gray']['gray-200'],
                     strokeDashArray: 4,
@@ -254,7 +272,12 @@
                     }
                 }
             };
-            var chart = new ApexCharts(document.querySelector("#kt_charts_widget_1_chart"), options);
-            chart.render();
+
+        var chart = new ApexCharts(element, options);
+        chart.render();
+    }
+    jQuery(document).ready(function () {
+        _initChartsWidget1();
+    });
         </script>
     @stop
