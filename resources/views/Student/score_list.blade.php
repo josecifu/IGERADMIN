@@ -37,14 +37,20 @@
                                 @endforeach
                             </tr>
                             <tr>
-                                <th><center>Cursos</center></th>
+                                <th>
+                                    <center>Cursos</center>
+                                </th>
                                 @foreach($titles as $title)
                                     @if($title['No']=='0')
-                                    <th><center>No existen examenes asignados </center></th>
+                                    <th>
+                                        <center>No existen examenes asignados</center>
+                                    </th>
                                     @endif
                                     @if($title['Test'])
                                         @foreach($title['Test'] as $t)
-                                        <th><center>{{$t}}</center></th>
+                                        <th>
+                                            <center>{{$t}}</center>
+                                        </th>
                                         @endforeach
                                     @endif
                                 @endforeach
@@ -59,19 +65,17 @@
                                     <td style="background-color: #E4E6EF"> </td>
                                     @elseif(isset($score[0]['Porcentage']))
                                     <td>
-                                        
-                                        <div class="progress" >
+                                        <div class="progress">
                                             <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: {{$score[0]['Porcentage']}}%" aria-valuenow="{{$score[0]['Note']}}" aria-valuemin="0" aria-valuemax="{{$score[0]['Max']}}">{{$score[0]['Note']}} Pts</div>
-                                        </div>  
-                                   
+                                        </div>
                                     </td>
                                     @else
                                     <td>
-                                        <center><span class="label label-warning label-pill label-inline mr-2"> {{$score[0]}}</span></center>
-                                       
+                                        <center>
+                                            <span class="label label-warning label-pill label-inline mr-2">{{$score[0]}}</span>
+                                        </center>
                                     </td>
                                     @endif
-                                
                                 @endforeach
                             </tr>
                             @endforeach
