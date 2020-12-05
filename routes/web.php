@@ -135,7 +135,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::post('/update/activity', $route.'\Teacher@updateActivity')->name('updateActivity');
 		Route::get('/delete/activity/{curso}/{model}', $route.'\Teacher@deleteActivity')->name('deleteActivity');
 		Route::get('/detail/activity/{curso}/{model}', $route.'\Teacher@DetailActivity')->name('DetailActivity');
-		Route::get('/change/pass/{model}', $route.'\Teacher@changePassword')->name('ChangePasswordTeacher');
+		Route::post('/change/pass/{model}', $route.'\Teacher@changePassword')->name('ChangePasswordTeacher');
 	});
 	Route::group([ 'prefix' => 'workspace'], function(){
 		$route = "App\Http\Controllers";

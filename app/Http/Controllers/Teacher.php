@@ -152,7 +152,44 @@ class Teacher extends Controller
                 }
             }
         }
-        return view('Teacher/Home',compact('Titles','Models','DataTeacher','TestData'));
+        $tests=[];    
+        $course = Asign_teacher_course::where('user_id',$data->id)->get();
+        if(!$course->isEmpty()){
+            foreach ($course as $value) {
+                $actividades = Assign_activity::where([['Course_id',$value->Course_id],['State','Active']])->first();
+                $mcourse = Course::find($value->Course_id);
+                if (isset($actividades)) {
+                    $examenes = test::where([['Activity_id',$actividades->id],['State','Active']])->get();
+                    foreach ($examenes as $value) {
+                        $fechafinal = explode(" ", $value->EndDate);
+                        $horafinal = $fechafinal[1].' '.$fechafinal[2];
+                        $horaactual = date("g").':'.date("i").' '.date("A");
+                        $actual = new DateTime();
+                        if(date($fechafinal[0]) > $actual->format('m/d/Y')){
+                            $data=[
+                                "id" => $value->id,
+                                "examen" => $value->Title,
+                                "Curso" => $mcourse->Name ." - ". $mcourse->Grade()->GradeName()." - ".$mcourse->Grade()->Period()->Name,
+                                "FI" => $value->StartDate,
+                                "FF" => $value->EndDate,
+                            ];
+                            array_push($tests,$data);
+                        }
+                        else if (date($fechafinal[0]) == $actual->format('m/d/Y') && $horafinal > $horaactual) {
+                            $data=[
+                                "id" => $value->id,
+                                "examen" => $value->Title,
+                                "Curso" => $mcourse->Name ." - ". $mcourse->Grade()->GradeName()." - ".$mcourse->Grade()->Period()->Name,
+                                "FI" => $value->StartDate,
+                                "FF" => $value->EndDate,
+                            ];
+                            array_push($tests,$data);
+                        }
+                    }
+                }
+            }
+        }
+        return view('Teacher/Home',compact('Titles','Models','DataTeacher','TestData','tests'));
     }
     public function list() //Visualizcion tabla Voluntarios con usuario
     {
@@ -377,15 +414,17 @@ class Teacher extends Controller
         Assign_user_rol::where('user_id',$r->id)->update($dataU);
         return redirect()->route('ListTeacher');
     }
-    public function changePassword($id)
+    public function changePassword(Request $request, $id)
     {
+        $data = $request->data[0];
+        if($data['Contraseña'] == null){
+            return response()->json(["id"=>"La contraseña no puede estar vacia"]);
+        }
         $user = User::where('Person_id',$id)->first();
         $user->PasswordRestore = "Change";
+        $user->password = bcrypt($data['Contraseña']);
         $user->Save();
-        Session::put([
-            'message' => "Cambio de contraseña habilitado",
-             ]);
-        return redirect()->route('ListTeacher');
+        return response()->json(["Accion completada"]);
     }
 
     public function score(Request $request, $id)      //VISUALIZACIÓN DE NOTAS DE LAS UNIDADES
@@ -1050,15 +1089,26 @@ class Teacher extends Controller
     }
     public function ViewTestsGeplande($id)
     {
-        $Titles = ['id','Examen','Fecha y hora de Inicio','Fecha y hora de Final','Acciones'];
+        $Titles = ['id','Examen','Fecha y hora de Inicio','Fecha y hora de Final'];
         $Models=[];        
         $actividades = Assign_activity::where([['Course_id',$id],['State','Active']])->first();
         if (isset($actividades)) {
             $examenes = test::where([['Activity_id',$actividades->id],['State','Active']])->get();
             foreach ($examenes as $value) {
-                $fechainicio = explode(" ", $value->StartDate);
-                $actual = new DateTime(null, new DateTimeZone('America/Guatemala'));
-                if(date($fechainicio[0]) >= $actual->format('m/d/Y')){
+                $fechafinal = explode(" ", $value->EndDate);
+                $horafinal = $fechafinal[1].' '.$fechafinal[2];
+                $horaactual = date("g").':'.date("i").' '.date("A");
+                $actual = new DateTime();
+                if(date($fechafinal[0]) > $actual->format('m/d/Y')){
+                    $data=[
+                        "id" => $value->id,
+                        "examen" => $value->Title,
+                        "FI" => $value->StartDate,
+                        "FF" => $value->EndDate,
+                    ];
+                    array_push($Models,$data);
+                }
+                else if (date($fechafinal[0]) == $actual->format('m/d/Y') && $horafinal > $horaactual) {
                     $data=[
                         "id" => $value->id,
                         "examen" => $value->Title,
