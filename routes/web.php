@@ -18,7 +18,7 @@ Route::get('/login', $route.'\LoginController@index')->name('login');
 #Restore
 Route::post('/restore/username', $route.'\LoginController@restore')->name('restorepassword');
 Route::get('/restore/password/{model}', $route.'\LoginController@restorepass')->name('restorepass');
-Route::get('/password/change/user', $route.'\LoginController@ChangePassword')->name('ChangePassword');
+Route::get('/password/change/user', $route.'\LoginController@PassReset')->name('PassReset');
 Route::post('/password/change', $route.'\LoginController@ChangePassword')->name('ChangePassword');
 #Dashboard
 Route::redirect('/', '/administration/home/dashboard');
