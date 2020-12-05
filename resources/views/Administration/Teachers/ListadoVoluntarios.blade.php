@@ -167,7 +167,7 @@
                                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
                                                 <ul class="nav nav-hoverable flex-column">\
                                                     <li class="nav-item"><a class="nav-link" href="/administration/teacher/edit/'+full[0]+'"><i class="nav-icon la la-edit"></i><span class="nav-text">Editar</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="/administration/teacher/change/pass/'+full[0]+'"><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" onclick="create('+full[0]+');"><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
                                                 </ul>\
                                             </div>\
                                         </div>\
@@ -247,7 +247,91 @@
                     }
                 })
             }
-
+            function create($id)
+            {
+                Swal.mixin({
+                    input: 'text',
+                    confirmButtonText: 'Siguiente  &rarr;',
+                    showCancelButton: true,
+                    progressSteps: ['1',]
+                }).queue([
+                    {
+                    title: 'Ingrese la contraseña temporal',
+                    },
+                ]).then((result) => {
+                    if (result.value) {
+                    const answers = JSON.stringify(result.value)
+                    console.log(result.value);
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                        },
+                        buttonsStyling: false
+                    })
+                    
+                    swalWithBootstrapButtons.fire({
+                        title: '¿Está seguro de los datos?',
+                        text: "Contraseña: "+result.value[0],
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Si, crearlo!',
+                        cancelButtonText: 'No, cancelar!',
+                        reverseButtons: true
+                    }).then((result2) => {
+                        if (result2.isConfirmed) {
+                            var data = [{
+                                Contraseña: result.value[0],
+                            }];
+                
+                            $.ajax({
+                                url:"/administration/teacher/change/pass/"+$id,
+                                type:'POST',
+                                data: {"_token":"{{ csrf_token() }}","data":data},
+                                dataType: "JSON",
+                                success: function(e){
+                                    if(e.id){
+                                        swalWithBootstrapButtons.fire({
+                                        title: 'Error!',
+                                        text: e.id,
+                                        icon: 'error',
+                                        confirmButtonText: 'Aceptar',
+                                        })
+                                    }else{
+                                        swalWithBootstrapButtons.fire({
+                                        title: 'Creado!',
+                                        text: 'Contraseña temporal asignada con exito!',
+                                        icon: 'success',
+                                        confirmButtonText: 'Aceptar',
+                                        }).then(function () {    
+                                            var $url_path = '{!! url('/') !!}';
+                                            window.location.href = $url_path+"/administration/teacher/list";
+                                        });
+                                    }//fin else
+                                },
+                                error: function(e){
+                                    swalWithBootstrapButtons.fire({
+                                        title: 'Error!',
+                                        text:   e.responseJSON['error'],
+                                        icon: 'error',
+                                        confirmButtonText: 'Aceptar',
+                                    })
+                                
+                                }
+                            });
+                        
+                        } else {
+                        swalWithBootstrapButtons.fire({
+                            title: 'Cancelado!',
+                            text:  'La actividad no ha sido creada!',
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar',
+                        })
+                        }
+                    })
+                    }
+                })
+            }//fin funcion crear
        </script>
 
       
