@@ -59,7 +59,14 @@ class LoginController extends Controller
     }   
     public function PassReset(Request $request, $userid)
     {
-    return view('Login/Restore',compact('userid'));
+        $user = user::find($userid);
+        if($user->PasswordRestore=="Change")
+        {
+            return view('Login/Restore',compact('userid'));
+        }
+        else{
+            return redirect('login');
+        }
     }
     public function ChangePassword(Request $request)
     {
@@ -67,6 +74,7 @@ class LoginController extends Controller
             $data = $request->data[0];
             $user = user::find($data['id']);
             $user->password = bcrypt($data['pass']);
+            $user->PasswordRestore = "";
             $user->save();
         } catch (Exception $e) {
             return response()->json(['Error' => "No se ha podido restablecer la contraseña."], 500);
@@ -82,9 +90,11 @@ class LoginController extends Controller
             $user->setSession($rols->toArray());
             $rol =$rols->toArray();
             $rol=$rol[0]['Name'];
-            if($user->PasswordRestore="Change")
+            if($user->PasswordRestore=="Change")
             {
-                return redirect('password/change/user');
+                $request->session()->invalidate();
+                return redirect('password/change/user/'.$user->id);
+                
             }
             if($rol=="Estudiante")
             {
