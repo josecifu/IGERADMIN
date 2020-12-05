@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
+use App\Models\logs;
 use \Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
 class LoginController extends Controller
@@ -98,14 +99,52 @@ class LoginController extends Controller
             }
             if($rol=="Estudiante")
             {
+                $user->PasswordRestore = "";
+                $user->save();
+                $log = new logs;
+                $log->Table = "Estudiante";
+                $log->User_ID = $user->name;
+                $log->Description = "El usuario ".$user->Person()->Names. " ".$user->Person()->LastNames. " ha iniciado sesión";
+                $log->Type = "Login";
+                $log->save();
                 return redirect('student/home/dashboard');
             }
             elseif($rol=="Voluntario")
             {
+                $user->PasswordRestore = "";
+                $user->save();
+                $user->save();
+                $log = new logs;
+                $log->Table = "Voluntario";
+                $log->User_ID = $user->name;
+                $log->Description = "El usuario ".$user->Person()->Names. " ".$user->Person()->LastNames. " ha iniciado sesión";
+                $log->Type = "Login";
+                $log->save();
                 return redirect('teacher/home/dashboard');
             }
-            $user->PasswordRestore = "";
-            $user->save();
+            elseif($rol=="Encargado de circulo")
+            {
+                $user->PasswordRestore = "";
+                $user->save();
+                $user->save();
+                $log = new logs;
+                $log->Table = "Encargado de circulo";
+                $log->User_ID = $user->name;
+                $log->Description = "El usuario ".$user->Person()->Names. " ".$user->Person()->LastNames. " ha iniciado sesión";
+                $log->Type = "Login";
+                $log->save();
+                return redirect('teacher/home/dashboard');
+            }
+            elseif($rol=="Administrador")
+            {
+                $log = new logs;
+                $log->Table = "Administrador";
+                $log->User_ID = $user->name;
+                $log->Description = "El usuario ".$user->Person()->Names. " ".$user->Person()->LastNames. " ha iniciado sesión";
+                $log->Type = "Login";
+                $log->save();
+               
+            }
         }
         else
         {

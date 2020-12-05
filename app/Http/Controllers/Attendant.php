@@ -267,11 +267,12 @@ class Attendant extends Controller
             {
                 foreach($grade->Courses()->where('State','Active') as $Course)
                 {
+                    $nota = Note::where(['Course_id'=>$id])->first();
                     $model = [
                         "Id" =>$value->id,
                         "Course" =>$Course->Name,
                         "Grade" => $value->Name." - ".$grade->GradeName(),
-                        "Date" => $Student->created_at->format('d/m/Y'),
+                        "State" => $nota->State,
                     ];
                     array_push($Models,$model);
                 }

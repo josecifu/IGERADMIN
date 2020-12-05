@@ -33,13 +33,16 @@ use App\Models\Assign_student_grade;
 //Modelo Asignacion Jornada grado
 use App\Models\Assign_period_grade;
 //Modelo Asignacion nivel grado
-use App\Models\Assign_level_grade;
+use App\Models\test;
+use App\Models\Asign_test_course;
 //Modelo asignacion de circulo de estudio
 use App\Models\Assign_attendant_periods;
 use App\Models\Asign_teacher_course;
 use App\Models\Assign_activity;
+
 use Session;
 use Illuminate\Support\Facades\DB;
+use Carbon;
 
 class Administration extends Controller
 {
@@ -60,22 +63,78 @@ class Administration extends Controller
             return redirect('attendant/home/dashboard');
         }
         $Month = [];
-        $M = [
-            "Type"=>"New",
-            "Title"=>"Nuevo Estudiante",
-            "User" =>"Administrador",
-            "Date" => "29 de noviembre de 2020",
-            "Url" => "administration/home/dashboard",
-            "State" => "Success"
-        ];
-        array_push($Month,$M);
+        $logs = logs::whereDate('created_at', '=', \Carbon\Carbon::now()->format('Y-m-d'))->get();
+        foreach ($logs as $value) {
+            setlocale(LC_TIME, "spanish");
+            $newDate = date("d-m-Y", strtotime($value->created_at));	
+            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $M = [
+                "Type"=>"New",
+                "Title"=>"Nuevo ".$value->Table,
+                "User" =>$value->User_id,
+                "Date" => $mes,
+                "Url" => "administration/home/dashboard",
+                "State" => "Success"
+            ];
+            array_push($Month,$M);
+        }
+        $Week = [];
+        $logs = logs::whereDate('created_at', '=', \Carbon\Carbon::now()->format('Y-m-d'))->get();
+        foreach ($logs as $value) {
+            setlocale(LC_TIME, "spanish");
+            $newDate = date("d-m-Y", strtotime($value->created_at));	
+            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $M = [
+                "Type"=>"New",
+                "Title"=>"Nuevo ".$value->Table,
+                "User" =>$value->User_id,
+                "Date" => $mes,
+                "Url" => "administration/home/dashboard",
+                "State" => "Success"
+            ];
+            array_push($Month,$M);
+        }
+        $tests = test::latest()
+        ->take(10)
+        ->get();
+        $Tests =[];
+        foreach ($tests as  $value) {
+            $assign = Asign_test_course::where('Test_id',$value->id)->first();
+            $as = Asign_teacher_course::find($assign->Teacher_id);
+            $user = user::find($as->user_id);
+            setlocale(LC_TIME, "spanish");
+            $newDate = date("d-m-Y", strtotime($value->created_at));	
+            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $test = [
+                "Title"=>$value->Title,
+                "User"=>$user->name,
+                "Date"=>$mes,
+                "url" => "/administration/teacher/question/".$value->id."/".$value->Course()->id
+            ];
+            array_push($Tests,$test);
+        }
+        $Timeline = [];
+        $logs = logs::where('Table','Encargado de circulo')->get();
+        dd($logs);
+        foreach ($logs as $value) {
+            setlocale(LC_TIME, "spanish");
+            $newDate = date("d-m-Y", strtotime($value->created_at));	
+            $time = strftime("%I:%M %P", strtotime($newDate));
+            $M = [
+                "Time"=>$time,
+                "Description"=>$value->Description,
+                
+            ];
+            array_push($Month,$M);
+        }
         $Logs =[
             "Month" =>$Month,
             "Week" =>[],
             "Days" =>[],
-            "Test" =>[],
+            "Test" => $Tests,
             "Timeline"=>[],
         ];
+
         return view('Administration.Dashboard.Home',compact('Logs'));
     }
     public function AttendantEdit(Request $request,$id)
@@ -1080,7 +1139,65 @@ class Administration extends Controller
     }
     public function Report()
     {
-        return view('Administration/Dashboard/Report');
+        $Month = [];
+        $logs = logs::whereDate('created_at', '=', \Carbon\Carbon::now()->format('Y-m-d'))->get();
+        foreach ($logs as $value) {
+            setlocale(LC_TIME, "spanish");
+            $newDate = date("d-m-Y", strtotime($value->created_at));	
+            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $M = [
+                "Type"=>"New",
+                "Title"=>"Nuevo ".$value->Table,
+                "User" =>$value->User_Id,
+                "Description" => $value->Description,
+                "Date" => $mes,
+                "Url" => "administration/home/dashboard",
+                "State" => "Success"
+            ];
+            array_push($Month,$M);
+        }
+        $Week = [];
+        $logs = logs::whereDate('created_at', '=', \Carbon\Carbon::now()->format('Y-m-d'))->get();
+        foreach ($logs as $value) {
+            setlocale(LC_TIME, "spanish");
+            $newDate = date("d-m-Y", strtotime($value->created_at));	
+            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $M = [
+                "Type"=>"New",
+                "Title"=>"Nuevo ".$value->Table,
+                "User" =>$value->User_Id,
+                "Description" => $value->Description,
+                "Date" => $mes,
+                "Url" => "administration/home/dashboard",
+                "State" => "Success"
+            ];
+            array_push($Week,$M);
+        }
+        $Days = [];
+        $logs = logs::whereDate('created_at', '=', \Carbon\Carbon::now()->format('Y-m-d'))->get();
+        foreach ($logs as $value) {
+            setlocale(LC_TIME, "spanish");
+            $newDate = date("d-m-Y", strtotime($value->created_at));	
+            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $M = [
+                "Type"=>"New",
+                "Title"=>"Nuevo ".$value->Table,
+                "User" =>$value->User_Id,
+                "Description" => $value->Description,
+                "Date" => $mes,
+                "Url" => "administration/home/dashboard",
+                "State" => "Success"
+            ];
+            array_push($Days,$M);
+        }
+        $Logs =[
+            "Month" =>$Month,
+            "Week" =>$Week,
+            "Days" =>$Days,
+            "Test" =>[],
+            "Timeline"=>[],
+        ];
+        return view('Administration/Dashboard/Report',compact('Logs'));
     }
     public function Inscriptions()
     {
