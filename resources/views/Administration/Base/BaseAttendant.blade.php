@@ -163,7 +163,24 @@
 																	</span>
 																</a>
 															</li>
+															@elseif ($button['Type']=='btn2')
+															<li class="navi-item">
+																<a href="{{ url($button['Link'])}}" class="navi-link">
+																	<span class="navi-text">
+																		<span class="label label-xl label-inline btn btn-light-success font-weight-bold mr-2"  style="height:100%; width: 100%">{{$button['Name']}}</span>
+																	</span>
+																</a>
+															</li>
+															@elseif ($button['Type']=='btn3')
+															<li class="navi-item">
+																<a href="{{ url($button['Link'])}}" class="navi-link">
+																	<span class="navi-text">
+																		<span class="label label-xl label-inline btn btn-light-danger font-weight-bold mr-2"  style="height:100%; width: 100%">{{$button['Name']}}</span>
+																	</span>
+																</a>
+															</li>
 															@endif
+															
 														@endforeach
 													
 												</ul>
@@ -599,32 +616,8 @@
 			{
 				clearLvls();
 				posGrade=pos;
-				var url = '{{route('LoadPeriods')}}';
-				if(pos==1)
-				{
-					$('#Title1').text("Listado de alumnos por grado");
-				}
-				else if(pos==2)
-				{
-					$('#Title1').text("Visualizacion de notas por grado");
-					$('#Title2').html("Visualice el listado de notas por circulo de estudio, nivel y grados");
-				}
-				else if(pos==3)
-				{
-					$('#Title1').text("Visualizacion de Notas por grado");
-					$('#Title2').html("Visualice el listado de notas por circulo de estudio, grados del nivel y curso seleccionado");
-				}
-				else if(pos==4)
-				{			
-					$('#Title1').text("Visualización de examenes por grado y Voluntarios");
-					$('#Title2').html("Visualice el listado de examenes por grados del nivel y circulo de estudio seleccionado");
-				}
-				else if(pos==5)
-				{			
-					$('#Title1').text("Visualización de examenes por grado y curso");
-					$('#Title2').html("Visualice el listado de examenes por curso, grados, nivel y circulo de estudio seleccionado");
-				}
-				else if(pos==6)
+				var url = '{{route('LoadPeriodsAttendantAsign')}}';
+				if(pos==7)
 				{			
 					$('#Title1').text("Visualización de notas aprobadas y reprobadas");
 					$('#Title2').html("Visualice el listado de notas y examenes por curso, grados, nivel y circulo de estudio seleccionado");
@@ -646,52 +639,13 @@
 			}
 			function save()
 			{			
-				if(posGrade==1)
-				{
-					var Id = $('#gradeselect1').val();
-					var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/student/list/bygrade/"+Id;
-				}
-				if(posGrade==2)
-				{
-					var Id = $('#gradeselect1').val();
-					var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/student/score/"+Id;
-				}
-				if(posGrade==3)
-				{
-					var Id = $('#courseselect1').val();
-					if(Id > 0){
-						var $url_path = '{!! url('/') !!}';
-                    	window.location.href = $url_path+"/administration/teacher/score/"+Id;
-					}	
-				}
-				if(posGrade==4)
-				{
-					var Id = $('#courseselect1').val();
-					var $url_path = '{!! url('/') !!}';
-					if(Id > 0){
-                    window.location.href = $url_path+"/administration/teacher/test/"+Id;
-					}
-				}
-				if(posGrade==5)
-				{
-					var Id = $('#courseselect1').val();
-					var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/student/list/test/"+Id;
-				}
-				if(posGrade==6)
-				{
-					var Id = $('#courseselect1').val();
-					var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/workspace/attendant/notes/"+Id;
-				}
 				if(posGrade==7)
 				{
 					var Id = $('#courseselect1').val();
 					var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/workspace/attendant/notes/"+Id;
+                    window.location.href = $url_path+"/attendant/notes/"+Id;
 				}
+				
 			}
 			function ListLevel(Period)
 			{
@@ -756,7 +710,7 @@
 				});
 			}
 			$('#gradeselect1').on('change', function() {
-				if(posGrade==3 || posGrade==4 || posGrade==5 || posGrade==6 ) {
+				if(posGrade==7 ) {
 					$('#SelectCourse').css("visibility", "visible");
 					ListCourse($('#gradeselect1').val());
 				}

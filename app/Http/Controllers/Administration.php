@@ -36,6 +36,8 @@ use App\Models\Assign_period_grade;
 use App\Models\Assign_level_grade;
 //Modelo asignacion de circulo de estudio
 use App\Models\Assign_attendant_periods;
+use App\Models\Asign_teacher_course;
+use App\Models\Assign_activity;
 use Session;
 use Illuminate\Support\Facades\DB;
 
@@ -53,7 +55,10 @@ class Administration extends Controller
         {
             return redirect('teacher/home/dashboard');
         }
-     
+        elseif($rol=="Encargado de circulo")
+        {
+            return redirect('attendant/home/dashboard');
+        }
         $Month = [];
         $M = [
             "Type"=>"New",
@@ -141,9 +146,105 @@ class Administration extends Controller
         $type="Deletes";
         return view('Administration.Attendant.List',compact('buttons','Titles','Models','type'));
     }
-    public function AttendantNotes()
+    public function AttendantNotes(Request $request, $id)
     {
-        dd("HOLA");
+        $Models = [];
+        $buttons =[];
+        $Titles = [];
+        $Modal = [];
+        if(session()->get('rol_Name')=="Voluntario"){
+            $teacher = $request->session()->get('User_id');
+            $assignV = Asign_teacher_course::where('Course_id',$id)->first();
+            if(isset($assignV)){
+                $course = course::find($assignV->Course_id);
+                $userV = user::find($assignV->user_id);
+                $vol = Person::find($userV->id);
+            }else{
+                return redirect('/teacher/home/dashboard')->withError('No tiene cursos asignados');
+            }
+        } else {
+            $button = [
+                "Name" => 'Crear Actividad',
+                "Link" => "create()",
+                "Type" => "addFunction"
+            ];
+            array_push($buttons,$button);
+            $button = [
+                "Name" => 'Ver detalles de actividad',
+                "Link" => 'modal()',
+                "Type" => "addFunction1"
+            ];
+            array_push($buttons,$button);
+            $course = course::find($id);
+            $assignV = Asign_teacher_course::where('Course_id',$id)->first();
+            if(isset($assignV)){
+                $userV = user::find($assignV->user_id);
+                $vol = $userV->person();
+            }else{
+                return redirect('/administration/teacher/list')->withError('El curso no tiene ningún voluntario asignado');
+            }
+        }
+        $Activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
+        if(!$Activities->isempty()){
+            $gradeStudents = grade::find($course->Grade_id)->Students();
+            foreach($Activities as $Activity)
+            {
+                $moda = [
+                    'id' => $Activity->id,
+                    "Name" => $Activity->Name,
+                ];
+                array_push($Modal,$moda);
+                $act = [
+                    "Name" =>$Activity->Name,
+                    "No" =>count($Activity->Tests()),
+                    "Test" => $Activity->Tests(),
+                ];
+                array_push($Titles,$act);
+            }
+                foreach($gradeStudents as $student)
+                {
+                    $notas=[];
+                    foreach($Activities as $Activity)
+                    {
+                        if(count($Activity->Tests())>0)
+                        {
+                            foreach($Activity->Tests() as $v)
+                            {
+                                // $assign = Assign_student_grade::where([['user_id',$student->id],['State','Active']])->first();
+                                $note = Note::where([['Test_id',$v->id],['Student_id',$student->Asssign_Grade()->id]])->first();
+                                if($note==null){
+                                    array_push($notas,0);
+                                }
+                                else if($note->State == "Qualified"){
+                                    array_push($notas,$note->Score);
+                                }else{
+                                    array_push($notas,"El examen no se ha sido enviado a revisión");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            array_push($notas,"-");
+                        }
+                    }
+                    $model =[
+                        'Alumno' => $student->person()->Names." ".$student->person()->LastNames,
+                        'Notas' =>$notas,
+                    ];
+                    array_push($Models,$model);
+                }
+            
+        }
+        
+        $button = [
+            "Name" => 'Enviar notas a revisión',
+            "Link" => '/teacher/send/state/test/'.$id,
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $Nombre = $vol->Names.' '.$vol->LastNames;
+        $grado = grade::find($course->Grade_id)->GradeName();
+        return view('Administration/Attendant/Notes',compact('buttons','Modal','Titles','Models','Nombre','course','grado'));
     }
     public function AttendantAssign($id)
     {
@@ -300,6 +401,11 @@ class Administration extends Controller
                     $person->Gender = 'Femenino';
                 }
                 $person->save();
+                $registered_user = User::where('name',$Usuario)->first();
+                if ($registered_user!=null)
+                {
+                    return response()->json(['Error' => "El nombre de usuario que ingreso ya esta registrado!"], 500);
+                }
                 //Tabla usuarios
                 $user = new User;
                 $user->name = $Usuario;
@@ -341,6 +447,7 @@ class Administration extends Controller
                         $grado = grade::find($period->Grade_id)->GradeName();
                         $user_Attendant->user_id = $user->id;
                         $user_Attendant->Period_id = $Periods[$i];
+                        $user_Attendant->Year = date('YY');
                         $user_Attendant->State = "Active";
                         $user_Attendant->save();
                         #logs registro de asignación
@@ -351,6 +458,7 @@ class Administration extends Controller
                         " al circulo de estudio  ".$Periods[$i];
                         $log->Type = "Assign";
                         $log->save();
+                        
                     }
                 }
                 DB::commit();
@@ -416,12 +524,56 @@ class Administration extends Controller
     
     public function AttendantSavePeriods(Request $request)
     {
-        dd($request);
-        $logs = new Log;
-        $logs->Table = "Attendant";
-        $logs->User_Id = $request->session()->get('User_Id');
-        $logs->Description = "Se modifico la asignacion de cursos, se agrego el curso no.".$rols->id." con nombre ".$rols->Name;
-        $logs->save();
+
+        $id = user::find($request->session()->get('User_id')); 
+        $data = $request->data[0];
+        $Period = $data['Period'];
+        $code = $data['Code'];
+        $Attendant = Person::find($code);
+        $Period = explode(";",$Period);
+        
+        if (empty($Period[0])) {
+            return response()->json(["Error"=>"La asignación no debe estar vacia"]);
+        }
+        //LOGICA
+        try {
+            
+              DB::beginTransaction();
+                $delete = Assign_attendant_periods::where([['user_id',$code],['State','Active']])->get()->except($Period);
+                foreach ($delete as $value) {
+                    $deleteassign = Assign_attendant_periods::find($value->id);
+                    $deleteassign->State = "Deactivated";
+                    $deleteassign->save();
+                }
+                for ($i=0; $i < count($Period) ; $i++) {
+                    $verificar = Assign_attendant_periods::where([['Period_id',$Period[$i]],['State','Active']])->first();
+  
+                    if ($verificar==null)
+                     {     
+                        $period = period::find($Period[$i]);
+                        $usuario_curso = new Assign_attendant_periods;
+                        $usuario_curso->user_id = $Attendant->User()->id;
+                        $usuario_curso->Period_id = $Period[$i];
+                        $usuario_curso->State = "Active";
+                        $usuario_curso->save();
+                        #logs registro de asignación
+                        $log = new logs;
+                        $log->Table = "Attendant";
+                        $log->User_ID = $id->name;
+                        $log->Description = "Se asigno el circulo de estudio ".$period." al encargado ".$Attendant->Names;
+                        $log->Type = "Assign";
+                        $log->save();
+                    }
+                    else if (isset($delete)){
+
+                    }
+                }
+                DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+        }
+        return response()->json(["Accion completada"]);
+
     }
 
     public function Create_permission()
@@ -458,7 +610,7 @@ class Administration extends Controller
             "Levels" => $Models,
             ]);
     }
-    
+  
     public function LoadPeriodsAttendant()
     {
         $PeriodsData = period::where('State','Active')->get();
