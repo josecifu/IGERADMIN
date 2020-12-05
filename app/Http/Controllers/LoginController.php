@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
+use App\Models\logs;
 use \Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
 class LoginController extends Controller
@@ -57,12 +58,24 @@ class LoginController extends Controller
         }
         return view('Login/Restore',compact('userid'));
     }   
+    public function PassReset(Request $request, $userid)
+    {
+        $user = user::find($userid);
+        if($user->PasswordRestore=="Change")
+        {
+            return view('Login/Restore',compact('userid'));
+        }
+        else{
+            return redirect('login');
+        }
+    }
     public function ChangePassword(Request $request)
     {
         try {
             $data = $request->data[0];
             $user = user::find($data['id']);
             $user->password = bcrypt($data['pass']);
+            $user->PasswordRestore = "";
             $user->save();
         } catch (Exception $e) {
             return response()->json(['Error' => "No se ha podido restablecer la contraseña."], 500);
@@ -78,16 +91,60 @@ class LoginController extends Controller
             $user->setSession($rols->toArray());
             $rol =$rols->toArray();
             $rol=$rol[0]['Name'];
+            if($user->PasswordRestore=="Change")
+            {
+                $request->session()->invalidate();
+                return redirect('password/change/user/'.$user->id);
+                
+            }
             if($rol=="Estudiante")
             {
+                $user->PasswordRestore = "";
+                $user->save();
+                $log = new logs;
+                $log->Table = "Estudiante";
+                $log->User_ID = $user->name;
+                $log->Description = "El usuario ".$user->Person()->Names. " ".$user->Person()->LastNames. " ha iniciado sesión";
+                $log->Type = "Login";
+                $log->save();
                 return redirect('student/home/dashboard');
             }
             elseif($rol=="Voluntario")
             {
+                $user->PasswordRestore = "";
+                $user->save();
+                $user->save();
+                $log = new logs;
+                $log->Table = "Voluntario";
+                $log->User_ID = $user->name;
+                $log->Description = "El usuario ".$user->Person()->Names. " ".$user->Person()->LastNames. " ha iniciado sesión";
+                $log->Type = "Login";
+                $log->save();
                 return redirect('teacher/home/dashboard');
             }
-            $user->PasswordRestore = "";
-            $user->save();
+            elseif($rol=="Encargado de circulo")
+            {
+                $user->PasswordRestore = "";
+                $user->save();
+                $user->save();
+                $log = new logs;
+                $log->Table = "Encargado de circulo";
+                $log->User_ID = $user->name;
+                $log->Description = "El usuario ".$user->Person()->Names. " ".$user->Person()->LastNames. " ha iniciado sesión";
+                $log->Type = "Login";
+                $log->save();
+                return redirect('teacher/home/dashboard');
+            }
+            elseif($rol=="Administrador")
+            {
+                $log = new logs;
+                $log->Table = "Administrador";
+                $log->User_ID = $user->name;
+                $log->Description = "El usuario ".$user->Person()->Names. " ".$user->Person()->LastNames. " ha iniciado sesión";
+                $log->Type = "Login";
+                $log->save();
+               
+            }
         }
         else
         {

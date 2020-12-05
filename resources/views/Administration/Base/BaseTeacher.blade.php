@@ -637,6 +637,17 @@
 					confirmButtonText: "Aceptar",
 				})
 			@endif
+			@if(Session::has('message'))
+			Swal.fire({
+				title: "{{Session::get('message')}}",
+				text: "",
+				icon: "success",
+				confirmButtonText: "Aceptar",
+			})
+			@php
+			session()->forget('message');	
+			@endphp
+			@endif
 		</script>
 
 		@section('scripts')

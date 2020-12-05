@@ -265,25 +265,25 @@ var KTWizard1 = function () {
 
          function crearDatos()
          {
-			var Cursos = cursosduallist.selected;
-			var selectedCourse ="";
-			$.each(Cursos, function(fetch, data){
-				if(selectedCourse=="")
+			var Periods = cursosduallist.selected;
+			var selectedPeriod ="";
+			$.each(Periods, function(fetch, data){
+				if(selectedPeriod=="")
 				{
-					selectedCourse=data.dataset.id;
+					selectedPeriod=data.dataset.id;
 				}
 				else
 				{
-					selectedCourse = selectedCourse+";"+data.dataset.id;
+					selectedPeriod = selectedPeriod+";"+data.dataset.id;
 				}
 			});
             var data = [{
-				Curso: selectedCourse,
+				Period: selectedPeriod,
 				Code: {{$id}},
             }];
 
             $.ajax({
-                url:'/administration/teacher/save/assign/courses',
+                url:'/administration/workspace/attendant/save/assign/periods',
                 type:'POST',
                 data: {"_token":"{{ csrf_token() }}","data":data},
                 dataType: "JSON",
@@ -301,7 +301,7 @@ var KTWizard1 = function () {
 						type: "success"
 						}).then(function () {
 						var $url_path = '{!! url('/') !!}';
-						window.location.href = $url_path+"/administration/teacher/list";
+						window.location.href = $url_path+"/administration/workspace/attendant/list";
                         });
 					}
                 },

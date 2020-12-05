@@ -208,7 +208,7 @@
 				KTCkeditor.init();
 			});
 			function actualizar(){
-				alert("Hola que hace");
+				alert("Mensaje");
 			}
 		</script>
 	@stop

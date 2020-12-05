@@ -707,7 +707,7 @@ class Student extends Controller
             $user = new User;
             if ($registered_user!=null)
             {
-                return response()->json(['Error' => "Lo siento, el nombre de usuario que ingreso ya esta registrado!"], 500);
+                return response()->json(['Error' => "El nombre de usuario que ingreso ya esta registrado!"], 500);
             }
             $user->name = $username;
             $user->email = $email;

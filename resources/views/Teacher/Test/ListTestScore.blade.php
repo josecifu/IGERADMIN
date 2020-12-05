@@ -97,7 +97,6 @@
                                                     @foreach($Titles as $Title)
                                                         <th colspan="{{ $Title['No'] }}" ><center>{{ $Title['Name'] }}</center></th>
                                                     @endforeach
-                                                    <th></th>
                                                 </tr>
                                                 <tr>
                                                     <th>Nombre de los alumnos</th>
@@ -109,7 +108,6 @@
                                                         <th><center>{{$title->Title}}</center></th>
                                                         @endforeach
                                                     @endforeach
-                                                    <th>Acciones</th>
                                                   </tr>
                                             </thead>
                                             <tbody>
@@ -130,19 +128,18 @@
                                                                 <td>
                                                                     <center>
                                                                         <a onclick="create({{$nota['Student']}},{{$nota['Curso_id']}},{{$nota['Test_id']}});" disable class="btn btn-outline-info btn-sm mr-3">
-                                                                        <i class="flaticon-list-3"></i>Calificar examen fisico</a>
+                                                                        <i class="flaticon-list-3"></i>Calificar examen fisico</a> <span class="label label-warning label-pill label-inline mr-2">{{$nota['Punteo']}}pts</span>
                                                                     </center></td>
                                                             @elseif($nota['Student_id'] == "No" )
                                                                 <td style="background-color: #E2E4ED"></td>
                                                             @else
                                                             <td>
                                                                 <center>
-                                                                    <a href="{{url('/teacher/view/qualify/test/'.$nota['Student_id'].'/'.$nota['Test_id'])}}" class="btn btn-outline-info btn-sm mr-3">
-                                                                        <i class="flaticon-list-3"></i>Calificar examen </a>
+                                                                    <a href="{{url('/teacher/view/qualify/test/'.$nota['Student_id'].'/'.$nota['Test_id'].'/'.$nota['Curso_id'])}}" class="btn btn-outline-info btn-sm mr-3">
+                                                                        <i class="flaticon-list-3"></i>Calificar examen </a> <span class="label label-warning label-pill label-inline mr-2">{{$nota['Punteo']}}pts</span>
                                                                 </center></td>
                                                             @endif
                                                         @endforeach
-                                                        <td nowrap="nowrap"></td>
                                                     </tr>
                                                    @endforeach                                                    
                                                 </div>
@@ -182,30 +179,7 @@
                         },
                         columnDefs: [
                             {
-                                targets: -1,
-                                title: 'Acciones',
-                                orderable: false,
-                                render: function(data, type, full, meta) {
-                                    return '\
-                                        <div class="dropdown dropdown-inline">\
-                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">\
-                                                <i class="la la-cog"></i>\
-                                            </a>\
-                                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
-                                                <ul class="nav nav-hoverable flex-column">\
-                                                    <li class="nav-item"><a class="nav-link" href="/administration/teacher/edit/'+full[0]+'"><i class="nav-icon la la-edit"></i><span class="nav-text">Editar</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
-                                                </ul>\
-                                            </div>\
-                                        </div>\
-                                        <a href="/administration/teacher/delete/'+full[0]+'" class="btn btn-sm btn-clean btn-icon" title="Borrar">\
-                                            <i class="la la-trash"></i>\
-                                        </a>\
-                                    ';
-                                },
-                            },
-                           
-                          
+                            },                          
                         ],
                     });
 
@@ -285,8 +259,8 @@
                                         })
                                     }else{
                                         swalWithBootstrapButtons.fire({
-                                        title: 'Creado!',
-                                        text: 'Se ha creado con exito!',
+                                        title: 'Calificado!',
+                                        text: 'Se ha calificado el examen con exito!',
                                         icon: 'success',
                                         confirmButtonText: 'Aceptar',
                                         }).then(function () {

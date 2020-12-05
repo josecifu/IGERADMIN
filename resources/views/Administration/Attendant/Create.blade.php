@@ -366,7 +366,7 @@ var KTWizard1 = function () {
 								text: "Porfavor completar los campos requeridos",
 								icon: "error",
 								buttonsStyling: false,
-								confirmButtonText: "Ok, lo tengo!",
+								confirmButtonText: "Aceptar",
 								customClass: {
 									confirmButton: "btn font-weight-bold btn-light"
 								}
@@ -496,7 +496,8 @@ var KTWizard1 = function () {
 					}else{
 						swal.fire({ title: "Accion completada", 
 						text: "El encargado de circulo a sido registrado con éxito!", 
-						type: "success"
+						type: "success",
+						confirmButtonText: 'Aceptar',
                         }).then(function () {
                           var $url_path = '{!! url('/') !!}';
                           window.location.href = $url_path+"/administration/workspace/attendant/list";
@@ -504,10 +505,10 @@ var KTWizard1 = function () {
 					}//fin else 
                 },
                 error: function(e){
-					console.log(e);
+					console.log();
 					swal.fire({
 						title: 'Ocurrio un error!',
-						text:  'Los datos no han sido registrados!, verifique los campos',
+						text:  e.responseJSON['Error'],
 						icon: 'error',
 						confirmButtonText: 'Aceptar',
                     })

@@ -1,13 +1,13 @@
-@extends('Administration.Base/Base')
+@extends('Administration.Base/BaseAttendant')
 {{-- Page title --}}
     @section('title')
-    Inicio
+    Administración
     @stop
     @section('breadcrumb1')
-    Tablero
+    Encargado de circulo
     @stop
     @section('breadcrumb2')
-    Voluntarios
+    Notas
     @stop
     {{-- Page content --}}
     @section('content')
@@ -38,13 +38,15 @@
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
-                                            <h3 class="card-label">Listado de Voluntarios</h3>
+                                            @isset($course)
+                                                <h3 class="card-label">Listado de Notas de {{$course->Name ?? ''}} de {{$grado ?? ''}} / Voluntario encargado: {{$Nombre}}</h3>
+                                            @endisset
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
                                             <div class="dropdown dropdown-inline mr-2">
-                                                <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white;">
-                                                <i class="la la-download" style="color: white;"></i>Exportar</button>
+                                                <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white">
+                                                <i class="la la-download" style="color: white"></i>Exportar</button>
                                                 <!--begin::Dropdown Menu-->
                                                 <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                                                     <ul class="nav flex-column nav-hover">
@@ -84,8 +86,6 @@
                                                 <!--end::Dropdown Menu-->
                                             </div>
                                             <!--end::Dropdown-->
-                                            <a href="{{url('administration/teacher/create')}}" class="btn btn-primary font-weight-bolder">
-                                            <i class="la la-plus"></i>Añadir un voluntario</a>
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -93,35 +93,43 @@
                                         <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
                                             <thead>
                                                 <tr>
+                                                    <th></th>
                                                     @foreach($Titles as $Title)
-                                                    <th>{{ $Title }}</th>
+                                                        <th colspan="{{ $Title['No'] }}" ><center>{{ $Title['Name'] }}</center></th>
                                                     @endforeach
+                                                    
                                                 </tr>
+                                                <tr>
+                                                    <th>Nombre de los alumnos</th>
+                                                    @foreach($Titles as $Title)
+                                                        @if($Title['No']==0)
+                                                        <th><center>No existen examenes asignados</center></th>
+                                                        @endif
+                                                        @foreach($Title['Test'] as $title)
+                                                        <th><center>{{$title->Title}}</center></th>
+                                                        @endforeach
+                                                    @endforeach
+                                                    
+                                                  </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($Models as $Model)
-                                                <tr>
-                                                    <td>{{$Model['Id']}}</td>
-                                                    <td>{{$Model['Name']}}</td>
-                                                    <td>{{$Model['Apellido']}}</td>
-                                                    <td>{{$Model['Telefono']}}</td>
-                                                    <td>{{$Model['Usuario']}}</td>
-                                                    <td>{{$Model['Correo']}}</td>
-                                                    <td>
-                                                        @if($Model['Curses'])
-                                                            <ul>
-                                                                @foreach($Model['Curses'] as $Course)
-                                                                    <li>{{$Course['Curso']}}</li>    
-                                                                @endforeach
-                                                            </ul>
-                                                        @else
-                                                        <p style="text-align: center;">  Ningun curso asignado</p>
+                                                
+                                                    @foreach( $Models as $model)
+                                                        <tr>
+                                                            <td>{{$model['Alumno']}}</td>
+                                                            @foreach($model['Notas'] as $nota)
+                                                                @if($nota=='0')
+                                                                <td><center>{{$nota}}</center></td>
+                                                                @elseif(intval($nota) > 0)
+                                                                <td><center>{{$nota}}</center></td>
+                                                                @else
+                                                                    <td style="background-color: #E2E4ED"></td>
+                                                                @endif
+                                                            @endforeach
                                                             
-                                                        @endif
-                                                    </td>
-                                                    <td nowrap="nowrap"></td>
-                                                </tr>
-                                                @endforeach
+                                                        </tr>
+                                                    @endforeach                                                    
+                                                </div>
                                             </tbody>
                                         </table>
                                         <!--end: Datatable-->
@@ -129,14 +137,49 @@
                                 </div>
                                 <!--end::Card-->
                             </div>
+                            <div class="modal fade" id="kt_grades_modal1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Visualizar actividades del curso {{$course->Name}}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <i aria-hidden="true" class="ki ki-close"></i>
+                                            </button>
+                                        </div>
+                                        <form class="form">
+                                            <div class="modal-body">
+                                                <div class="form-group row">
+                                                    <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el nivel</label>
+                                                    <div class="col-lg-9 col-md-9 col-sm-12">
+                                                        <select class="form-control selectpicker" data-size="10" data-live-search="true" id="detailA">
+                                                            <option value="0">--Seleccione una opción</option>
+                                                            @foreach($Modal as $m)
+                                                                <option value="{{ $m['id']}} ">{{$m['Name']}} </option>
+                                                            @endforeach
+                                                        </select>
+                                                        <span class="form-text text-muted">Visualice los detalles de la actividad seleccionada</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                <button type="button" class="btn btn-primary mr-2" onclick="detalleActividad();">Visualizar</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
 
-	@stop
+    @stop
+    
 	@section('scripts')
 
         <!--begin::Page Vendors(used by this page)-->
         <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
         <!--end::Page Vendors-->
         <!--begin::Page Scripts(used by this page)-->
+        <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
         
         <!--end::Page Scripts-->
         <script type="text/javascript">
@@ -153,33 +196,7 @@
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                         },
-                        columnDefs: [
-                            {
-                                targets: -1,
-                                title: 'Acciones',
-                                orderable: false,
-                                render: function(data, type, full, meta) {
-                                    return '\
-                                        <div class="dropdown dropdown-inline">\
-                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title ="Ajustes" data-toggle="dropdown">\
-                                                <i class="la la-cog"></i>\
-                                            </a>\
-                                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
-                                                <ul class="nav nav-hoverable flex-column">\
-                                                    <li class="nav-item"><a class="nav-link" href="/administration/teacher/edit/'+full[0]+'"><i class="nav-icon la la-edit"></i><span class="nav-text">Editar</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" onclick="create('+full[0]+');"><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
-                                                </ul>\
-                                            </div>\
-                                        </div>\
-                                        <a href="/administration/teacher/assign/courses/'+full[0]+'" class="btn btn-sm btn-clean btn-icon" title="Administrar asignación de cursos">\
-                                            <i class="la la-edit"></i>\
-                                        </a>\
-                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Eliminar">\
-                                            <i class="la la-trash"></i>\
-                                        </a>\
-                                    ';
-                                },
-                            },
+                        
                            
                           
                         ],
@@ -201,62 +218,25 @@
             jQuery(document).ready(function() {
                 KTDatatablesDataSourceHtml.init();
             });
-            function deletePeriod($id,$name)
-            {
-                const swalWithBootstrapButtons = Swal.mixin({
-                    customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                    },
-                    buttonsStyling: false
-                })
-                swalWithBootstrapButtons.fire({
-                    title: '¿Está seguro de eliminar el voluntario?',
-                    text: "El nombre del Voluntario: "+$name,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Si, eliminar!',
-                    cancelButtonText: 'No, cancelar!',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        var Code = $id;
-                        var data = [{
-                            Code: Code,
-                            Name: result.value[0],
-                        }];
-                        swalWithBootstrapButtons.fire({
-                            title: 'Eliminado!',
-                            text: 'Se ha eliminado con exito!',
-                            icon: 'success',
-                            confirmButtonText: 'Aceptar',
-                        }).then(function () {
-                            
-                            var $url_path = '{!! url('/') !!}';
-                            window.location.href = $url_path+"/administration/teacher/delete/"+$id;
-                            });
-                    } else if (
-                    result.dismiss === Swal.DismissReason.cancel
-                    ) {
-                    swalWithBootstrapButtons.fire({
-                        title: 'Cancelado!',
-                        text:  'La Voluntario no ha sido eliminada!',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar',
-                    })
-                    }
-                })
-            }
-            function create($id)
+
+            $.fn.editable.defaults.mode = 'inline';
+            $(document).ready(function() {
+                $('#username').editable();
+            });
+            function create()
             {
                 Swal.mixin({
                     input: 'text',
                     confirmButtonText: 'Siguiente  &rarr;',
                     showCancelButton: true,
-                    progressSteps: ['1',]
+                    progressSteps: ['1','2',]
                 }).queue([
                     {
-                    title: 'Ingrese la contraseña temporal',
+                    title: 'Ingrese nombre de la actividad:',
+                    
+                    },
+                    {
+                    title: 'Ingrese Punteo total de la actividad:',
                     },
                 ]).then((result) => {
                     if (result.value) {
@@ -272,7 +252,7 @@
                     
                     swalWithBootstrapButtons.fire({
                         title: '¿Está seguro de los datos?',
-                        text: "Contraseña: "+result.value[0],
+                        text: "El nombre de la actividad: "+result.value[0]+" y el punteo: "+result.value[1],
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonText: 'Si, crearlo!',
@@ -281,11 +261,12 @@
                     }).then((result2) => {
                         if (result2.isConfirmed) {
                             var data = [{
-                                Contraseña: result.value[0],
+                                Actividad: result.value[0],
+                                Punteo: result.value[1],
                             }];
                 
                             $.ajax({
-                                url:"/administration/teacher/change/pass/"+$id,
+                                url:'/teacher/save/activity/'+{{$course->id}},
                                 type:'POST',
                                 data: {"_token":"{{ csrf_token() }}","data":data},
                                 dataType: "JSON",
@@ -300,12 +281,12 @@
                                     }else{
                                         swalWithBootstrapButtons.fire({
                                         title: 'Creado!',
-                                        text: 'Contraseña temporal asignada con exito!',
+                                        text: 'Se ha creado con exito!',
                                         icon: 'success',
                                         confirmButtonText: 'Aceptar',
                                         }).then(function () {    
                                             var $url_path = '{!! url('/') !!}';
-                                            window.location.href = $url_path+"/administration/teacher/list";
+                                            window.location.href = $url_path+"/teacher/score/list/"+{{$course->id}};
                                         });
                                     }//fin else
                                 },
@@ -332,7 +313,16 @@
                     }
                 })
             }//fin funcion crear
+            function modal() {
+                $("#kt_grades_modal1").modal("show");
+            }
+            function detalleActividad() {
+                var id = $('#detailA').val();
+                var $url_path = '{!! url('/') !!}';
+                window.location.href = $url_path+"/teacher/detail/activity/"+{{$course->id}}+"/"+id;   
+            }
        </script>
 
       
-	@stop
+    @stop
+    
