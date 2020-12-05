@@ -175,7 +175,7 @@ class Teacher extends Controller
         ];
         array_push($buttons,$button);
         $Titles =['Id','Nombres','Apellidos','Telefono','Usuario','Email','Cursos Asignados','Acciones'];
-        $usuario_rol = Assign_user_rol::where('Rol_id',3)->where('State','Active')->get('user_id');
+        $usuario_rol = Assign_user_rol::where([['Rol_id',3],['State','Active']])->get('user_id');
         $Models = [];
         foreach ($usuario_rol as $v) {
             $usuario = User::find($v->user_id);
@@ -288,7 +288,7 @@ class Teacher extends Controller
                         $usuario_curso->user_id = $user->id;
                         $usuario_curso->Course_id = $Cursos[$i];
                         $usuario_curso->State = "Active";
-                        $usuario_curso->Year = date("YY");
+                        $usuario_curso->Year = date("Y");
                         $usuario_curso->save();
                         #logs registro de asignación
                         $log = new logs;
@@ -360,7 +360,8 @@ class Teacher extends Controller
     public function delete($id, Request $request)   //ELIMINAR/DESACTIVAR VOLUNTARIO
     {
         $IID = user::find($request->session()->get('User_id'));
-        $r = User::find($id);
+        $r = User::where('Person_id',$id)->first();
+
         $dataU=array(
             'State' => 'Desactivated',
         );
@@ -372,7 +373,7 @@ class Teacher extends Controller
         $log->save();
         Asign_teacher_course::where('user_id',$r->id)->update($dataU);
         User::where('Person_id', $id)->update($dataU);
-        Assign_user_rol::where('user_id',$id)->update($dataU);
+        Assign_user_rol::where('user_id',$r->id)->update($dataU);
         return redirect()->route('ListTeacher');
     }
     public function score(Request $request, $id)      //VISUALIZACIÓN DE NOTAS DE LAS UNIDADES
@@ -763,17 +764,20 @@ class Teacher extends Controller
         $total = $Punteo;
         $grado = grade::find($c->Grade_id)->GradeName();
         $activity = Assign_activity::find($actividad);
-        $scores = test::where([['Activity_id',$actividad],['State','Active']])->orWhere('State','Fisico')->get('Score');
+        $scores = test::where([['Activity_id',$actividad],['State','Fisico']])->orWhere([['Activity_id',$actividad],['State','Active']])->get();
         foreach ($scores as $value) {
             $total += $value->Score;
         }
-        if($actividad == ""){
+        if($Titulo == ""){
             return response()->json(["Error"=>"El nombre del examen no puede quedar vacio"]);
         }
         else if($Punteo <= 0){
             return response()->json(["Error"=>"El punteo debe ser mayor a 0"]);
         }
-        else if ($total > $activity->Score) {
+        else if($actividad == null){
+            return response()->json(["Error"=>"Seleccione un actividad"]);
+        }
+        else if (intval($total) > $activity->Score) {
             return response()->json(["Error"=>"El examen excede el punteo total de la actividad, Punteo total: ".$activity->Score]);
         } else {
             if ($data['tipoexamen'] == 'true') {
@@ -1251,7 +1255,8 @@ class Teacher extends Controller
             "Type" => "add"
         ];
         array_push($buttons,$button);
-        $assignT = Asign_teacher_course::where([['user_id',$id],['State','Active']])->get();
+        $user = User::where('Person_id',$id)->first();
+        $assignT = Asign_teacher_course::where([['user_id',$user->id],['State','Active']])->get();
         $cursosasignados = [];
         if(!$assignT->isEmpty()){
             foreach ($assignT as $value) {
