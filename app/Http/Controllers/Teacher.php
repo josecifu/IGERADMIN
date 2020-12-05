@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use DateTime;
 use DateTimeZone;
+use Session;
 use Illuminate\Http\Request;
 //tabla de informacion
 use App\Models\information;
@@ -376,6 +377,17 @@ class Teacher extends Controller
         Assign_user_rol::where('user_id',$r->id)->update($dataU);
         return redirect()->route('ListTeacher');
     }
+    public function changePassword($id)
+    {
+        $user = User::where('Person_id',$id)->first();
+        $user->State = "ChangePassword";
+        $user->Save();
+        Session::put([
+            'message' => "Cambio de contraseña habilitado",
+             ]);
+        return redirect()->route('ListTeacher');
+    }
+
     public function score(Request $request, $id)      //VISUALIZACIÓN DE NOTAS DE LAS UNIDADES
     {
         $Models = [];
@@ -723,7 +735,10 @@ class Teacher extends Controller
             $n->State = "Qualified";
             $n->save();
         }
-        return redirect('/teacher/score/list/'.$id)->witherror('Notas de '.$curso->Name.' enviadas al circulo de estudio');
+        Session::put([
+            'message' => "Notas de '.$curso->Name.' enviadas al circulo de estudio",
+             ]);
+        return redirect('/teacher/score/list/'.$id);
     }
     public function createExam($id)
     {
