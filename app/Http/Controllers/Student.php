@@ -57,13 +57,8 @@ class Student extends Controller
                         $date_teststart2 = strtotime($StartDate2);
                         $EndDate = date("d-m-Y H:i:00",strtotime($test->EndDate)); 
                         $date_testend = strtotime($EndDate);
-                        $start = true;
                         if($date_now >= $date_teststart)
                         {
-                            if($date_now >= $date_teststart2)
-                            {
-                                $start=false;
-                            }
                             if($date_now <=$date_testend)
                             {
                                 if($test->StartDate)
@@ -74,11 +69,6 @@ class Student extends Controller
                                         "test"=>$test->Title,
                                         "start"=>$test->StartDate,
                                         "end"=>$test->EndDate,
-                                        "score"=>$test->Score,
-                                        "NoQuestions"=>$test->NoQuestions(),
-                                        "activity" => $test->Activity()->Name,
-                                        "Active" =>$start,
-                                        "teacher"=> $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames
                                     ];
                                     array_push($models,$query);
                                 }
@@ -90,6 +80,55 @@ class Student extends Controller
         }
         return view('Student/home',compact('models'));
     }
+
+    public function all_tests(Request $request)
+    {
+        $id = $request->session()->get('User_id');
+        $models = [];
+        $assign = Assign_student_grade::where('user_id',$id)->first();
+        $courses = $assign->Grade()->Courses();
+        $answer = Asign_answer_test_student::where('Studen_id',$assign->id)->first();
+        //dd($answer);
+        foreach($courses as $course)
+        {
+            if($course->Tests())
+            {
+                foreach($course->Tests()->where('State','Active') as $test)
+                {
+                    $StartDate = date("d-m-Y",strtotime($test->StartDate." - 5 days")); 
+                    $StartDate2 = date("d-m-Y H:i:00",strtotime($test->StartDate)); 
+                    $date_now = strtotime(date("d-m-Y H:i:00"));
+                    $date_teststart = strtotime($StartDate);
+                    $date_teststart2 = strtotime($StartDate2);
+                    $EndDate = date("d-m-Y H:i:00",strtotime($test->EndDate)); 
+                    $date_testend = strtotime($EndDate);
+                    $start = true;
+                    $query =[
+                        'id' => $test->id,
+                        'test' => $test->Title,
+                        'score' => $test->Score,
+                        'start' => $test->StartDate,
+                        'end' => $test->EndDate,
+                        'state' => $test->State,
+                        'course' => $course->Name,
+                        'NoQuestions' => $test->NoQuestions(),
+                        'activity' => $test->Activity()->Name,
+                        'Active' =>$start,
+                        'teacher' => $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames,
+                        'date' => date("d-m-Y",strtotime($test->StartDate)),
+                        'final' => 'sin nota',
+                        'percentage' => '0'
+                    ];
+                    array_push($models,$query);
+                }
+            }
+        }
+        return view('Student/tests',compact('models','assign','answer'));
+    }
+
+
+
+
 
 
 
@@ -150,7 +189,6 @@ class Student extends Controller
                 {
                     foreach($course->Tests()->where('State','Active') as $test)
                     {
-                        $fecha_actual = date("d-m-Y");
                         $StartDate = date("d-m-Y",strtotime($test->StartDate." - 5 days")); 
                         $StartDate2 = date("d-m-Y H:i:00",strtotime($test->StartDate)); 
                         $date_now = strtotime(date("d-m-Y H:i:00"));
@@ -224,7 +262,7 @@ class Student extends Controller
             $note->Test_id = $test->id;
             $note->Score = $totalScore;
             $note->Course_id = $test->Course()->id;
-            $note->State = "Complete";   
+            $note->State = "Complete";
             $note->save();
             DB::commit();
         }
@@ -233,97 +271,6 @@ class Student extends Controller
             DB::rollBack();
         }
         return response()->json(["Accion exitosa"]);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function all_tests(Request $request)                                 //mostrar despues del tiempo
-    {
-        $id = $request->session()->get('User_id');
-        $models = [];
-        $assign = Assign_student_grade::where('user_id',$id)->first();
-        $courses = $assign->Grade()->Courses();
-        foreach($courses as $course)
-        { 
-            if($course->Tests())
-            {
-                foreach($course->Tests() as $test)
-                {
-                    $date_now = strtotime(date("d-m-Y H:i:00"));
-                    $date_end = strtotime($test->EndDate);
-                    dd($date_end);
-
-                    if ($date_now >= $date_end)
-                    {
-
-                        $notes = Note::where('Test_id',$test->id)->get('Score');
-                        foreach ($notes->where('State','Approved') as $note)
-                        {
-                            $query =[
-                                'id' => $test->id,
-                                'course' => $course->Name,
-                                'test' => $test->Title,
-                                'date' => date("d-m-Y",strtotime($test->StartDate)),
-                                'score' => $test->Score,
-                                'activity' => $test->Activity()->Name,
-                                'teacher' => $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames,
-                                'final' => $note->Score ?? 'sin calificar',
-                                'percentage' => (100/($test->Score))*($note->Score) ?? '0'
-                            ];
-                            array_push($models,$query);
-                        }
-                    }
-                }
-            }
-        }
-        return view('Student/tests',compact('models','assign'));
     }
 
     public function test_review($id,$assign)
@@ -360,7 +307,7 @@ class Student extends Controller
             $query = [
                 "id" => $question->id,
                 "question" => $question->Title,
-                "correct" => $question->CorrectAnswers  ?? 'Ninguno',
+                "correct" => $question->CorrectAnswers  ?? 'No aplica',
                 "answer" => $answer->Answers ?? 'No contestada',
                 "score" => $answer->Score ?? '0',
             ];
@@ -687,14 +634,14 @@ class Student extends Controller
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Listado de estudiantes eliminados',
-            "Link" => 'administration/student/list/eliminated',
+            "Name" => 'Listado de estudiantes activos',
+            "Link" => 'administration/student/list',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Historial de registros',
-            "Link" => 'administration/student/logs',
+            "Name" => 'Listado de estudiantes eliminados',
+            "Link" => 'administration/student/list/eliminated',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
@@ -916,7 +863,7 @@ class Student extends Controller
             $tests = [];
             foreach($activities as $activity)
             {
-                foreach($activity->Tests()->whereIn('State',['Qualified','Fisico']) as $test)
+                foreach($activity->Tests()->whereIn('State',['Finished','Fisico']) as $test)
                 {
                     $values =[
                         'Id' => $test->id,
@@ -977,7 +924,7 @@ class Student extends Controller
                 "id" => $question->id,
                 "question" => $question->Title,
                 "type" => $question->Type,
-                "correct" => $question->CorrectAnswers  ?? 'Ninguno',
+                "correct" => $question->CorrectAnswers  ?? 'No aplica',
                 "answer" => $answer->Answers ?? 'No contestada',
                 "score" => $answer->Score ?? '0',
             ];
