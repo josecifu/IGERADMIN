@@ -288,6 +288,7 @@
                                                             <!--begin::Form-->
                                                             <div class="form">
                                                                 <!--begin::Item-->
+                                                                @foreach($Approveds as $a)
                                                                 <div class="d-flex align-items-center pb-9">
                                                                     <!--begin::Symbol-->
                                                                     
@@ -295,16 +296,16 @@
                                                                     <!--begin::Section-->
                                                                     <div class="d-flex flex-column flex-grow-1">
                                                                         <!--begin::Title-->
-                                                                        <a href="#" class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg mb-1">Matematicas - Primero Básico / 13-01-001 (Viernes IGER)</a>
+                                                                        <a href="#" class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg mb-1">{{$a['Curso']}}</a>
                                                                         <!--end::Title-->
                                                                         <!--begin::Desc-->
-                                                                        <span class="text-dark-50 font-weight-normal font-size-sm"><span class="label label-dark label-inline mr-2">Notas Semestre 1</span> <span class="label label-warning label-pill label-inline mr-2">24 de noviembre a las 9:25 PM</span></span>
+                                                                        <span class="text-dark-50 font-weight-normal font-size-sm"><span class="label label-dark label-inline mr-2">Notas Semestre 1</span> <span class="label label-warning label-pill label-inline mr-2">{{$a['Revision']}}</span></span>
                                                                         <!--begin::Desc-->
                                                                     </div>
                                                                     <!--end::Section-->
                                                                 </div>
                                                                 <!--end::Item-->
-
+                                                                @endforeach
                                                             </div>
                                                             <!--end::Form-->
                                                         </div>
@@ -315,6 +316,7 @@
                                                         <!--begin::Form-->
                                                         <div class="form">
                                                             <!--begin::Item-->
+                                                            @foreach($Qualifieds as $q)
                                                             <div class="d-flex align-items-center pb-9">
                                                                 <!--begin::Symbol-->
                                                               
@@ -322,16 +324,16 @@
                                                                 <!--begin::Section-->
                                                                 <div class="d-flex flex-column flex-grow-1">
                                                                     <!--begin::Title-->
-                                                                    <a href="#" class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg mb-1">Idioma - Primero Básico / 13-01-001 (Viernes IGER)</a>
+                                                                    <a href="#" class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg mb-1">{{$q['Curso']}}</a>
                                                                     <!--end::Title-->
                                                                     <!--begin::Desc-->
-                                                                    <span class="text-dark-50 font-weight-normal font-size-sm"><span class="label label-dark label-inline mr-2">Notas Semestre 1</span> <span class="label label-danger label-pill label-inline mr-2">24 de noviembre a las 9:25 PM</span></span>
+                                                                    <span class="text-dark-50 font-weight-normal font-size-sm"><span class="label label-dark label-inline mr-2">Notas Semestre 1</span> <span class="label label-danger label-pill label-inline mr-2">{{$q['Revision']}}</span></span>
                                                                     <!--begin::Desc-->
                                                                 </div>
                                                                 <!--end::Section-->
                                                             </div>
                                                             <!--end::Item-->
-                                                            
+                                                            @endforeach
                                                         </div>
                                                         <!--end::Form-->
                                                     </div>
@@ -400,7 +402,6 @@
                                                                             <a href="#" class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">{{$t['examen']}}</a>
                                                                             <span class="text-muted font-weight-bold d-block">{{$t['Curso']}}</span>
                                                                         </td>
-                                                                        <td></td>
                                                                         <td class="text-left">
                                                                             <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$t['FI']}}</span>
                                                                             <span class="text-muted font-weight-bold d-block font-size-sm">Fecha Inicio</span>

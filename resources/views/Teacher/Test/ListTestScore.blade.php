@@ -128,7 +128,7 @@
                                                                 <td>
                                                                     <center>
                                                                         <a onclick="create({{$nota['Student']}},{{$nota['Curso_id']}},{{$nota['Test_id']}});" disable class="btn btn-outline-info btn-sm mr-3">
-                                                                        <i class="flaticon-list-3"></i>Calificar examen fisico</a>
+                                                                        <i class="flaticon-list-3"></i>Calificar examen fisico</a> <span class="label label-warning label-pill label-inline mr-2">{{$nota['Punteo']}}pts</span>
                                                                     </center></td>
                                                             @elseif($nota['Student_id'] == "No" )
                                                                 <td style="background-color: #E2E4ED"></td>
@@ -136,7 +136,7 @@
                                                             <td>
                                                                 <center>
                                                                     <a href="{{url('/teacher/view/qualify/test/'.$nota['Student_id'].'/'.$nota['Test_id'].'/'.$nota['Curso_id'])}}" class="btn btn-outline-info btn-sm mr-3">
-                                                                        <i class="flaticon-list-3"></i>Calificar examen </a>
+                                                                        <i class="flaticon-list-3"></i>Calificar examen </a> <span class="label label-warning label-pill label-inline mr-2">{{$nota['Punteo']}}pts</span>
                                                                 </center></td>
                                                             @endif
                                                         @endforeach
@@ -259,8 +259,8 @@
                                         })
                                     }else{
                                         swalWithBootstrapButtons.fire({
-                                        title: 'Creado!',
-                                        text: 'Se ha creado con exito!',
+                                        title: 'Calificado!',
+                                        text: 'Se ha calificado el examen con exito!',
                                         icon: 'success',
                                         confirmButtonText: 'Aceptar',
                                         }).then(function () {
