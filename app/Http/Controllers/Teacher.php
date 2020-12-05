@@ -587,7 +587,6 @@ class Teacher extends Controller
         $Titles = [];
         $Modal = [];
         $teacher = user::find($request->session()->get('User_id'));
-        $assignV = Asign_teacher_course::where('Course_id',$id)->first();
         $vol = $teacher->Person();
         $course = course::find($id);
         $Activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
@@ -607,59 +606,59 @@ class Teacher extends Controller
                 ];
                 array_push($Titles,$act);
             }
-                foreach($gradeStudents as $student)
+            foreach($gradeStudents as $student)
+            {
+                $notas=[];
+                foreach($Activities as $Activity)
                 {
-                    $notas=[];
-                    foreach($Activities as $Activity)
+                    if(count($Activity->Tests())>0)
                     {
-                        if(count($Activity->Tests())>0)
+                        foreach($Activity->Tests() as $v)
                         {
-                            foreach($Activity->Tests() as $v)
-                            {
-                                $assign = Assign_student_grade::where([['user_id',$student->id],['State','Active']])->first();
-                                $notes = note::where([['Test_id',$v->id],['Student_id',$assign->id]])->first();
-                                if($v->State == "Fisico"){
-                                    if($notes==null){
-                                        $n=["Student_id" => "Fisico", "Student"=>$assign->id, "Curso_id"=>$id,"Test_id"=> $v->id, "Punteo"=> "0/".$v->Score];
-                                        array_push($notas,$n);
-                                    } 
-                                    elseif($notes->State == "Pre-Qualified"){
-                                        $n=["Student_id" => "Fisico", "Student"=>$assign->id, "Curso_id"=>$id,"Test_id"=> $v->id, "Punteo"=> $notes->Score.'/'.$v->Score];
-                                        array_push($notas,$n);
-                                    }
-                                    elseif($notes->State == "Qualified" || $notes->State == "Approved"){
-                                        $n=["Student_id" => "Pre" ,"Test_id"=> "Pre"];
-                                        array_push($notas,$n);
-                                    }
+                            $assign = Assign_student_grade::where([['user_id',$student->id],['State','Active']])->first();
+                            $notes = note::where([['Test_id',$v->id],['Student_id',$assign->id]])->first();
+                            if($v->State == "Fisico"){
+                                if($notes==null){
+                                    $n=["Student_id" => "Fisico", "Student"=>$assign->id, "Curso_id"=>$id,"Test_id"=> $v->id, "Punteo"=> "0/".$v->Score];
+                                    array_push($notas,$n);
+                                } 
+                                elseif($notes->State == "Pre-Qualified"){
+                                    $n=["Student_id" => "Fisico", "Student"=>$assign->id, "Curso_id"=>$id,"Test_id"=> $v->id, "Punteo"=> $notes->Score.'/'.$v->Score];
+                                    array_push($notas,$n);
+                                }
+                                elseif($notes->State == "Qualified" || $notes->State == "Approved"){
+                                    $n=["Student_id" => "Pre" ,"Test_id"=> "Pre"];
+                                    array_push($notas,$n);
+                                }
+                            }
+                            else{
+                                if($notes==null){
+                                    $n=["Student_id" => "0" ,"Test_id"=> "0"];
+                                    array_push($notas,$n);
+                                } 
+                                elseif($notes->State == "Pre-Qualified" || $notes->State == "Qualified" || $notes->State == "Approved"){
+                                    $n=["Student_id" => "Pre" ,"Test_id"=> "Pre"];
+                                    array_push($notas,$n);
                                 }
                                 else{
-                                    if($notes==null){
-                                        $n=["Student_id" => "0" ,"Test_id"=> "0"];
-                                        array_push($notas,$n);
-                                    } 
-                                    elseif($notes->State == "Pre-Qualified" || $notes->State == "Qualified" || $notes->State == "Approved"){
-                                        $n=["Student_id" => "Pre" ,"Test_id"=> "Pre"];
-                                        array_push($notas,$n);
-                                    }
-                                    else{
-                                        $n=["Student_id" => $assign->id,"Test_id"=>$v->id, "Curso_id"=>$id];
-                                        array_push($notas,$n);
-                                    }
+                                    $n=["Student_id" => $assign->id,"Test_id"=>$v->id, "Curso_id"=>$id];
+                                    array_push($notas,$n);
                                 }
                             }
                         }
-                        else
-                        {
-                            $n=["Student_id" => 'No',"Test_id"=>'No'];
-                            array_push($notas,$n);
-                        }
                     }
-                    $model =[
-                        'Alumno' => $student->person()->Names." ".$student->person()->LastNames,
-                        'Notas' =>$notas,
-                    ];
-                    array_push($Models,$model);
+                    else
+                    {
+                        $n=["Student_id" => 'No',"Test_id"=>'No'];
+                        array_push($notas,$n);
+                    }
                 }
+                $model =[
+                    'Alumno' => $student->person()->Names." ".$student->person()->LastNames,
+                    'Notas' =>$notas,
+                ];
+                array_push($Models,$model);
+            }
         }
         $Nombre = $vol->Names.' '.$vol->LastNames;
         $grado = grade::find($course->Grade_id)->GradeName();
@@ -802,7 +801,31 @@ class Teacher extends Controller
     }
     public function SendQualify(Request $request,$id)
     {
-        $curso = course::find($id);
+        $course = course::find($id);
+        $Activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
+        if(!$Activities->isempty()){
+            $gradeStudents = grade::find($course->Grade_id)->Students();
+            foreach($gradeStudents as $student)
+            {
+                $notas=[];
+                foreach($Activities as $Activity)
+                {
+                    if(count($Activity->Tests())>0)
+                    {
+                        foreach($Activity->Tests() as $v)
+                        {
+                            $assign = Assign_student_grade::where([['user_id',$student->id],['State','Active']])->first();
+                            $notes = note::where([['Test_id',$v->id],['Student_id',$assign->id]])->first();
+                            if($v->State == "Fisico"){
+                                if($notes==null){
+                                    return redirect('/teacher/test/score/'.$id)->withError('El examen: '.$v->Title.' aún no ha sido calificado');
+                                } 
+                            }
+                        }
+                    }
+                }
+            }
+        }
         $nota = Note::where('Course_id',$id)->get();
         if($nota->isempty()){
             return redirect('/teacher/score/list/'.$id)->withError('No existen notas de examenes calificados');
@@ -823,7 +846,7 @@ class Teacher extends Controller
             }
         }
         Session::put([
-            'message' => "Notas de: $curso->Name enviadas al circulo de estudio",
+            'message' => "Notas de: $course->Name enviadas al circulo de estudio",
              ]);
         return redirect('/teacher/score/list/'.$id);
     }
@@ -902,6 +925,7 @@ class Teacher extends Controller
                     $examen->EndDate = $Fechas[1].' '.$HoraF;
                     $examen->Activity_id = $actividad;
                     $examen->Order = $data['OrderQuestions'];
+                    $examen->Year = date("Y");
                     $examen->State = 'Active';
                     $examen->save();
                     $assignVol = Asign_teacher_course::where('Course_id',$curso)->first();
@@ -927,6 +951,7 @@ class Teacher extends Controller
                     $examen->Title = $Titulo;
                     $examen->Score = $Punteo;
                     $examen->Activity_id = $actividad;
+                    $examen->Year = date("Y");
                     $examen->State = 'Fisico';
                     $examen->save();
                     $assignVol = Asign_teacher_course::where('Course_id',$curso)->first();
@@ -1027,6 +1052,7 @@ class Teacher extends Controller
                 $note->Score = $score;
                 $note->Course_id = $course;
                 $note->State = "Pre-Qualified";
+                $note->Year = date("Y");
                 $note->Test_id = $test;
                 $note->Save();
                 return response()->json("Accion Completada");    

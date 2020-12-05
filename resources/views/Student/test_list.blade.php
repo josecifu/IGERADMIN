@@ -71,11 +71,10 @@
                     <div class="d-flex justify-content-between align-items-center">
                       <span class="text-dark-75 font-weight-bolder mr-2">Fecha de disponibilidad:</span>
                       <span class="label label-dark label-inline mr-2">{{$model['start']}}</span>
-                      
                     </div>
                     <br>
                     <div class="d-flex justify-content-between align-items-center">
-                      <span class="text-dark-75 font-weight-bolder mr-2">Fecha de finalización</span>
+                      <span class="text-dark-75 font-weight-bolder mr-2">Fecha de finalización:</span>
                       <span class="label label-dark label-inline mr-2">{{$model['end']}}</span>
                     </div>
                   </div>

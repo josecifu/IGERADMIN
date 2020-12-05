@@ -165,15 +165,24 @@
                     <div class="row">
                         <div class="col-xxl-12">                        
                             <!--begin::Base Table Widget 10-->
-                            
                             <div class="card card-custom gutter-b">
                                 <!--begin::Header-->
                                 <div class="card-header border-0 pt-5">
                                     <h3 class="card-title align-items-start flex-column">
-                                        <span class="card-label font-weight-bolder text-dark">Evaluaciones programadas</span>
-                                        <span class="text-muted mt-3 font-weight-bold font-size-sm">Proximos examenes con fechas
-                                        <span class="text-primary"></span></span>
+                                        <span class="card-label font-weight-bolder text-dark">Evaluaciones</span>
+                                        <span class="text-muted mt-3 font-weight-bold font-size-sm">Cantidad: 
+                                        <span class="text-primary font-weight-bolder">1</span></span>
                                     </h3>
+                                    <div class="card-toolbar">
+                                        <ul class="nav nav-pills-sm nav-dark">
+                                            <li class="nav-item ml-0">
+                                                <a type="button" class="btn btn-danger" href="/student/test/view">Evaluaciones programadas</a>
+                                            </li>&nbsp;&nbsp;&nbsp;
+                                            <li class="nav-item">
+                                                <a type="button" class="btn btn-warning" href="/student/test/list">Todos los examenes</a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                                 <!--end::Header-->
                                 <!--begin::Body-->
@@ -215,13 +224,13 @@
                                                                 </div>
                                                             </td>
                                                             <td class="pl-0">
-                                                                <a href="" class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">{{$model['test']}}</a>
+                                                                <a class="text-dark-75 font-weight-bolder mb-1 font-size-lg">{{$model['test']}}</a>
                                                                 <span class="text-muted font-weight-bold d-block">{{$model['course']}}</span>
                                                             </td>
                                                             <td></td>
                                                             <td class="text-left">
-                                                                <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['start']}}</span>
-                                                                <span class="text-muted font-weight-bold d-block font-size-sm">Fecha & hora</span>
+                                                                <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['start']}} - {{$model['end']}}</span>
+                                                                <span class="text-muted font-weight-bold d-block font-size-sm">Fecha Inicio & Fecha Final</span>
                                                             </td>
                                                         </tr>
                                                         @endforeach
