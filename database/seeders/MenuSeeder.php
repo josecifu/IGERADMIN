@@ -114,7 +114,7 @@ class MenuSeeder extends Seeder
             'menu_id' => '10'          
         ]);       
         DB::table('menus')->insert([
-            'Name' => 'Administracion', //16
+            'Name' => 'Administración', //16
             'Icon' => 'pe-7s-home',
             'Url' => 'administration/workspace',
             'State' => '1',     
@@ -293,5 +293,56 @@ class MenuSeeder extends Seeder
             'Url' => 'listCourse(5)',
             'menu_id' => '38'      
         ]); 
+
+
+
+
+
+
+            //Attendant
+            DB::table('menus')->insert([
+                'Name' => 'Inicio', //42
+                'Icon' => 'pe-7s-home',
+                'Url' => 'attendant/home',
+                'State' => '1',     
+                'Order' => '10',      
+            ]);
+            DB::table('menus')->insert([ 
+                'Name' => 'Tablero',
+                'State' => '1',
+                'Url' => 'attendant/home/dashboard',  //43
+                'menu_id' => '42'          
+            ]); 
+            DB::table('menus')->insert([ 
+                'Name' => 'Espacio de trabajo',
+                'State' => '1',
+                // 'Url' => 'teacher/home/workspace',  //44
+                'Type' => '3',
+                'Url' => 'listCourse(4)',
+                'menu_id' => '42'          
+            ]); 
+            DB::table('menus')->insert([
+                'Name' => 'Notas', //45
+                'Icon' => 'pe-7s-home',
+                'Url' => 'attendant/notes',
+                'State' => '1',     
+                'Order' => '10',      
+            ]);
+            DB::table('menus')->insert([ 
+                'Name' => 'Visualizar notas',
+                'State' => '1',
+                // 'Url' => 'teacher/score/list/vol',  //46
+                'Type' => '4',
+                'Url' => 'ListGrade(7)',       
+                'menu_id' => '45'
+            ]); 
+            DB::table('menus')->insert([ 
+                'Name' => 'Visualizar notas aprobadas y reprobadas',
+                'State' => '1',
+                // 'Url' => 'teacher/test/view',  //47
+                'Url' => 'attendant/notes/aproved',
+                'menu_id' => '45'          
+            ]); 
+            
     }
 }

@@ -33,6 +33,10 @@ class User extends Authenticatable
     public function CoursesTeacherData(){
         return $this->belongsToMany(course::class,'asign_teacher_courses','user_id','Course_id')->get();
     }
+    public function PeriodsAttendantData(){
+        return $this->belongsToMany(period::class,'assign_attendant_periods','user_id','Period_id')->get();
+    }
+   
     public function CountTeacherPeriods()
     {
         $model=[];

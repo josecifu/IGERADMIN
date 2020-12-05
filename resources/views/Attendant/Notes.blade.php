@@ -1,4 +1,4 @@
-@extends('Administration.Base/BaseTeacher')
+@extends('Administration.Base/BaseAttendant')
 {{-- Page title --}}
     @section('title')
     Administración
@@ -45,8 +45,8 @@
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
                                             <div class="dropdown dropdown-inline mr-2">
-                                                <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="la la-download"></i>Exportar</button>
+                                                <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white">
+                                                <i class="la la-download" style="color: white"></i>Exportar</button>
                                                 <!--begin::Dropdown Menu-->
                                                 <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                                                     <ul class="nav flex-column nav-hover">
@@ -97,7 +97,7 @@
                                                     @foreach($Titles as $Title)
                                                         <th colspan="{{ $Title['No'] }}" ><center>{{ $Title['Name'] }}</center></th>
                                                     @endforeach
-                                                    <th></th>
+                                                    
                                                 </tr>
                                                 <tr>
                                                     <th>Nombre de los alumnos</th>
@@ -109,7 +109,7 @@
                                                         <th><center>{{$title->Title}}</center></th>
                                                         @endforeach
                                                     @endforeach
-                                                    <th>Acciones</th>
+                                                    
                                                   </tr>
                                             </thead>
                                             <tbody>
@@ -126,7 +126,7 @@
                                                                     <td style="background-color: #E2E4ED"></td>
                                                                 @endif
                                                             @endforeach
-                                                            <td nowrap="nowrap"></td>
+                                                            
                                                         </tr>
                                                     @endforeach                                                    
                                                 </div>
@@ -196,30 +196,7 @@
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                         },
-                        columnDefs: [
-                            {
-                                targets: -1,
-                                title: 'Acciones',
-                                orderable: false,
-                                render: function(data, type, full, meta) {
-                                    return '\
-                                        <div class="dropdown dropdown-inline">\
-                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">\
-                                                <i class="la la-cog"></i>\
-                                            </a>\
-                                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
-                                                <ul class="nav nav-hoverable flex-column">\
-                                                    <li class="nav-item"><a class="nav-link" href="/administration/teacher/edit/'+full[0]+'"><i class="nav-icon la la-edit"></i><span class="nav-text">Editar</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
-                                                </ul>\
-                                            </div>\
-                                        </div>\
-                                        <a href="/administration/teacher/delete/'+full[0]+'" class="btn btn-sm btn-clean btn-icon" title="Borrar">\
-                                            <i class="la la-trash"></i>\
-                                        </a>\
-                                    ';
-                                },
-                            },
+                        
                            
                           
                         ],

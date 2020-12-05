@@ -769,7 +769,7 @@
 													{{session()->get('Username')}}
 												@endif
 											</div>
-											<span class="label label-light-warning label-lg font-weight-bold label-inline">@if(session()->has('Username'))
+											<span class="label label-light-warning label-lg font-weight-bold label-inline" style="height: 100%">@if(session()->has('Username'))
 												{{session()->get('rol_Name')}}
 										  @endif</span>
 											<!--end::Text-->
@@ -779,7 +779,15 @@
 										<!--begin::Nav-->
 										<div class="navi navi-spacer-x-0 pt-5">
 											<!--begin::Item-->
+											@if(session()->get('rol_Name')=="Administrador")
 											<a href="custom/apps/user/profile-1/personal-information.html" class="navi-item px-8">
+											@elseif(session()->get('rol_Name')=="Estudiante")
+											<a href="custom/apps/user/profile-1/personal-information.html" class="navi-item px-8">
+												@elseif(session()->get('rol_Name')=="Voluntario")
+											<a href="custom/apps/user/profile-1/personal-information.html" class="navi-item px-8">
+												@elseif(session()->get('rol_Name')=="Encargado de circulo")
+											<a href="{{url('attendant/profile')}}" class="navi-item px-8">
+											@endif
 												<div class="navi-link">
 													<div class="navi-icon mr-2">
 														<i class="flaticon2-calendar-3 text-success"></i>
@@ -801,7 +809,7 @@
 													</div>
 													<div class="navi-text">
 														<div class="font-weight-bold">Mis actividaes</div>
-														<div class="text-muted">Logs y registros de usuario</div>
+														<div class="text-muted">registros de actividad de usuario</div>
 													</div>
 												</div>
 											</a>

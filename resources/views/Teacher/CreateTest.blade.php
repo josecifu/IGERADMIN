@@ -134,7 +134,7 @@
 											<div class="d-flex justify-content-between border-top mt-5 pt-10">
 												<div>
 													<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Crear Examen</button>
-													<button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>*
+													<button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>
 												</div>
 											</div>
 											<!--end::Wizard Actions-->

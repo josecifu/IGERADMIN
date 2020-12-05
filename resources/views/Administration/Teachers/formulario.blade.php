@@ -526,7 +526,7 @@ var KTWizard1 = function () {
 					console.log(e);
 					swal.fire({
 						title: 'Ocurrio un error!',
-						text:  'Los datos no han sido registrados!, verifique los campos',
+						text: e.responseJSON['Error'],
 						icon: 'error',
 						confirmButtonText: 'Aceptar',
                     })

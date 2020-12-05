@@ -278,7 +278,7 @@ var KTWizard1 = function () {
 				}
 			});
             var data = [{
-				Curso: selectedPeriod,
+				Period: selectedPeriod,
 				Code: {{$id}},
             }];
 
@@ -301,7 +301,7 @@ var KTWizard1 = function () {
 						type: "success"
 						}).then(function () {
 						var $url_path = '{!! url('/') !!}';
-						window.location.href = $url_path+"/administration/teacher/list";
+						window.location.href = $url_path+"/administration/workspace/attendant/list";
                         });
 					}
                 },

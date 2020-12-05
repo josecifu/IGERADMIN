@@ -250,6 +250,11 @@ class Teacher extends Controller
                 //Tabla usuarios
                 $user = new User;
                 $user->name = $Usuario;
+                $registered_user = User::where('name',$Usuario)->first();
+                if ($registered_user!=null)
+                {
+                    return response()->json(['Error' => "El nombre de usuario que ingreso ya esta registrado!"], 500);
+                }
                 $user->email = $Email;
                 $user->password = bcrypt($Contraseña);
                 $user->State = "Active";
