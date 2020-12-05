@@ -1,10 +1,10 @@
 @extends('Administration.Base/Base')
 {{-- Page title --}}
     @section('title')
-    Inicio
+    Encargado de circulo
     @stop
     @section('breadcrumb1')
-    Tablero
+    Administración
     @stop
     @section('breadcrumb2')
     Principal
@@ -151,7 +151,7 @@
                                             </a>\
                                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right" >\
                                                 <ul class="nav nav-hoverable flex-column" >\
-                                                    <li class="nav-item"><a class="nav-link" href="#" data-toggle="modal" data-target="#CoursesModal'+full[0]+'"><i class="nav-icon la la-mail-reply-all"></i><span class="nav-text" style="padding-left:10px;"> Asignación de circulos de estudio</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="/administration/workspace/attendant/assign/'+full[0]+'" ><i class="nav-icon la la-mail-reply-all"></i><span class="nav-text" style="padding-left:10px;"> Asignación de circulos de estudio</span></a></li>\
                                                 </ul>\
                                             </div>\
                                         </div>\

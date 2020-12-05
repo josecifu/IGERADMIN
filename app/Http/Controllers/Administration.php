@@ -36,7 +36,7 @@ use App\Models\Assign_period_grade;
 use App\Models\Assign_level_grade;
 //Modelo asignacion de circulo de estudio
 use App\Models\Assign_attendant_periods;
-
+use Session;
 use Illuminate\Support\Facades\DB;
 
 class Administration extends Controller
@@ -145,6 +145,30 @@ class Administration extends Controller
     {
         dd("HOLA");
     }
+    public function AttendantAssign($id)
+    {
+        $buttons =[];
+        $button = [
+            "Name" => 'Listado Voluntarios',
+            "Link" => 'administration/teacher/list',
+            "Type" => "add"
+        ];
+        $person = Person::find($id);
+        array_push($buttons,$button);
+        $assignT = Assign_attendant_periods::where([['user_id',$person->User()->id],['State','Active']])->get();
+        $PeriodsAssign = [];
+        if(!$assignT->isEmpty()){
+            foreach ($assignT as $value) {
+                $period = period::find($value->Period_id);
+                $data = [
+                    'id' => $period->id,
+                    "name" => $period->Name,
+                ];
+                array_push($PeriodsAssign,$data);
+            }
+        }
+        return view('Administration/attendant/AssignPeriods',compact('buttons','PeriodsAssign','id'));
+    }
     public function AttendantList(Request $request)
     {
         $buttons =[];
@@ -193,6 +217,7 @@ class Administration extends Controller
             }
         }
             $type="Active";
+           
         return view('Administration.Attendant.List',compact('buttons','Titles','Models','type'));
     }
     public function AttendantCreate(Request $request)
@@ -423,6 +448,26 @@ class Administration extends Controller
          } 
         return response()->json([
             "Levels" => $Models,
+            ]);
+    }
+    public function LoadPeriodsAttendant()
+    {
+        $PeriodsData = period::where('State','Active')->get();
+        $periods =[];
+       
+        foreach ($PeriodsData as $value) {
+            $assign=Assign_attendant_periods::where('Period_id',$value->id)->first();
+            if($assign==null)
+            {
+                $period = [
+                    "Id" =>$value->id,
+                    "Name" =>$value->Name,
+                ];
+                array_push($periods,$period);
+            }
+         } 
+        return response()->json([
+            "Periods" => $periods,
             ]);
     }
     public function LoadPeriods()

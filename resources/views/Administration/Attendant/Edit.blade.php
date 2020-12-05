@@ -1,13 +1,13 @@
 @extends('Administration.Base/Base')
 {{-- Page title --}}
     @section('title')
-    Inicio
+	Encargado de circulo
     @stop
     @section('breadcrumb1')
-    Actualizar
+    Administración
     @stop
     @section('breadcrumb2')
-    Voluntario
+    Actualización de encargado
     @stop
     {{-- Page content --}}
     @section('content')

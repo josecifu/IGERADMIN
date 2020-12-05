@@ -594,10 +594,12 @@
 				$('#SelectGrd').css("visibility", "hidden");
 				$('#SelectCourse').css("visibility", "hidden");
 			}
+			
 			function ListGrade(pos)
 			{
 				clearLvls();
 				posGrade=pos;
+				var url = '{{route('LoadPeriods')}}';
 				if(pos==1)
 				{
 					$('#Title1').text("Listado de alumnos por grado");
@@ -622,9 +624,14 @@
 					$('#Title1').text("Visualización de examenes por grado y curso");
 					$('#Title2').html("Visualice el listado de examenes por curso, grados, nivel y circulo de estudio seleccionado");
 				}
-				
+				else if(pos==6)
+				{			
+					$('#Title1').text("Visualización de notas aprobadas y reprobadas");
+					$('#Title2').html("Visualice el listado de notas y examenes por curso, grados, nivel y circulo de estudio seleccionado");
+					url = '{{route('LoadPeriodsAttendant')}}';
+				}
 				$.ajax ({
-					url: '{{route('LoadPeriods')}}',
+					url: url,
 					type: 'GET',
 					success: (e) => {
 						$('#periodselect1').empty();
@@ -667,6 +674,12 @@
 					}
 				}
 				if(posGrade==5)
+				{
+					var Id = $('#courseselect1').val();
+					var $url_path = '{!! url('/') !!}';
+                    window.location.href = $url_path+"/administration/student/list/test/"+Id;
+				}
+				if(posGrade==6)
 				{
 					var Id = $('#courseselect1').val();
 					var $url_path = '{!! url('/') !!}';
@@ -742,7 +755,6 @@
 				}
 			});
 			@if(Session::has('error'))
-	  
 			Swal.fire({
 				title: "{{Session::get('error')}}",
 				text: "",
@@ -750,8 +762,19 @@
 				confirmButtonText: "Aceptar",
 			})
 			@endif
+			@if(Session::has('message'))
+			Swal.fire({
+				title: "{{Session::get('message')}}",
+				text: "",
+				icon: "success",
+				confirmButtonText: "Aceptar",
+			})
+			@php
+			session()->forget('message');	
+			@endphp
+			@endif
 		</script>
-
+		
 
 		@section('scripts')
 																					          

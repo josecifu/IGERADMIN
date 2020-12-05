@@ -147,10 +147,13 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 			#Encargados de circulo
 			Route::get('/list', $route.'\Administration@AttendantList')->name('AttendantList');
 			Route::get('/create', $route.'\Administration@AttendantCreate')->name('AttendantCreate');
+			Route::get('/notes', $route.'\Administration@AttendantCreate')->name('AttendantNotes');
+			Route::get('/assign/{model}', $route.'\Administration@AttendantAssign')->name('AttendantAssign');
 			Route::get('/deletes', $route.'\Administration@AttendantDeletes')->name('AttendantDeletes');
 			Route::post('/save', $route.'\Administration@AttendantSave')->name('AttendantSave');
 			Route::get('/edit/{model}', $route.'\Administration@AttendantEdit')->name('AttendantEdit');
 			Route::get('/change/{model}/{type}', $route.'\Administration@AttendantChange')->name('AttendantChange');
+			Route::get('/load/periods', $route.'\Administration@LoadPeriodsAttendant')->name('LoadPeriodsAttendant');
 		});
 	});
 	//Configuraciones
