@@ -22,10 +22,41 @@ use App\Models\Asign_teacher_course;
 
 class Student extends Controller
 {
-    public function statistics()
+    public function statistics ()
     {
         $models = [];
-        return view('Administration/Student/statistics',compact('models'));
+        $periods = Period::where('State','Active')->get();
+        $countsfemale = [];
+        $countsmale = [];
+        foreach($periods as $value)
+        {
+            $female = 0;
+            $male = 0;
+            foreach($value->Grades() as $grade)
+            {
+                foreach($grade->Students() as $student)
+                {
+                    if($student->Person()->Gender=="Masculino")
+                    {
+                        $male++;
+                    }
+                    else
+                    {
+                        $female++;
+                    }
+                }
+            }
+            array_push($countsfemale,$female);
+            array_push($countsmale,$male);
+        }
+            array_push($countsfemale,0);
+            array_push($countsfemale,0);
+            array_push($countsmale,0);
+            array_push($countsfemale,0);
+            array_push($countsmale,0);
+            array_push($countsmale,0);
+
+        return view('Administration/Student/statistics ',compact('countsfemale','countsmale'));
     }
 
     #FUNCIONES DE ESTUDIANTE
@@ -920,7 +951,7 @@ class Student extends Controller
                 {
                     $values =[
                         'Id' => $test->id,
-                        'state' => $test->State,
+                        'e' => $test->State,
                         'NoQuestions' => $test->NoQuestions(),
                     ];
                     array_push($tests,$values);
