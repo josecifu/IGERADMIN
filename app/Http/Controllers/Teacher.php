@@ -152,8 +152,12 @@ class Teacher extends Controller
                 }
             }
         }
-        $tests=[];    
+        $tests=[];  
+        $Qualifieds = [];
+        $Approveds = [];  
         $course = Asign_teacher_course::where('user_id',$data->id)->get();
+
+        #========== BUSCA EXÁMENES PROGRAMADOS =============
         if(!$course->isEmpty()){
             foreach ($course as $value) {
                 $actividades = Assign_activity::where([['Course_id',$value->Course_id],['State','Active']])->first();
@@ -162,26 +166,38 @@ class Teacher extends Controller
                     $examenes = test::where([['Activity_id',$actividades->id],['State','Active']])->get();
                     foreach ($examenes as $value) {
                         $fechafinal = explode(" ", $value->EndDate);
+                        $fechaInicial = explode(" ", $value->StartDate);
                         $horafinal = $fechafinal[1].' '.$fechafinal[2];
+                        $horaInicial = $fechaInicial[1].' '.$fechaInicial[2];
                         $horaactual = date("g").':'.date("i").' '.date("A");
                         $actual = new DateTime();
                         if(date($fechafinal[0]) > $actual->format('m/d/Y')){
+                            setlocale(LC_TIME, "spanish");
+                            $newDate = date("d-m-Y", strtotime($value->StartDate));	
+                            $Inicio = strftime("%d de %B del %Y", strtotime($newDate));
+                            $newDateFinal = date("d-m-Y", strtotime($value->EndDate));	
+                            $Final = strftime("%d de %B del %Y", strtotime($newDateFinal));
                             $data=[
                                 "id" => $value->id,
                                 "examen" => $value->Title,
                                 "Curso" => $mcourse->Name ." - ". $mcourse->Grade()->GradeName()." - ".$mcourse->Grade()->Period()->Name,
-                                "FI" => $value->StartDate,
-                                "FF" => $value->EndDate,
+                                "FI" => $Inicio.' '.$horaInicial,
+                                "FF" => $Final.' '.$horafinal,
                             ];
                             array_push($tests,$data);
                         }
                         else if (date($fechafinal[0]) == $actual->format('m/d/Y') && $horafinal > $horaactual) {
+                            setlocale(LC_TIME, "spanish");
+                            $newDate = date("d-m-Y", strtotime($value->StartDate));	
+                            $Inicio = strftime("%d de %B del %Y", strtotime($newDate));
+                            $newDateFinal = date("d-m-Y", strtotime($value->EndDate));	
+                            $Final = strftime("%d de %B del %Y", strtotime($newDateFinal));
                             $data=[
                                 "id" => $value->id,
                                 "examen" => $value->Title,
                                 "Curso" => $mcourse->Name ." - ". $mcourse->Grade()->GradeName()." - ".$mcourse->Grade()->Period()->Name,
-                                "FI" => $value->StartDate,
-                                "FF" => $value->EndDate,
+                                "FI" => $Inicio.' '.$horaInicial,
+                                "FF" => $Final.' '.$horafinal,
                             ];
                             array_push($tests,$data);
                         }
@@ -189,7 +205,35 @@ class Teacher extends Controller
                 }
             }
         }
-        return view('Teacher/Home',compact('Titles','Models','DataTeacher','TestData','tests'));
+        #======== BUSCA QUALIFIED ==================
+        if(!$course->isEmpty()){
+            foreach ($course as $value) {
+                $qualified = Note::where([['Course_id',$value->Course_id],['State','Qualified']])->first();
+                $approved = Note::where([['Course_id',$value->Course_id],['State','Approved']])->first();
+                $mcourse = Course::find($value->Course_id);
+                if (isset($qualified)) {
+                    setlocale(LC_TIME, "spanish");
+                    $newDate = date("d-m-Y", strtotime($qualified->updated_at));	
+                    $Revision = strftime("%d de %B del %Y", strtotime($newDate));
+                    $data=[
+                        "Curso" => $mcourse->Name ." - ". $mcourse->Grade()->GradeName()." - ".$mcourse->Grade()->Period()->Name,
+                        "Revision" => $Revision,
+                    ];
+                    array_push($Qualifieds,$data);
+                }
+                else if (isset($approved)) {
+                    setlocale(LC_TIME, "spanish");
+                    $newDate = date("d-m-Y", strtotime($approved->updated_at));	
+                    $Revision = strftime("%d de %B del %Y", strtotime($newDate));
+                    $data=[
+                        "Curso" => $mcourse->Name ." - ". $mcourse->Grade()->GradeName()." - ".$mcourse->Grade()->Period()->Name,
+                        "Revision" => $Revision,
+                    ];
+                    array_push($Approveds,$data);
+                }
+            }
+        }
+        return view('Teacher/Home',compact('Titles','Models','DataTeacher','TestData','tests','Approveds','Qualifieds'));
     }
     public function list() //Visualizcion tabla Voluntarios con usuario
     {
@@ -496,7 +540,7 @@ class Teacher extends Controller
                                 if($note==null){
                                     array_push($notas,0);
                                 }
-                                else if($note->State == "Pre-Qualified" || $note->State == "Complete" || $note->State == "Qualified"){
+                                else if($note->State == "Pre-Qualified" || $note->State == "Complete" || $note->State == "Qualified" || $note->State == "Approved"){
                                     array_push($notas,$note->Score);
                                 }else{
                                     array_push($notas,"El examen no se ha calificado");
@@ -571,10 +615,14 @@ class Teacher extends Controller
                                 $notes = note::where([['Test_id',$v->id],['Student_id',$assign->id]])->first();
                                 if($v->State == "Fisico"){
                                     if($notes==null){
-                                        $n=["Student_id" => "Fisico", "Student"=>$assign->id, "Curso_id"=>$id,"Test_id"=> $v->id];
+                                        $n=["Student_id" => "Fisico", "Student"=>$assign->id, "Curso_id"=>$id,"Test_id"=> $v->id, "Punteo"=> "0/".$v->Score];
                                         array_push($notas,$n);
                                     } 
-                                    elseif($notes->State == "Pre-Qualified" || $notes->State == "Qualified"){
+                                    elseif($notes->State == "Pre-Qualified"){
+                                        $n=["Student_id" => "Fisico", "Student"=>$assign->id, "Curso_id"=>$id,"Test_id"=> $v->id, "Punteo"=> $notes->Score.'/'.$v->Score];
+                                        array_push($notas,$n);
+                                    }
+                                    elseif($notes->State == "Qualified" || $notes->State == "Approved"){
                                         $n=["Student_id" => "Pre" ,"Test_id"=> "Pre"];
                                         array_push($notas,$n);
                                     }
@@ -584,7 +632,7 @@ class Teacher extends Controller
                                         $n=["Student_id" => "0" ,"Test_id"=> "0"];
                                         array_push($notas,$n);
                                     } 
-                                    elseif($notes->State == "Pre-Qualified" || $notes->State == "Qualified"){
+                                    elseif($notes->State == "Pre-Qualified" || $notes->State == "Qualified" || $notes->State == "Approved"){
                                         $n=["Student_id" => "Pre" ,"Test_id"=> "Pre"];
                                         array_push($notas,$n);
                                     }
@@ -608,19 +656,11 @@ class Teacher extends Controller
                     array_push($Models,$model);
                 }
         }
-        // dd($Models);
-        $button = [
-            "Name" => 'Enviar notas a revisión',
-            "Link" => '/teacher/send/state/test/'.$id,
-            "Type" => "btn1"
-        ];
-        array_push($buttons,$button);
         $Nombre = $vol->Names.' '.$vol->LastNames;
         $grado = grade::find($course->Grade_id)->GradeName();
-        return view('Teacher/Test/ListTestScore',compact('buttons','Modal','Titles','Models','Nombre','course','grado'));
+        return view('Teacher/Test/ListTestScore',compact('Modal','Titles','Models','Nombre','course','grado'));
     }
             #===================    CRUD EXAMENES ================
-
     public function TestTeacher(Request $request,$id)   //VISTA DE EXAMENES DE UN CURSO
     {
         $buttons =[];
@@ -763,16 +803,19 @@ class Teacher extends Controller
             return redirect('/teacher/score/list/'.$id)->withError('No existen notas de examenes calificados');
         }
         foreach ($nota as $value) {
-            if ($value->State != 'Qualified' && $value->State != 'Pre-Qualified') {
+            // if (($value->State != 'Qualified') || ($value->State != 'Pre-Qualified') || ($value->State != 'Approved')) {
+            if ($value->State == 'Complete') {
                 $test = test::find($value->Test_id);
                 $assignT = Assign_student_grade::find($value->Student_id);
                 $student = User::find($assignT->user_id)->person();
                 return redirect('/teacher/test/score/'.$id)->withError('El examen: '.$test->Title.' del estudiante: '.$student->Names.' '.$student->LastNames.' aún no ha sido calificado');
-            }            
+            }
         }
         foreach ($nota as $n) {
-            $n->State = "Qualified";
-            $n->save();
+            if ($n->State == 'Pre-Qualified'){
+                $n->State = "Qualified";
+                $n->save();
+            }
         }
         Session::put([
             'message' => "Notas de: $curso->Name enviadas al circulo de estudio",
@@ -832,7 +875,7 @@ class Teacher extends Controller
             return response()->json(["Error"=>"Seleccione un actividad"]);
         }
         else if (intval($total) > $activity->Score) {
-            return response()->json(["Error"=>"El examen excede el punteo total de la actividad, Punteo total: ".$activity->Score]);
+            return response()->json(["Error"=>"El o los exámenes creados exceden el punteo de la actividad, Punteo total de la actividad: ".$activity->Score]);
         } else {
             if ($data['tipoexamen'] == 'true') {
                 if ($data['Preguntas'] <= 0) {
@@ -967,14 +1010,23 @@ class Teacher extends Controller
             return response()->json(["Error"=>"El punteo es mayor al punteo total del examen: ".$examen->Score]);
         }
         else{
-            $note = new Note;
-            $note->Student_id = $student;
-            $note->Score = $score;
-            $note->Course_id = $course;
-            $note->State = "Qualified";
-            $note->Test_id = $test;
-            $note->Save();
-            return response()->json("Accion Completada");
+            $verificar = Note::where([['Student_id',$student],['Course_id',$course],['Test_id',$test]])->first();
+            if(isset($verificar)){
+                $verificar->Score = $score;
+                $verificar->save();
+                return response()->json("Accion Completada");    
+            }
+            else{
+                $note = new Note;
+                $note->Student_id = $student;
+                $note->Score = $score;
+                $note->Course_id = $course;
+                $note->State = "Pre-Qualified";
+                $note->Test_id = $test;
+                $note->Save();
+                return response()->json("Accion Completada");    
+            }
+            
         }
         
     }
