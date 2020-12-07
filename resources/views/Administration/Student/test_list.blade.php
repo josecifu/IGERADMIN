@@ -102,16 +102,19 @@
                                     <td>{{$model['lastname']}}</td>
                                     @foreach($model['tests'] as $test)
                                     <td>
-                                        @if($test['state']=="Fisico")
-                                        <center>
-                                            <button type="button" disabled class="btn btn-outline-info">{{$model['note']}}</button>
-                                        </center>
-                                        @else
-                                        <center>
-                                            <button type="button" class="btn btn-outline-info"  onclick="verExamen({{$test['Id']}},{{$model['assign']}});">{{$model['note']}}</button>
-                                        </center>
-                                        @endif
-                                    </td>   
+                                        @foreach($test['notes'] as $note)
+                                            @if($test['state']=="written")
+                                            <center>
+                                                <button type="button" disabled class="btn btn-outline-info">{{$note['Score']}}</button>
+                                            </center>
+                                            @endif
+                                            @if($test['state']=="approved")
+                                            <center>
+                                                <button type="button" class="btn btn-outline-info"  onclick="verExamen({{$test['Id']}},{{$model['assign']}});">{{$note['Score']}}</button>
+                                            </center>
+                                            @endif
+                                        @endforeach
+                                    </td>
                                     @endforeach
                                 </tr>
                                 @endforeach

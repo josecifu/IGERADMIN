@@ -68,42 +68,55 @@ class Student extends Controller
     public function dashboard(Request $request)
     {
         $id = $request->session()->get('User_id');
+        $year = date("Y");
+        $cont = 0;
         $models = [];
         $assign = Assign_student_grade::where('user_id',$id)->first();
-        $answer = Asign_answer_test_student::where('Studen_id',$assign->id)->first();
-        if ($answer == null)
-        {
-            $courses = $assign->Grade()->Courses();
-            foreach($courses as $course)
-            { 
-                if($course->Tests())
+        $courses = $assign->Grade()->Courses();
+        foreach($courses as $course)
+        { 
+            if($course->Tests())
+            {
+                foreach($course->Tests()->where('Year',$year) as $test)
                 {
-                    foreach($course->Tests()->where('State','Active') as $test)
+                    $question = Question::where('Test_id',$test->id)->first();
+                    if($question != null)
                     {
-                        $fecha_actual = date("d-m-Y");
-                        $StartDate = date("d-m-Y",strtotime($test->StartDate." - 5 days")); 
-                        $StartDate2 = date("d-m-Y H:i:00",strtotime($test->StartDate)); 
-                        $date_now = strtotime(date("d-m-Y H:i:00"));
-                        $date_teststart = strtotime($StartDate);
-                        $date_teststart2 = strtotime($StartDate2);
-                        $EndDate = date("d-m-Y H:i:00",strtotime($test->EndDate)); 
-                        $date_testend = strtotime($EndDate);
-                        if($date_now >= $date_teststart)
+                        $answer = Asign_answer_test_student::where('Question_id',$question->id)->first();
+                        if ($answer == null)
                         {
-                            if($date_now <=$date_testend)
+                            $cont = $cont + 1;
+                            $StartDate = date("d-m-Y",strtotime($test->StartDate." - 5 days")); 
+                            $StartDate2 = date("d-m-Y H:i:00",strtotime($test->StartDate)); 
+                            $date_now = strtotime(date("d-m-Y H:i:00"));
+                            $date_teststart = strtotime($StartDate);
+                            $date_teststart2 = strtotime($StartDate2);
+                            $EndDate = date("d-m-Y H:i:00",strtotime($test->EndDate)); 
+                            $date_testend = strtotime($EndDate);
+                            $start = true;
+                            if($date_now >= $date_teststart)
                             {
-                                if($test->StartDate)
+                                if($date_now >= $date_teststart2)
                                 {
-                                    $query =[
-                                        "id"=>$test->id,
-                                        "course"=>$course->Name,
-                                        "test"=>$test->Title,
-                                        "start"=>$test->StartDate,
-                                        "end"=>$test->EndDate,
-                                    ];
-                                    array_push($models,$query);
+                                    $start = false;
+                                }
+                                if($date_now <= $date_testend)
+                                {
+                                    if($test->StartDate)
+                                    {
+                                        $query =[
+                                            'id' => $test->id,
+                                            'course' => $course->Name,
+                                            'test' => $test->Title,
+                                            'start' => date("d/m/Y h:i A",strtotime($test->StartDate)),
+                                            'end' => date("d/m/Y h:i A",strtotime($test->EndDate)),
+                                            'counter' => $cont
+                                        ];
+                                        array_push($models,$query);
+                                    }
                                 }
                             }
+
                         }
                     }
                 }
@@ -112,50 +125,6 @@ class Student extends Controller
         return view('Student/home',compact('models'));
     }
 
-    public function all_tests(Request $request)
-    {
-        $id = $request->session()->get('User_id');
-        $models = [];
-        $assign = Assign_student_grade::where('user_id',$id)->first();
-        $courses = $assign->Grade()->Courses();
-        $answer = Asign_answer_test_student::where('Studen_id',$assign->id)->first();
-        //dd($answer);
-        foreach($courses as $course)
-        {
-            if($course->Tests())
-            {
-                foreach($course->Tests()->where('State','Active') as $test)
-                {
-                    $StartDate = date("d-m-Y",strtotime($test->StartDate." - 5 days")); 
-                    $StartDate2 = date("d-m-Y H:i:00",strtotime($test->StartDate)); 
-                    $date_now = strtotime(date("d-m-Y H:i:00"));
-                    $date_teststart = strtotime($StartDate);
-                    $date_teststart2 = strtotime($StartDate2);
-                    $EndDate = date("d-m-Y H:i:00",strtotime($test->EndDate)); 
-                    $date_testend = strtotime($EndDate);
-                    $start = true;
-                    $query =[
-                        'id' => $test->id,
-                        'test' => $test->Title,
-                        'score' => $test->Score,
-                        'start' => $test->StartDate,
-                        'end' => $test->EndDate,
-                        'state' => $test->State,
-                        'course' => $course->Name,
-                        'NoQuestions' => $test->NoQuestions(),
-                        'activity' => $test->Activity()->Name,
-                        'Active' =>$start,
-                        'teacher' => $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames,
-                        'date' => date("d-m-Y",strtotime($test->StartDate)),
-                        'final' => 'sin nota',
-                        'percentage' => '0'
-                    ];
-                    array_push($models,$query);
-                }
-            }
-        }
-        return view('Student/tests',compact('models','assign','answer'));
-    }
 
 
 
@@ -189,7 +158,36 @@ class Student extends Controller
 
 
 
-                            #funciones terminadas
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    //REVISAR FILTROS (EXAMENES Y NOTAS POR AÑO)
 /*-------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------*/
@@ -208,51 +206,57 @@ class Student extends Controller
     public function student_test_list(Request $request)
     {
         $id = $request->session()->get('User_id');
+        $year = date("Y");
         $models = [];
         $assign = Assign_student_grade::where('user_id',$id)->first();
-        $answer = Asign_answer_test_student::where('Studen_id',$assign->id)->first();
-        if ($answer == null)
-        {
-            $courses = $assign->Grade()->Courses();
-            foreach($courses as $course)
-            { 
-                if($course->Tests())
+        $courses = $assign->Grade()->Courses();
+        foreach($courses as $course)
+        { 
+            if($course->Tests())
+            {
+                foreach($course->Tests()->where('Year',$year) as $test)
                 {
-                    foreach($course->Tests()->where('State','Active') as $test)
+                    $question = Question::where('Test_id',$test->id)->first();
+                    if($question != null)
                     {
-                        $StartDate = date("d-m-Y",strtotime($test->StartDate." - 5 days")); 
-                        $StartDate2 = date("d-m-Y H:i:00",strtotime($test->StartDate)); 
-                        $date_now = strtotime(date("d-m-Y H:i:00"));
-                        $date_teststart = strtotime($StartDate);
-                        $date_teststart2 = strtotime($StartDate2);
-                        $EndDate = date("d-m-Y H:i:00",strtotime($test->EndDate)); 
-                        $date_testend = strtotime($EndDate);
-                        $start = true;
-                        if($date_now >= $date_teststart)
+                        $answer = Asign_answer_test_student::where('Question_id',$question->id)->first();
+                        if ($answer == null)
                         {
-                            if($date_now >= $date_teststart2)
+                            $StartDate = date("d-m-Y",strtotime($test->StartDate." - 5 days")); 
+                            $StartDate2 = date("d-m-Y H:i:00",strtotime($test->StartDate)); 
+                            $date_now = strtotime(date("d-m-Y H:i:00"));
+                            $date_teststart = strtotime($StartDate);
+                            $date_teststart2 = strtotime($StartDate2);
+                            $EndDate = date("d-m-Y H:i:00",strtotime($test->EndDate)); 
+                            $date_testend = strtotime($EndDate);
+                            $start = true;
+                            if($date_now >= $date_teststart)
                             {
-                                $start=false;
-                            }
-                            if($date_now <=$date_testend)
-                            {
-                                if($test->StartDate)
+                                if($date_now >= $date_teststart2)
                                 {
-                                    $query =[
-                                        "id"=>$test->id,
-                                        "course"=>$course->Name,
-                                        "test"=>$test->Title,
-                                        "start"=>$test->StartDate,
-                                        "end"=>$test->EndDate,
-                                        "score"=>$test->Score,
-                                        "NoQuestions"=>$test->NoQuestions(),
-                                        "activity" => $test->Activity()->Name,
-                                        "Active" =>$start,
-                                        "teacher"=> $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames
-                                    ];
-                                    array_push($models,$query);
+                                    $start = false;
+                                }
+                                if($date_now <= $date_testend)
+                                {
+                                    if($test->StartDate)
+                                    {
+                                        $query =[
+                                            'id' => $test->id,
+                                            'course' => $course->Name,
+                                            'test' => $test->Title,
+                                            'start' => date("d/m/Y h:i A",strtotime($test->StartDate)),
+                                            'end' => date("d/m/Y h:i A",strtotime($test->EndDate)),
+                                            'score' => $test->Score,
+                                            'NoQuestions' => $test->NoQuestions(),
+                                            'activity' => $test->Activity()->Name,
+                                            'Active' => $start,
+                                            'teacher' => $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames
+                                        ];
+                                        array_push($models,$query);
+                                    }
                                 }
                             }
+
                         }
                     }
                 }
@@ -264,6 +268,7 @@ class Student extends Controller
     public function save_answer(Request $request)
     {
         $id = $request->session()->get('User_id');
+        $year = date("Y");
         try
         {
             DB::beginTransaction();
@@ -294,6 +299,7 @@ class Student extends Controller
             $note->Score = $totalScore;
             $note->Course_id = $test->Course()->id;
             $note->State = "Complete";
+            $note->Year = $year;
             $note->save();
             DB::commit();
         }
@@ -304,8 +310,87 @@ class Student extends Controller
         return response()->json(["Accion exitosa"]);
     }
 
+    public function all_tests(Request $request)
+    {
+        $id = $request->session()->get('User_id');
+        $year = date("Y");
+        $models = [];
+        $assign = Assign_student_grade::where('user_id',$id)->first();
+        $courses = $assign->Grade()->Courses();
+        foreach($courses as $course)
+        {
+            if($course->Tests())
+            {
+                foreach($course->Tests()->where('Year',$year) as $test)
+                {
+                    $state = [];
+                    $question = Question::where('Test_id',$test->id)->first();
+                    if($question == null)
+                    {
+                        $state = "written";
+                    }
+                    else
+                    {
+                        $answer = Asign_answer_test_student::where('Question_id',$question->id)->first();
+                        if ($answer == null)
+                        {
+                            $state = "start";
+                        }
+                        else
+                        {
+                            $option = Asign_answer_test_student::where(['Question_id'=>$question->id,'State'=> 'Qualified'])->first();
+                            if ($option == null)
+                            {
+                                $state = "qualify";
+                            }
+                            else
+                            {
+                                $state = "approved";
+                            }
+                        }
+                    }
+                    $StartDate = date("d-m-Y",strtotime($test->StartDate." - 5 days")); 
+                    $StartDate2 = date("d-m-Y H:i:00",strtotime($test->StartDate)); 
+                    $date_now = strtotime(date("d-m-Y H:i:00"));
+                    $date_teststart = strtotime($StartDate);
+                    $date_teststart2 = strtotime($StartDate2);
+                    $EndDate = date("d-m-Y H:i:00",strtotime($test->EndDate)); 
+                    $date_testend = strtotime($EndDate);
+                    $start = "false";
+                    if($date_now >= $date_teststart)
+                    {
+                        if($date_now >= $date_teststart2)
+                        {
+                            $start = "true";
+                        }
+                    }
+                    $notes = Note::where(['Test_id'=>$test->id,'State'=>'Approved','Year'=>$year])->get('Score');
+                    $query =[
+                        'state' => $state,
+                        'id' => $test->id,
+                        'test' => $test->Title,
+                        'score' => $test->Score,
+                        'start' => date("d/m/Y h:i A",strtotime($test->StartDate)),
+                        'end' => date("d/m/Y h:i A",strtotime($test->EndDate)),
+                        'course' => $course->Name,
+                        'NoQuestions' => $test->NoQuestions(),
+                        'activity' => $test->Activity()->Name,
+                        'activation' => $start,
+                        'teacher' => $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames,
+                        'date' => date("d/m/Y",strtotime($test->StartDate)),
+                        'notes' => $notes,
+                        'hundred' => '100'
+                    ];
+                    array_push($models,$query);
+                }
+            }
+        }
+        return view('Student/tests',compact('models','assign'));
+    }
+
     public function test_review($id,$assign)
     {
+        $year = date("Y");
         $models = [];
         $scores = [];
         $titles = [
@@ -323,7 +408,7 @@ class Student extends Controller
         $user_student = User::find($assign_teacher->user_id);
         $teacher = Person::find($user_student->Person_id);
         $questions = $test->Questions();
-        $notes = Note::where('Test_id',$test->id)->where('State','Approved')->get();
+        $notes = Note::where(['Test_id'=>$test->id,'State'=>'Approved','Year'=>$year])->get();
         foreach ($notes as $note)
         {
             $consult = [
@@ -350,12 +435,13 @@ class Student extends Controller
     public function teacher_information(Request $request)
     {
         $id = $request->session()->get('User_id');
+        $year = date("Y");
         $models = [];
         $assign = Assign_student_grade::where('user_id',$id)->first();
         $courses = $assign->Grade()->Courses();
         foreach($courses as $course)
         {
-            $assign_teacher = Asign_teacher_course::where('Course_id',$course->id)->get('user_id');
+            $assign_teacher = Asign_teacher_course::where(['Course_id'=>$course->id,'Year'=>$year])->get('user_id');
             $user = User::find($assign_teacher)->first();
             if ($user==null)
             {
@@ -459,7 +545,7 @@ class Student extends Controller
                         }
                         else
                         {
-                            array_push($notes,"No existe notas para este curso");
+                            array_push($notes,"No disponible");
                         }
                     }
                     else
@@ -874,8 +960,9 @@ class Student extends Controller
         return redirect()->route('ListEliminatedStudents');
     }
 
-    public function test_list($id)                                                  //obtener nota del parcial
+    public function test_list($id)
     {
+        $year = date("Y");
         $titles = [];
         $models = [];
         $activities = Assign_activity::where('Course_id',$id)->get();
@@ -894,12 +981,40 @@ class Student extends Controller
             $tests = [];
             foreach($activities as $activity)
             {
-                foreach($activity->Tests()->whereIn('State',['Finished','Fisico']) as $test)
+                foreach($activity->Tests()->where('Year',$year) as $test)
                 {
+                    $state = [];
+                    $question = Question::where('Test_id',$test->id)->first();
+                    if($question == null)
+                    {
+                        $state = "written";
+                    }
+                    else
+                    {
+                        $answer = Asign_answer_test_student::where('Question_id',$question->id)->first();
+                        if ($answer == null)
+                        {
+                            $state = "start";
+                        }
+                        else
+                        {
+                            $option = Asign_answer_test_student::where(['Question_id'=>$question->id,'State'=> 'Qualified'])->first();
+                            if ($option == null)
+                            {
+                                $state = "qualify";
+                            }
+                            else
+                            {
+                                $state = "approved";
+                            }
+                        }
+                    }
+                    $notes = Note::where('Test_id',$test->id)->get('Score');
                     $values =[
                         'Id' => $test->id,
-                        'e' => $test->State,
+                        'state' => $state,
                         'NoQuestions' => $test->NoQuestions(),
+                        'notes' => $notes,
                     ];
                     array_push($tests,$values);
                 }
@@ -1065,7 +1180,7 @@ class Student extends Controller
                         }
                         else
                         {
-                            array_push($notes,"No existe notas para este curso");
+                            array_push($notes,"No disponible");
                         }
                     }
                     else

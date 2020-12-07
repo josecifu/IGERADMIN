@@ -58,7 +58,7 @@
                                         <span class="font-weight-bold mr-4">Valor:</span>
                                         <span class="btn btn-light-warning btn-sm font-weight-bold btn-upper btn-text">{{$model['score']}}</span>
                                     </div>
-                                    @if($answer == "null")
+                                    @if($model['state']=="start")
                                     <div class="d-flex justify-content-between align-items-center">
                                         <span class="font-weight-bold mr-4">Fecha de disponibilidad:</span>
                                         <span class="btn btn-light-success btn-sm font-weight-bold btn-upper btn-text">{{$model['start']}}</span>
@@ -67,7 +67,8 @@
                                         <span class="font-weight-bold mr-4">Fecha de finalización:</span>
                                         <span class="btn btn-light-danger btn-sm font-weight-bold btn-upper btn-text">{{$model['end']}}</span>
                                     </div>
-                                    @else
+                                    @endif
+                                    @if(($model['state']=="qualify")||($model['state']=="approved"))
                                     <div class="d-flex justify-content-between align-items-center">
                                         <span class="font-weight-bold mr-4">Fecha:</span>
                                         <span class="btn btn-light-success btn-sm font-weight-bold btn-upper btn-text">{{$model['date']}}</span>
@@ -75,26 +76,40 @@
                                     @endif
                                     <!--end::Data-->
                                     <!--begin::Progress-->
-                                    @if($answer == "null")
-                                    <div class="d-flex mb-5 align-items-cente">
-                                        <span class="d-block font-weight-bold mr-5">Punteo Obtenido</span>
-                                        <div class="d-flex flex-row-fluid align-items-center">
-                                            <div class="progress progress-xs mt-2 mb-2 w-100">
-                                                <div class="progress-bar bg-success" role="progressbar" style="width:{{$model['percentage']}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                    @if(($model['state']=="written")||($model['state']=="approved"))
+                                        @foreach($model['notes'] as $note)
+                                        <div class="d-flex mb-5 align-items-cente">
+                                            <span class="d-block font-weight-bold mr-5">Punteo Obtenido</span>
+                                            <div class="d-flex flex-row-fluid align-items-center">
+                                                <div class="progress progress-xs mt-2 mb-2 w-75">
+                                                    <div class="progress-bar bg-success" role="progressbar" style="width:{{($model['hundred']/$model['score'])*($note->Score)}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                                <span class="ml-3 font-weight-bolder">{{$note->Score??'sin nota'}} Pts</span>
                                             </div>
-                                            <span class="ml-3 font-weight-bolder">{{$model['final']}}</span>
                                         </div>
-                                    </div>
-                                    <!--end::Progress-->
+                                        @endforeach
                                     @endif
+                                    <!--end::Progress-->
                                 </div>
                                 <!--end::Body-->
                                 <!--begin::Footer-->
                                 <div class="card-footer d-flex align-items-center">
-                                    @if($answer == "null")
-                                    <button type="button" onclick="" class="btn btn-block btn-sm btn-light-info font-weight-bolder text-uppercase py-4">Empezar</button>
-                                    @else
-                                    <button type="button" onclick="verExamen({{$model['id']}},{{$assign->id}});" class="btn btn-block btn-sm btn-light-info font-weight-bolder text-uppercase py-4">Ver examen</button>
+                                    @if($model['state']=="written")
+                                    <button class="btn btn-block btn-sm btn-secondary font-weight-bolder text-uppercase py-3" disabled>Examen Fisico</button>
+                                    @endif
+                                    @if($model['state']=="start")
+                                        @if($model['activation']=="false")
+                                        <button type="button" onclick="location.href='{{url('/student/test/view/questions/'.$model['id'])}}'" class="btn btn-block btn-sm btn-secondary font-weight-bolder text-uppercase py-3" disabled>No esta disponible</button>
+                                        @endif
+                                        @if($model['activation']=="true")
+                                        <button type="button" onclick="location.href='{{url('/student/test/view/questions/'.$model['id'])}}'" class="btn btn-block btn-sm btn-info font-weight-bolder text-uppercase py-3">Empezar</button>
+                                        @endif
+                                    @endif
+                                    @if($model['state']=="qualify")
+                                    <button class="btn btn-block btn-sm btn-secondary font-weight-bolder text-uppercase py-3" disabled>No ha sido calificado</button>
+                                    @endif
+                                    @if($model['state']=="approved")
+                                    <button type="button" onclick="verExamen({{$model['id']}},{{$assign->id}});" class="btn btn-block btn-sm btn-light-info font-weight-bolder text-uppercase py-3">Ver examen</button>
                                     @endif
                                 </div>
                                 <!--end::Footer-->
