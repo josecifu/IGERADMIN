@@ -85,7 +85,6 @@ class Student extends Controller
                         $answer = Asign_answer_test_student::where('Question_id',$question->id)->first();
                         if ($answer == null)
                         {
-                            $cont = $cont + 1;
                             $StartDate = date("d-m-Y",strtotime($test->StartDate." - 5 days")); 
                             $StartDate2 = date("d-m-Y H:i:00",strtotime($test->StartDate)); 
                             $date_now = strtotime(date("d-m-Y H:i:00"));
@@ -104,6 +103,7 @@ class Student extends Controller
                                 {
                                     if($test->StartDate)
                                     {
+                                        $cont = $cont + 1;
                                         $query =[
                                             'id' => $test->id,
                                             'course' => $course->Name,
@@ -357,16 +357,23 @@ class Student extends Controller
                     $EndDate = date("d-m-Y H:i:00",strtotime($test->EndDate)); 
                     $date_testend = strtotime($EndDate);
                     $start = "false";
+                    $availability = "disabled";
                     if($date_now >= $date_teststart)
                     {
                         if($date_now >= $date_teststart2)
                         {
                             $start = "true";
                         }
+                        if($date_now <= $date_testend)
+                        {
+                            if($test->StartDate)
+                            {
+                                $availability = "enabled";
+                            }
+                        }
                     }
                     $notes = Note::where(['Test_id'=>$test->id,'State'=>'Approved','Year'=>$year])->get('Score');
                     $query =[
-                        'state' => $state,
                         'id' => $test->id,
                         'test' => $test->Title,
                         'score' => $test->Score,
@@ -375,11 +382,13 @@ class Student extends Controller
                         'course' => $course->Name,
                         'NoQuestions' => $test->NoQuestions(),
                         'activity' => $test->Activity()->Name,
-                        'activation' => $start,
                         'teacher' => $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames,
                         'date' => date("d/m/Y",strtotime($test->StartDate)),
                         'notes' => $notes,
-                        'hundred' => '100'
+                        'hundred' => '100',
+                        'activation' => $start,
+                        'state' => $state,
+                        'availability' => $availability
                     ];
                     array_push($models,$query);
                 }
