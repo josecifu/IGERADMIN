@@ -28,7 +28,7 @@
                     <div class="row">
                         @foreach($models as $model)
                         <!--begin::Course-->
-                        <div class="col-xl-5">
+                        <div class="col-xl-6">
                             <!--begin::Card-->
                             <div class="card card-custom gutter-b card-stretch">
                                 <!--begin::Body-->
@@ -79,9 +79,9 @@
                                     @if(($model['state']=="written")||($model['state']=="approved"))
                                         @foreach($model['notes'] as $note)
                                         <div class="d-flex mb-5 align-items-cente">
-                                            <span class="d-block font-weight-bold mr-5">Punteo Obtenido</span>
+                                            <span class="d-block font-weight-bold mr-5">Nota:</span>
                                             <div class="d-flex flex-row-fluid align-items-center">
-                                                <div class="progress progress-xs mt-2 mb-2 w-75">
+                                                <div class="progress progress-xs mt-2 mb-2 w-100">
                                                     <div class="progress-bar bg-success" role="progressbar" style="width:{{($model['hundred']/$model['score'])*($note->Score)}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
                                                 <span class="ml-3 font-weight-bolder">{{$note->Score??'sin nota'}} Pts</span>

@@ -22,21 +22,20 @@
                         <h3 class="card-label">Listado de cursos y notas</h3>
                     </div>
                     <div class="card-toolbar">
-                        <a href="{{url('student/home/dashboard')}}" class="btn btn-danger font-weight-bolder mr-2">
-                        <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
+                        <a href="{{url('student/home/dashboard')}}" class="btn btn-danger font-weight-bolder mr-2"><i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
                     </div>
                 </div>
                 <div class="card-body">
                     <!--begin: Datatable-->
-                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
+                    <table class="table table-bordered table-hover table-checkable" style="margin-top:13px !important">
                         <thead>
-                            <tr>
+                            <tr style="background:#cecece">
                                 <th rowspan="1"></th>
                                 @foreach($titles as $t)
                                     <th colspan="{{$t['No']}}"><center>{{$t['Activity']}}</center></th>
                                 @endforeach
                             </tr>
-                            <tr>
+                            <tr style="background:#e5e5e5">
                                 <th>
                                     <center>Cursos</center>
                                 </th>

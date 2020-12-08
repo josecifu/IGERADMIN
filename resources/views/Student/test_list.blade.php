@@ -22,8 +22,7 @@
               <h3 class="card-label">Evaluaciones programadas</h3>
           </div>
           <div class="card-toolbar">
-              <a href="{{url('student/home/dashboard')}}" class="btn btn-danger font-weight-bolder mr-2">
-              <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
+              <a href="{{url('student/home/dashboard')}}" class="btn btn-danger font-weight-bolder mr-2"><i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
           </div>
         </div>
         <div class="card-body">

@@ -24,14 +24,12 @@
                     <div class="card-toolbar">
                         <div class="card-header">
                             <div class="card-toolbar">
-                                <a href="{{url('administration/student/list')}}" class="btn btn-danger font-weight-bolder mr-2">
-                                <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
+                                <a href="{{url('administration/student/list')}}" class="btn btn-danger font-weight-bolder mr-2"><i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
                             </div>
                         </div>
                         <!--begin::Dropdown-->
                         <div class="dropdown dropdown-inline mr-2">
-                            <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="la la-download"></i>Exportar</button>
+                            <button style="color:white;" type="button" class="btn btn-light-primary font-weight-bolder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="la la-download" style="color:white;"></i>Exportar</button>
                             <!--begin::Dropdown Menu-->
                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                                 <ul class="nav flex-column nav-hover">

@@ -108,8 +108,7 @@
                                             </svg>
                                             <!--end::Svg Icon-->
                                         </span>
-
-                                        <a href="#" class="text-warning font-weight-bold font-size-h6 mt-2">Actualizar informacion</a>
+                                        <a href="#" class="text-warning font-weight-bold font-size-h6 mt-2">Actualizar mi información</a>
                                     </div>
                                     </a>
                                 </div>
@@ -129,7 +128,7 @@
                                             </svg>
                                             <!--end::Svg Icon-->
                                         </span>
-                                        <a href="{{url('student/test/view')}}" class="text-danger font-weight-bold font-size-h6 mt-2">Visualizar examenes</a>
+                                        <a href="/student/test/list" class="text-danger font-weight-bold font-size-h6 mt-2">Visualizar todos los examenes</a>
                                     </div>
                                     </a>
                                     <a href="#">
@@ -145,7 +144,7 @@
                                             </svg>
                                             <!--end::Svg Icon-->
                                         </span>
-                                        <a href="{{url('student/course/list')}}" class="text-danger font-weight-bold font-size-h6 mt-2">Ver información de cursos</a>
+                                        <a href="{{url('student/course/list')}}" class="text-danger font-weight-bold font-size-h6 mt-2">Visualizar información de cursos</a>
                                     </div>
                                 </a>
                                 </div>
@@ -171,14 +170,7 @@
                                     <div class="card-toolbar">
                                         <ul class="nav nav-pills-sm nav-dark">
                                             <li class="nav-item ml-0">
-                                                <a type="button" class="btn btn-danger" href="/student/test/view">Evaluaciones programadas</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="card-toolbar">
-                                        <ul class="nav nav-pills-sm nav-dark">
-                                            <li class="nav-item">
-                                                <a type="button" class="btn btn-warning" href="/student/test/list">Todos los examenes</a>
+                                                <a type="button" class="btn btn-success" href="/student/test/view">Evaluaciones programadas</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -206,8 +198,8 @@
                                                         @foreach($models as $model)
                                                         <tr>
                                                             <td class="pl-0 py-5">
-                                                                <div class="symbol symbol-45 symbol-light-danger mr-2">
-                                                                    <a type="button" class="btn btn-outline-danger">{{$model['counter']}}</a>
+                                                                <div class="symbol symbol-45 symbol-light-success mr-2">
+                                                                    <a type="button" class="btn btn-outline-success">{{$model['counter']}}</a>
                                                                 </div>
                                                             </td>
                                                             <td class="pl-0">

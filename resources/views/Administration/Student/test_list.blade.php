@@ -26,8 +26,7 @@
                     <div class="card-toolbar">
                         <!--begin::Dropdown-->
                         <div class="dropdown dropdown-inline mr-2">
-                            <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="la la-download"></i>Exportar</button>
+                            <button style="color:white;" type="button" class="btn btn-light-primary font-weight-bolder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="la la-download" style="color:white;"></i>Exportar</button>
                             <!--begin::Dropdown Menu-->
                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                                 <ul class="nav flex-column nav-hover">
@@ -71,7 +70,7 @@
                 </div>
                 <div class="card-body">
                     <!--begin: Datatable-->
-                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
+                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top:13px !important">
                         <thead>
                             <tr style="background:#cecece">
                                 <th colspan="2">
@@ -105,7 +104,7 @@
                                         @foreach($test['notes'] as $note)
                                             @if($test['state']=="written")
                                             <center>
-                                                <button type="button" disabled class="btn btn-outline-info">{{$note['Score']}}</button>
+                                                <button type="button" disabled class="btn btn-info">{{$note['Score']}}</button>
                                             </center>
                                             @endif
                                             @if($test['state']=="approved")
