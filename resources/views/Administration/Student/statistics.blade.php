@@ -43,7 +43,7 @@
                                             <a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="ki ki-bold-more-hor"></i>
                                             </a>
-                                            <div class="dropdown-menu dropdown-menu-md dropdown-menu-right col-xl-4">
+                                            <div class="dropdown-menu dropdown-menu-md dropdown-menu-right col-xl-4">  
                                                 <!--begin::Navigation-->
                                                 <ul class="navi navi-hover">
                                                     <li class="navi-header font-weight-bold py-3">

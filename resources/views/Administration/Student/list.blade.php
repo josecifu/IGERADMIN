@@ -22,7 +22,12 @@
                         <h3 class="card-label">Listado general de estudiantes activos</h3>
                     </div>
                     <div class="card-toolbar">
+                        <!--begin::Button-->
+                        <a href="{{url('administration/student/create')}}" class="btn btn-primary font-weight-bolder mr-2">
+                        <i class="la la-plus"></i>Añadir nuevo estudiante</a>
+                        <!--end::Button-->
                         <!--begin::Dropdown-->
+<<<<<<< HEAD
                         <div class="dropdown dropdown-inline mr-2" >
                             <button style="color: white;" type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="la la-download" style="color: white;"></i>Exportar</button>
@@ -33,6 +38,49 @@
                         <a href="{{url('administration/student/create')}}" class="btn btn-success font-weight-bolder">
                         <i class="la la-plus"></i>Añadir nuevo estudiante</a>
                         <!--end::Button-->
+=======
+                        <div class="dropdown dropdown-inline">
+                            <button style="color:white;" type="button" class="btn btn-light-primary font-weight-bolder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="la la-download" style="color:white;"></i>Exportar</button>
+                            <!--begin::Dropdown Menu-->
+                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                                <ul class="nav flex-column nav-hover">
+                                    <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opción:</li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon la la-print"></i>
+                                            <span class="nav-text">Imprimir</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon la la-copy"></i>
+                                            <span class="nav-text">Copiar</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon la la-file-excel-o"></i>
+                                            <span class="nav-text">Excel</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon la la-file-text-o"></i>
+                                            <span class="nav-text">CSV</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon la la-file-pdf-o"></i>
+                                            <span class="nav-text">PDF</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!--end::Dropdown Menu-->
+                        </div>
+                        <!--end::Dropdown-->
+>>>>>>> c19ce0a453592a586cab61f23c2ec3ccc4ff0d18
                     </div>
                 </div>
                 <div class="card-body">
@@ -129,8 +177,8 @@
                                             </a>\
                                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
                                                 <ul class="nav nav-hoverable flex-column">\
-                                                    <li class="nav-item"><a class="nav-link" href=""><i class="nav-icon la la-list"></i><span class="nav-text">Ver asistencias</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href=""><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="/administration/student/list/assists/'+full[0]+'"><i class="nav-icon la la-list"></i><span class="nav-text">Ver asistencias</span></a></li>\
+                                                    <li class="nav-item"><a class="btn nav-link" onclick="create('+full[0]+');"><i class="nav-icon la la-lock"></i><span class=" nav-text">Restablecer contraseña</span></a></li>\
                                                 </ul>\
                                             </div>\
                                         </div>\
@@ -175,8 +223,8 @@
                     text: $name+" "+$lastname,
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Eliminar!',
-                    cancelButtonText: 'Cancelar!',
+                    confirmButtonText: 'Eliminar',
+                    cancelButtonText: 'Cancelar',
                     reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
@@ -206,9 +254,95 @@
                     }
                 })
             }
+<<<<<<< HEAD
             
             $(function () {
                 $('[data-toggle="tooltip"]').tooltip()
               })
+=======
+            function create($id)
+            {
+                Swal.mixin({
+                    input: 'text',
+                    confirmButtonText: 'Continuar',
+                    cancelButtonText: 'Cancelar',
+                    showCancelButton: true,
+                }).queue([
+                    {
+                    title: 'Ingrese la nueva contraseña',
+                    },
+                ]).then((result) => {
+                    if (result.value) {
+                    const answers = JSON.stringify(result.value)
+                    console.log(result.value);
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                        },
+                        buttonsStyling: false
+                    })
+                    swalWithBootstrapButtons.fire({
+                        title: '¿Está seguro de los datos?',
+                        text: "Nueva Contraseña: "+result.value[0],
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Restablecer',
+                        cancelButtonText: 'Cancelar',
+                        reverseButtons: true
+                    }).then((result2) => {
+                        if (result2.isConfirmed) {
+                            var data = [{
+                                Contraseña: result.value[0],
+                            }];
+                            $.ajax({
+                                url:"/administration/student/restore/password/"+$id,
+                                type:'POST',
+                                data: {"_token":"{{ csrf_token() }}","data":data},
+                                dataType: "JSON",
+                                success: function(e){
+                                    if(e.id){
+                                        swalWithBootstrapButtons.fire({
+                                        title: 'Error!',
+                                        text: e.id,
+                                        icon: 'error',
+                                        confirmButtonText: 'Aceptar',
+                                        })
+                                    }
+                                    else {
+                                        swalWithBootstrapButtons.fire({
+                                        title: 'Creado!',
+                                        text: 'Contraseña asignada con exito!',
+                                        icon: 'success',
+                                        confirmButtonText: 'Aceptar',
+                                        }).then(function () {    
+                                            var $url_path = '{!! url('/') !!}';
+                                            window.location.href = $url_path+"/administration/student/list";
+                                        });
+                                    }
+                                },
+                                error: function(e){
+                                    swalWithBootstrapButtons.fire({
+                                        title: 'Error!',
+                                        text:   e.responseJSON['error'],
+                                        icon: 'error',
+                                        confirmButtonText: 'Aceptar',
+                                    })
+                                }
+                            });
+                        }
+                        else {
+                        swalWithBootstrapButtons.fire({
+                            title: 'Cancelado!',
+                            text:  'Se ha cancelado la acción!',
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar',
+                        })
+                        }
+                    })
+                    }
+                })
+            }
+>>>>>>> c19ce0a453592a586cab61f23c2ec3ccc4ff0d18
        </script>  
     @stop

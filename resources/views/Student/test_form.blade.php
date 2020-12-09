@@ -47,14 +47,20 @@
                                     @foreach($test->Questions() as $key => $Question)
                                     <!--begin: Wizard Step 1-->
                                     <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
+                                        <!--begin::Instructions-->
+                                        <h2 style="text-align:justify;">
+                                    	@if($Question->Type=="V/F")
+                                    		Intrucciones: A continuación, lea cuidadosamente el siguiente enunciado y elija verdadero si el enunciado es correcta o Falso si es incorrecto.
+                                    	@elseif($Question->Type=="Respuesta Abierta")
+                                    		Intrucciones: A continuación, lea cuidadosamente el siguiente enunciado y escriba su respuesta en el espacio asignado.
+										@elseif($Question->Type=="Multiple")
+											Intrucciones: A continuación, lea cuidadosamente el siguiente enunciado y seleccione la respuesta correcta de las opciones que se le presenta.
+                                    	@endif
+                                        </h2><br>
+                                        <!--end::Instructions-->
                                         <h3 class="mb-10 font-weight-bold text-dark">
-                                        	Pregunta: {!! $Question->Title !!}<br>
-                                        	Tipo:
-                                        	@if($Question->Type=="V/F")
-                                        		Verdadero ó falso
-                                        	@else{{$Question->Type}}
-                                        	@endif<br>
-                                        	Valor: {!! $Question->Score !!}
+                                        	{{$key+1}}. {!! $Question->Title !!}<br>
+                                        	Valor: {!! $Question->Score !!} Pts.
                                         </h3>
                                         <div class="form-group">
                                             <div class="card-body" style="border-style: solid;border-color: #E26207;">
@@ -75,7 +81,7 @@
                                         	<div class="form-group">
 												<label>Respuesta:</label>
 												<input type="text" class="form-control" name="Respuesta" id="AnswerText{{$key}}" placeholder="" value="" />
-												<span class="form-text text-muted">Por favor escriba la respuesta correcta.</span>
+												<span class="form-text text-muted">Por favor, escriba la respuesta correcta.</span>
 											</div>
 											@elseif($Question->Type=="Multiple")
 											<div class="form-group row">

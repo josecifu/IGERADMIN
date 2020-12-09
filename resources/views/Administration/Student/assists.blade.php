@@ -4,7 +4,7 @@
     Estudiantes
     @stop
     @section('breadcrumb1')
-    Listado/Inactivos
+    Listado/Logs
     @stop
     @section('breadcrumb2')
     Estudiante
@@ -19,25 +19,19 @@
                         <span class="card-icon">
                             <i class="flaticon2-favourite text-primary"></i>
                         </span>
-                        <h3 class="card-label">Listado de estudiantes eliminados</h3>
+                        <h3 class="card-label">Registro de asistencias de: {{$student->Names}} {{$student->LastNames}}</h3>
                     </div>
                     <div class="card-toolbar">
                         <div class="card-toolbar">
                             <a href="{{url('administration/student/list')}}" class="btn btn-danger font-weight-bolder mr-2"><i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
                         </div>
                         <!--begin::Dropdown-->
-<<<<<<< HEAD
-                        <div class="dropdown dropdown-inline mr-2" >
-                            <button style="color: white;" type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="la la-download" style="color: white;"></i>Exportar</button>
-                            @include("Administration.Base._exports")
-=======
-                        <div class="dropdown dropdown-inline mr-2">
+                        <div class="dropdown dropdown-inline">
                             <button style="color:white;" type="button" class="btn btn-light-primary font-weight-bolder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="la la-download" style="color:white;"></i>Exportar</button>
                             <!--begin::Dropdown Menu-->
                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                                 <ul class="nav flex-column nav-hover">
-                                    <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opción:</li>
+                                    <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opcion:</li>
                                     <li class="nav-item">
                                         <a href="#" class="nav-link">
                                             <i class="nav-icon la la-print"></i>
@@ -71,14 +65,13 @@
                                 </ul>
                             </div>
                             <!--end::Dropdown Menu-->
->>>>>>> c19ce0a453592a586cab61f23c2ec3ccc4ff0d18
                         </div>
                         <!--end::Dropdown-->
                     </div>
                 </div>
                 <div class="card-body">
                     <!--begin: Datatable-->
-                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
+                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top:13px !important">
                         <thead>
                             <tr>
                                 @foreach($titles as $title)
@@ -87,15 +80,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($models as $model)
+                            @foreach($models as $key => $model)
                             <tr>
-                                <td>{{$model['id']}}</td>
-                                <td>{{$model['name']}}</td>
-                                <td>{{$model['lastname']}}</td>
-                                <td>{{$model['phone']}}</td>
-                                <td>{{$model['user']}}</td>
-                                <td>{{$model['email']}}</td>
-                                <td>{{$model['conexion']}}</td>
+                                <td>{{$key+1}}</td>
+                                <td></td>
                                 <td nowrap="nowrap"></td>
                             </tr>
                             @endforeach
@@ -111,6 +99,8 @@
         <!--begin::Page Vendors(used by this page)-->
         <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
         <!--end::Page Vendors-->
+        <!--begin::Page Scripts(used by this page)-->
+        <!--end::Page Scripts-->
         <script type="text/javascript">
             "use strict";
             var KTDatatablesDataSourceHtml = function() {
@@ -122,20 +112,6 @@
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                         },
-                        columnDefs: [
-                            {
-                                targets: -1,
-                                title: 'Acciones',
-                                orderable: false,
-                                render: function(data, type, full, meta) {
-                                    return '\
-                                        <a href="javascript:;" data-toggle="tooltip" data-placement="top" onclick="ActivePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Habilitar estudiante" data-placement="left">\
-                                        <i class="la la-check-circle"></i>\
-                                        </a>\
-                                    ';
-                                },
-                            },
-                        ],
                     });
                 };
                 return {
@@ -147,53 +123,5 @@
             jQuery(document).ready(function() {
                 KTDatatablesDataSourceHtml.init();
             });
-            function ActivePeriod($id,$name)
-            {
-                const swalWithBootstrapButtons = Swal.mixin({
-                    customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                    },
-                    buttonsStyling: false
-                })
-                swalWithBootstrapButtons.fire({
-                    title: '¿Está seguro de habilitar el estudiante?',
-                    text: "El nombre del estudiante: "+$name,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Habilitar',
-                    cancelButtonText: 'Cancelar',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        var Code = $id;
-                        var data = [{
-                            Code: Code,
-                            Name: result.value[0],
-                        }];
-                        swalWithBootstrapButtons.fire({
-                            title: 'Habilitado!',
-                            text: 'Se ha habilitado con exito!',
-                            icon: 'success',
-                            confirmButtonText: 'Aceptar',
-                        }).then(function () {
-                            var $url_path = '{!! url('/') !!}';
-                            window.location.href = $url_path+"/administration/student/activate/"+$id;
-                            });
-                    } else if (
-                    result.dismiss === Swal.DismissReason.cancel
-                    ) {
-                    swalWithBootstrapButtons.fire({
-                        title: 'Cancelado!',
-                        text:  'El estudiante no ha sido eliminada!',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar',
-                    })
-                    }
-                })
-            }
-            $(function () {
-                $('[data-toggle="tooltip"]').tooltip()
-              })
-       </script>  
+       </script>
     @stop

@@ -25,13 +25,11 @@
                     </div>
                     <div class="card-toolbar">
                         <div class="card-toolbar">
-                            <a href="{{url('administration/student/score/'.$grade->id)}}" class="btn btn-danger font-weight-bolder mr-2">
-                            <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
+                            <a href="{{url('administration/student/score/'.$grade->id)}}" class="btn btn-danger font-weight-bolder mr-2"><i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
                         </div>
                         <!--begin::Dropdown-->
-                        <div class="dropdown dropdown-inline mr-2">
-                            <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="la la-download"></i>Exportar</button>
+                        <div class="dropdown dropdown-inline">
+                            <button style="color:white;" type="button" class="btn btn-light-primary font-weight-bolder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="la la-download" style="color:white;"></i>Exportar</button>
                             <!--begin::Dropdown Menu-->
                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                                 <ul class="nav flex-column nav-hover">
@@ -75,15 +73,15 @@
                 </div>
                 <div class="card-body">
                     <!--begin: Datatable-->
-                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
+                    <table class="table table-bordered table-hover table-checkable" style="margin-top:13px !important">
                         <thead>
-                            <tr>
+                            <tr style="background:#cecece">
                                 <th rowspan="1"></th>
                                 @foreach($titles as $t)
                                     <th colspan="{{$t['No']}}"><center>{{$t['Activity']}}</center></th>
                                 @endforeach
                             </tr>
-                            <tr>
+                            <tr style="background:#e5e5e5">
                                 <th>
                                     <center>Cursos</center>
                                 </th>
