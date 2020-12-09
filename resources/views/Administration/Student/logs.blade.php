@@ -81,10 +81,7 @@
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                         },
-<<<<<<< HEAD
                         
-=======
->>>>>>> c19ce0a453592a586cab61f23c2ec3ccc4ff0d18
                     });
                 };
                 return {
