@@ -125,7 +125,42 @@ class Student extends Controller
         return view('Student/home',compact('models'));
     }
 
-
+    public function assists($id)
+    {
+        $buttons = [];
+        $button = [
+            "Name" => 'Añadir nuevo estudiante',
+            "Link" => 'administration/student/create',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $button = [
+            "Name" => 'Listado de estudiantes activos',
+            "Link" => 'administration/student/list',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $button = [
+            "Name" => 'Listado de estudiantes eliminados',
+            "Link" => 'administration/student/list/eliminated',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $button = [
+            "Name" => 'Historial de registros',
+            "Link" => 'administration/student/logs',
+            "Type" => "btn1"
+        ];
+        array_push($buttons,$button);
+        $models = [];
+        $titles = [
+            'No',
+            'Fecha y hora',
+            ''
+        ];
+        $student = Person::find($id);
+        return view('Administration/Student/assists',compact('models','titles','buttons','student'));
+    }
 
 
 
@@ -777,7 +812,8 @@ class Student extends Controller
             'Responsable',
             'Actividad',
             'Tipo',
-            'Fecha y hora'
+            'Fecha y hora',
+            ''
         ];
         $logs = logs::where('Table','Estudiante')->orWhere('Table','Usuario')->orWhere('Table','Rol')->orWhere('Table','Grado')->get();
         foreach ($logs as $log)
@@ -794,6 +830,8 @@ class Student extends Controller
         return view('Administration/Student/logs',compact('models','titles','buttons'));
     }
 
+    //ASSISTS
+
     public function create()
     {
         return view('Administration/Student/create_form');
@@ -801,8 +839,8 @@ class Student extends Controller
 
     public function save(Request $request)
     {
-        $id = $request->session()->get('User_id');
-        $responsible_user = User::find($id);
+        $code = $request->session()->get('User_id');
+        $responsible_user = User::find($code);
         $data = $request->data[0];
         $names = $data['Nombre'];
         $lastnames = $data['Apellido'];
@@ -860,25 +898,25 @@ class Student extends Controller
             $log->Table = "Estudiante";
             $log->User_ID = $responsible_user->name;
             $log->Description = "Se registro un nuevo estudiante: ".$student->Names." ".$student->LastNames;
-            $log->Type = "Crear";
+            $log->Type = "Create";
             $log->save();
             $log = new logs;
             $log->Table = "Usuario";
             $log->User_ID = $responsible_user->name;
             $log->Description = "Se registro un nuevo usuario: ".$user->name;
-            $log->Type = "Crear";
+            $log->Type = "Create";
             $log->save();
             $log = new logs;
             $log->Table = "Rol";
             $log->User_ID = $responsible_user->name;
             $log->Description = "Se ha asignado el rol Estudiante al usuario: ".$user->name;
-            $log->Type = "Asignar";
+            $log->Type = "Assign";
             $log->save();
             $log = new logs;
             $log->Table = "Grado";
             $log->User_ID = $responsible_user->name;
             $log->Description = "Al estudiante: ".$student->Names." ".$student->LastNames." se le ha asignado a: ".$grade->GradeName();
-            $log->Type = "Asignar";
+            $log->Type = "Assign";
             $log->save();
             DB::commit();
         }
@@ -902,8 +940,8 @@ class Student extends Controller
 
     public function update(Request $request)
     {
-        $id = $request->session()->get('User_id');
-        $responsible_user = User::find($id);
+        $code = $request->session()->get('User_id');
+        $responsible_user = User::find($code);
         $data = $request->data[0];
         $names = $data['Nombre'];
         $lastnames = $data['Apellido'];
@@ -927,15 +965,15 @@ class Student extends Controller
         $log->Table = "Estudiante";
         $log->User_ID = $responsible_user->name;
         $log->Description = "Se actualizaron los datos del estudiante: ".$names." ".$lastnames;
-        $log->Type = "Actualizar";
+        $log->Type = "Update";
         $log->save();
         return response()->json(["Accion completada"]);
     }
 
     public function delete($id, Request $request)
     {
-        $indentity = $request->session()->get('User_id');
-        $responsible_user = User::find($indentity);
+        $code = $request->session()->get('User_id');
+        $responsible_user = User::find($code);
         $person = Person::find($id);
         $user = User::where('Person_id',$person->id)->first();
         $data_user = array('State' => 'Desactivated');
@@ -943,7 +981,7 @@ class Student extends Controller
         $log->Table = "Estudiante";
         $log->User_ID = $responsible_user->name;
         $log->Description = "Se ha eliminado el usuario: ".$user->name;
-        $log->Type = "Eliminar";
+        $log->Type = "Delete";
         $log->save();
         User::where('Person_id', $id)->update($data_user);
         Assign_user_rol::where('user_id',$user->id)->update($data_user);
@@ -953,8 +991,8 @@ class Student extends Controller
 
     public function activate($id, Request $request)
     {
-        $indentity = $request->session()->get('User_id');
-        $responsible_user = User::find($indentity);
+        $code = $request->session()->get('User_id');
+        $responsible_user = User::find($code);
         $person = Person::find($id);
         $user = User::where('Person_id',$person->id)->first();
         $data_user = array('State' => 'Active');
@@ -962,11 +1000,33 @@ class Student extends Controller
         $log->Table = "Estudiante";
         $log->User_ID = $responsible_user->name;
         $log->Description = "Se ha habilitado el usuario: ".$user->name;
-        $log->Type = "Activar";
+        $log->Type = "Activate";
         $log->save();
         User::where('Person_id', $id)->update($data_user);
         Assign_user_rol::where('user_id',$user->id)->update($data_user);
         return redirect()->route('ListEliminatedStudents');
+    }
+
+    public function restore_password(Request $request, $id)
+    {
+        $code = $request->session()->get('User_id');
+        $responsible_user = User::find($code);
+        $data = $request->data[0];
+        if($data['Contraseña'] == null)
+        {
+            return response()->json(["id"=>"La contraseña no puede estar vacia"]);
+        }
+        $user = User::where('Person_id',$id)->first();
+        $user->PasswordRestore = "Change";
+        $user->password = bcrypt($data['Contraseña']);
+        $user->Save();
+        $log = new Logs;
+        $log->Table = "Estudiante";
+        $log->User_ID = $responsible_user->name;
+        $log->Description = "Se ha restablecido la contraseña del usuario: ".$user->name;
+        $log->Type = "Restore";
+        $log->save();
+        return response()->json(["Accion completada"]);
     }
 
     public function test_list($id)
@@ -1033,7 +1093,6 @@ class Student extends Controller
                 'assign' => $student->Asssign_Grade()->id,
                 'name' => $student->person()->Names,
                 'lastname' => $student->person()->LastNames,
-                'note' => 'sin nota',
                 'tests' => $tests
             ];
             array_push($models,$query);
