@@ -9,7 +9,7 @@ use App\Models\Assign_user_rol;
 use App\Models\User;
 use App\Models\Person;
 use App\Models\Assign_student_grade;
-use App\Models\Period;
+use App\Models\period;
 use App\Models\grade;
 use App\Models\Level;
 use App\Models\Course;
@@ -24,12 +24,12 @@ class Student extends Controller
 {
     public function Profile(Request $request)
     {
-        
+        return view('Administration/Student/statistics ',compact('countsfemale','countsmale'));
     }
     public function statistics ()
     {
         $models = [];
-        $periods = Period::where('State','Active')->get();
+        $periods = period::where('State','Active')->get();
         $countsfemale = [];
         $countsmale = [];
         foreach($periods as $value)
