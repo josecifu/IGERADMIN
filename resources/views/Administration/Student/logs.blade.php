@@ -30,45 +30,9 @@
                         </div>
                         <!--begin::Dropdown-->
                         <div class="dropdown dropdown-inline mr-2">
-                            <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="la la-download"></i>Exportar</button>
-                            <!--begin::Dropdown Menu-->
-                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                                <ul class="nav flex-column nav-hover">
-                                    <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opcion:</li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-print"></i>
-                                            <span class="nav-text">Imprimir</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-copy"></i>
-                                            <span class="nav-text">Copiar</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-file-excel-o"></i>
-                                            <span class="nav-text">Excel</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-file-text-o"></i>
-                                            <span class="nav-text">CSV</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-file-pdf-o"></i>
-                                            <span class="nav-text">PDF</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!--end::Dropdown Menu-->
+                            <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" style="color: white;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="la la-download"  style="color: white;" ></i>Exportar</button>
+                            @include("Administration.Base._exports")
                         </div>
                         <!--end::Dropdown-->
                     </div>
@@ -89,9 +53,10 @@
                                 <td>{{$model['id']}}</td>
                                 <td>{{$model['responsible']}}</td>
                                 <td>{{$model['activity']}}</td>
-                                <td>{{$model['type']}}</td>
+                                <td>
+                                    <span class="label label-{{$model['color']}} label-pill label-inline mr-2" style="height: 100%;width: 100%" >{{$model['type']}}</span>
+                                </td>
                                 <td>{{$model['datatime']}}</td>
-                                <td nowrap="nowrap"></td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -124,36 +89,7 @@
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                         },
-                        columnDefs: [
-                            {
-                                targets: -1,
-                                title: 'Acciones',
-                                orderable: false,
-                                render: function(data, type, full, meta) {
-                                    return '\
-                                        <div class="dropdown dropdown-inline">\
-                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" data-toggle="dropdown">\
-                                                <i class="la la-cog"></i>\
-                                            </a>\
-                                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
-                                                <ul class="nav nav-hoverable flex-column">\
-                                                    <li class="nav-item"><a class="nav-link" href="/administration/teacher/edit/'+full[0]+'"><i class="nav-icon la la-edit"></i><span class="nav-text">Editar</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" href="#"><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
-                                                </ul>\
-                                            </div>\
-                                        </div>\
-                                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Detalle de asignación">\
-                                            <i class="la la-edit"></i>\
-                                        </a>\
-                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Borrar">\
-                                            <i class="la la-trash"></i>\
-                                        </a>\
-                                    ';
-                                },
-                            },
-                           
-                          
-                        ],
+                        
                     });
 
                 };

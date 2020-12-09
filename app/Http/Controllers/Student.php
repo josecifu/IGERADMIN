@@ -22,6 +22,10 @@ use App\Models\Asign_teacher_course;
 
 class Student extends Controller
 {
+    public function Profile(Request $request)
+    {
+        
+    }
     public function statistics ()
     {
         $models = [];
@@ -361,7 +365,7 @@ class Student extends Controller
             {
                 $query =[
                     'course' => $course->Name,
-                    'teacher' => 'Ningun profesor/@ asignado',
+                    'teacher' => 'Ningun voluntario asignado',
                     'phone' => 'Ninguno',
                     'gender' => 'Ninguno',
                     'email' => 'Ninguno'
@@ -522,6 +526,7 @@ class Student extends Controller
         ];
         $year = date("Y");
         $rols = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get();
+        
         foreach ($rols as $rol)
         {
             $user = User::find($rol->user_id);
@@ -529,6 +534,15 @@ class Student extends Controller
             $assigns = Assign_student_grade::where('User_id',$user->id)->where('Year',$year)->where('State','Active')->get('Grade_id');
             foreach ($assigns as $assign)
             {
+                $conection = logs::where(['Type'=>'Login','User_Id'=>$user->name])->orderby('created_at','DESC')->take(1)->first();
+                if($conection)
+                {
+                    setlocale(LC_TIME, "spanish");
+                    $newDate = date("d-m-Y", strtotime($conection->created_at));	
+                    $mes = strftime("%d de %B del %Y", strtotime($newDate));
+                    $conection= $mes." a las ".date("H:m A", strtotime($conection->created_at));
+                }
+                
                 $grade = Grade::find($assign->Grade_id);
                 $query = [
                     'id' => $student->id,
@@ -538,7 +552,7 @@ class Student extends Controller
                     'user' => $user->name,
                     'email' => $user->email,
                     'grade' => $grade->GradeName(),
-                    'conexion' => '17/11/2020'
+                    'conexion' => $conection ?? 'El usuario no se ha conectado'
                 ];
                 array_push($models,$query);
             }
@@ -639,8 +653,17 @@ class Student extends Controller
         $rols = Assign_user_rol::where('Rol_id',2)->where('State','Desactivated')->get('user_id');
         foreach ($rols as $rol)
         {
+
             $user = User::find($rol->user_id);
             $student = Person::find($user->Person_id);
+            $conection = logs::where(['Type'=>'Login','User_Id'=>$user->name])->orderby('created_at','DESC')->take(1)->first();
+            if($conection)
+            {
+                setlocale(LC_TIME, "spanish");
+                $newDate = date("d-m-Y", strtotime($conection->created_at));	
+                $mes = strftime("%d de %B del %Y", strtotime($newDate));
+                $conection= $mes." a las ".date("H:m A", strtotime($conection->created_at));
+            }
             $query = [
                 'id' => $student->id,
                 'name' => $student->Names,
@@ -648,7 +671,7 @@ class Student extends Controller
                 'phone' => $student->Phone,
                 'user' => $user->name,
                 'email' => $user->email,
-                'conexion' => '17/11/2020'
+                'conexion' => $conection ?? 'El usuario no se ha conectado'
             ];
             array_push($models,$query);
         }
@@ -682,17 +705,48 @@ class Student extends Controller
             'Responsable',
             'Actividad',
             'Tipo',
-            'Fecha y hora'
+            'Fecha y hora',
         ];
         $logs = logs::where('Table','Estudiante')->orWhere('Table','Usuario')->orWhere('Table','Rol')->orWhere('Table','Grado')->get();
         foreach ($logs as $log)
         {
+            setlocale(LC_TIME, "spanish");
+            $newDate = date("d-m-Y", strtotime($log->created_at));	
+            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $type = "";
+            $color = "Success";
+            if($log->Type=="Crear")
+            {
+                $type = "Nuevo registro";
+                $color = "success";
+            }
+            if($log->Type=="Asignar")
+            {
+                $type = "Se asigno registro";
+                $color = "warning";
+            }
+            if($log->Type=="Eliminar")
+            {
+                $type = "Se elimino registro";
+                $color = "danger";
+            }
+            if($log->Type=="Login")
+            {
+                $type = "Ha iniciado sesión";
+                $color = "primary";
+            }
+            if($log->Type=="Activar")
+            {
+                $type = "Se ha activado";
+                $color = "primary";
+            }
             $data = [
                 'id' => $log->id,
                 'responsible' => $log->User_Id,
                 'activity' => $log->Description,
-                'type' => $log->Type,
-                'datatime' => $log->created_at
+                'type' => $type,
+                'color' => $color,
+                'datatime' => $mes." a las ".date("g:i A", strtotime($log->created_at))
             ];
             array_push($models,$data);
         }
@@ -764,25 +818,25 @@ class Student extends Controller
             $log = new logs;
             $log->Table = "Estudiante";
             $log->User_ID = $responsible_user->name;
-            $log->Description = "Se registro un nuevo estudiante: ".$student->Names." ".$student->LastNames;
+            $log->Description = "Se registro un nuevo estudiante ".$student->Names." ".$student->LastNames;
             $log->Type = "Crear";
             $log->save();
             $log = new logs;
             $log->Table = "Usuario";
             $log->User_ID = $responsible_user->name;
-            $log->Description = "Se registro un nuevo usuario: ".$user->name;
+            $log->Description = "Se registro un nuevo usuario ".$user->name;
             $log->Type = "Crear";
             $log->save();
             $log = new logs;
             $log->Table = "Rol";
             $log->User_ID = $responsible_user->name;
-            $log->Description = "Se ha asignado el rol Estudiante al usuario: ".$user->name;
+            $log->Description = "Se ha asignado el rol Estudiante al usuario ".$user->name;
             $log->Type = "Asignar";
             $log->save();
             $log = new logs;
             $log->Table = "Grado";
             $log->User_ID = $responsible_user->name;
-            $log->Description = "Al estudiante: ".$student->Names." ".$student->LastNames." se le ha asignado a: ".$grade->GradeName();
+            $log->Description = "El estudiante ".$student->Names." ".$student->LastNames." ha sido asignado al grado ".$grade->GradeName();
             $log->Type = "Asignar";
             $log->save();
             DB::commit();
@@ -831,7 +885,7 @@ class Student extends Controller
         $log = new logs;
         $log->Table = "Estudiante";
         $log->User_ID = $responsible_user->name;
-        $log->Description = "Se actualizaron los datos del estudiante: ".$names." ".$lastnames;
+        $log->Description = "Se actualizaron los datos del estudiante ".$names." ".$lastnames;
         $log->Type = "Actualizar";
         $log->save();
         return response()->json(["Accion completada"]);
@@ -847,7 +901,7 @@ class Student extends Controller
         $log = new logs;
         $log->Table = "Estudiante";
         $log->User_ID = $responsible_user->name;
-        $log->Description = "Se ha eliminado el usuario: ".$user->name;
+        $log->Description = "El usuario ".$user->name." ha sido eliminado";
         $log->Type = "Eliminar";
         $log->save();
         User::where('Person_id', $id)->update($data_user);
@@ -866,11 +920,12 @@ class Student extends Controller
         $log = new logs;
         $log->Table = "Estudiante";
         $log->User_ID = $responsible_user->name;
-        $log->Description = "Se ha habilitado el usuario: ".$user->name;
+        $log->Description = "Se habilito el usuario ".$user->name;
         $log->Type = "Activar";
         $log->save();
         User::where('Person_id', $id)->update($data_user);
         Assign_user_rol::where('user_id',$user->id)->update($data_user);
+        Assign_student_grade::where('user_id',$user->id)->update($data_user);
         return redirect()->route('ListEliminatedStudents');
     }
 

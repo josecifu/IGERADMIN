@@ -19,7 +19,7 @@ use App\Models\level;
 use App\Models\logs;
 //modelo de grado
 use App\Models\grade;
-
+use Barryvdh\DomPDF\Facade as PDF;
 //Modelo de aula
 use App\Models\classrom;
 //modelo de materias
@@ -134,7 +134,7 @@ class Administration extends Controller
             "Test" => $Tests,
             "Timeline"=>$Timeline,
         ];
-
+        
         return view('Administration.Dashboard.Home',compact('Logs'));
     }
     public function AttendantEdit(Request $request,$id)
@@ -1139,54 +1139,117 @@ class Administration extends Controller
     }
     public function Report()
     {
+        $buttons =[];
+
+        $button = [
+            "Name" => 'Exportar datos para impresión',
+            "Link" => 'imprimir()',
+            "Type" => "addFunction1"
+        ];
+        array_push($buttons,$button);
         $Month = [];
-        $logs = logs::whereDate('created_at', '=', \Carbon\Carbon::now()->format('Y-m-d'))->get();
+        $logs = logs::whereMonth('created_at', '=', \Carbon\Carbon::now()->format('m'))->get();
         foreach ($logs as $value) {
             setlocale(LC_TIME, "spanish");
             $newDate = date("d-m-Y", strtotime($value->created_at));	
             $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $title = "Nuevo ".$value->Table;
+            $state = "Success";
+            $type = "New";
+            if($value->Type=="Login")
+            {
+                $title ="Inicio ".$value->Table;
+                $state ="Success";
+                $type = "Info";
+            }
+            if($value->Type=="Eliminar")
+            {
+                $title ="Elimino ".$value->Table;
+                $state ="Delete";
+                $type = "Delete";
+                
+            }
             $M = [
-                "Type"=>"New",
-                "Title"=>"Nuevo ".$value->Table,
+                "Type"=> $type,
+                "Title"=>$title,
                 "User" =>$value->User_Id,
                 "Description" => $value->Description,
-                "Date" => $mes,
+                "Date" => $mes." a las ".date("H:m A", strtotime($value->created_at)),
                 "Url" => "administration/home/dashboard",
-                "State" => "Success"
+                "State" => $state
             ];
             array_push($Month,$M);
         }
         $Week = [];
-        $logs = logs::whereDate('created_at', '=', \Carbon\Carbon::now()->format('Y-m-d'))->get();
+        $logs = logs::all();
         foreach ($logs as $value) {
             setlocale(LC_TIME, "spanish");
             $newDate = date("d-m-Y", strtotime($value->created_at));	
             $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $title = "Nuevo ".$value->Table;
+            $state = "Success";
+            $type = "New";
+            if($value->Type=="Login")
+            {
+                $title ="Inicio ".$value->Table;
+                $state ="Success";
+                $type = "Info";
+            }
+            if($value->Type=="Eliminar")
+            {
+                $title ="Elimino ".$value->Table;
+                $state ="Delete";
+                $type = "Delete";
+                
+            }
             $M = [
-                "Type"=>"New",
-                "Title"=>"Nuevo ".$value->Table,
+                "Type"=> $type,
+                "Title"=>$title,
                 "User" =>$value->User_Id,
                 "Description" => $value->Description,
-                "Date" => $mes,
+                "Date" => $mes." a las ".date("H:m A", strtotime($value->created_at)),
                 "Url" => "administration/home/dashboard",
-                "State" => "Success"
+                "State" => $state
             ];
             array_push($Week,$M);
         }
         $Days = [];
-        $logs = logs::whereDate('created_at', '=', \Carbon\Carbon::now()->format('Y-m-d'))->get();
+        $logs = logs::whereDay('created_at', '=', \Carbon\Carbon::now()->format('d-m'))->get();
         foreach ($logs as $value) {
             setlocale(LC_TIME, "spanish");
             $newDate = date("d-m-Y", strtotime($value->created_at));	
             $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $title = "Nuevo ".$value->Table;
+            $state = "Success";
+            $type = "New";
+            if($value->Type=="Login")
+            {
+                $title ="Inicio ".$value->Table;
+                $state ="Success";
+                $type = "Info";
+            }
+            if($value->Type=="Eliminar")
+            {
+                $title ="Elimino ".$value->Table;
+                $state ="Delete";
+                $type = "Delete";
+                
+            }
+            if($value->Type=="Activar")
+            {
+                $title ="Activo ".$value->Table;
+                $state ="Success";
+                $type = "Edit";
+                
+            }
             $M = [
-                "Type"=>"New",
-                "Title"=>"Nuevo ".$value->Table,
+                "Type"=> $type,
+                "Title"=>$title,
                 "User" =>$value->User_Id,
                 "Description" => $value->Description,
-                "Date" => $mes,
+                "Date" => $mes." a las ".date("g:i A", strtotime($value->created_at)),
                 "Url" => "administration/home/dashboard",
-                "State" => "Success"
+                "State" => $state
             ];
             array_push($Days,$M);
         }
@@ -1197,7 +1260,7 @@ class Administration extends Controller
             "Test" =>[],
             "Timeline"=>[],
         ];
-        return view('Administration/Dashboard/Report',compact('Logs'));
+        return view('Administration/Dashboard/Report',compact('Logs','buttons'));
     }
     public function Inscriptions()
     {
@@ -1234,5 +1297,188 @@ class Administration extends Controller
     public function Statistics()
     {
         return view('Administration/Workspace/Statistics');
+    }
+    public function Reports(Request $request,$id,$type)
+    {        
+        $models=[];
+        $Titles=[];
+        $title1 = "";
+        $d="";
+        if($type=="listadoalumnos")
+        {
+            $Titles=['No',
+            'Nombres',
+            'Apellidos',
+            'Télefono',
+            'Usuario',
+            'Correo electronico',
+            'Grado',
+            'Ultima conexión'];
+            if($id==1)
+            {
+                $year = date("Y");
+                $rols = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get();
+                $usuario_rol = Assign_user_rol::where([['Rol_id',3],['State','Active']])->get('user_id');
+                foreach ($usuario_rol as $v) {
+                    $usuario = User::find($v->user_id);
+                    $persona = Person::find($usuario->Person_id);
+                    // $curses = User::find($v->user_id)->CoursesTeacher();
+                    $curses = Asign_teacher_course::where([['user_id',$v->user_id],['State','Active']])->get();
+                    $dataT = [];
+                    foreach ($curses as $value) {
+                        $curso = course::find($value->Course_id);
+                        $dataC = [
+                            'Curso' => $curso->Name." - ".$curso->Grade()->GradeNamePeriod(),
+                        ];
+                        array_push($dataT,$dataC);
+                    }
+                    $conection = logs::where(['Type'=>'Login','User_Id'=>$usuario->name])->orderby('created_at','DESC')->take(1)->first();
+                        if($conection)
+                        {
+                            setlocale(LC_TIME, "spanish");
+                            $newDate = date("d-m-Y", strtotime($conection->created_at));	
+                            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+                            $conection= $mes." a las ".date("H:m A", strtotime($conection->created_at));
+                        }
+                    $data = [
+                        'Id' => $persona->id,
+                        'Name' => $persona->Names,
+                        'Apellido' => $persona->LastNames,
+                        'Telefono' => $persona->Phone,
+                        'Usuario' => $usuario->name,
+                        'Correo' => $usuario->email,
+                        'Curses' => $dataT,
+                        'Conection' => $conection ?? 'El usuario no se ha conectado'
+                    ];
+                    array_push($models,$data);
+                }
+                $title1 = "Listado de voluntarios";
+                $pdf = PDF::loadView('Administration.Reports.pdf', compact('Titles','models','title1'));
+                return $pdf->download('ListadoVoluntarios-'.date("d-m-y-H-i-A").'.pdf');
+            }
+            
+        }
+        if($type=="listadovoluntarios")
+        {
+            $Titles=['No',
+            'Nombres',
+            'Télefono',
+            'Usuario',
+            'Correo electronico',
+            'Cursos asignados',
+            'Ultima conexión'];
+            if($id==1)
+            {
+                $usuario_rol = Assign_user_rol::where([['Rol_id',3],['State','Active']])->get('user_id');
+                foreach ($usuario_rol as $v) {
+                    $usuario = User::find($v->user_id);
+                    $persona = Person::find($usuario->Person_id);
+                    // $curses = User::find($v->user_id)->CoursesTeacher();
+                    $curses = Asign_teacher_course::where([['user_id',$v->user_id],['State','Active']])->get();
+                    $dataT = [];
+                    $coursesvol = "<ol>";
+                    foreach ($curses as $value) {
+                        $curso = course::find($value->Course_id);
+                        $coursesvol = $coursesvol."<li>".$curso->Name." - ".$curso->Grade()->GradeNamePeriod() ."</li>";
+                    }
+                    $coursesvol = $coursesvol."</ol>";
+                    $conection = logs::where(['Type'=>'Login','User_Id'=>$usuario->name])->orderby('created_at','DESC')->take(1)->first();
+                        if($conection)
+                        {
+                            setlocale(LC_TIME, "spanish");
+                            $newDate = date("d-m-Y", strtotime($conection->created_at));	
+                            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+                            $conection= $mes." a las ".date("H:m A", strtotime($conection->created_at));
+                        }
+                    $data = [
+                        'Id' => $persona->id,
+                        'Name' => $persona->Names." ".$persona->LastNames,
+                        'Telefono' => $persona->Phone,
+                        'Usuario' => $usuario->name,
+                        'Correo' => $usuario->email,
+                        'Curses' => $coursesvol,
+                        'Conection' => $conection ?? 'El usuario no se ha conectado'
+                    ];
+                    array_push($models,$data);
+                }
+
+                $title1 = "Listado de alumnos";
+                $pdf = PDF::loadView('Administration.Reports.pdf', compact('Titles','models','title1'));
+                return $pdf->download('ListadoAlumnos-'.date("d-m-y-H-i-A").'.pdf');
+            }   
+        }
+        if($type=="generalreportpdf")
+        {
+            
+            $Titles=['No',
+            'Responsable',
+            'Actividad',
+            'Tipo',
+            'Fecha y hora'];
+            if($id==1)
+            {
+                $title1 = "Reporte general todos los registros";
+                $logs = logs::all();
+                foreach ($logs as $key => $value) {
+                    setlocale(LC_TIME, "spanish");
+                    $newDate = date("d-m-Y", strtotime($value->created_at));	
+                    $mes = strftime("%d de %B del %Y", strtotime($newDate));
+                    $title = "Nuevo ".$value->Table;
+                    $M = [
+                        "Id"=> ($key+1),
+                        "User" =>$value->User_Id,
+                        "Description" => $value->Description,
+                        "Type"=> $title,
+                        "Date" => $mes." a las ".date("g:i A", strtotime($value->created_at)),
+                    ];
+                    array_push($models,$M);
+                }
+                $d = "total";
+            }
+            if($id==2)
+            {
+                $title1 = "Reporte general mensual";
+                $logs = logs::whereMonth('created_at', '=', \Carbon\Carbon::now()->format('m'))->get();
+                foreach ($logs as $key => $value) {
+                    setlocale(LC_TIME, "spanish");
+                    $newDate = date("d-m-Y", strtotime($value->created_at));	
+                    $mes = strftime("%d de %B del %Y", strtotime($newDate));
+                    $title = "Nuevo ".$value->Table;
+                    $M = [
+                        "Id"=> ($key+1),
+                        "User" =>$value->User_Id,
+                        "Description" => $value->Description,
+                        "Type"=> $title,
+                        "Date" =>  $mes." a las ".date("g:i A", strtotime($value->created_at)),
+                    ];
+                    array_push($models,$M);
+                }
+                $d = "mensual";
+            }
+            if($id==3)
+            {
+                $title1 = "Reporte general del dia";
+                $logs = logs::whereDay('created_at', '=', \Carbon\Carbon::now()->format('d-m'))->get();
+                foreach ($logs as $key => $value ) {
+                    setlocale(LC_TIME, "spanish");
+                    $newDate = date("d-m-Y", strtotime($value->created_at));	
+                    $mes = strftime("%d de %B del %Y", strtotime($newDate));
+                    $title = "Nuevo ".$value->Table;
+                    $M = [
+                        "Id"=> ($key+1),
+                        "User" =>$value->User_Id,
+                        "Description" => $value->Description,
+                        "Type"=> $title,
+                        "Date" =>  $mes." a las ".date("g:i A", strtotime($value->created_at)),
+                    ];
+                    array_push($models,$M);
+                }
+                $d = "deldia";
+            }
+            $pdf = PDF::loadView('Administration.Reports.pdf', compact('Titles','models','title1'));
+            return $pdf->download('ReporteGeneral-'.$d.'-'.date("d-m-y-H-i-A").'.pdf');
+        }
+
+        return false;
     }
 }

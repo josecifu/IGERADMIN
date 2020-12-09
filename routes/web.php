@@ -27,8 +27,13 @@ Route::get('/', $route.'\Administration@Dashboard')->name('home')->middleware('a
 Route::post('/signin',  $route.'\LoginController@login')->name('signin');
 #logout
 Route::get('/logout', $route.'\LoginController@logout')->name('logout');
+Route::group([ 'prefix' => 'reports','middleware' => 'auth'], function(){
+	$route = "App\Http\Controllers";
+	Route::get('pdf/{model}/{type}', $route.'\Administration@Reports')->name('reports.pdf');
+});
 Route::group([ 'prefix' => 'student','middleware' => 'auth'], function(){
 	$route = "App\Http\Controllers";
+	Route::get('/profile',$route.'\Student@Profile')->name('ProfileStudent');
 	Route::get('/home/dashboard',$route.'\Student@dashboard')->name('StudentDashboard');
 	Route::get('/home/workspace',$route.'\Student@workspace')->name('StudentWorkspace');
 	Route::get('/test/list',$route.'\Student@all_tests')->name('StudentAllTest');
@@ -75,7 +80,7 @@ Route::group([ 'prefix' => 'attendant','middleware' => 'auth'], function(){
 	Route::get('/load/periods', $route.'\Attendant@LoadPeriodsAttendantAsign')->name('LoadPeriodsAttendantAsign');
 	Route::get('/profile',$route.'\Attendant@ProfileAttendant')->name('ProfileAttendant');
 	Route::post('/profile/update', $route.'\Attendant@UpdateProfileAttendant')->name('UpdateProfileAttendant');
-	Route::get('/notes/{model}', $route.'\Attendant@NotesAttendant')->name('NotesAttendant');
+	Route::get('/notes/view/{model}', $route.'\Attendant@NotesAttendant')->name('NotesAttendant');
 	Route::get('/send/state/{model}/{state}', $route.'\Attendant@UpdateStateNotesAttendant')->name('UpdateStateNotesAttendant');
 	Route::get('/notes/aproved', $route.'\Attendant@NotesAprovedAttendant')->name('NotesAprovedAttendant');
 });
@@ -131,7 +136,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/logs',$route.'\Teacher@logs')->name('LogsTeacher');
 		Route::get('/delete/{model}', $route.'\Teacher@delete')->name('DeleteTeacher');
 		Route::get('/search',$route.'\Teacher@seach')->name('SceachTeacher');
-		Route::get('/workspace',$route.'\Teacher@workspace')->name('WorkspaceTeacher');
+		Route::get('/workspace/{model}',$route.'\Teacher@workspace')->name('WorkspaceTeacher');
 		Route::get('/statistics',$route.'\Teacher@statistics')->name('StatisticsTeacher');
 		Route::post('/load/courses', $route.'\Teacher@LoadCourses')->name('LoadCoursesTeacher');
 		Route::get('/desactive', $route.'\Teacher@Desactive')->name('Desactive');

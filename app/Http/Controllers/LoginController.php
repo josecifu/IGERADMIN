@@ -133,7 +133,7 @@ class LoginController extends Controller
                 $log->Description = "El usuario ".$user->Person()->Names. " ".$user->Person()->LastNames. " ha iniciado sesión";
                 $log->Type = "Login";
                 $log->save();
-                return redirect('teacher/home/dashboard');
+                return redirect('attendant/home/dashboard');
             }
             elseif($rol=="Administrador")
             {
@@ -143,7 +143,7 @@ class LoginController extends Controller
                 $log->Description = "El usuario ".$user->Person()->Names. " ".$user->Person()->LastNames. " ha iniciado sesión";
                 $log->Type = "Login";
                 $log->save();
-               
+                return redirect('administration/home/dashboard');
             }
         }
         else

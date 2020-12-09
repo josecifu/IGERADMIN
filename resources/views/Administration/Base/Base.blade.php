@@ -24,6 +24,9 @@
 		<link rel="shortcut icon" href="{{ asset('assets/media/logos/faviconiger.ico')}}" />
 	</head>
 	<!--end::Head-->
+	<div class="page-loader">
+		<div class="spinner spinner-warning"></div>
+	</div>
 	<!--begin::Body-->
 	<body id="kt_body" class="header-fixed subheader-enabled page-loading">
 		<!--begin::Main-->
@@ -630,7 +633,12 @@
 					$('#Title2').html("Visualice el listado de notas y examenes por curso, grados, nivel y circulo de estudio seleccionado");
 				
 				}
+				else if(pos==8)
+				{			
+					$('#Title1').text("Visualización espacio de trabajo del curso");
+					$('#Title2').html("Visualice la información presentada por curso");
 				
+				}
 				$.ajax ({
 					url: url,
 					type: 'GET',
@@ -691,6 +699,12 @@
 					var Id = $('#courseselect1').val();
 					var $url_path = '{!! url('/') !!}';
                     window.location.href = $url_path+"/administration/workspace/attendant/notes/"+Id;
+				}
+				if(posGrade==8)
+				{
+					var Id = $('#courseselect1').val();
+					var $url_path = '{!! url('/') !!}';
+                    window.location.href = $url_path+"/administration/teacher/workspace/"+Id;
 				}
 			}
 			function ListLevel(Period)
@@ -756,7 +770,7 @@
 				});
 			}
 			$('#gradeselect1').on('change', function() {
-				if(posGrade==3 || posGrade==4 || posGrade==5 || posGrade==6 ) {
+				if(posGrade==3 || posGrade==4 || posGrade==5 || posGrade==6 || posGrade==8) {
 					$('#SelectCourse').css("visibility", "visible");
 					ListCourse($('#gradeselect1').val());
 				}

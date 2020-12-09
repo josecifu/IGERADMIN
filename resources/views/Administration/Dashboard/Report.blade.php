@@ -4,10 +4,10 @@
     Inicio
     @stop
     @section('breadcrumb1')
-    Tablero
+    Reportes generales
     @stop
     @section('breadcrumb2')
-    Principal
+    Todos los circulos
     @stop
     {{-- Page content --}}
     @section('content')
@@ -26,13 +26,13 @@
 												<div class="card-toolbar">
 													<ul class="nav nav-pills nav-pills-sm nav-dark-75">
 														<li class="nav-item">
-															<a class="nav-link py-2 px-4" data-toggle="tab" href="#kt_tab_pane_5_1">Mes</a>
+															<a class="nav-link py-2 px-4" data-toggle="tab" onclick="change(1)"  href="#kt_tab_pane_5_2">Todos</a>
 														</li>
 														<li class="nav-item">
-															<a class="nav-link py-2 px-4" data-toggle="tab" href="#kt_tab_pane_5_2">Semana</a>
+															<a class="nav-link py-2 px-4" data-toggle="tab" onclick="change(2)"  href="#kt_tab_pane_5_1">Mes</a>
 														</li>
 														<li class="nav-item">
-															<a class="nav-link py-2 px-4 active" data-toggle="tab" href="#kt_tab_pane_5_3">Dia</a>
+															<a class="nav-link py-2 px-4 active" onclick="change(3)" data-toggle="tab" href="#kt_tab_pane_5_3">Dia</a>
 														</li>
 													</ul>
 												</div>
@@ -176,11 +176,11 @@
 																		</td>
 																		<td class="text-right">
 																			@if($Log['State']=="Success")
-																			<span class="label label-lg label-light-success label-inline">{{$Log['State']}}</span>
+																			<span class="label label-lg label-light-success label-inline">Completado</span>
 																			@elseif($Log['State']=="Delete")
-																				<span class="label label-lg label-light-danger label-inline">{{$Log['State']}}</span>
+																				<span class="label label-lg label-light-danger label-inline">Eliminado</span>
 																			@elseif($Log['State']=="Progress")
-																				<span class="label label-lg label-light-warning label-inline">{{$Log['State']}}</span>
+																				<span class="label label-lg label-light-warning label-inline">En progreso</span>
 																			@endif
 																		</td>
 																		<td class="text-right pr-0">
@@ -247,7 +247,7 @@
 																			</div>
 																		</td>
 																		<td class="pl-0">
-																			<a href="#" class="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">{{$Log['Title']}}</a>
+																			<a href="javascript:;" class="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg">{{$Log['Title']}}</a>
 																			<span class="text-muted font-weight-bold d-block">{{$Log['User']}}</span>
                                                                         </td>
                                                                         <td class="text-center">
@@ -260,15 +260,15 @@
 																		</td>
 																		<td class="text-right">
 																			@if($Log['State']=="Success")
-																			<span class="label label-lg label-light-success label-inline">{{$Log['State']}}</span>
+																			<span class="label label-lg label-light-success label-inline">Completado</span>
 																			@elseif($Log['State']=="Delete")
-																				<span class="label label-lg label-light-danger label-inline">{{$Log['State']}}</span>
+																				<span class="label label-lg label-light-danger label-inline">Eliminado</span>
 																			@elseif($Log['State']=="Progress")
-																				<span class="label label-lg label-light-warning label-inline">{{$Log['State']}}</span>
+																				<span class="label label-lg label-light-warning label-inline">En progreso</span>
 																			@endif
 																		</td>
 																		<td class="text-right pr-0">
-																			<a href="{{$Log['Url']}}" class="btn btn-icon btn-light btn-sm">
+																			<a href="javascript:;" class="btn btn-icon btn-light btn-sm">
 																				<span class="svg-icon svg-icon-md svg-icon-success">
 																					<!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg-->
 																					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -304,4 +304,16 @@
     </div>
 	@stop
 	@section('scripts')
+	<script type="text/javascript">
+		var SelectMenu = 3;
+		function imprimir()
+		{
+			var $url_path = '{!! url('/') !!}';
+			window.location.href = $url_path+"/reports/pdf/"+SelectMenu+"/generalreportpdf";
+		}
+		function change($select)
+		{
+			SelectMenu = $select;
+		}
+	</script>
 	@stop

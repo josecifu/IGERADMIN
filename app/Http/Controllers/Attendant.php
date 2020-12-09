@@ -21,8 +21,9 @@ use App\Models\grade;
 use App\Models\Asign_teacher_course;
 #Tabla logs
 use App\Models\logs;
+use App\Models\Assign_student_grade;
 use Illuminate\Support\Facades\DB;
-
+use Carbon\Carbon;
 class Attendant extends Controller
 {
     public function AttendantHome(Request $request)
@@ -34,6 +35,9 @@ class Attendant extends Controller
         $DataPeriods=[];
         $nPending=0;
         $nAproved = 0;
+        $Pending = [];
+        $Aproved = [];
+        $logs=[];
         if($data)
         {
             foreach ($data->PeriodsAttendantData() as $key => $period) {
@@ -42,74 +46,64 @@ class Attendant extends Controller
                    {
                        $notes = note::where(['Course_id'=>$course->id,'State'=>"Qualified"])->first();
                        if($notes!=null)
-                       $nPending++;
-                       $notes = note::where(['Course_id'=>$course->id,'State'=>"Approved"])->first();
+                       {
+                        $nPending++;
+                        $Assign = Course::find($course->id);
+                        setlocale(LC_TIME, 'es');
+                        $tiempo = new Carbon($notes->updated_at);
+                        $newDateFinal= $tiempo->formatLocalized('%d de %B de %Y')." ".date("H:i A",strtotime($notes->updated_at));
+                        
+                        $note = [
+                            "id"=>$course->id,
+                            "Course" => $Assign->Name." ".$Assign->Grade()->GradeNamePeriod(),
+                            "Activity"=>$notes->Test()->Activity()->Name,
+                            "Update"=>$newDateFinal,
+                        ];
+                        array_push($Pending,$note);
+                       }
+                       
+                       $notes = Note::where(['Course_id'=>$course->id,'State'=>"Approved"])->first();
+  
                        if($notes!=null)
-                       $nAproved++;
+                       {
+                            $nAproved++;
+                            $Assign = Course::find($course->id);
+                            setlocale(LC_TIME, 'es');
+                            $tiempo = new Carbon($notes->updated_at);
+                            $newDateFinal= $tiempo->formatLocalized('%d de %B de %Y')." ".date("H:i A",strtotime($notes->updated_at));
+                            
+                            $note = [
+                                "id"=>$notes->id,
+                                "Course" => $Assign->Name." ".$Assign->Grade()->GradeNamePeriod(),
+                                "Activity"=>$notes->Test()->Activity()->Name,
+                                "Update"=>$newDateFinal,
+                            ];
+                            array_push($Aproved,$note);
+                            
+                       }
+                      
+
+                       $log = logs::where('Period_id',$period->id)->get();
+                       foreach ($log as $value) {
+                        if(!in_array($value,$logs))
+                            array_push($logs,$value);
+                       }
                        
                    }
                 }
             }
-           
+        }
+    
             $DataAttendant=[
                 "CountPeriods" => count($data->PeriodsAttendantData()),
                 "NotesPending" => $nPending,
                 "NotesAproved" => $nAproved,
+                "Pending" =>$Pending,
+                "Aproved" =>$Aproved,
+                "Logs" => $logs
             ];
-            $dataActivity = [];
-            $dataTest = [];
-            $dataAll = [];
-            $TestData =[];
-            foreach($data->CoursesTeacherData() as $value)
-            {
-                $Activities = Assign_activity::where([['Course_id',$value->id],['State','Active']])->get();
-                foreach($Activities as $Activity)
-                {
-                    if(!in_array($Activity->Name,$dataActivity))
-                    {
-                        array_push($dataActivity,$Activity->Name);
-                        $act = [
-                            "Name" =>$Activity->Name,
-                            "No" =>count($Activity->Tests()) ?? 0,
-                        ];
-                        array_push($Titles,$act);
-                    }
-                    if(count($Activity->Tests())>0)
-                    {
-                        foreach($Activity->Tests() as $test)
-                        {
-                            if(!in_array($test->Title,$TestData))
-                            {
-                                $dat = [
-                                    "Activity"=>$Activity->Name,
-                                    "Test" =>$test->Title
-                                ];
-                                    
-                                array_push($TestData,$dat);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        $dat = [
-                            "Activity"=>$Activity->Name,
-                            "Test" =>"No existen examenes asignados"
-                        ];
-                         array_push($TestData,$dat);
-                    }
-                }
-                foreach($value->Grade()->Students() as $student)
-                {
-                    $notes = Note::where(['Student_id'=> $student->Asssign_Grade()->id, "Course_id" => $value->id])->get();
-                    $model = [
-                        "Name"=> $student->LastNames." ".$student->Names,
-                        "Curse"=>$value->Name,
-                        "Notes" =>"0"
-                    ];
-                }
-            }
-        }
-        return view('Attendant/Home',compact('Titles','Models','DataAttendant','TestData'));
+      
+        return view('Attendant/Home',compact('Titles','Models','DataAttendant'));
     }
     public function NotesAttendant(Request $request, $id)
     {
@@ -267,18 +261,18 @@ class Attendant extends Controller
             {
                 foreach($grade->Courses()->where('State','Active') as $Course)
                 {
-                    $nota = Note::where(['Course_id'=>$id])->first();
+                    $nota = Note::where(['Course_id'=>$Course->id])->first();
                     $model = [
-                        "Id" =>$value->id,
+                        "Id" =>$Course->id,
                         "Course" =>$Course->Name,
                         "Grade" => $value->Name." - ".$grade->GradeName(),
-                        "State" => $nota->State,
+                        "State" => $nota->State ?? "No asignada por el voluntario",
                     ];
                     array_push($Models,$model);
                 }
             }
             
         }
-        return view('Administration/Workspace/Inscriptions',compact('Titles','Models'));
+        return view('Attendant/NotesStates',compact('Titles','Models'));
     }
 }

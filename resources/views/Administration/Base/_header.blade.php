@@ -412,10 +412,10 @@
 											@if(session()->get('rol_Name')=="Administrador")
 											<a href="custom/apps/user/profile-1/personal-information.html" class="navi-item px-8">
 											@elseif(session()->get('rol_Name')=="Estudiante")
+											<a href="{{url('student/profile')}}" class="navi-item px-8">
+											@elseif(session()->get('rol_Name')=="Voluntario")
 											<a href="custom/apps/user/profile-1/personal-information.html" class="navi-item px-8">
-												@elseif(session()->get('rol_Name')=="Voluntario")
-											<a href="custom/apps/user/profile-1/personal-information.html" class="navi-item px-8">
-												@elseif(session()->get('rol_Name')=="Encargado de circulo")
+											@elseif(session()->get('rol_Name')=="Encargado de circulo")
 											<a href="{{url('attendant/profile')}}" class="navi-item px-8">
 											@endif
 												<div class="navi-link">

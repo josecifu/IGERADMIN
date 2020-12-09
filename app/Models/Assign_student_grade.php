@@ -12,5 +12,8 @@ class Assign_student_grade extends Model
     {
         return $this->hasOne('App\Models\grade','id','Grade_id')->first();
     }
-
+    public function User()
+    {
+        return $this->hasOne('App\Models\user','id','user_id')->first();
+    }
 }

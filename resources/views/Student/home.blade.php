@@ -265,8 +265,8 @@
                 var strokeColor = '#fff';
                 var options = {
                     series: [{
-                        name: 'Net Profit',
-                        data: [30, 45, 32, 70, 40, 40, 40]
+                        name: 'Promedios',
+                        data: [0, 0]
                     }],
                     chart: {
                         type: 'area',
@@ -308,7 +308,7 @@
                         colors: [strokeColor]
                     },
                     xaxis: {
-                        categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                        categories: ['Semestre 1', 'Semestre 2'],
                         axisBorder: {
                             show: false,
                         },
@@ -373,7 +373,7 @@
                         },
                         y: {
                             formatter: function (val) {
-                                return "$" + val + " thousands"
+                                return "" + val + " puntos"
                             }
                         },
                         marker: {

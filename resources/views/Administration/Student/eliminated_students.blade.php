@@ -19,7 +19,7 @@
                         <span class="card-icon">
                             <i class="flaticon2-favourite text-primary"></i>
                         </span>
-                        <h3 class="card-label">Listado de estudiantes deshabilitados</h3>
+                        <h3 class="card-label">Listado de estudiantes eliminados</h3>
                     </div>
                     <div class="card-toolbar">
                         <div class="card-toolbar">
@@ -30,43 +30,7 @@
                         <div class="dropdown dropdown-inline mr-2" >
                             <button style="color: white;" type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="la la-download" style="color: white;"></i>Exportar</button>
-                            <!--begin::Dropdown Menu-->
-                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                                <ul class="nav flex-column nav-hover">
-                                    <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opción:</li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-print"></i>
-                                            <span class="nav-text">Imprimir</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-copy"></i>
-                                            <span class="nav-text">Copiar</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-file-excel-o"></i>
-                                            <span class="nav-text">Excel</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-file-text-o"></i>
-                                            <span class="nav-text">CSV</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-file-pdf-o"></i>
-                                            <span class="nav-text">PDF</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!--end::Dropdown Menu-->
+                            @include("Administration.Base._exports")
                         </div>
                         <!--end::Dropdown-->
                     </div>
@@ -124,7 +88,7 @@
                                 orderable: false,
                                 render: function(data, type, full, meta) {
                                     return '\
-                                        <a href="javascript:;" onclick="ActivePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Habilitar estudiante" data-placement="left">\
+                                        <a href="javascript:;" data-toggle="tooltip" data-placement="top" onclick="ActivePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Habilitar estudiante" data-placement="left">\
                                         <i class="la la-check-circle"></i>\
                                         </a>\
                                     ';
@@ -188,5 +152,8 @@
                     }
                 })
             }
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+              })
        </script>  
     @stop
