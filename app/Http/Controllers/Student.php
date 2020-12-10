@@ -4,18 +4,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\logs;
-use App\Models\Rol;
+use App\Models\rol;
 use App\Models\Assign_user_rol;
 use App\Models\User;
 use App\Models\Person;
 use App\Models\Assign_student_grade;
 use App\Models\period;
 use App\Models\grade;
-use App\Models\Level;
-use App\Models\Course;
+use App\Models\course;
 use App\Models\Asign_answer_test_student;
 use App\Models\Question;
-use App\Models\Test;
+use App\Models\test;
 use App\Models\Note;
 use App\Models\Assign_activity;
 use App\Models\Asign_teacher_course;
@@ -26,7 +25,7 @@ class Student extends Controller
     {
         return view('Administration/Student/statistics ',compact('countsfemale','countsmale'));
     }
-    public function statistics ()
+    public function statistics()
     {
         $models = [];
         $periods = period::where('State','Active')->get();
@@ -53,13 +52,12 @@ class Student extends Controller
             array_push($countsfemale,$female);
             array_push($countsmale,$male);
         }
-            array_push($countsfemale,0);
-            array_push($countsfemale,0);
-            array_push($countsmale,0);
-            array_push($countsfemale,0);
-            array_push($countsmale,0);
-            array_push($countsmale,0);
-
+        array_push($countsfemale,0);
+        array_push($countsfemale,0);
+        array_push($countsmale,0);
+        array_push($countsfemale,0);
+        array_push($countsmale,0);
+        array_push($countsmale,0);
         return view('Administration/Student/statistics ',compact('countsfemale','countsmale'));
     }
 
@@ -73,7 +71,6 @@ class Student extends Controller
     {
         $id = $request->session()->get('User_id');
         $year = date("Y");
-        $cont = 0;
         $models = [];
         $assign = Assign_student_grade::where('user_id',$id)->first();
         $courses = $assign->Grade()->Courses();
@@ -107,20 +104,17 @@ class Student extends Controller
                                 {
                                     if($test->StartDate)
                                     {
-                                        $cont = $cont + 1;
                                         $query =[
                                             'id' => $test->id,
                                             'course' => $course->Name,
                                             'test' => $test->Title,
                                             'start' => date("d/m/Y h:i A",strtotime($test->StartDate)),
-                                            'end' => date("d/m/Y h:i A",strtotime($test->EndDate)),
-                                            'counter' => $cont
+                                            'end' => date("d/m/Y h:i A",strtotime($test->EndDate))
                                         ];
                                         array_push($models,$query);
                                     }
                                 }
                             }
-
                         }
                     }
                 }
@@ -167,79 +161,16 @@ class Student extends Controller
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    //REVISAR FILTROS (EXAMENES Y NOTAS POR AÑO)
-/*-------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------*/
+                    //REVISAR FILTROS  DE EXAMENES Y NOTAS POR AÑO Y ESTADO
 /*-------------------------------------------------------------------------------------------*/
 
     public function test_questions(Request $request,$id)
     {
         $models = [];
         $titles = [];
-        $test = Test::find($id);
-        $Course = $test->Course()->Name;
-        return view('Student/test_form',compact('titles','test','Course'));
+        $test = test::find($id);
+        $course = $test->Course()->Name;
+        return view('Student/test_form',compact('titles','test','course'));
     }
 
     public function student_test_list(Request $request)
@@ -295,7 +226,6 @@ class Student extends Controller
                                     }
                                 }
                             }
-
                         }
                     }
                 }
@@ -316,7 +246,7 @@ class Student extends Controller
             $assign = Assign_student_grade::where('user_id',$id)->first();
             foreach($request->data as $Answer)
             {
-                $question = question::find($Answer['QuestionId']);
+                $question = Question::find($Answer['QuestionId']);
                 $score = 0;
                 if(($Answer['Answer'] == $question->CorrectAnswers) && ($Answer['Answer'] != null))
                 {
@@ -451,7 +381,7 @@ class Student extends Controller
         $user_student = User::find($assign_student->user_id);
         $test = test::find($id);
         $activity = Assign_activity::find($test->Activity_id);
-        $course = Course::find($activity->Course_id);
+        $course = course::find($activity->Course_id);
         $assign_teacher = Asign_teacher_course::where('Course_id',$course->id)->first();
         $user_student = User::find($assign_teacher->user_id);
         $teacher = Person::find($user_student->Person_id);
@@ -656,7 +586,6 @@ class Student extends Controller
         ];
         $year = date("Y");
         $rols = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get();
-        
         foreach ($rols as $rol)
         {
             $user = User::find($rol->user_id);
@@ -672,8 +601,7 @@ class Student extends Controller
                     $mes = strftime("%d de %B del %Y", strtotime($newDate));
                     $conection= $mes." a las ".date("H:m A", strtotime($conection->created_at));
                 }
-                
-                $grade = Grade::find($assign->Grade_id);
+                $grade = grade::find($assign->Grade_id);
                 $query = [
                     'id' => $student->id,
                     'name' => $student->Names,
@@ -722,7 +650,7 @@ class Student extends Controller
             'Última conexión',
             'Acciones'
         ];
-        $grade = Grade::find($id);
+        $grade = grade::find($id);
         $year = date("Y");
         $rols = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get();
         foreach ($rols as $rol)
@@ -732,6 +660,14 @@ class Student extends Controller
             $assigns = Assign_student_grade::where('User_id',$user->id)->where('Year',$year)->where('State','Active')->where('Grade_id',$grade->id)->get('Grade_id');
             foreach ($assigns as $assign)
             {
+                $conection = logs::where(['Type'=>'Login','User_Id'=>$user->name])->orderby('created_at','DESC')->take(1)->first();
+                if($conection)
+                {
+                    setlocale(LC_TIME, "spanish");
+                    $newDate = date("d-m-Y", strtotime($conection->created_at));    
+                    $mes = strftime("%d de %B del %Y", strtotime($newDate));
+                    $conection= $mes." a las ".date("H:m A", strtotime($conection->created_at));
+                }
                 $query = [
                     'id' => $student->id,
                     'name' => $student->Names,
@@ -739,7 +675,7 @@ class Student extends Controller
                     'phone' => $student->Phone,
                     'user' => $user->name,
                     'email' => $user->email,
-                    'conexion' => '17/11/2020'
+                    'conexion' => $conection ?? 'El usuario no se ha conectado'
                 ];
                 array_push($models,$query);
             }
@@ -783,7 +719,6 @@ class Student extends Controller
         $rols = Assign_user_rol::where('Rol_id',2)->where('State','Desactivated')->get('user_id');
         foreach ($rols as $rol)
         {
-
             $user = User::find($rol->user_id);
             $student = Person::find($user->Person_id);
             $conection = logs::where(['Type'=>'Login','User_Id'=>$user->name])->orderby('created_at','DESC')->take(1)->first();
@@ -903,7 +838,7 @@ class Student extends Controller
         $email = $data['Correo'];
         $password = $data['Contraseña'];
         $year = date("Y");
-        $grade = Grade::find($data['Grado']);
+        $grade = grade::find($data['Grado']);
         $registered_user = User::where('name',$username)->first();
         try
         {
@@ -1074,7 +1009,7 @@ class Student extends Controller
         $user->PasswordRestore = "Change";
         $user->password = bcrypt($data['Contraseña']);
         $user->Save();
-        $log = new Logs;
+        $log = new logs;
         $log->Table = "Estudiante";
         $log->User_ID = $responsible_user->name;
         $log->Description = "Se ha restablecido la contraseña del usuario: ".$user->name;
@@ -1171,7 +1106,7 @@ class Student extends Controller
         $student = Person::find($user_student->Person_id);
         $test = test::find($id);
         $activity = Assign_activity::find($test->Activity_id);
-        $course = Course::find($activity->Course_id);
+        $course = course::find($activity->Course_id);
         $assign_teacher = Asign_teacher_course::where('Course_id',$course->id)->first();
         $user_student = User::find($assign_teacher->user_id);
         $teacher = Person::find($user_student->Person_id);
@@ -1210,16 +1145,24 @@ class Student extends Controller
             'Última conexión',
             'Acciones'
         ];
-        $grade = Grade::find($id);
+        $grade = grade::find($id);
         foreach ($grade->Students() as $user)
         {
+            $conection = logs::where(['Type'=>'Login','User_Id'=>$user->name])->orderby('created_at','DESC')->take(1)->first();
+            if($conection)
+            {
+                setlocale(LC_TIME, "spanish");
+                $newDate = date("d-m-Y", strtotime($conection->created_at));    
+                $mes = strftime("%d de %B del %Y", strtotime($newDate));
+                $conection= $mes." a las ".date("H:m A", strtotime($conection->created_at));
+            }
             $student = Person::find($user->Person_id);
             $query = [
                 'id' => $student->id,
                 'name' => $student->Names,
                 'lastname' => $student->LastNames,
                 'assign' => $user->Asssign_Grade()->id,
-                'conexion' => '17/11/2020'
+                'conexion' => $conection ?? 'El usuario no se ha conectado'
             ];
             array_push($models,$query);
         }
