@@ -30,8 +30,9 @@
 											<!--end::Header-->
 											<!--begin::Body-->
 											<div class="card-body pt-4">
+												<div class="scroll scroll-pull" data-scroll="true" data-wheel-propagation="true" style="height: 200px">
 												<!--begin::Container-->
-												<div>
+												
 													@foreach ($Logs['Test'] as $test)
 													<!--begin::Item-->
 													<div class="d-flex align-items-center mb-8">

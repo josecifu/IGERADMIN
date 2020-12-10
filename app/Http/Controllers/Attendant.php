@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Assign_attendant_periods;
 //tabla de notas
-use App\Models\note;
+use App\Models\Note;
 //tabla asignacion actividad
 use App\Models\Assign_activity;
 //tabla de cursos
@@ -44,7 +44,7 @@ class Attendant extends Controller
                 foreach ($period->Grades() as $grade) {
                    foreach($grade->Courses() as $course)
                    {
-                       $notes = note::where(['Course_id'=>$course->id,'State'=>"Qualified"])->first();
+                       $notes = Note::where(['Course_id'=>$course->id,'State'=>"Qualified"])->first();
                        if($notes!=null)
                        {
                         $nPending++;
@@ -151,12 +151,33 @@ class Attendant extends Controller
                                 // $assign = Assign_student_grade::where([['user_id',$student->id],['State','Active']])->first();
                                 $note = Note::where([['Test_id',$v->id],['Student_id',$student->Asssign_Grade()->id]])->first();
                                 if($note==null){
-                                    array_push($notas,0);
+                                    $nota =[
+                                        "score"=>0,
+                                        "State"=>""
+                                    ];
+                                    array_push($notas,$nota);
                                 }
                                 else if($note->State == "Qualified"){
-                                    array_push($notas,$note->Score);
-                                }else{
-                                    array_push($notas,"El examen no se ha sido enviado a revisión");
+                                    $nota =[
+                                        "score"=>$note->Score,
+                                        "State"=>"Qualified"
+                                    ];
+                                    array_push($notas, $nota);
+                                }
+                                else if($note->State == "Approved"){
+                                    $nota =[
+                                        "score"=>$note->Score,
+                                        "State"=>"Approved"
+                                    ];
+                                    array_push($notas,$note->nota);
+                                }
+                                else{
+                                    $nota =[
+                                        "score"=>"El examen no se ha sido enviado a revisión",
+                                        "State"=>""
+                                    ];
+                                    array_push($notas,$note->nota);
+                                   
                                 }
                             }
                         }
@@ -242,10 +263,10 @@ class Attendant extends Controller
                         'message' => "Notas del curso ".$curso->Name." aprovadas, seran visibles para todos los alumnos",
                         ]);
                 }
-            return redirect('attendant/notes/'.$id);
+            return redirect('attendant/notes/view/'.$id);
         }
         else{
-            return redirect('attendant/notes/'.$id)->withError("Las notas del curso ".$curso->Name." no han sido modificadas, no existen notas aun.");
+            return redirect('attendant/notes/view/'.$id)->withError("Las notas del curso ".$curso->Name." no han sido modificadas, no existen notas aun.");
             
         }
     }

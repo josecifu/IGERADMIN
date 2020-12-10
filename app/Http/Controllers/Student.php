@@ -22,6 +22,10 @@ use App\Models\Asign_teacher_course;
 
 class Student extends Controller
 {
+    public function __construct()
+	{
+		$this->middleware('auth');
+	} 
     public function Profile(Request $request)
     {
         return view('Administration/Student/statistics ',compact('countsfemale','countsmale'));
@@ -198,9 +202,15 @@ class Student extends Controller
                             $date_now = strtotime(date("d-m-Y H:i:00"));
                             $date_teststart = strtotime($StartDate);
                             $date_teststart2 = strtotime($StartDate2);
-                            $EndDate = date("d-m-Y H:i:00",strtotime($test->EndDate)); 
+                            $EndDate = date("m-d-Y",strtotime($test->EndDate)); 
                             $date_testend = strtotime($EndDate);
                             $start = true;
+                            if($test->id==12)
+                            {
+                                dd($StartDate2,$EndDate,$test->StartDate,$test->EndDate);
+                            }
+                            
+
                             if($date_now >= $date_teststart)
                             {
                                 if($date_now >= $date_teststart2)

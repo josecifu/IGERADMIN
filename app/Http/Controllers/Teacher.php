@@ -953,6 +953,7 @@ class Teacher extends Controller
                 $HoraF = $data['HoraF'];
                 $actual = new DateTime(null, new DateTimeZone('America/Guatemala'));
                 try {
+                    
                     DB::beginTransaction();
                     $examen = new test;
                     $examen->Title = $Titulo;
