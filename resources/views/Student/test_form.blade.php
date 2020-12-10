@@ -16,7 +16,7 @@
             <div class="alert alert-custom alert-white alert-shadow fade show gutter-b" role="alert">
                 <div class="alert-icon">
                 </div>
-                <div class="alert-text"><center><h1>{{$test->Title}}- {{$Course}}</h1><h2>Fecha de finalización: {{$test->EndDate}}</h2></center></div>
+                <div class="alert-text"><center><h1>{{$test->Title}}- {{$course}}</h1><h2>Fecha de finalización: {{$test->EndDate}}</h2></center></div>
             </div>
             <div class="card card-custom">
                 <div class="card-body p-0">

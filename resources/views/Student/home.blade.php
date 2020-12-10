@@ -195,11 +195,11 @@
                                                     <!--end::Thead-->
                                                     <!--begin::Tbody-->
                                                     <tbody>
-                                                        @foreach($models as $model)
+                                                        @foreach($models as $key => $model)
                                                         <tr>
                                                             <td class="pl-0 py-5">
                                                                 <div class="symbol symbol-45 symbol-light-success mr-2">
-                                                                    <a type="button" class="btn btn-outline-success">{{$model['counter']}}</a>
+                                                                    <a type="button" class="btn btn-outline-success">{{$key+1}}</a>
                                                                 </div>
                                                             </td>
                                                             <td class="pl-0">
