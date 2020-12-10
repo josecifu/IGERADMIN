@@ -242,10 +242,10 @@ class Attendant extends Controller
                         'message' => "Notas del curso ".$curso->Name." aprovadas, seran visibles para todos los alumnos",
                         ]);
                 }
-            return redirect('attendant/notes/'.$id);
+            return redirect('attendant/notes/view'.$id);
         }
         else{
-            return redirect('attendant/notes/'.$id)->withError("Las notas del curso ".$curso->Name." no han sido modificadas, no existen notas aun.");
+            return redirect('attendant/notes/view'.$id)->withError("Las notas del curso ".$curso->Name." no han sido modificadas, no existen notas aun.");
             
         }
     }
