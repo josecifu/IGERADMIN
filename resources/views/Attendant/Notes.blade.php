@@ -118,7 +118,7 @@
                                                         <tr>
                                                             <td>{{$model['Alumno']}}</td>
                                                             @foreach($model['Notas'] as $nota)
-                                                                @if($nota['score']=='0')
+                                                                @if(intval($nota['score'])==0)
                                                                 <td><center>{{$nota['score']}}</center></td>
                                                                 @elseif(intval($nota['score']) > 0)
                                                                     @if($nota['State']=='Approved')
