@@ -66,13 +66,14 @@
                                     <td>
                                         <div class="progress">
                                             <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: {{$score[0]['Porcentage']}}%" aria-valuenow="{{$score[0]['Note']}}" aria-valuemin="0" aria-valuemax="{{$score[0]['Max']}}">{{$score[0]['Note']}} Pts</div>
+                                            <center>0</center>
                                         </div>
                                     </td>
                                     @else
                                     <td>
                                         <center>
                                             <span class="label label-warning label-pill label-inline mr-2">{{$score[0]}}</span>
-                                            0
+                                            
                                         </center>
                                     </td>
                                     @endif
