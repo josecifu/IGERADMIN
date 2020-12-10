@@ -151,12 +151,33 @@ class Attendant extends Controller
                                 // $assign = Assign_student_grade::where([['user_id',$student->id],['State','Active']])->first();
                                 $note = Note::where([['Test_id',$v->id],['Student_id',$student->Asssign_Grade()->id]])->first();
                                 if($note==null){
-                                    array_push($notas,0);
+                                    $nota =[
+                                        "score"=>0,
+                                        "State"=>""
+                                    ];
+                                    array_push($notas,$nota);
                                 }
                                 else if($note->State == "Qualified"){
-                                    array_push($notas,$note->Score);
-                                }else{
-                                    array_push($notas,"El examen no se ha sido enviado a revisión");
+                                    $nota =[
+                                        "score"=>$note->Score,
+                                        "State"=>"Qualified"
+                                    ];
+                                    array_push($notas, $nota);
+                                }
+                                else if($note->State == "Approved"){
+                                    $nota =[
+                                        "score"=>$note->Score,
+                                        "State"=>"Approved"
+                                    ];
+                                    array_push($notas,$note->nota);
+                                }
+                                else{
+                                    $nota =[
+                                        "score"=>"El examen no se ha sido enviado a revisión",
+                                        "State"=>""
+                                    ];
+                                    array_push($notas,$note->nota);
+                                   
                                 }
                             }
                         }
