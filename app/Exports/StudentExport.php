@@ -34,7 +34,7 @@ class StudentExport implements WithEvents,ShouldAutoSize,WithCalculatedFormulas
     {
       return [
          BeforeExport::class => function(BeforeExport $event){
-            $event->writer->reopen(new \Maatwebsite\Excel\Files\LocalTemporaryFile(asset('StudentList.xlsx')),Excel::XLSX);
+            $event->writer->reopen(new \Maatwebsite\Excel\Files\LocalTemporaryFile(Storage::get('StudentList.xlsx')),Excel::XLSX);
             $event->writer->getSheetByIndex(0);
             
                 $event->getWriter()->getSheetByIndex(0)->autoSize();
