@@ -220,7 +220,7 @@
 										</div>
 										<div>
 											<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Guardar Registro</button>
-											<button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>
+											<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>
 										</div>
 									</div>
 									<!--end::Wizard Actions-->
@@ -472,6 +472,7 @@
 				}
 			});
 			function ListLevel(Period){
+				$('#Grado').empty();
 				$.ajax ({
 					url: '{{route('LoadLevels')}}',
 					type: 'POST',
@@ -490,6 +491,7 @@
 				});	
 			}
 			function ListGrades(Level){
+				$('#Grado').empty();
 				$.ajax ({
 					url: '{{route('LoadGrades')}}',
 					type: 'POST',
@@ -498,7 +500,6 @@
 						"LvlId"      : Level,
 					},
 					success: (e) => {
-						$('#Grado').empty();
 						$('#Grado').append('<option value="" >--Seleccione una opción</option>');
 						$.each(e['Grades'], function(fetch, data){
 						$('#Grado').append('<option value="'+data.Id+'" >'+data.Name+'</option>');
@@ -509,8 +510,10 @@
 			}
 			$('#Jornada').on('change', function() {
 				ListLevel($('#Jornada').val());
+				ListGrades($('#Nivel').val());
 			});
 			$('#Nivel').on('change', function() {
+				$('#Grado').empty();
 				ListGrades($('#Nivel').val());
 			});
 	    </script>

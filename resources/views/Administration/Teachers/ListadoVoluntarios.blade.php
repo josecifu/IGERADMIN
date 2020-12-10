@@ -42,49 +42,13 @@
                                         </div>
                                         <div class="card-toolbar">
                                             <!--begin::Dropdown-->
-                                            <div class="dropdown dropdown-inline mr-2">
-                                                <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white;">
+                                            <div class="dropdown dropdown-inline mr-2" >
+                                                <button style="color: white;" type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="la la-download" style="color: white;"></i>Exportar</button>
-                                                <!--begin::Dropdown Menu-->
-                                                <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                                                    <ul class="nav flex-column nav-hover">
-                                                        <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opcion:</li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-print"></i>
-                                                                <span class="nav-text">Imprimir</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-copy"></i>
-                                                                <span class="nav-text">Copiar</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-file-excel-o"></i>
-                                                                <span class="nav-text">Excel</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-file-text-o"></i>
-                                                                <span class="nav-text">CSV</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-file-pdf-o"></i>
-                                                                <span class="nav-text">PDF</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <!--end::Dropdown Menu-->
+                                                @include("Administration.Base._exports")
                                             </div>
                                             <!--end::Dropdown-->
-                                            <a href="{{url('administration/teacher/create')}}" class="btn btn-primary font-weight-bolder">
+                                            <a href="{{url('administration/teacher/create')}}" class="btn btn-success font-weight-bolder">
                                             <i class="la la-plus"></i>Añadir un voluntario</a>
                                         </div>
                                     </div>
@@ -119,6 +83,7 @@
                                                             
                                                         @endif
                                                     </td>
+                                                    <td>{{$Model['Conection']}}</td>
                                                     <td nowrap="nowrap"></td>
                                                 </tr>
                                                 @endforeach
@@ -143,12 +108,45 @@
            
             "use strict";
             var KTDatatablesDataSourceHtml = function() {
-
+                var d = new Date();
+                var strDate =  d.getDate()+ "-" + (d.getMonth()+1) + "-" + d.getFullYear() + " " + d.getHours() + "-" + d.getMinutes();
                 var initTable1 = function() {
                     var table = $('#kt_datatable');
 
                     // begin first table
                     table.DataTable({
+                        dom: 'Bfrtip',
+                        buttons: [
+                            {
+                                text: 'Exportar a excel',
+                                extend: 'excelHtml5',
+                                fieldSeparator: '\t',
+                                messageTop: 'Listado de voluntarios.',
+                                exportOptions: {
+                                    columns: [ 0, 1, 2, 3, 4 , 5 ,6,7 ],
+                                },
+                                title: 'ListadoAlumnos-'+strDate
+                            },
+                            {
+                                text: 'Exportar a csv',
+                                extend: 'csvHtml5',
+                                extension: '.csv',
+                                exportOptions: {
+                                    columns: [ 0, 1, 2, 3, 4 , 5 ,6,7 ],
+                                },
+                                messageTop: 'Listado de voluntarios'
+                            },
+                            {
+                                text: 'Exportar a PDF',
+                                extend: 'pdfHtml5',
+                                extension: '.pdf',
+                                exportOptions: {
+                                    columns: [ 0, 1, 2, 3, 4 , 5 ,6,7 ],
+                                },
+                                messageTop: 'Listado de voluntarios'
+                            }
+                            
+                        ],
                         responsive: true,
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
@@ -332,6 +330,14 @@
                     }
                 })
             }//fin funcion crear
+            function exportdata(Type)
+            {
+                var $url_path = '{!! url('/') !!}';
+			    window.location.href = $url_path+"/reports/pdf/"+Type+"/listadovoluntarios";
+            }
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+              })
        </script>
 
       

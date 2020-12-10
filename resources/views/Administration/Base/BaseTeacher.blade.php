@@ -24,6 +24,9 @@
 		<link rel="shortcut icon" href="{{ asset('assets/media/logos/faviconiger.ico')}}" />
 	</head>
 	<!--end::Head-->
+	<div class="page-loader">
+		<div class="spinner spinner-warning"></div>
+	</div>
 	<!--begin::Body-->
 	<body id="kt_body" class="header-fixed subheader-enabled page-loading">
 		<!--begin::Main-->

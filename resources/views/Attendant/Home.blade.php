@@ -11,6 +11,8 @@
     @stop
     {{-- Page content --}}
     @section('content')
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    
 
         <div class="content flex-column-fluid" id="kt_content">
                 <h3>Tablero</h3>
@@ -124,7 +126,7 @@
                                                         </span>
                                                         <div class="d-flex flex-column flex-lg-fill">
                                                             <span class="text-dark-75 font-weight-bolder font-size-sm">{{$DataAttendant['NotesPending']}} Notas pendientes</span>
-                                                            <a href="#" class="text-primary font-weight-bolder">Ver</a>
+                                                            <a href="#" data-toggle="modal" data-target="#kt_select_modalSelect1" onclick="ListGrade(7)" class="text-primary font-weight-bolder">Ver</a>
                                                         </div>
                                                     </div>
                                                     <!--end: Item-->
@@ -135,7 +137,7 @@
                                                         </span>
                                                         <div class="d-flex flex-column">
                                                             <span class="text-dark-75 font-weight-bolder font-size-sm">{{$DataAttendant['NotesAproved']}} Notas aprobadas</span>
-                                                            <a href="#" class="text-primary font-weight-bolder">Ver</a>
+                                                            <a href="{{url('attendant/notes/aproved')}}"  class="text-primary font-weight-bolder">Ver</a>
                                                         </div>
                                                     </div>
                                                     <!--end: Item-->
@@ -163,7 +165,7 @@
 											<div class="card-header align-items-center border-0 mt-4">
 												<h3 class="card-title align-items-start flex-column">
 													<span class="font-weight-bolder text-dark">Actividad de circulos de estudios</span>
-													<span class="text-muted mt-3 font-weight-bold font-size-sm">0 Actividades</span>
+													<span class="text-muted mt-3 font-weight-bold font-size-sm">{{count($DataAttendant['Logs'])}} Actividades</span>
 												</h3>
 												
 											</div>
@@ -172,22 +174,23 @@
 											<div class="card-body pt-4">
 												<!--begin::Timeline-->
 												<div class="timeline timeline-6 mt-3">
+                                                    @foreach($DataAttendant['Logs'] as $log)
 													<!--begin::Item-->
 													<div class="timeline-item align-items-start">
 														<!--begin::Label-->
-														<div class="timeline-label font-weight-bolder text-dark-75 font-size-lg">08:42</div>
+														<div class="timeline-label font-weight-bolder text-dark-75 font-size-lg" style="width: 150px;">{{$log->created_at->format('d/m/Y h:i A')}}</div>
 														<!--end::Label-->
 														<!--begin::Badge-->
 														<div class="timeline-badge">
-															<i class="fa fa-genderless text-warning icon-xl"></i>
+															<i class="fa fa-genderless text-success icon-xl"></i>
 														</div>
 														<!--end::Badge-->
 														<!--begin::Text-->
-														<div class="font-weight-mormal font-size-lg timeline-content text-muted pl-3">Asignación de examen en el curso Idioma Español</div>
+														<div class="font-weight-mormal font-size-lg timeline-content text-muted pl-3">{{$log->Description}}</div>
 														<!--end::Text-->
 													</div>
 													<!--end::Item-->
-													
+													@endforeach
 												</div>
 												<!--end::Timeline-->
 											</div>
@@ -207,7 +210,7 @@
                                                 <h3 class="card-title align-items-start flex-column">
                                                     <span class="card-label font-weight-bold font-size-h4 text-dark-75">Punteos verificados</span>
                                                     <span class="text-muted mt-3 font-weight-bold font-size-sm">No de punteos  
-                                                    <span class="text-primary font-weight-bolder">no verificados 0</span></span>
+                                                    <span class="text-primary font-weight-bolder">no verificados {{count($DataAttendant['Pending'])}} , notas aprobadas {{count($DataAttendant['Aproved'])}}</span></span>
                                                 </h3>
                                                 <div class="card-toolbar">
                                                     <ul class="nav nav-pills nav-pills-sm nav-dark">
@@ -223,31 +226,55 @@
                                             <!--end::Header-->
                                             <!--begin::Body-->
                                             <div class="card-body pt-1">
-                                                <div class="scroll scroll-pull" data-scroll="true" data-wheel-propagation="true" style="height: 250px">
+                                                <div class="scroll scroll-pull" data-scroll="true" data-wheel-propagation="true" style="height: 350px">
                                                 <div class="tab-content mt-5" id="myTabLIist18">
                                                     
                                                     <!--begin::Tap pane-->
                                                         <div class="tab-pane fade" id="kt_tab_pane_1_1" role="tabpanel" aria-labelledby="kt_tab_pane_1_1">
                                                             <!--begin::Form-->
                                                             <div class="form">
-                                                                <!--begin::Item-->
-                                                                <div class="d-flex align-items-center pb-9">
-                                                                    <!--begin::Symbol-->
-                                                                    
-                                                                    <!--end::Symbol-->
-                                                                    <!--begin::Section-->
-                                                                    <div class="d-flex flex-column flex-grow-1">
-                                                                        <!--begin::Title-->
-                                                                        <a href="#" class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg mb-1">Matematicas - Primero Básico / 13-01-001 (Viernes IGER)</a>
-                                                                        <!--end::Title-->
-                                                                        <!--begin::Desc-->
-                                                                        <span class="text-dark-50 font-weight-normal font-size-sm"><span class="label label-dark label-inline mr-2">Notas Semestre 1</span> <span class="label label-warning label-pill label-inline mr-2">24 de noviembre a las 9:25 PM</span></span>
-                                                                        <!--begin::Desc-->
+                                                                @if(count($DataAttendant['Aproved'])>0)
+                                                                    @foreach($DataAttendant['Aproved'] as $note)
+                                                                    <!--begin::Item-->
+                                                                    <div class="d-flex align-items-center pb-9">
+                                                                        <!--begin::Symbol-->
+                                                                        
+                                                                        <!--end::Symbol-->
+                                                                        
+                                                                        <!--begin::Section-->
+                                                                        <div class="d-flex flex-column flex-grow-1">
+                                                                            <!--begin::Title-->
+                                                                            <a href="{{url('/attendant/notes/'.$note['id'])}}" class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg mb-1">{{$note['Course']}}</a>
+                                                                            <!--end::Title-->
+                                                                            <!--begin::Desc-->
+                                                                            <span class="text-dark-50 font-weight-normal font-size-sm"><span class="label label-dark label-inline mr-2">{{$note['Activity']}}</span> <span class="label label-warning label-pill label-inline mr-2">{!!$note['Update']!!}</span></span>
+                                                                            <!--begin::Desc-->
+                                                                        </div>
+                                                                        <!--end::Section-->
+                                                                        
                                                                     </div>
-                                                                    <!--end::Section-->
-                                                                </div>
-                                                                <!--end::Item-->
-
+                                                                    <!--end::Item-->
+                                                                    @endforeach
+                                                                @else
+                                                                <!--begin::Item-->
+                                                                    <div class="d-flex align-items-center pb-9">
+                                                                        <!--begin::Symbol-->
+                                                                        
+                                                                        <!--end::Symbol-->
+                                                                        
+                                                                        <!--begin::Section-->
+                                                                        <div class="d-flex flex-column flex-grow-1">
+                                                                            <!--begin::Title-->
+                                                                            <a href="#" class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg mb-1">No existen notas aprobadas</a>
+                                                                            <!--end::Title-->
+                                                                            
+                                                                            <!--begin::Desc-->
+                                                                        </div>
+                                                                        <!--end::Section-->
+                                                                        
+                                                                    </div>
+                                                                    <!--end::Item-->
+                                                                @endif
                                                             </div>
                                                             <!--end::Form-->
                                                         </div>
@@ -257,24 +284,48 @@
                                                     <div class="tab-pane fade show active" id="kt_tab_pane_2_2" role="tabpanel" aria-labelledby="kt_tab_pane_2_2">
                                                         <!--begin::Form-->
                                                         <div class="form">
-                                                            <!--begin::Item-->
-                                                            <div class="d-flex align-items-center pb-9">
-                                                                <!--begin::Symbol-->
-                                                              
-                                                                <!--end::Symbol-->
-                                                                <!--begin::Section-->
-                                                                <div class="d-flex flex-column flex-grow-1">
-                                                                    <!--begin::Title-->
-                                                                    <a href="#" class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg mb-1">Idioma - Primero Básico / 13-01-001 (Viernes IGER)</a>
-                                                                    <!--end::Title-->
-                                                                    <!--begin::Desc-->
-                                                                    <span class="text-dark-50 font-weight-normal font-size-sm"><span class="label label-dark label-inline mr-2">Notas Semestre 1</span> <span class="label label-danger label-pill label-inline mr-2">24 de noviembre a las 9:25 PM</span></span>
-                                                                    <!--begin::Desc-->
+                                                            @if(count($DataAttendant['Pending'])>0)
+                                                                @foreach($DataAttendant['Pending'] as $note)
+                                                                <!--begin::Item-->
+                                                                <div class="d-flex align-items-center pb-9">
+                                                                    <!--begin::Symbol-->
+                                                                
+                                                                    <!--end::Symbol--> 
+                                                                
+                                                                    <!--begin::Section-->
+                                                                    <div class="d-flex flex-column flex-grow-1">
+                                                                        <!--begin::Title-->
+                                                                        <a href="{{url('/attendant/notes/'.$note['id'])}}" class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg mb-1">{{$note['Course']}}</a>
+                                                                        <!--end::Title-->
+                                                                        <!--begin::Desc-->
+                                                                        <span class="text-dark-50 font-weight-normal font-size-sm"><span class="label label-dark label-inline mr-2">{{$note['Activity']}}</span> <span class="label label-danger label-pill label-inline mr-2">{!!$note['Update']!!}</span></span>
+                                                                        <!--begin::Desc-->
+                                                                    </div>
+                                                                    <!--end::Section-->
+                                                                
                                                                 </div>
-                                                                <!--end::Section-->
-                                                            </div>
-                                                            <!--end::Item-->
-                                                            
+                                                                <!--end::Item-->
+                                                                @endforeach
+                                                            @else
+                                                                <!--begin::Item-->
+                                                                    <div class="d-flex align-items-center pb-9">
+                                                                        <!--begin::Symbol-->
+                                                                        
+                                                                        <!--end::Symbol-->
+                                                                        
+                                                                        <!--begin::Section-->
+                                                                        <div class="d-flex flex-column flex-grow-1">
+                                                                            <!--begin::Title-->
+                                                                            <a class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg mb-1">No existen notas pendientes</a>
+                                                                            <!--end::Title-->
+                                                                            
+                                                                            <!--begin::Desc-->
+                                                                        </div>
+                                                                        <!--end::Section-->
+                                                                        
+                                                                    </div>
+                                                                    <!--end::Item-->
+                                                                @endif
                                                         </div>
                                                         <!--end::Form-->
                                                     </div>

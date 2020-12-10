@@ -90,7 +90,8 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([
             'Name' => 'Visualización de espacio de trabajo',
             'State' => '1',
-            'Url' => 'administration/teacher/workspace',  
+            'Type' => '3',
+            'Url' => 'ListGrade(8)',
             'menu_id' => '10'          
         ]);
         DB::table('menus')->insert([

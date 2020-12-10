@@ -19,17 +19,21 @@
                         <span class="card-icon">
                             <i class="flaticon2-favourite text-primary"></i>
                         </span>
-                        <h3 class="card-label">Listado de estudiantes deshabilitados</h3>
+                        <h3 class="card-label">Listado de estudiantes eliminados</h3>
                     </div>
                     <div class="card-toolbar">
                         <div class="card-toolbar">
-                            <a href="{{url('administration/student/list')}}" class="btn btn-danger font-weight-bolder mr-2">
-                            <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
+                            <a href="{{url('administration/student/list')}}" class="btn btn-danger font-weight-bolder mr-2"><i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
                         </div>
                         <!--begin::Dropdown-->
+<<<<<<< HEAD
                         <div class="dropdown dropdown-inline mr-2" >
                             <button style="color: white;" type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="la la-download" style="color: white;"></i>Exportar</button>
+                            @include("Administration.Base._exports")
+=======
+                        <div class="dropdown dropdown-inline mr-2">
+                            <button style="color:white;" type="button" class="btn btn-light-primary font-weight-bolder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="la la-download" style="color:white;"></i>Exportar</button>
                             <!--begin::Dropdown Menu-->
                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                                 <ul class="nav flex-column nav-hover">
@@ -67,6 +71,7 @@
                                 </ul>
                             </div>
                             <!--end::Dropdown Menu-->
+>>>>>>> c19ce0a453592a586cab61f23c2ec3ccc4ff0d18
                         </div>
                         <!--end::Dropdown-->
                     </div>
@@ -124,7 +129,7 @@
                                 orderable: false,
                                 render: function(data, type, full, meta) {
                                     return '\
-                                        <a href="javascript:;" onclick="ActivePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Habilitar estudiante" data-placement="left">\
+                                        <a href="javascript:;" data-toggle="tooltip" data-placement="top" onclick="ActivePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" title="Habilitar estudiante" data-placement="left">\
                                         <i class="la la-check-circle"></i>\
                                         </a>\
                                     ';
@@ -134,7 +139,6 @@
                     });
                 };
                 return {
-                    //main function to initiate the module
                     init: function() {
                         initTable1();
                     },
@@ -157,8 +161,8 @@
                     text: "El nombre del estudiante: "+$name,
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Habilitar!',
-                    cancelButtonText: 'Cancelar!',
+                    confirmButtonText: 'Habilitar',
+                    cancelButtonText: 'Cancelar',
                     reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
@@ -188,5 +192,8 @@
                     }
                 })
             }
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+              })
        </script>  
     @stop

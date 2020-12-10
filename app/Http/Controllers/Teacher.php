@@ -51,8 +51,9 @@ use Illuminate\Support\Facades\DB;
 
 class Teacher extends Controller
 {
-    public function workspace()
+    public function workspace($id)
     {
+        $course=course::find($id);
         $buttons =[];
         $button = [
             "Name" => 'Info',
@@ -60,7 +61,21 @@ class Teacher extends Controller
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
-        return view('Administration/Teachers/spaceWork',compact('buttons'));
+        $teacher = $course->Teacher();
+        
+        $vol = "No asignado";
+        if($teacher)
+        {
+            $vol = $teacher->person()->Names." ".$teacher->person()->LastNames;
+        }
+            $model= [
+            "Course"=>$course->Name,
+            "Teacher"=>$vol,
+            "Info"=>" ",
+            "Students"=> count($course->Grade()->Students()),
+            "Test"=> $course->Tests(),
+        ];
+        return view('Administration/Teachers/spaceWork',compact('buttons','model'));
     }
     public function __construct()
 	{
@@ -254,7 +269,7 @@ class Teacher extends Controller
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
-        $Titles =['Id','Nombres','Apellidos','Telefono','Usuario','Email','Cursos Asignados','Acciones'];
+        $Titles =['Id','Nombres','Apellidos','Telefono','Usuario','Email','Cursos Asignados','Ultima conexión','Acciones'];
         $usuario_rol = Assign_user_rol::where([['Rol_id',3],['State','Active']])->get('user_id');
         $Models = [];
         foreach ($usuario_rol as $v) {
@@ -270,6 +285,14 @@ class Teacher extends Controller
                 ];
                 array_push($dataT,$dataC);
             }
+            $conection = logs::where(['Type'=>'Login','User_Id'=>$usuario->name])->orderby('created_at','DESC')->take(1)->first();
+                if($conection)
+                {
+                    setlocale(LC_TIME, "spanish");
+                    $newDate = date("d-m-Y", strtotime($conection->created_at));	
+                    $mes = strftime("%d de %B del %Y", strtotime($newDate));
+                    $conection= $mes." a las ".date("H:m A", strtotime($conection->created_at));
+                }
             $data = [
                 'Id' => $persona->id,
                 'Name' => $persona->Names,
@@ -278,6 +301,7 @@ class Teacher extends Controller
                 'Usuario' => $usuario->name,
                 'Correo' => $usuario->email,
                 'Curses' => $dataT,
+                'Conection' => $conection ?? 'El usuario no se ha conectado'
             ];
             array_push($Models,$data);
         }
@@ -369,7 +393,7 @@ class Teacher extends Controller
                     if (!isset($verificar)) {
                         $usuario_curso = new Asign_teacher_course;
                         $curso = course::find($Cursos[$i]);
-                        $grado = grade::find($curso->Grade_id)->GradeName();
+                        $grado = grade::find($curso->Grade_id);
                         $usuario_curso->user_id = $user->id;
                         $usuario_curso->Course_id = $Cursos[$i];
                         $usuario_curso->State = "Active";
@@ -379,9 +403,9 @@ class Teacher extends Controller
                         $log = new logs;
                         $log->Table = "Voluntario";
                         $log->User_ID = $id->name;
-                        $log->Description = "Se asigno el usuario: ".$user->name.
-                        " al curso de ".$curso->Name." del grado de ".$grado;
+                        $log->Description = "Se asigno el curso ".$curso->Name." del grado ".$grado->GradeName()." al voluntario ".$person->fullname();
                         $log->Type = "Assign";
+                        $log->Period_id = $grado->Period()->id;
                         $log->save();
                     }
                 }
@@ -885,7 +909,7 @@ class Teacher extends Controller
         $curso = $data['curso'];
         $c = course::find($curso);
         $total = $Punteo;
-        $grado = grade::find($c->Grade_id)->GradeName();
+        $grado = grade::find($c->Grade_id);
         $activity = Assign_activity::find($actividad);
         $scores = test::where([['Activity_id',$actividad],['State','Fisico']])->orWhere([['Activity_id',$actividad],['State','Active']])->get();
         foreach ($scores as $value) {
@@ -934,8 +958,9 @@ class Teacher extends Controller
                     $log = new logs;
                     $log->Table = "Voluntario";
                     $log->User_ID = $id->name;
-                    $log->Description = "El usuario ".$id->name." creo un nuevo examen virtual para el curso de ".$c->Name." de ".$grado;
+                    $log->Description = "El usuario ".$id->name." creo un nuevo examen virtual para el curso de ".$c->Name." de ".$grado->GradeName();
                     $log->Type = "Create";
+                    $log->Period_id = $grado->Period()->id;
                     $log->save();
                     DB::commit();
                 }catch (Exception $e) {
@@ -960,8 +985,9 @@ class Teacher extends Controller
                     $log = new logs;
                     $log->Table = "Voluntario";
                     $log->User_ID = $id->name;
-                    $log->Description = "El usuario ".$id->name." creo un nuevo examen fisico para el curso de ".$c->Name." de ".$grado;
+                    $log->Description = "El usuario ".$id->name." creo un nuevo examen fisico para el curso de ".$c->Name." de ".$grado->GradeName();
                     $log->Type = "Create";
+                    $log->Period_id = $grado->Period()->id;
                     $log->save();
                     DB::commit();
                 }catch (Exception $e) {
@@ -1089,6 +1115,7 @@ class Teacher extends Controller
             $log->User_ID = $user->name;
             $log->Description = "Se creo la nueva actividad: ".$Actividad;
             $log->Type = "Create";
+            $log->Period_id = course::find($id)->Grade()->Period()->id;
             $log->save();
             return response()->json(["Acción Completada"]);
         }
@@ -1142,6 +1169,7 @@ class Teacher extends Controller
             $log->Table = "Voluntario";
             $log->User_ID = $user->name;
             $log->Description = "Se actualizo la actividad: ".$Actividad;
+            $log->Period_id = $assign->Course()->Grade()->Period()->id;
             $log->Type = "Update";
             $log->save();
             return response()->json(["Accion completada"]);
@@ -1463,6 +1491,7 @@ class Teacher extends Controller
                         $log->Description = "Se asigno el usuario: ".$vol->name.
                         " al curso de ".$curso->Name." del grado de ".$grado;
                         $log->Type = "Assign";
+                        $log->Period_id = $grado->Period()->id;
                         $log->save();
                     }
                 }

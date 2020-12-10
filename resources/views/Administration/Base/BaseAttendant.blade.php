@@ -22,8 +22,14 @@
 		<!--begin::Layout Themes(used by all pages)-->
 		<!--end::Layout Themes-->
 		<link rel="shortcut icon" href="{{ asset('assets/media/logos/faviconiger.ico')}}" />
+	
+			<meta charset="utf-8"> <!-- Esta linea es importante -->
+		
 	</head>
 	<!--end::Head-->
+	<div class="page-loader">
+		<div class="spinner spinner-warning"></div>
+	</div>
 	<!--begin::Body-->
 	<body id="kt_body" class="header-fixed subheader-enabled page-loading">
 		<!--begin::Main-->
@@ -643,7 +649,7 @@
 				{
 					var Id = $('#courseselect1').val();
 					var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/attendant/notes/"+Id;
+                    window.location.href = $url_path+"/attendant/notes/view/"+Id;
 				}
 				
 			}

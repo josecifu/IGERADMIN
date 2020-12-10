@@ -12,4 +12,8 @@ class Person extends Model
     {
         return $this->hasOne(User::class,'Person_id','id')->first();
     }
+    public function FullName()
+    {
+        return $this->Names." ".$this->LastNames;
+    }
 }

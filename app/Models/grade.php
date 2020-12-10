@@ -22,7 +22,7 @@ class grade extends Model
     }
     public function GradeName()
     {
-        return $this->Name." ".$this->Level()->first()->Name;
+        return $this->Name." ".$this->Level()->Name;
     }
     public function Courses()
     {
