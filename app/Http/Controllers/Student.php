@@ -91,12 +91,14 @@ class Student extends Controller
                         $answer = Asign_answer_test_student::where('Question_id',$question->id)->first();
                         if ($answer == null)
                         {
-                            $StartDate = date("d-m-Y",strtotime($test->StartDate." - 5 days")); 
-                            $StartDate2 = date("d-m-Y H:i:00",strtotime($test->StartDate)); 
+                            $dateStrStart =str_replace("/","-",$test->StartDate);
+                            $StartDate = date("d-m-Y",strtotime($dateStrStart." - 5 days")); 
+                            $StartDate2 = date("d-m-Y H:i:00",strtotime($dateStrStart)); 
                             $date_now = strtotime(date("d-m-Y H:i:00"));
                             $date_teststart = strtotime($StartDate);
                             $date_teststart2 = strtotime($StartDate2);
-                            $EndDate = date("d-m-Y H:i:00",strtotime($test->EndDate)); 
+                            $dateStr =str_replace("/","-",$test->EndDate);
+                            $EndDate =date('d-m-Y H:i:00', strtotime($dateStr));
                             $date_testend = strtotime($EndDate);
                             $start = true;
                             if($date_now >= $date_teststart)
@@ -207,7 +209,6 @@ class Student extends Controller
                             $EndDate =date('d-m-Y H:i:00', strtotime($dateStr));
                             $date_testend = strtotime($EndDate);
                             $start = true;
-                           
                             if($date_now >= $date_teststart)
                             {
                                 if($date_now >= $date_teststart2)
