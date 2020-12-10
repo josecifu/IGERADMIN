@@ -207,7 +207,7 @@ class Student extends Controller
                             $start = true;
                             if($test->id==12)
                             {
-                                dd($StartDate2,$EndDate);
+                                dd($StartDate2,$EndDate,$test->StartDate,$test->EndDate);
                             }
                             
 
