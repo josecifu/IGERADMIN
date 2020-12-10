@@ -771,7 +771,7 @@ class Teacher extends Controller
         $Models = [];
         
         if (session()->get('rol_Name')=="Voluntario") {
-            return view('Teacher/QuestionTest',compact('test','questions','curso'));
+            return view('Teacher/QuestionTest',compact('buttons','test','questions','curso'));
         }else{
             return view('Administration/Teachers/QuestionTest',compact('buttons','test','questions','curso'));
         }

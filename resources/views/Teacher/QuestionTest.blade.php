@@ -217,7 +217,92 @@
                     return 'error';
                 }
             }
-            
+            function create()
+            {
+                Swal.mixin({
+                    input: 'text',
+                    confirmButtonText: 'Siguiente  &rarr;',
+                    showCancelButton: true,
+                    progressSteps: ['1',]
+                }).queue([
+                    {
+                    title: 'Ingrese un numero de preguntas:',
+                    
+                    },
+                ]).then((result) => {
+                    if (result.value) {
+                    const answers = JSON.stringify(result.value)
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                        },
+                        buttonsStyling: false
+                    })
+                    
+                    swalWithBootstrapButtons.fire({
+                        title: '¿Está seguro de los datos?',
+                        text: "Numero de preguntas: "+result.value[0],
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Si, agregar!',
+                        cancelButtonText: 'No, cancelar!',
+                        reverseButtons: true
+                    }).then((result2) => {
+                        if (result2.isConfirmed) {
+                            var data = [{
+                                Preguntas: result.value[0],
+                                Test: {{$test->id}},
+                            }];
+                
+                            $.ajax({
+                                url:'/teacher/add/question/test',
+                                type:'POST',
+                                data: {"_token":"{{ csrf_token() }}","data":data},
+                                dataType: "JSON",
+                                success: function(e){
+                                    if(e.id){
+                                        swalWithBootstrapButtons.fire({
+                                        title: 'Error!',
+                                        text: e.id,
+                                        icon: 'error',
+                                        confirmButtonText: 'Aceptar',
+                                        })
+                                    }else{
+                                        swalWithBootstrapButtons.fire({
+                                        title: 'Creado!',
+                                        text: 'Se han creado las preguntas con exito!',
+                                        icon: 'success',
+                                        confirmButtonText: 'Aceptar',
+                                        }).then(function () {
+                                            var $url_path = '{!! url('/') !!}';
+                                            window.location.href = $url_path+"/teacher/assign/question/test/"+{{$test->id}}+"/"+result.value[0];
+                                        });
+                                    }//fin else                                    
+                                },
+                                error: function(e){
+                                    swalWithBootstrapButtons.fire({
+                                        title: 'Cancelado!',
+                                        text:   e.responseJSON['error'],
+                                        icon: 'error',
+                                        confirmButtonText: 'Aceptar',
+                                    }) 
+                                }
+                            });
+                        } else if (
+                        result.dismiss === Swal.DismissReason.cancel
+                        ) {
+                        swalWithBootstrapButtons.fire({
+                            title: 'Cancelado!',
+                            text:  'No se han preguntas',
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar',
+                        })
+                        }
+                    })
+                    }
+                })
+            }
            
        </script>
 	@stop
