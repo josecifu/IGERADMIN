@@ -58,6 +58,7 @@ Route::group([ 'prefix' => 'teacher','middleware' => 'auth'], function(){							
 	Route::get('/test/list/{model}',$route.'\Teacher@TestTeacher')->name('TeacherTests');
 	Route::get('/create/test/{model}',$route.'\Teacher@createExam')->name('TeacherCreateTest');
 	Route::get('/assign/question/test/{exam}/{model}',$route.'\Teacher@AssignQuestion')->name('TeacherAssignQuestions');
+	Route::post('/add/question/test', $route.'\Teacher@AddQuestion')->name('TeacherAddQuestion');
 	Route::get('/question/{model}/{no}', $route.'\Teacher@QuestionTest')->name('TeacherQuestionsTest');
 	Route::get('/detail/activity/{curso}/{model}',$route.'\Teacher@DetailActivity')->name('TeacherdetailActivity');
 	Route::get('/load/courses', $route.'\Teacher@TeacherLoadCourse')->name('TeacherLoadCourse');
@@ -149,6 +150,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/question/{model}/{no}', $route.'\Teacher@QuestionTest')->name('QuestionsTest');
 		Route::get('/create/test/{model}', $route.'\Teacher@createExam')->name('createExam');
 		Route::get('/assign/question/test/{model}/{no}', $route.'\Teacher@AssignQuestion')->name('AssignQuestion');
+		Route::post('/add/question/test', $route.'\Teacher@AddQuestion')->name('AddQuestion');
 		Route::post('/save/question/test', $route.'\Teacher@SaveAssignQuestion')->name('SaveAssignQuestion');
 		Route::post('/save/test', $route.'\Teacher@saveExam')->name('saveExam');
 		Route::post('/save/activity/{model}', $route.'\Teacher@saveActivity')->name('saveActivity');

@@ -759,14 +759,21 @@ class Teacher extends Controller
     }
     public function QuestionTest($id,$curso)   #VER PREGUNTAS DE UN EXAMEN
     {
+        $buttons=[];
+        $button = [
+            "Name" => 'Añadir Preguntas',
+            "Link" => "create()",
+            "Type" => "addFunction"
+        ];
+        array_push($buttons,$button);
         $test = test::find($id);
         $questions = Question::where('Test_id',$id)->get();
         $Models = [];
         
         if (session()->get('rol_Name')=="Voluntario") {
-            return view('Teacher/QuestionTest',compact('test','questions','curso'));
+            return view('Teacher/QuestionTest',compact('buttons','test','questions','curso'));
         }else{
-            return view('Administration/Teachers/QuestionTest',compact('test','questions','curso'));
+            return view('Administration/Teachers/QuestionTest',compact('buttons','test','questions','curso'));
         }
     }
     public function QualifyTest($id,$idtest,$course)
@@ -824,6 +831,19 @@ class Teacher extends Controller
     public function SendQualify(Request $request,$id)
     {
         $course = course::find($id);
+        $nota = Note::where('Course_id',$id)->get();
+        if($nota->isempty()){
+            return redirect('/teacher/score/list/'.$id)->withError('No existen notas de examenes calificados');
+        }
+        foreach ($nota as $value) {
+            // if (($value->State != 'Qualified') || ($value->State != 'Pre-Qualified') || ($value->State != 'Approved')) {
+            if ($value->State == 'Complete') {
+                $test = test::find($value->Test_id);
+                $assignT = Assign_student_grade::find($value->Student_id);
+                $student = User::find($assignT->user_id)->person();
+                return redirect('/teacher/test/score/'.$id)->withError('El examen: '.$test->Title.' del estudiante: '.$student->Names.' '.$student->LastNames.' aún no ha sido calificado');
+            }
+        }
         $Activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
         if(!$Activities->isempty()){
             $gradeStudents = grade::find($course->Grade_id)->Students();
@@ -860,19 +880,6 @@ class Teacher extends Controller
                         }
                     }
                 }
-            }
-        }
-        $nota = Note::where('Course_id',$id)->get();
-        if($nota->isempty()){
-            return redirect('/teacher/score/list/'.$id)->withError('No existen notas de examenes calificados');
-        }
-        foreach ($nota as $value) {
-            // if (($value->State != 'Qualified') || ($value->State != 'Pre-Qualified') || ($value->State != 'Approved')) {
-            if ($value->State == 'Complete') {
-                $test = test::find($value->Test_id);
-                $assignT = Assign_student_grade::find($value->Student_id);
-                $student = User::find($assignT->user_id)->person();
-                return redirect('/teacher/test/score/'.$id)->withError('El examen: '.$test->Title.' del estudiante: '.$student->Names.' '.$student->LastNames.' aún no ha sido calificado');
             }
         }
         foreach ($nota as $n) {
@@ -1020,6 +1027,26 @@ class Teacher extends Controller
             return view('Administration/Tests/1',compact('id','preguntas'));   
         }
     }
+    public function AddQuestion(Request $request)
+    {
+        $data = $request->data[0];
+        $Preguntas = $data['Preguntas'];
+        $examen = $data['Test'];
+        $questions = Question::where('Test_id',$examen)->get();
+        if(!$questions->isEmpty()){
+            return response()->json(["id"=>"No se pueden asignar más preguntas al examen"]);
+        }
+        else{
+            if($Preguntas == 0 || $Preguntas == ""){
+                return response()->json(["id"=>"Ingrese un numero de preguntas valido"]);
+            }
+            elseif($Preguntas > 25){
+                return response()->json(["id"=>"Valla! Demasiadas preguntas prueba con 25"]);
+            }
+            return response()->json(["Accion Completada"]);
+        }
+    }
+
     public function SaveAssignQuestion(Request $request)
     {
         $data = $request->data;
