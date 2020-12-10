@@ -649,7 +649,7 @@ class Teacher extends Controller
                                     array_push($notas,$n);
                                 }
                                 elseif($notes->State == "Qualified" || $notes->State == "Approved"){
-                                    $n=["Student_id" => "Pre" ,"Test_id"=> "Pre"];
+                                    $n=["Student_id" => "Qua" ,"Test_id"=> "Qua"];
                                     array_push($notas,$n);
                                 }
                             }
@@ -657,9 +657,9 @@ class Teacher extends Controller
                                 if($notes==null){
                                     $n=["Student_id" => "0" ,"Test_id"=> "0"];
                                     array_push($notas,$n);
-                                } 
-                                elseif($notes->State == "Pre-Qualified" || $notes->State == "Qualified" || $notes->State == "Approved"){
-                                    $n=["Student_id" => "Pre" ,"Test_id"=> "Pre"];
+                                }
+                                elseif($notes->State == "Qualified" || $notes->State == "Approved"){
+                                    $n=["Student_id" => "Qua" ,"Test_id"=> "Qua"];
                                     array_push($notas,$n);
                                 }
                                 else{
@@ -783,9 +783,15 @@ class Teacher extends Controller
         $nota = $note->id;
         $Models = [];
         foreach ($test->Questions() as $value) {
-            $answers = Asign_answer_test_student::where([['Studen_id',$id],['Question_id',$value->id],['State','Complete']])->first();
+            $answers = Asign_answer_test_student::where([['Studen_id',$id],['Question_id',$value->id]])->first();
             if($answers==null){
-                return redirect('/teacher/home/dashboard')->withError('Examen ya calificado');
+                $answers = new Asign_answer_test_student;
+                $answers->Studen_id = $id;
+                $answers->Question_id = $value->id;
+                $answers->Score = 0;
+                $answers->Answers = "Sin Responder";
+                $answers->State = "Complete";
+                $answers->save();
             }
             $data = [
                 'id' => $answers->id,
