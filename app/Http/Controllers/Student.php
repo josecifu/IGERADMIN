@@ -127,8 +127,8 @@ class Student extends Controller
                                             'id' => $test->id,
                                             'course' => $course->Name,
                                             'test' => $test->Title,
-                                            'start' => date("d/m/Y h:i A",strtotime($test->StartDate)),
-                                            'end' => date("d/m/Y h:i A",strtotime($test->EndDate))
+                                            'start' => $test->StartDate,
+                                            'end' => $test->EndDate
                                         ];
                                         array_push($models,$query);
                                     }
@@ -315,10 +315,9 @@ class Student extends Controller
                 {
                     $state = [];
                     $question = Question::where('Test_id',$test->id)->first();
-                    $check = Note::where(['Test_id'=>$test->id,'State'=>'Approved'])->first();
+                    $check = Note::where(['Test_id'=>$test->id,'Student_id'=>$assign->id,'State'=>'Approved','Year'=>$year])->first();
                     if(($question == null) && ($check != null))
                     {
-                        $notes = Note::where(['Test_id'=>$test->id,'State'=>'Approved','Year'=>$year])->get('Score');
                         $state = "written";
                     }
                     if($question != null)
@@ -335,16 +334,17 @@ class Student extends Controller
                         }
                         if(($option != null) && ($check != null))
                         {
-                            $notes = Note::where(['Test_id'=>$test->id,'State'=>'Approved','Year'=>$year])->get('Score');
                             $state = "approved";
                         }
                     }
-                    $StartDate = date("d-m-Y",strtotime($test->StartDate." - 5 days")); 
-                    $StartDate2 = date("d-m-Y H:i:00",strtotime($test->StartDate)); 
+                    $dateStrStart = str_replace("/","-",$test->StartDate);
+                    $StartDate = date("d-m-Y",strtotime($dateStrStart." - 5 days")); 
+                    $StartDate2 = date("d-m-Y H:i:00",strtotime($dateStrStart)); 
                     $date_now = strtotime(date("d-m-Y H:i:00"));
                     $date_teststart = strtotime($StartDate);
                     $date_teststart2 = strtotime($StartDate2);
-                    $EndDate = date("d-m-Y H:i:00",strtotime($test->EndDate)); 
+                    $dateStr = str_replace("/","-",$test->EndDate);
+                    $EndDate = date('d-m-Y H:i:00', strtotime($dateStr));
                     $date_testend = strtotime($EndDate);
                     $start = "false";
                     $availability = "disabled";
@@ -362,27 +362,29 @@ class Student extends Controller
                             }
                         }
                     }
+                    $notes = Note::where(['Test_id'=>$test->id,'Student_id'=>$assign->id,'State'=>'Approved','Year'=>$year])->get('Score');
                     $query =[
                         'id' => $test->id,
                         'test' => $test->Title,
                         'score' => $test->Score,
-                        'start' => date("d/m/Y h:i A",strtotime($test->StartDate)),
-                        'end' => date("d/m/Y h:i A",strtotime($test->EndDate)),
+                        'start' => $test->StartDate,
+                        'end' => $test->EndDate,
                         'course' => $course->Name,
                         'NoQuestions' => $test->NoQuestions(),
                         'activity' => $test->Activity()->Name,
                         'teacher' => $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames,
-                        'date' => date("d/m/Y",strtotime($test->StartDate)),
-                        'notes' => $notes ?? '0',
+                        'date' => date("m/d/Y",strtotime($test->StartDate)),
+                        'notes' => $notes ?? 'Sin nota',
                         'hundred' => '100',
                         'activation' => $start,
                         'state' => $state,
-                        'availability' => $availability
+                        'availability' => $availability,
                     ];
                     array_push($models,$query);
                 }
             }
         }
+        //dd($models);
         return view('Student/tests',compact('models','assign'));
     }
 
@@ -406,7 +408,7 @@ class Student extends Controller
         $user_student = User::find($assign_teacher->user_id);
         $teacher = Person::find($user_student->Person_id);
         $questions = $test->Questions();
-        $notes = Note::where(['Test_id'=>$test->id,'State'=>'Approved','Year'=>$year])->get();
+        $notes = Note::where(['Test_id'=>$test->id,'Student_id'=>$assign_student->id,'State'=>'Approved','Year'=>$year])->get();
         foreach ($notes as $note)
         {
             $consult = [
