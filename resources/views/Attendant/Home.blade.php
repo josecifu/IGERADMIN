@@ -244,7 +244,7 @@
                                                                         <!--begin::Section-->
                                                                         <div class="d-flex flex-column flex-grow-1">
                                                                             <!--begin::Title-->
-                                                                            <a href="{{url('/attendant/notes/'.$note['id'])}}" class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg mb-1">{{$note['Course']}}</a>
+                                                                            <a href="{{url('/attendant/notes/view/'.$note['id'])}}" class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg mb-1">{{$note['Course']}}</a>
                                                                             <!--end::Title-->
                                                                             <!--begin::Desc-->
                                                                             <span class="text-dark-50 font-weight-normal font-size-sm"><span class="label label-dark label-inline mr-2">{{$note['Activity']}}</span> <span class="label label-warning label-pill label-inline mr-2">{!!$note['Update']!!}</span></span>
@@ -295,7 +295,7 @@
                                                                     <!--begin::Section-->
                                                                     <div class="d-flex flex-column flex-grow-1">
                                                                         <!--begin::Title-->
-                                                                        <a href="{{url('/attendant/notes/'.$note['id'])}}" class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg mb-1">{{$note['Course']}}</a>
+                                                                        <a href="{{url('/attendant/notes/view/'.$note['id'])}}" class="text-dark-75 font-weight-bolder text-hover-primary font-size-lg mb-1">{{$note['Course']}}</a>
                                                                         <!--end::Title-->
                                                                         <!--begin::Desc-->
                                                                         <span class="text-dark-50 font-weight-normal font-size-sm"><span class="label label-dark label-inline mr-2">{{$note['Activity']}}</span> <span class="label label-danger label-pill label-inline mr-2">{!!$note['Update']!!}</span></span>

@@ -75,7 +75,7 @@ class Teacher extends Controller
             "Students"=> count($course->Grade()->Students()),
             "Test"=> $course->Tests(),
         ];
-        return view('Administration/Teachers/spaceWork',compact('buttons','model'));
+        return view('Administration/Teachers/spaceWork',compact('buttons','model','id'));
     }
     public function __construct()
 	{
