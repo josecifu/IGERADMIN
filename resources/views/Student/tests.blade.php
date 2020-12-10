@@ -17,7 +17,7 @@
                 <div class="card-header">
                     <div class="card-title">
                         <span class="card-icon"><i class="flaticon2-favourite text-primary"></i></span>
-                        <h3 class="card-label">Todas las evaluaciones realizadas</h3>
+                        <h3 class="card-label">Todas las evaluaciones</h3>
                     </div>
                     <div class="card-toolbar">
                         <a href="{{url('student/home/dashboard')}}" class="btn btn-danger font-weight-bolder mr-2"><i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
@@ -69,7 +69,7 @@
                                             <span class="btn btn-light-danger btn-sm font-weight-bold btn-upper btn-text">{{$model['end']}}</span>
                                         </div>
                                         @endif
-                                        @if(($model['state']=="qualify")||($model['state']=="approved"))
+                                        @if($model['state']=="approved")
                                         <div class="d-flex justify-content-between align-items-center">
                                             <span class="font-weight-bold mr-4">Fecha:</span>
                                             <span class="btn btn-light-success btn-sm font-weight-bold btn-upper btn-text">{{$model['date']}}</span>
@@ -105,9 +105,6 @@
                                             @if($model['activation']=="true")
                                             <button type="button" onclick="location.href='{{url('/student/test/view/questions/'.$model['id'])}}'" class="btn btn-block btn-sm btn-info font-weight-bolder text-uppercase py-3">Empezar</button>
                                             @endif
-                                        @endif
-                                        @if($model['state']=="qualify")
-                                        <button class="btn btn-block btn-sm btn-secondary font-weight-bolder text-uppercase py-3" disabled>No ha sido calificado</button>
                                         @endif
                                         @if($model['state']=="approved")
                                         <button type="button" onclick="verExamen({{$model['id']}},{{$assign->id}});" class="btn btn-block btn-sm btn-light-info font-weight-bolder text-uppercase py-3">Ver examen</button>

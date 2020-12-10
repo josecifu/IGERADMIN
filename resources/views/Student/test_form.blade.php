@@ -47,17 +47,6 @@
                                     @foreach($test->Questions() as $key => $Question)
                                     <!--begin: Wizard Step 1-->
                                     <div class="pb-5" data-wizard-type="step-content" data-wizard-state="current">
-                                        <!--begin::Instructions-->
-                                        <h2 style="text-align:justify;">
-                                    	@if($Question->Type=="V/F")
-                                    		Intrucciones: A continuación, lea cuidadosamente el siguiente enunciado y elija verdadero si el enunciado es correcta o Falso si es incorrecto.
-                                    	@elseif($Question->Type=="Respuesta Abierta")
-                                    		Intrucciones: A continuación, lea cuidadosamente el siguiente enunciado y escriba su respuesta en el espacio asignado.
-										@elseif($Question->Type=="Multiple")
-											Intrucciones: A continuación, lea cuidadosamente el siguiente enunciado y seleccione la respuesta correcta de las opciones que se le presenta.
-                                    	@endif
-                                        </h2><br>
-                                        <!--end::Instructions-->
                                         <h3 class="mb-10 font-weight-bold text-dark">
                                         	{{$key+1}}. {!! $Question->Title !!}<br>
                                         	Valor: {!! $Question->Score !!} Pts.
