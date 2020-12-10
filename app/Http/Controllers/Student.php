@@ -37,6 +37,7 @@ class Student extends Controller
         $countsfemale = [];
         $countsmale = [];
         $periodsdata = [];
+        $averagenotes = [];
         foreach($periods as $value)
         {
             $female = 0;
@@ -58,6 +59,7 @@ class Student extends Controller
             array_push($countsfemale,$female);
             array_push($countsmale,$male);
             array_push($periodsdata,$value->Name);
+            array_push($averagenotes,$value->Name);
         }
         
         return view('Administration/Student/statistics ',compact('countsfemale','countsmale','periodsdata'));
