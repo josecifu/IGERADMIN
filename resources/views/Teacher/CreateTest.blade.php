@@ -154,11 +154,49 @@
     @section('scripts')
 		<!--begin::Page Scripts(used by this page)-->
 		<script type="text/javascript">
+			var spanish_daterangepicker = {
+				"direction": "ltr",
+				"format": "DD/MM/YYYY",
+				"separator": " - ",
+				"applyLabel": "Aceptar",
+				"cancelLabel": "Cancelar",
+				"fromLabel": "Desde",
+				"toLabel": "A",
+				"customRangeLabel": "Perzonalizada",
+				"daysOfWeek": [
+					"Do",
+					"Lu",
+					"Ma",
+					"Mi",
+					"Ju",
+					"Vi",
+					"Sa"
+				],
+				"monthNames": [
+					"Enero",
+					"Febrero",
+					"Marzo",
+					"Abril",
+					"Mayo",
+					"Junio",
+					"Julio",
+					"Agosto",
+					"Septiembre",
+					"Octubre",
+					"Noviembre",
+					"Diciembre"
+				],
+				"firstDay": 1
+			};
 			"use strict";
+			var nowDate = new Date();
+			var today = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), 0, 0, 0, 0);
 			$('#Fechas').daterangepicker({
 				buttonClasses: ' btn',
-				applyClass: 'btn-primary',
-				cancelClass: 'btn-secondary'
+				locale : spanish_daterangepicker,
+				applyClass: 'btn-success',
+				cancelClass: 'btn-secondary',
+				minDate: today,
 			});
 			// minimum setup
 			$('#HoraInicio, #HoraFinal').timepicker();

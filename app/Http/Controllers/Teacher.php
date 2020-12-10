@@ -759,6 +759,13 @@ class Teacher extends Controller
     }
     public function QuestionTest($id,$curso)   #VER PREGUNTAS DE UN EXAMEN
     {
+        $buttons=[];
+        $button = [
+            "Name" => 'Añadir Preguntas',
+            "Link" => "create()",
+            "Type" => "addFunction"
+        ];
+        array_push($buttons,$button);
         $test = test::find($id);
         $questions = Question::where('Test_id',$id)->get();
         $Models = [];
@@ -766,7 +773,7 @@ class Teacher extends Controller
         if (session()->get('rol_Name')=="Voluntario") {
             return view('Teacher/QuestionTest',compact('test','questions','curso'));
         }else{
-            return view('Administration/Teachers/QuestionTest',compact('test','questions','curso'));
+            return view('Administration/Teachers/QuestionTest',compact('buttons','test','questions','curso'));
         }
     }
     public function QualifyTest($id,$idtest,$course)
@@ -1020,6 +1027,26 @@ class Teacher extends Controller
             return view('Administration/Tests/1',compact('id','preguntas'));   
         }
     }
+    public function AddQuestion(Request $request)
+    {
+        $data = $request->data[0];
+        $Preguntas = $data['Preguntas'];
+        $examen = $data['Test'];
+        $questions = Question::where('Test_id',$examen)->get();
+        if(!$questions->isEmpty()){
+            return response()->json(["id"=>"No se pueden asignar más preguntas al examen"]);
+        }
+        else{
+            if($Preguntas == 0 || $Preguntas == ""){
+                return response()->json(["id"=>"Ingrese un numero de preguntas valido"]);
+            }
+            elseif($Preguntas > 25){
+                return response()->json(["id"=>"Valla! Demasiadas preguntas prueba con 25"]);
+            }
+            return response()->json(["Accion Completada"]);
+        }
+    }
+
     public function SaveAssignQuestion(Request $request)
     {
         $data = $request->data;
