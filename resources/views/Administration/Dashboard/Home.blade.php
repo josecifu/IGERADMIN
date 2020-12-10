@@ -30,7 +30,7 @@
 											<!--end::Header-->
 											<!--begin::Body-->
 											<div class="card-body pt-4">
-												<div class="scroll scroll-pull" data-scroll="true" data-wheel-propagation="true" style="height: 200px">
+												<div class="scroll scroll-pull" data-scroll="true" data-wheel-propagation="true" style="height: 500px">
 												<!--begin::Container-->
 												
 													@foreach ($Logs['Test'] as $test)
@@ -83,6 +83,8 @@
 									</div>
 									<div class="col-lg-9 col-md-12 col-sm-12">
 										<!--begin::List Widget 9-->
+										<div class="scroll scroll-pull" data-scroll="true" data-wheel-propagation="true" style="height: 500px">
+												
 										<div class="card card-custom gutter-b">
 											<!--begin::Header-->
 											<div class="card-header align-items-center border-0 mt-4">
@@ -94,7 +96,7 @@
 											</div>
 											<!--end::Header-->
 											<!--begin::Body-->
-											<div class="card-body pt-4" style="height: 440px;">
+											<div class="card-body pt-4">
 												<!--begin::Timeline-->
 												<div class="timeline timeline-6 mt-3">
 													@if(count($Logs['Timeline'])==0)
@@ -121,6 +123,7 @@
 												<!--end::Timeline-->
 											</div>
 											<!--end: Card Body-->
+										</div>
 										</div>
 										<!--end: List Widget 9-->
 									</div>

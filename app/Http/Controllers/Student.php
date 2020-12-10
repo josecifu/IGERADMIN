@@ -36,12 +36,25 @@ class Student extends Controller
         $periods = period::where('State','Active')->get();
         $countsfemale = [];
         $countsmale = [];
+        $periodsdata = [];
+        $averagenotes = [];
         foreach($periods as $value)
         {
             $female = 0;
             $male = 0;
+            $note = 0;
+            $cantNotes = 0;
             foreach($value->Grades() as $grade)
             {
+                foreach($grade->Courses() as $course)
+                {
+                    $notes = Note::where(['Course_id'=>$course->id,'State'=>'Approved'])->get();
+                    foreach($notes as $n)
+                    {
+                        $note = $note +$n->Score;
+                        $cantNotes++;
+                    }
+                }
                 foreach($grade->Students() as $student)
                 {
                     if($student->Person()->Gender=="Masculino")
@@ -54,16 +67,15 @@ class Student extends Controller
                     }
                 }
             }
+            if($cantNotes!=0)
+            $note=($note/$cantNotes);
             array_push($countsfemale,$female);
             array_push($countsmale,$male);
+            array_push($periodsdata,$value->Name);
+            array_push($averagenotes,$note);
         }
-        array_push($countsfemale,0);
-        array_push($countsfemale,0);
-        array_push($countsmale,0);
-        array_push($countsfemale,0);
-        array_push($countsmale,0);
-        array_push($countsmale,0);
-        return view('Administration/Student/statistics ',compact('countsfemale','countsmale'));
+        
+        return view('Administration/Student/statistics ',compact('countsfemale','countsmale','periodsdata','averagenotes'));
     }
 
     #FUNCIONES DE ESTUDIANTE
@@ -88,7 +100,7 @@ class Student extends Controller
                     $question = Question::where('Test_id',$test->id)->first();
                     if($question != null)
                     {
-                        $answer = Asign_answer_test_student::where('Question_id',$question->id)->first();
+                        $answer = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$assign->id])->first();
                         if ($answer == null)
                         {
                             $dateStrStart =str_replace("/","-",$test->StartDate);
@@ -196,7 +208,7 @@ class Student extends Controller
                     $question = Question::where('Test_id',$test->id)->first();
                     if($question != null)
                     {
-                        $answer = Asign_answer_test_student::where('Question_id',$question->id)->first();
+                        $answer = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$assign->id])->first();
                         if ($answer == null)
                         {
                             $dateStrStart =str_replace("/","-",$test->StartDate);
@@ -304,24 +316,23 @@ class Student extends Controller
                     $state = [];
                     $question = Question::where('Test_id',$test->id)->first();
                     $check = Note::where(['Test_id'=>$test->id,'State'=>'Approved'])->first();
-                    if(($question == null)&&($check != null))
+                    if(($question == null) && ($check != null))
                     {
                         $notes = Note::where(['Test_id'=>$test->id,'State'=>'Approved','Year'=>$year])->get('Score');
                         $state = "written";
                     }
                     if($question != null)
                     {
-                        $answer = Asign_answer_test_student::where('Question_id',$question->id)->first();
+                        $answer = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$assign->id])->first();
                         if ($answer == null)
                         {
                             $state = "start";
                         }
-                        $option = Asign_answer_test_student::where(['Question_id'=>$question->id,'State'=> 'Qualified'])->first();
+                        $option = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$assign->id,'State'=>'Qualified'])->first();
                         if (($answer != null) && ($option == null))
                         {
                             $state = "qualify";
                         }
-                        //dd($option);
                         if(($option != null) && ($check != null))
                         {
                             $notes = Note::where(['Test_id'=>$test->id,'State'=>'Approved','Year'=>$year])->get('Score');
@@ -515,7 +526,8 @@ class Student extends Controller
                 {
                     $notes =[]; 
                     $id = $request->session()->get('User_id');
-                    $assign = Assign_student_grade::where('user_id',$id)->first();
+                    $year = date('Y');
+                    $assign = Assign_student_grade::where(['user_id'=>$id,'Year'=>$year])->first();
                     $asignactivity = Assign_activity::where(['Name'=>$value['Activity'],'Course_id'=>$course->id])->first();
                     $testInfo = test::where(['Activity_id'=>$asignactivity->id,'Title'=> $test])->first();
                     if($testInfo!=null)
@@ -618,7 +630,7 @@ class Student extends Controller
                     'phone' => $student->Phone,
                     'user' => $user->name,
                     'email' => $user->email,
-                    'grade' => $grade->GradeName(),
+                    'grade' => $grade->GradeNamePeriod(),
                     'conexion' => $conection ?? 'El usuario no se ha conectado'
                 ];
                 array_push($models,$query);

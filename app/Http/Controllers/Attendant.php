@@ -294,6 +294,7 @@ class Attendant extends Controller
             }
             
         }
+        
         return view('Attendant/NotesStates',compact('Titles','Models'));
     }
 }

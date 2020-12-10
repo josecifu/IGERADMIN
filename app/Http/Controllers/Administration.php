@@ -671,13 +671,22 @@ class Administration extends Controller
             ]);
     }
   
-    public function LoadPeriodsAttendant()
+    public function LoadPeriodsAttendant(Request $request)
     {
         $PeriodsData = period::where('State','Active')->get();
         $periods =[];
        
         foreach ($PeriodsData as $value) {
-            $assign=Assign_attendant_periods::where('Period_id',$value->id)->first();
+            $assign=Assign_attendant_periods::where('Period_id',$value->id)->get();
+            if($assign->isEmpty()){
+                $CoursesData = course::where('Period_id',$request['GradeId'])->get();
+            }else{
+            $ids = [];
+            foreach ($assign as $value) {
+                array_push($ids,$value->Course_id);
+            }
+            $CoursesData = course::where('Grade_id',$request['GradeId'])->get()->except($ids);
+            }
             if($assign==null)
             {
                 $period = [
@@ -1395,7 +1404,7 @@ class Administration extends Controller
                             'phone' => $student->Phone,
                             'user' => $user->name,
                             'email' => $user->email,
-                            'grade' => $grade->GradeName(),
+                            'grade' => $grade->GradeNamePeriod(),
                             'conexion' => $conection ?? 'El usuario no se ha conectado'
                         ];
                         array_push($models,$query);

@@ -124,7 +124,7 @@
 																</div>
 																<!--end::Text-->
 																<!--begin::label-->
-																<span class="font-weight-bolder label label-xl label-light-primary label-inline py-5 min-w-45px">0</span>
+																<span class="font-weight-bolder label label-xl label-light-primary label-inline py-5 min-w-45px">{{count($model['Test'])}}</span>
 																<!--end::label-->
 															</div>
 															<!--end::Item-->
@@ -291,12 +291,16 @@
 			var KTCkeditor = function () {
 				var demos = function () {
 					ClassicEditor
-						.create( document.querySelector( '#kt-ckeditor-1') )
-						.then( editor => {
-							mediaEmbed: {previewsInData: true}
-						} )
-						.catch( error => {	
-						} );
+						.create( document.querySelector( '#kt-ckeditor-1') ,{
+							language: 'es',
+							removePlugins: [  ],
+							toolbar: [ 'selectAll','undo','redo','|','Heading','paragraph','bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote','|', 'Link','mediaEmbed','|','insertTable','tableColumn','tableRow','mergeTableCells' ]
+						}).then( editor => {
+								mediaEmbed: {previewsInData: true}
+							} )
+							.catch( error => {
+								
+							} );
 				}
 				return {
 					// public functions
