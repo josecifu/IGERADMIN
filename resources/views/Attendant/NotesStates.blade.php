@@ -93,6 +93,8 @@
                                     <span class="label label-success label-pill label-inline mr-2">Notas aprobada</span>
                                     @elseif($Model['State']=="Qualified")
                                     <span class="label label-warning label-pill label-inline mr-2">Pendientes de aprobación</span>
+                                    @elseif($Model['State']=="Pre-Qualified")
+                                    <span class="label label-warning label-pill label-inline mr-2">Pendientes de calificación</span>
                                     @else
                                     <span class="label label-dark label-inline mr-2"> {{$Model['State']}}</span>
                                    
