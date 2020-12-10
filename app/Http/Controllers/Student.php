@@ -88,7 +88,7 @@ class Student extends Controller
                     $question = Question::where('Test_id',$test->id)->first();
                     if($question != null)
                     {
-                        $answer = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$id])->first();
+                        $answer = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$assign->id])->first();
                         if ($answer == null)
                         {
                             $dateStrStart =str_replace("/","-",$test->StartDate);
@@ -196,7 +196,7 @@ class Student extends Controller
                     $question = Question::where('Test_id',$test->id)->first();
                     if($question != null)
                     {
-                        $answer = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$id])->first();
+                        $answer = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$assign->id])->first();
                         if ($answer == null)
                         {
                             $dateStrStart =str_replace("/","-",$test->StartDate);
@@ -311,12 +311,12 @@ class Student extends Controller
                     }
                     if($question != null)
                     {
-                        $answer = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$id])->first();
+                        $answer = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$assign->id])->first();
                         if ($answer == null)
                         {
                             $state = "start";
                         }
-                        $option = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$id,'State'=>'Qualified'])->first();
+                        $option = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$assign->id,'State'=>'Qualified'])->first();
                         if (($answer != null) && ($option == null))
                         {
                             $state = "qualify";
