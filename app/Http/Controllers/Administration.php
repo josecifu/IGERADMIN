@@ -39,9 +39,10 @@ use App\Models\Asign_test_course;
 use App\Models\Assign_attendant_periods;
 use App\Models\Asign_teacher_course;
 use App\Models\Assign_activity;
-
+use App\Exports\StudentExport;
 use Session;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Carbon;
 
 class Administration extends Controller
@@ -1405,6 +1406,11 @@ class Administration extends Controller
                 $pdf = PDF::loadView('Administration.Reports.pdf', compact('Titles','models','title1'));
                 return $pdf->download('ListadoAlumnos-'.date("d-m-y-H-i-A").'.pdf');
             }   
+            if($id==2)
+            {
+                
+                return Excel::download(new StudentExport, 'users-collection.xlsx');
+            }
         }
         if($type=="generalreportpdf")
         {
@@ -1477,7 +1483,6 @@ class Administration extends Controller
             $pdf = PDF::loadView('Administration.Reports.pdf', compact('Titles','models','title1'));
             return $pdf->download('ReporteGeneral-'.$d.'-'.date("d-m-y-H-i-A").'.pdf');
         }
-
         return false;
     }
 }

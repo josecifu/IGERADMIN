@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Assign_attendant_periods;
 //tabla de notas
-use App\Models\note;
+use App\Models\Note;
 //tabla asignacion actividad
 use App\Models\Assign_activity;
 //tabla de cursos
@@ -44,7 +44,7 @@ class Attendant extends Controller
                 foreach ($period->Grades() as $grade) {
                    foreach($grade->Courses() as $course)
                    {
-                       $notes = note::where(['Course_id'=>$course->id,'State'=>"Qualified"])->first();
+                       $notes = Note::where(['Course_id'=>$course->id,'State'=>"Qualified"])->first();
                        if($notes!=null)
                        {
                         $nPending++;

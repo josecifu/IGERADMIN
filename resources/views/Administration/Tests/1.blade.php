@@ -173,8 +173,9 @@
 	@section('scripts')
 	<!--begin::Page Vendors(used by this page)-->
 
-		<script src="{{ asset ('assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js')}}"></script>
-	<script type="text/javascript">
+	<script src="https://cdn.ckeditor.com/ckeditor5/23.1.0/classic/ckeditor.js"></script>
+	<script src="https://cdn.ckeditor.com/ckeditor5/23.1.0/classic/translations/es.js"></script>
+		<script type="text/javascript">
 	// Class definition
 		var KTEDITORS =[];
 		var KTCkeditor = function () {
@@ -183,15 +184,18 @@
 			var demos = function () {
 				@for ($i = 1; $i <= $preguntas; $i++)
 				ClassicEditor
-					.create( document.querySelector( '#kt-ckeditor-{{$i}}') )
-					.then( editor => {
+				.create( document.querySelector( '#kt-ckeditor-{{$i}}'),{
+					language: 'es',
+					removePlugins: [  ],
+					toolbar: [ 'selectAll','undo','redo','|','Heading','paragraph','bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote','|', 'Link','mediaEmbed','|','insertTable','tableColumn','tableRow','mergeTableCells' ]
+				}).then( editor => {
 						KTEDITORS[{{$i-1}}]= editor;
 						mediaEmbed: {previewsInData: true}
-
 					} )
 					.catch( error => {
 						
 					} );
+
 				@endfor
 			}
 
@@ -206,6 +210,7 @@
 		// Initialization
 		jQuery(document).ready(function() {
 			KTCkeditor.init();
+			
 		});
 
         "use strict";
@@ -398,6 +403,7 @@
 
 		jQuery(document).ready(function () {
 			KTWizard2.init();
+			
 		});
 		function getId(url) {
 			var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;

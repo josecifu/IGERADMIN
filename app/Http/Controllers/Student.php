@@ -22,6 +22,10 @@ use App\Models\Asign_teacher_course;
 
 class Student extends Controller
 {
+    public function __construct()
+	{
+		$this->middleware('auth');
+	} 
     public function Profile(Request $request)
     {
         return view('Administration/Student/statistics ',compact('countsfemale','countsmale'));
