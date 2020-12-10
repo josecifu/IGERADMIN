@@ -1304,7 +1304,7 @@ class Administration extends Controller
         $Titles=[];
         $title1 = "";
         $d="";
-        if($type=="listadoalumnos")
+        if($type=="listadovoluntarios")
         {
             $Titles=['No',
             'Nombres',
@@ -1358,7 +1358,7 @@ class Administration extends Controller
             }
             
         }
-        if($type=="listadovoluntarios")
+        if($type=="listadoalumnos")
         {
             $Titles=['No',
             'Nombres',

@@ -26,14 +26,10 @@
                             <a href="{{url('administration/student/list')}}" class="btn btn-danger font-weight-bolder mr-2"><i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
                         </div>
                         <!--begin::Dropdown-->
-<<<<<<< HEAD
                         <div class="dropdown dropdown-inline mr-2" >
                             <button style="color: white;" type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="la la-download" style="color: white;"></i>Exportar</button>
                             @include("Administration.Base._exports")
-=======
-                        <div class="dropdown dropdown-inline mr-2">
-                            <button style="color:white;" type="button" class="btn btn-light-primary font-weight-bolder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="la la-download" style="color:white;"></i>Exportar</button>
                             <!--begin::Dropdown Menu-->
                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                                 <ul class="nav flex-column nav-hover">
@@ -71,7 +67,6 @@
                                 </ul>
                             </div>
                             <!--end::Dropdown Menu-->
->>>>>>> c19ce0a453592a586cab61f23c2ec3ccc4ff0d18
                         </div>
                         <!--end::Dropdown-->
                     </div>

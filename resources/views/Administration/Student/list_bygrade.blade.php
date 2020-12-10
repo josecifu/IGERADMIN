@@ -25,12 +25,12 @@
                     </div>
                     <div class="card-toolbar">
                         <!--begin::Button-->
-                        <a href="{{url('administration/student/create')}}" class="btn btn-primary font-weight-bolder mr-2">
+                        <a href="{{url('administration/student/create')}}" class="btn btn-success font-weight-bolder mr-2">
                         <i class="la la-plus"></i>Añadir nuevo estudiante</a>
                         <!--end::Button-->
                         <!--begin::Dropdown-->
                         <div class="dropdown dropdown-inline">
-                            <button style="color:white;" type="button" class="btn btn-light-primary font-weight-bolder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="la la-download" style="color:white;"></i>Exportar</button>
+                            <button style="color:white;" type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="la la-download" style="color:white;"></i>Exportar</button>
                             <!--begin::Dropdown Menu-->
                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                                 <ul class="nav flex-column nav-hover">
@@ -74,7 +74,7 @@
                 </div>
                 <div class="card-body">
                     <!--begin: Datatable-->
-                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
+                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top:13px !important">
                         <thead>
                             <tr>
                                 @foreach($titles as $title)

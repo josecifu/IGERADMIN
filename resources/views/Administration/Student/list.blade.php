@@ -23,25 +23,19 @@
                     </div>
                     <div class="card-toolbar">
                         <!--begin::Button-->
-                        <a href="{{url('administration/student/create')}}" class="btn btn-primary font-weight-bolder mr-2">
-                        <i class="la la-plus"></i>Añadir nuevo estudiante</a>
+                        <a href="{{url('administration/student/create')}}" class="btn btn-success font-weight-bolder mr-2"><i class="la la-plus"></i>Añadir nuevo estudiante</a>
                         <!--end::Button-->
                         <!--begin::Dropdown-->
                         <div class="dropdown dropdown-inline mr-2" >
-                            <button style="color: white;" type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="la la-download" style="color: white;"></i>Exportar</button>
+                            <button style="color: white;" type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="la la-download" style="color: white;"></i>Exportar</button>
                             @include("Administration.Base._exports")
                         </div>
                         <!--end::Dropdown-->
-                        <!--begin::Button-->
-                        <a href="{{url('administration/student/create')}}" class="btn btn-success font-weight-bolder">
-                        <i class="la la-plus"></i>Añadir nuevo estudiante</a>
-                        <!--end::Button-->
                     </div>
                 </div>
                 <div class="card-body">
                     <!--begin: Datatable-->
-                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
+                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top:13px !important">
                         <thead>
                             <tr>
                                 @foreach($titles as $title)
@@ -210,7 +204,89 @@
                     }
                 })
             }
-            
+            function create($id)
+            {
+                Swal.mixin({
+                    input: 'text',
+                    confirmButtonText: 'Continuar',
+                    cancelButtonText: 'Cancelar',
+                    showCancelButton: true,
+                }).queue([
+                    {
+                    title: 'Ingrese la nueva contraseña',
+                    },
+                ]).then((result) => {
+                    if (result.value) {
+                    const answers = JSON.stringify(result.value)
+                    console.log(result.value);
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                        },
+                        buttonsStyling: false
+                    })
+                    swalWithBootstrapButtons.fire({
+                        title: '¿Está seguro de los datos?',
+                        text: "Nueva Contraseña: "+result.value[0],
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Restablecer',
+                        cancelButtonText: 'Cancelar',
+                        reverseButtons: true
+                    }).then((result2) => {
+                        if (result2.isConfirmed) {
+                            var data = [{
+                                Contraseña: result.value[0],
+                            }];
+                            $.ajax({
+                                url:"/administration/student/restore/password/"+$id,
+                                type:'POST',
+                                data: {"_token":"{{ csrf_token() }}","data":data},
+                                dataType: "JSON",
+                                success: function(e){
+                                    if(e.id){
+                                        swalWithBootstrapButtons.fire({
+                                        title: 'Error!',
+                                        text: e.id,
+                                        icon: 'error',
+                                        confirmButtonText: 'Aceptar',
+                                        })
+                                    }
+                                    else {
+                                        swalWithBootstrapButtons.fire({
+                                        title: 'Creado!',
+                                        text: 'Contraseña asignada con exito!',
+                                        icon: 'success',
+                                        confirmButtonText: 'Aceptar',
+                                        }).then(function () {    
+                                            var $url_path = '{!! url('/') !!}';
+                                            window.location.href = $url_path+"/administration/student/list";
+                                        });
+                                    }
+                                },
+                                error: function(e){
+                                    swalWithBootstrapButtons.fire({
+                                        title: 'Error!',
+                                        text:   e.responseJSON['error'],
+                                        icon: 'error',
+                                        confirmButtonText: 'Aceptar',
+                                    })
+                                }
+                            });
+                        }
+                        else {
+                        swalWithBootstrapButtons.fire({
+                            title: 'Cancelado!',
+                            text:  'Se ha cancelado la acción!',
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar',
+                        })
+                        }
+                    })
+                    }
+                })
+            }
             $(function () {
                 $('[data-toggle="tooltip"]').tooltip()
               })
