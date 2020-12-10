@@ -122,6 +122,7 @@ class Student extends Controller
             "Date" => $conection,
             "Teacher"=>$teacher??'No asignado'
         ];
+        
         return view('Student/ViewWorkspace',compact('information'));
     }
     public function dashboard(Request $request)

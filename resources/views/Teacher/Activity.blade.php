@@ -1,13 +1,13 @@
 @extends('Administration.Base/Base')
 {{-- Page title --}}
     @section('title')
-    Estudiantes
+    Voluntarios
     @stop
     @section('breadcrumb1')
     Listado/Logs
     @stop
     @section('breadcrumb2')
-    Estudiante
+    Voluntario
     @stop
     {{-- Page content --}}
     @section('content')
@@ -23,11 +23,9 @@
                     </div>
                     <div class="card-toolbar">
                         <div class="card-toolbar">
-                            <a href="{{url('student/home/dashboard')}}" class="btn btn-danger font-weight-bolder mr-2"><i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
+                            <a href="{{url('teacher/home/dashboard')}}" class="btn btn-danger font-weight-bolder mr-2"><i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
                         </div>
-                        <!--begin::Dropdown-->
-                        
-                        <!--end::Dropdown-->
+                       
                     </div>
                 </div>
                 <div class="card-body">

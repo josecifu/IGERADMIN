@@ -36,7 +36,7 @@ Route::group([ 'prefix' => 'student','middleware' => 'auth'], function(){
 	Route::get('/profile',$route.'\Student@Profile')->name('ProfileStudent');
 	Route::get('/home/dashboard',$route.'\Student@dashboard')->name('StudentDashboard');
 	Route::get('/home/workspace',$route.'\Student@workspace')->name('StudentWorkspace');
-	Route::get('/home/workspace/view/{model}',$route.'\Student@workspaceview')->name('workspaceview');
+	Route::get('/home/workspace/view/{model}',$route.'\Student@workspaceview')->name('Studentworkspaceview');
 	Route::get('/test/list',$route.'\Student@all_tests')->name('StudentAllTest');
 	Route::get('/test/view',$route.'\Student@student_test_list')->name('TestStudentView');
 	Route::get('/test/view/questions/{model}',$route.'\Student@test_questions')->name('TestQuestions');
@@ -52,6 +52,7 @@ Route::group([ 'prefix' => 'teacher','middleware' => 'auth'], function(){							
 	$route = "App\Http\Controllers";
 	Route::get('/home/dashboard',$route.'\Teacher@dashboard')->name('TeacherDashboard') ;
 	Route::get('/home/workspace/{model}',$route.'\Teacher@workspaceT')->name('Teacherworkspace');
+	Route::get('/home/workspace/view/{model}',$route.'\Teacher@workspaceview')->name('Teacherworkspaceview');
 	Route::get('/view/profile',$route.'\Teacher@viewProfile')->name('TeacherProfile');
 	Route::post('/save/profile',$route.'\Teacher@SaveviewProfile')->name('TeachersaveProfile');
 	Route::get('/score/list/{model}',$route.'\Teacher@score')->name('TeacherScore');
@@ -74,6 +75,8 @@ Route::group([ 'prefix' => 'teacher','middleware' => 'auth'], function(){							
 	Route::get('/test/score/{model}', $route.'\Teacher@TestScore')->name('TestScore');
 	Route::post('/save/test', $route.'\Teacher@saveExam')->name('TeachersaveExam');
 	Route::post('/save/score/physical', $route.'\Teacher@SaveScorePhysic')->name('SaveScorePhysic');
+	Route::get('/activity/logs', $route.'\Teacher@ActivitiesLogs')->name('ActivitiesLogs');
+	
 });
 Route::group([ 'prefix' => 'attendant','middleware' => 'auth'], function(){
 	$route = "App\Http\Controllers";

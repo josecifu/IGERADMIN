@@ -246,7 +246,7 @@
 																					</div>
 																				</td>
 																				<td class="pl-0">
-																					<a href="#" class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">{{$information['Title']}}</a>
+																					<a href="{{url('teacher/home/workspace/view/'.$information['id'])}}"  class="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg">{{$information['Title']}}</a>
 																					<span class="text-muted font-weight-bold d-block">creado por {{$model['Teacher']}}</span>
 																				</td>
 																				<td></td>
@@ -255,7 +255,7 @@
 																					<span class="text-muted font-weight-bold d-block font-size-sm">Fecha de creacion</span>
 																				</td>
 																				<td class="text-right pr-0">
-																					<a href="#" class="btn btn-icon btn-light btn-sm">
+																					<a href="{{url('teacher/home/workspace/view/'.$information['id'])}}"  class="btn btn-icon btn-light btn-sm">
 																						<span class="svg-icon svg-icon-md svg-icon-success">
 																							<!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg-->
 																							<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">

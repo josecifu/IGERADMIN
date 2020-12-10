@@ -1,4 +1,4 @@
-@extends('Administration.Base/BaseStudent')
+@extends('Administration.Base/BaseTeacher')
 @section('title')
     Inicio
     @stop
