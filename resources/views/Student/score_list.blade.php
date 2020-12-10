@@ -71,7 +71,7 @@
                                     @else
                                     <td>
                                         <center>
-                                            <span class="label label-warning label-pill label-inline mr-2">{{$score[0]['Note']}}</span>
+                                            <span class="label label-warning label-pill label-inline mr-2">{{$score[0]}}</span>
                                         </center>
                                     </td>
                                     @endif
