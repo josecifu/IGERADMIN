@@ -125,7 +125,7 @@
                                                                         @if($nota['State']=='Approved')
                                                                             <td><center><span class="label label-rounded label-success mr-2">{{$nota}}</span></center></td>
                                                                         @else
-
+                                                                        <td><center><span class="label label-rounded label-dark mr-2">{{$nota}}</span></center></td>
                                                                         @endif
                                                                     @endif
                                                                 @else

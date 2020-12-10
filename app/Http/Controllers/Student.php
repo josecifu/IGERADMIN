@@ -203,6 +203,7 @@ class Student extends Controller
                             $date_teststart = strtotime($StartDate);
                             $date_teststart2 = strtotime($StartDate2);
                             $EndDate = date("d-m-Y H:i:00",strtotime($test->EndDate)); 
+                            dd($date_now);
                             $date_testend = strtotime($EndDate);
                             $start = true;
                             if($date_now >= $date_teststart)
