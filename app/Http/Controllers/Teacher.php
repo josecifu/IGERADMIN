@@ -113,6 +113,25 @@ class Teacher extends Controller
         }
         return view('Teacher/Activity',compact('models','titles'));
     }
+    public function workspaceview(Request $request,$id)
+    {
+        $info= information::find($id); 
+        $course = course::find($info->To);
+        setlocale(LC_TIME, "spanish");
+        $newDate = date("d-m-Y", strtotime($info->created_at));	
+        $mes = strftime("%d de %B del %Y", strtotime($newDate));
+        $conection= $mes." a las ".date("H:m A", strtotime($info->created_at));
+        $teacher = $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames;
+        $information=[
+            "Course"=>$course->Name,
+            "Title" =>$info->Title,
+            "Description" =>$info->Message,
+            "Date" => $conection,
+            "Teacher"=>$teacher??'No asignado'
+        ];
+        
+        return view('Teacher/ViewWorkspace',compact('information'));
+    }
     public function workspace($id)
     {
         $course=course::find($id);
@@ -169,6 +188,7 @@ class Teacher extends Controller
             $mes = strftime("%d de %B del %Y", strtotime($newDate));
             $conection= $mes." a las ".date("H:m A", strtotime($info->created_at));
             $information=[
+                "id" =>$info->id,
                 "Title" =>$info->Title,
                 "Date" => $conection,
             ];
