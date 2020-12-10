@@ -572,6 +572,7 @@ class Student extends Controller
             ];
             array_push($titles,$title);
         }
+        dd($titles);
         foreach ($titles as $value)
         {
             foreach ($value['Test'] as $test)
