@@ -68,7 +68,7 @@
                                             <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: {{$score[0]['Porcentage']}}%" aria-valuenow="{{$score[0]['Note']}}" aria-valuemin="0" aria-valuemax="{{$score[0]['Max']}}">{{$score[0]['Note']}} Pts</div>
                                             
                                         </div>
-                                        <center>0</center>
+                                        <center>{{$score[0]['Note']}}</center>
                                     </td>
                                     @else
                                     <td>
