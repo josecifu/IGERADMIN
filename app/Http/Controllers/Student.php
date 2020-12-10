@@ -542,6 +542,7 @@ class Student extends Controller
                 }
             }
         }
+        dd($data);
         $notesStuden =[];
         foreach ($data as $period)
         {
