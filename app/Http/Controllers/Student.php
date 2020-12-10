@@ -617,7 +617,7 @@ class Student extends Controller
                     'phone' => $student->Phone,
                     'user' => $user->name,
                     'email' => $user->email,
-                    'grade' => $grade->GradeName(),
+                    'grade' => $grade->GradeNamePeriod(),
                     'conexion' => $conection ?? 'El usuario no se ha conectado'
                 ];
                 array_push($models,$query);
