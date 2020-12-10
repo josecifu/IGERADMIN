@@ -42,8 +42,19 @@ class Student extends Controller
         {
             $female = 0;
             $male = 0;
+            $note = 0;
+            $cantNotes = 0;
             foreach($value->Grades() as $grade)
             {
+                foreach($grade->Courses() as $course)
+                {
+                    $notes = Note::where(['Course_id'=>$course->id,'State'=>'Approved'])->get();
+                    foreach($notes as $n)
+                    {
+                        $note = $note +$n->Score;
+                        $cantNotes++;
+                    }
+                }
                 foreach($grade->Students() as $student)
                 {
                     if($student->Person()->Gender=="Masculino")
@@ -56,13 +67,15 @@ class Student extends Controller
                     }
                 }
             }
+            if($cantNotes!=0)
+            $note=($note/$cantNotes);
             array_push($countsfemale,$female);
             array_push($countsmale,$male);
             array_push($periodsdata,$value->Name);
-            array_push($averagenotes,$value->Name);
+            array_push($averagenotes,$note);
         }
         
-        return view('Administration/Student/statistics ',compact('countsfemale','countsmale','periodsdata'));
+        return view('Administration/Student/statistics ',compact('countsfemale','countsmale','periodsdata','averagenotes'));
     }
 
     #FUNCIONES DE ESTUDIANTE
@@ -513,7 +526,8 @@ class Student extends Controller
                 {
                     $notes =[]; 
                     $id = $request->session()->get('User_id');
-                    $assign = Assign_student_grade::where('user_id',$id)->first();
+                    $year = date('Y');
+                    $assign = Assign_student_grade::where(['user_id'=>$id,'Year'=>$year])->first();
                     $asignactivity = Assign_activity::where(['Name'=>$value['Activity'],'Course_id'=>$course->id])->first();
                     $testInfo = test::where(['Activity_id'=>$asignactivity->id,'Title'=> $test])->first();
                     if($testInfo!=null)
