@@ -10,7 +10,7 @@ use App\Models\information;
 //tabla de asignacion de informacion
 use App\Models\Assign_files_information;
 //tabla de notas
-use App\Models\note;
+use App\Models\Note;
 //tabla de evaluaciones
 use App\Models\test;
 //tabla de preguntas
@@ -23,8 +23,6 @@ use App\Models\Asign_answer_test_student;
 use App\Models\Asign_test_course;
 //tabla de asignacion de estudiante grado
 use App\Models\Assign_student_grade;
-//tabla de Asignacion cursos a grados
-use App\Models\Assign_course_grade;
 //tabla de Asignacion cursos a grados
 use App\Models\Asign_teacher_course;
 //tabla de Asignacion usuario rol
@@ -85,7 +83,7 @@ class Teacher extends Controller
 	} 
     public function workspaceT(Request $request, $id)
     {
-        $id = user::find($request->session()->get('User_id'));
+        $id = User::find($request->session()->get('User_id'));
         $course = course::find($id);
         $info = [];
         $grade = grade::find($curse->Grade_id)->Period();
@@ -104,7 +102,7 @@ class Teacher extends Controller
     {
         $Titles =[];
         $Models = [];
-        $data = user::find($request->session()->get('User_id'));
+        $data = User::find($request->session()->get('User_id'));
         $DataTeacher=[];
         if($data)
         {
@@ -324,7 +322,7 @@ class Teacher extends Controller
 
     public function save(Request $request)  #REGISTRO Y ASIGNACIÓN DE VOLUNTARIOS
     {
-        $id = user::find($request->session()->get('User_id')); 
+        $id = User::find($request->session()->get('User_id')); 
         $data = $request->data[0];
         $Nombres= $data['Nombre'];
         $Apellidos= $data['Apellido'];
@@ -438,7 +436,7 @@ class Teacher extends Controller
 
     public function update(Request $request)        #ACTUALIZAR VOLUNTARIO
     {
-        $id = user::find($request->session()->get('User_id'));
+        $id = User::find($request->session()->get('User_id'));
         $data = $request->data[0];
         $Nombres= $data['Nombre'];
         $Apellidos= $data['Apellido'];
@@ -470,7 +468,7 @@ class Teacher extends Controller
 
     public function delete($id, Request $request)   //ELIMINAR/DESACTIVAR VOLUNTARIO
     {
-        $IID = user::find($request->session()->get('User_id'));
+        $IID = User::find($request->session()->get('User_id'));
         $r = User::where('Person_id',$id)->first();
 
         $dataU=array(
@@ -511,7 +509,7 @@ class Teacher extends Controller
             $assignV = Asign_teacher_course::where('Course_id',$id)->first();
             if(isset($assignV)){
                 $course = course::find($assignV->Course_id);
-                $userV = user::find($assignV->user_id);
+                $userV = User::find($assignV->user_id);
                 $vol = Person::find($userV->id);
             }else{
                 return redirect('/teacher/home/dashboard')->withError('No tiene cursos asignados');
@@ -532,7 +530,7 @@ class Teacher extends Controller
             $course = course::find($id);
             $assignV = Asign_teacher_course::where('Course_id',$id)->first();
             if(isset($assignV)){
-                $userV = user::find($assignV->user_id);
+                $userV = User::find($assignV->user_id);
                 $vol = $userV->person();
             }else{
                 return redirect('/administration/teacher/list')->withError('El curso no tiene ningún voluntario asignado');
@@ -610,7 +608,7 @@ class Teacher extends Controller
         $buttons =[];
         $Titles = [];
         $Modal = [];
-        $teacher = user::find($request->session()->get('User_id'));
+        $teacher = User::find($request->session()->get('User_id'));
         $vol = $teacher->Person();
         $course = course::find($id);
         $Activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
@@ -640,7 +638,7 @@ class Teacher extends Controller
                         foreach($Activity->Tests() as $v)
                         {
                             $assign = Assign_student_grade::where([['user_id',$student->id],['State','Active']])->first();
-                            $notes = note::where([['Test_id',$v->id],['Student_id',$assign->id]])->first();
+                            $notes = Note::where([['Test_id',$v->id],['Student_id',$assign->id]])->first();
                             if($v->State == "Fisico"){
                                 if($notes==null){
                                     $n=["Student_id" => "Fisico", "Student"=>$assign->id, "Curso_id"=>$id,"Test_id"=> $v->id, "Punteo"=> "0/".$v->Score];
@@ -722,7 +720,7 @@ class Teacher extends Controller
             ];
             array_push($buttons,$button);
             if(isset($assign->user_id)){
-                $userV = user::find($assign->user_id);
+                $userV = User::find($assign->user_id);
                 $vol = Person::find($userV->Person_id);
                 $course = course::find($id);
             }else{
@@ -839,7 +837,7 @@ class Teacher extends Controller
                         foreach($Activity->Tests() as $v)
                         {
                             $assign = Assign_student_grade::where([['user_id',$student->id],['State','Active']])->first();
-                            $notes = note::where([['Test_id',$v->id],['Student_id',$assign->id]])->first();
+                            $notes = Note::where([['Test_id',$v->id],['Student_id',$assign->id]])->first();
                             if($v->State == "Fisico"){
                                 if($notes==null){
                                     return redirect('/teacher/test/score/'.$id)->withError('El examen: '.$v->Title.' aún no ha sido calificado');
@@ -902,7 +900,7 @@ class Teacher extends Controller
     }
     public function saveExam(Request $request)
     {
-        $id = user::find($request->session()->get('User_id'));
+        $id = User::find($request->session()->get('User_id'));
         $persona = Person::find($id->Person_id);
         $data = $request->data[0];
         $Titulo = $data['Titulo'];
@@ -1093,7 +1091,7 @@ class Teacher extends Controller
     }
     public function saveActivity(Request $request,$id)
     {
-        $user = user::find($request->session()->get('User_id')); 
+        $user = User::find($request->session()->get('User_id')); 
         $data = $request->data[0];
         $Actividad = $data['Actividad'];
         $Punteo = $data['Punteo'];
@@ -1154,7 +1152,7 @@ class Teacher extends Controller
     }
     public function updateActivity(Request $request)
     {
-        $user = user::find($request->session()->get('User_id')); 
+        $user = User::find($request->session()->get('User_id')); 
         $data = $request->data[0];
         $Actividad = $data['Actividad'];
         $Punteo = $data['Punteo'];
@@ -1179,7 +1177,7 @@ class Teacher extends Controller
     }
     public function deleteActivity($curso, $id, Request $request)   //ELIMINAR/DESACTIVAR VOLUNTARIO
     {
-        $IID = user::find($request->session()->get('User_id'));
+        $IID = User::find($request->session()->get('User_id'));
         $r = Assign_activity::find($id);
         $dataU=array(
             'State' => 'Desactivated',
@@ -1274,7 +1272,7 @@ class Teacher extends Controller
     }
     public function Activate($id, Request $request)
     {
-        $IID = user::find($request->session()->get('User_id'));
+        $IID = User::find($request->session()->get('User_id'));
         $r = User::find($id);
         $dataU=array(
             'State' => 'Active',
@@ -1334,7 +1332,7 @@ class Teacher extends Controller
     public function viewProfile(Request $request)
     {
         $Titles = ['Titulo','Contenido'];
-        $user = user::find($request->session()->get('User_id')); 
+        $user = User::find($request->session()->get('User_id')); 
         $person = Person::find($user->Person_id);
         $curses = Asign_teacher_course::where([['user_id',$user->id],['State','Active']])->get();
         $dataT = [];
@@ -1361,7 +1359,7 @@ class Teacher extends Controller
     }
     public function SaveviewProfile(Request $request)
     {
-        $user = user::find($request->session()->get('User_id')); 
+        $user = User::find($request->session()->get('User_id')); 
         $person = Person::find($user->Person_id);
         $data = $request->data[0];
         $telefono = $data['Telefono'];
@@ -1448,11 +1446,11 @@ class Teacher extends Controller
     }
     public function SaveAdministrationCourses(Request $request)  #REGISTRO Y ASIGNACIÓN DE VOLUNTARIOS
     {
-        $id = user::find($request->session()->get('User_id')); 
+        $id = User::find($request->session()->get('User_id')); 
         $data = $request->data[0];
         $Cursos = $data['Curso'];
         $code = $data['Code'];
-        $vol = user::find($code);
+        $vol = User::find($code);
         $Cursos = explode(";",$Cursos);
         if (empty($Cursos[0])) {
             return response()->json(["Error"=>"La asignación no debe estar vacia"]);
@@ -1460,11 +1458,20 @@ class Teacher extends Controller
         //LOGICA
         try {
               DB::beginTransaction();
-                $delete = Asign_teacher_course::where([['user_id',$code],['State','Active']])->get()->except($Cursos);
-                foreach ($delete as $value) {
-                    $deleteassign = Asign_teacher_course::find($value->id);
-                    $deleteassign->State = "Deactivated";
-                    $deleteassign->save();
+                $delCourses=[] ;
+                for ($i=0; $i < count($Cursos) ; $i++) {
+                    $verificar = Asign_teacher_course::where([['Course_id',$Cursos[$i]],['State','Active']])->first();
+                    if(isset($verificar)){
+                        array_push($delCourses,$verificar->id);   
+                    }
+                }
+                $delete = Asign_teacher_course::where([['user_id',$code],['State','Active']])->get()->except($delCourses);
+                if(!$delete->isempty()){
+                    foreach ($delete as $value) {
+                        $deleteassign = Asign_teacher_course::find($value->id);
+                        $deleteassign->State = "Deactivated";
+                        $deleteassign->save();
+                    }   
                 }
                 for ($i=0; $i < count($Cursos) ; $i++) {
                     $verificar = Asign_teacher_course::where([['Course_id',$Cursos[$i]],['State','Active']])->first();
@@ -1474,6 +1481,7 @@ class Teacher extends Controller
                         $grado = grade::find($curso->Grade_id)->GradeName();
                         $usuario_curso->user_id = $vol->id;
                         $usuario_curso->Course_id = $Cursos[$i];
+                        $usuario_curso->Year = date("Y");
                         $usuario_curso->State = "Active";
                         $usuario_curso->save();
                         #logs registro de asignación
@@ -1485,9 +1493,6 @@ class Teacher extends Controller
                         $log->Type = "Assign";
                         $log->Period_id = $grado->Period()->id;
                         $log->save();
-                    }
-                    else if (isset($delete)){
-
                     }
                 }
                 DB::commit();
