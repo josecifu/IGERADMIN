@@ -39,49 +39,7 @@
                                     <!--end::Title-->
                                     <!--begin::Toolbar-->
                                     <div class="card-toolbar">
-                                        <div class="dropdown dropdown-inline">
-                                            <a href="#" class="btn btn-clean btn-hover-light-primary btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="ki ki-bold-more-hor"></i>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-md dropdown-menu-right col-xl-4">  
-                                                <!--begin::Navigation-->
-                                                <ul class="navi navi-hover">
-                                                    <li class="navi-header font-weight-bold py-3">
-                                                        <span class="font-size-lg">Exportar:</span>
-                                                    </li>
-                                                    <li class="navi-separator mb-3 opacity-70"></li>
-                                                    <li class="navi-item">
-                                                        <a href="#" class="navi-link">
-                                                            <span class="navi-text">
-                                                                <span class="label label-xl label-inline label-light-success">Imprimir</span>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="navi-item">
-                                                        <a href="#" class="navi-link">
-                                                            <span class="navi-text">
-                                                                <span class="label label-xl label-inline label-light-danger">PDF</span>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="navi-item">
-                                                        <a href="#" class="navi-link">
-                                                            <span class="navi-text">
-                                                                <span class="label label-xl label-inline label-light-warning">PNG</span>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                    <li class="navi-item">
-                                                        <a href="#" class="navi-link">
-                                                            <span class="navi-text">
-                                                                <span class="label label-xl label-inline label-light-primary">CSV</span>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                                <!--end::Navigation-->
-                                            </div>
-                                        </div>
+                                        
                                     </div>
                                     <!--end::Toolbar-->
                                 </div>
@@ -137,7 +95,7 @@
                                 <!--end::Header-->
                                 <!--begin::Body-->
                                 <div class="card-body">
-                                    <div id="kt_charts_widget_3_chart"></div>
+                                    <div id="kt_charts_widget_3_chart1"></div>
                                 </div>
                                 <!--end::Body-->
                             </div>
@@ -180,7 +138,7 @@
                     type: 'bar',
                     height: 350,
                     toolbar: {
-                        show: false
+                        show: true
                     }
                 },
                 plotOptions: {
@@ -202,7 +160,11 @@
                     colors: ['transparent']
                 },
                 xaxis: {
-                    categories: ['13-01-001 (Viernes IGER)', '13-01-004 (Sábados IGER)', '13-01-006 (Domingos MA)', '13-01-019 (Domingos IGER)'],
+                    categories: [
+                        @foreach($periodsdata as $period)
+                        "{{$period}}",
+                        @endforeach
+                        ],
                     axisBorder: {
                         show: false,
                     },
