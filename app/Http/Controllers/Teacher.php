@@ -840,7 +840,21 @@ class Teacher extends Controller
                             $notes = Note::where([['Test_id',$v->id],['Student_id',$assign->id]])->first();
                             if($v->State == "Fisico"){
                                 if($notes==null){
-                                    return redirect('/teacher/test/score/'.$id)->withError('El examen: '.$v->Title.' aún no ha sido calificado');
+                                    return redirect('/teacher/test/score/'.$id)->withError('El examen: '.$v->Title.' del estudiante: '.$student->name.' aún no ha sido calificado');
+                                }
+                            }
+                            else{
+                                if($notes==null){
+                                    if(!isset($notes)){
+                                        $Qual = new Note;
+                                        $Qual->Student_id = $assign->id;
+                                        $Qual->Course_id = $id;
+                                        $Qual->Score = 0;
+                                        $Qual->Year = date("Y");
+                                        $Qual->State = "Qualified";
+                                        $Qual->Test_id = $v->id;
+                                        $Qual->Save();
+                                    }
                                 } 
                             }
                         }

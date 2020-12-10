@@ -301,10 +301,7 @@
                                         text: 'Contraseña temporal asignada con exito!',
                                         icon: 'success',
                                         confirmButtonText: 'Aceptar',
-                                        }).then(function () {    
-                                            var $url_path = '{!! url('/') !!}';
-                                            window.location.href = $url_path+"/administration/teacher/list";
-                                        });
+                                        })
                                     }//fin else
                                 },
                                 error: function(e){
