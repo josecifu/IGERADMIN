@@ -39,9 +39,10 @@ use App\Models\Asign_test_course;
 use App\Models\Assign_attendant_periods;
 use App\Models\Asign_teacher_course;
 use App\Models\Assign_activity;
-
+use App\Exports\StudentExport;
 use Session;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Carbon;
 
 class Administration extends Controller
@@ -1308,11 +1309,10 @@ class Administration extends Controller
         {
             $Titles=['No',
             'Nombres',
-            'Apellidos',
             'Télefono',
             'Usuario',
             'Correo electronico',
-            'Grado',
+            'Cursos asignados',
             'Ultima conexión'];
             if($id==1)
             {
@@ -1326,62 +1326,13 @@ class Administration extends Controller
                     $curses = Asign_teacher_course::where([['user_id',$v->user_id],['State','Active']])->get();
                     $dataT = [];
                     foreach ($curses as $value) {
-                        $curso = course::find($value->Course_id);
-                        $dataC = [
-                            'Curso' => $curso->Name." - ".$curso->Grade()->GradeNamePeriod(),
-                        ];
-                        array_push($dataT,$dataC);
-                    }
-                    $conection = logs::where(['Type'=>'Login','User_Id'=>$usuario->name])->orderby('created_at','DESC')->take(1)->first();
-                        if($conection)
-                        {
-                            setlocale(LC_TIME, "spanish");
-                            $newDate = date("d-m-Y", strtotime($conection->created_at));	
-                            $mes = strftime("%d de %B del %Y", strtotime($newDate));
-                            $conection= $mes." a las ".date("H:m A", strtotime($conection->created_at));
+                        $coursesvol = "<ol>";
+                        foreach ($curses as $value) {
+                            $curso = course::find($value->Course_id);
+                            $coursesvol = $coursesvol."<li>".$curso->Name." - ".$curso->Grade()->GradeNamePeriod() ."</li>";
                         }
-                    $data = [
-                        'Id' => $persona->id,
-                        'Name' => $persona->Names,
-                        'Apellido' => $persona->LastNames,
-                        'Telefono' => $persona->Phone,
-                        'Usuario' => $usuario->name,
-                        'Correo' => $usuario->email,
-                        'Curses' => $dataT,
-                        'Conection' => $conection ?? 'El usuario no se ha conectado'
-                    ];
-                    array_push($models,$data);
-                }
-                $title1 = "Listado de voluntarios";
-                $pdf = PDF::loadView('Administration.Reports.pdf', compact('Titles','models','title1'));
-                return $pdf->download('ListadoVoluntarios-'.date("d-m-y-H-i-A").'.pdf');
-            }
-            
-        }
-        if($type=="listadoalumnos")
-        {
-            $Titles=['No',
-            'Nombres',
-            'Télefono',
-            'Usuario',
-            'Correo electronico',
-            'Cursos asignados',
-            'Ultima conexión'];
-            if($id==1)
-            {
-                $usuario_rol = Assign_user_rol::where([['Rol_id',3],['State','Active']])->get('user_id');
-                foreach ($usuario_rol as $v) {
-                    $usuario = User::find($v->user_id);
-                    $persona = Person::find($usuario->Person_id);
-                    // $curses = User::find($v->user_id)->CoursesTeacher();
-                    $curses = Asign_teacher_course::where([['user_id',$v->user_id],['State','Active']])->get();
-                    $dataT = [];
-                    $coursesvol = "<ol>";
-                    foreach ($curses as $value) {
-                        $curso = course::find($value->Course_id);
-                        $coursesvol = $coursesvol."<li>".$curso->Name." - ".$curso->Grade()->GradeNamePeriod() ."</li>";
+                        $coursesvol = $coursesvol."</ol>";
                     }
-                    $coursesvol = $coursesvol."</ol>";
                     $conection = logs::where(['Type'=>'Login','User_Id'=>$usuario->name])->orderby('created_at','DESC')->take(1)->first();
                         if($conection)
                         {
@@ -1401,11 +1352,65 @@ class Administration extends Controller
                     ];
                     array_push($models,$data);
                 }
+                $title1 = "Listado de voluntarios";
+                $pdf = PDF::loadView('Administration.Reports.pdf', compact('Titles','models','title1'));
+                return $pdf->download('ListadoVoluntarios-'.date("d-m-y-H-i-A").'.pdf');
+            }
+            
+        }
+        if($type=="listadoalumnos")
+        {
+            $Titles=['No',
+            'Nombres',
+            'Télefono',
+            'Usuario',
+            'Correo electronico',
+            'Grado',
+            'Ultima conexión'];
+            if($id==1)
+            {
+                $year = date("Y");
+                $rols = Assign_user_rol::where('Rol_id',2)->where('State','Active')->get();
+                
+                foreach ($rols as $rol)
+                {
+                    $user = User::find($rol->user_id);
+                    $student = Person::find($user->Person_id);
+                    $assigns = Assign_student_grade::where('User_id',$user->id)->where('Year',$year)->where('State','Active')->get('Grade_id');
+                    foreach ($assigns as $assign)
+                    {
+                        $conection = logs::where(['Type'=>'Login','User_Id'=>$user->name])->orderby('created_at','DESC')->take(1)->first();
+                        if($conection)
+                        {
+                            setlocale(LC_TIME, "spanish");
+                            $newDate = date("d-m-Y", strtotime($conection->created_at));	
+                            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+                            $conection= $mes." a las ".date("H:m A", strtotime($conection->created_at));
+                        }
+                        
+                        $grade = Grade::find($assign->Grade_id);
+                        $query = [
+                            'id' => $student->id,
+                            'name' => $student->Names." ".$student->LastNames,
+                            'phone' => $student->Phone,
+                            'user' => $user->name,
+                            'email' => $user->email,
+                            'grade' => $grade->GradeName(),
+                            'conexion' => $conection ?? 'El usuario no se ha conectado'
+                        ];
+                        array_push($models,$query);
+                    }
+                }
 
                 $title1 = "Listado de alumnos";
                 $pdf = PDF::loadView('Administration.Reports.pdf', compact('Titles','models','title1'));
                 return $pdf->download('ListadoAlumnos-'.date("d-m-y-H-i-A").'.pdf');
             }   
+            if($id==2)
+            {
+                
+                return Excel::download(new StudentExport, 'users-collection.xlsx');
+            }
         }
         if($type=="generalreportpdf")
         {
@@ -1478,7 +1483,6 @@ class Administration extends Controller
             $pdf = PDF::loadView('Administration.Reports.pdf', compact('Titles','models','title1'));
             return $pdf->download('ReporteGeneral-'.$d.'-'.date("d-m-y-H-i-A").'.pdf');
         }
-
         return false;
     }
 }

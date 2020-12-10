@@ -70,7 +70,7 @@
 										<div class="wizard-step" data-wizard-type="step">
 											<div class="wizard-label">
 												<i class="wizard-icon flaticon-clipboard"></i>
-												<h3 class="wizard-title">3. Asginación de circulos de estudio a encargados</h3>
+												<h3 class="wizard-title">3. Asignación de circulos de estudio a encargados</h3>
 											</div>
 										</div>
 										<!--end::Wizard Step 3 Nav-->

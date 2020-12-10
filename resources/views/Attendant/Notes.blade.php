@@ -118,12 +118,18 @@
                                                         <tr>
                                                             <td>{{$model['Alumno']}}</td>
                                                             @foreach($model['Notas'] as $nota)
-                                                                @if($nota=='0')
-                                                                <td><center>{{$nota}}</center></td>
-                                                                @elseif(intval($nota) > 0)
-                                                                <td><center>{{$nota}}</center></td>
+                                                                @if(isset($nota['score']))
+                                                                    @if(intval($nota['score'])==0)
+                                                                        <td><center>{{$nota['score']}}</center></td>
+                                                                    @elseif(intval($nota['score']) > 0)
+                                                                        @if($nota['State']=='Approved')
+                                                                            <td><center><span class="label label-rounded label-success mr-2">{{$nota}}</span></center></td>
+                                                                        @else
+                                                                        <td><center><span class="label label-rounded label-dark mr-2">{{$nota}}</span></center></td>
+                                                                        @endif
+                                                                    @endif
                                                                 @else
-                                                                    <td style="background-color: #E2E4ED"></td>
+                                                                        <td style="background-color: #E2E4ED"></td>
                                                                 @endif
                                                             @endforeach
                                                             
