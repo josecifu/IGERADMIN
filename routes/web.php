@@ -36,6 +36,7 @@ Route::group([ 'prefix' => 'student','middleware' => 'auth'], function(){
 	Route::get('/profile',$route.'\Student@Profile')->name('ProfileStudent');
 	Route::get('/home/dashboard',$route.'\Student@dashboard')->name('StudentDashboard');
 	Route::get('/home/workspace',$route.'\Student@workspace')->name('StudentWorkspace');
+	Route::get('/home/workspace/view/{model}',$route.'\Student@workspaceview')->name('workspaceview');
 	Route::get('/test/list',$route.'\Student@all_tests')->name('StudentAllTest');
 	Route::get('/test/view',$route.'\Student@student_test_list')->name('TestStudentView');
 	Route::get('/test/view/questions/{model}',$route.'\Student@test_questions')->name('TestQuestions');
