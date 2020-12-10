@@ -72,6 +72,7 @@
                                     <td>
                                         <center>
                                             <span class="label label-warning label-pill label-inline mr-2">{{$score[0]}}</span>
+                                            0
                                         </center>
                                     </td>
                                     @endif
