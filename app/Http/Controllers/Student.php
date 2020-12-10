@@ -526,7 +526,8 @@ class Student extends Controller
                 {
                     $notes =[]; 
                     $id = $request->session()->get('User_id');
-                    $assign = Assign_student_grade::where('user_id',$id)->first();
+                    $year = date('Y');
+                    $assign = Assign_student_grade::where(['user_id'=>$id,'Year'=>$year])->first();
                     $asignactivity = Assign_activity::where(['Name'=>$value['Activity'],'Course_id'=>$course->id])->first();
                     $testInfo = test::where(['Activity_id'=>$asignactivity->id,'Title'=> $test])->first();
                     if($testInfo!=null)
