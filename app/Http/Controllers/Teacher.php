@@ -824,6 +824,19 @@ class Teacher extends Controller
     public function SendQualify(Request $request,$id)
     {
         $course = course::find($id);
+        $nota = Note::where('Course_id',$id)->get();
+        if($nota->isempty()){
+            return redirect('/teacher/score/list/'.$id)->withError('No existen notas de examenes calificados');
+        }
+        foreach ($nota as $value) {
+            // if (($value->State != 'Qualified') || ($value->State != 'Pre-Qualified') || ($value->State != 'Approved')) {
+            if ($value->State == 'Complete') {
+                $test = test::find($value->Test_id);
+                $assignT = Assign_student_grade::find($value->Student_id);
+                $student = User::find($assignT->user_id)->person();
+                return redirect('/teacher/test/score/'.$id)->withError('El examen: '.$test->Title.' del estudiante: '.$student->Names.' '.$student->LastNames.' aún no ha sido calificado');
+            }
+        }
         $Activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
         if(!$Activities->isempty()){
             $gradeStudents = grade::find($course->Grade_id)->Students();
@@ -860,19 +873,6 @@ class Teacher extends Controller
                         }
                     }
                 }
-            }
-        }
-        $nota = Note::where('Course_id',$id)->get();
-        if($nota->isempty()){
-            return redirect('/teacher/score/list/'.$id)->withError('No existen notas de examenes calificados');
-        }
-        foreach ($nota as $value) {
-            // if (($value->State != 'Qualified') || ($value->State != 'Pre-Qualified') || ($value->State != 'Approved')) {
-            if ($value->State == 'Complete') {
-                $test = test::find($value->Test_id);
-                $assignT = Assign_student_grade::find($value->Student_id);
-                $student = User::find($assignT->user_id)->person();
-                return redirect('/teacher/test/score/'.$id)->withError('El examen: '.$test->Title.' del estudiante: '.$student->Names.' '.$student->LastNames.' aún no ha sido calificado');
             }
         }
         foreach ($nota as $n) {
