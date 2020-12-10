@@ -236,7 +236,7 @@ class Attendant extends Controller
     public function UpdateStateNotesAttendant(Request $request, $id,$type)
     {
         $curso = course::find($id);
-        $nota = Note::where(['Course_id'=>$id,'State'=>'Qualified'])->get();
+        $nota = Note::where(['Course_id'=>$id])->get();
         if(count($nota)>0)
         {
             foreach ($nota as $n) {
