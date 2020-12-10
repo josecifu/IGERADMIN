@@ -173,9 +173,21 @@ class Student extends Controller
         $titles = [
             'No',
             'Fecha y hora',
-            ''
         ];
         $student = Person::find($id);
+        $user = $student->User();
+        $logs = logs::where(['User_Id'=>$user->name,'Type'=>'Login'])->orderby('created_at','DESC')->get();
+        foreach($logs as $log)
+        {
+            setlocale(LC_TIME, "spanish");
+            $newDate = date("d-m-Y", strtotime($log->created_at));	
+            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $conection= $mes." a las ".date("H:m A", strtotime($log->created_at));
+            $l=[
+                "Date"=>$conection
+            ];
+            array_push($models,$l);
+        }
         return view('Administration/Student/assists',compact('models','titles','buttons','student'));
     }
 

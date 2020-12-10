@@ -83,8 +83,8 @@
                             @foreach($models as $key => $model)
                             <tr>
                                 <td>{{$key+1}}</td>
-                                <td></td>
-                                <td nowrap="nowrap"></td>
+                                <td>{{$model['Date']}}</td>
+                                
                             </tr>
                             @endforeach
                         </tbody>

@@ -17,6 +17,7 @@ class CreateInformationTable extends Migration
             $table->Increments('id');
             $table->string('Title');
             $table->string('Message');
+            $table->string('Type');
             $table->string('To');
             $table->timestamps();
         });

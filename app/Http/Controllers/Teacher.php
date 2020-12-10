@@ -45,6 +45,7 @@ use App\Models\grade;
 use App\Models\period;
 #Tabla nivel
 use App\Models\level;
+
 #Tabla logs
 use App\Models\logs;
 use Illuminate\Support\Facades\DB;
@@ -83,20 +84,62 @@ class Teacher extends Controller
 	} 
     public function workspaceT(Request $request, $id)
     {
-        $id = User::find($request->session()->get('User_id'));
+        $id2 = User::find($request->session()->get('User_id'));
         $course = course::find($id);
-        $info = [];
-        $grade = grade::find($curse->Grade_id)->Period();
-        $students = Assign_student_grade::where([['Grade_id',$curse->Grade_id],['State','Active']])->get();
-        $tests = Asign_test_course::where('Teacher_id',$value->id)->get();
-        $info = [
-            "curso" => $curse->Name,
+        $model = [];
+        $grade = grade::find($course->Grade_id)->Period();
+        $students = Assign_student_grade::where([['Grade_id',$course->Grade_id],['State','Active']])->get();
+        $tests = Asign_test_course::where('Teacher_id',$id2)->get();
+        $teacher = $id2->Person()->Names." ".$id2->Person()->Lastnames;
+        $model = [
+            "Course" => $course->Name,
             "Period" => $grade->Name,
             "Students" => count($students),
-            "Tests" => count($tests),
+            "Teacher"=> $teacher ?? 'No asignado',
+            "Test" => count($tests),
         ];
-        $teacher = Person::find($id->Person_id);
-        return view('/Teacher/spaceWork',compact('info','teacher','id'));
+        $teacher = Person::find($id2->Person_id);
+        $infos= information::where(['Type'=>'Course','To'=>$id])->get(); 
+        $informations = [];
+        foreach($infos as $info)
+        {
+            setlocale(LC_TIME, "spanish");
+            $newDate = date("d-m-Y", strtotime($info->created_at));	
+            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $conection= $mes." a las ".date("H:m A", strtotime($info->created_at));
+            $information=[
+                "Title" =>$info->Title,
+                "Date" => $conection,
+            ];
+            array_push($informations,$information);
+        }
+        return view('/Teacher/spaceWork',compact('model','teacher','id','informations'));
+    }
+    public function workspacesave(Request $request)
+    {
+        $data = $request['data'][0];
+        $id = User::find($request->session()->get('User_id'));
+        DB::beginTransaction();
+        try {
+            $course=course::find($request['ID']);
+            $model = new information;
+            $model->Title = $data['Titulo'];
+            $model->Message = $data['Contenido'];
+            $model->Type = "Course";
+            $model->To = $request['ID'];
+            $model->save();
+            $log = new logs;
+            $log->Table = "Voluntario";
+            $log->User_ID = $id->name;
+            $log->Description = "Se ha asignado información ".$model->Title." para el curso ".$course->name." del grado ".$course->Grade()->GradeNamePeriod();
+            $log->Type = "Create";
+            $log->save();
+            DB::commit();
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+        }
+        return response()->json(["Accion completada"]);
     }
     public function dashboard(Request $request)
     {
