@@ -184,7 +184,7 @@ class Teacher extends Controller
                         $horaInicial = $fechaInicial[1].' '.$fechaInicial[2];
                         $horaactual = date("g").':'.date("i").' '.date("A");
                         $actual = new DateTime();
-                        if(date($fechafinal[0]) > $actual->format('m/d/Y')){
+                        if(date($fechafinal[0]) > $actual->format('d/m/Y')){
                             setlocale(LC_TIME, "spanish");
                             $newDate = date("d-m-Y", strtotime($value->StartDate));	
                             $Inicio = strftime("%d de %B del %Y", strtotime($newDate));
@@ -199,7 +199,7 @@ class Teacher extends Controller
                             ];
                             array_push($tests,$data);
                         }
-                        else if (date($fechafinal[0]) == $actual->format('m/d/Y') && $horafinal > $horaactual) {
+                        else if (date($fechafinal[0]) == $actual->format('d/m/Y') && $horafinal > $horaactual) {
                             setlocale(LC_TIME, "spanish");
                             $newDate = date("d-m-Y", strtotime($value->StartDate));	
                             $Inicio = strftime("%d de %B del %Y", strtotime($newDate));
@@ -1250,7 +1250,7 @@ class Teacher extends Controller
                 $horafinal = $fechafinal[1].' '.$fechafinal[2];
                 $horaactual = date("g").':'.date("i").' '.date("A");
                 $actual = new DateTime();
-                if(date($fechafinal[0]) > $actual->format('m/d/Y')){
+                if(date($fechafinal[0]) > $actual->format('d/m/Y')){
                     $data=[
                         "id" => $value->id,
                         "examen" => $value->Title,
@@ -1259,7 +1259,7 @@ class Teacher extends Controller
                     ];
                     array_push($Models,$data);
                 }
-                else if (date($fechafinal[0]) == $actual->format('m/d/Y') && $horafinal > $horaactual) {
+                else if (date($fechafinal[0]) == $actual->format('d/m/Y') && $horafinal > $horaactual) {
                     $data=[
                         "id" => $value->id,
                         "examen" => $value->Title,
