@@ -36,6 +36,8 @@ class Student extends Controller
         $periods = period::where('State','Active')->get();
         $countsfemale = [];
         $countsmale = [];
+        $periodsdata = [];
+        $averagenotes = [];
         foreach($periods as $value)
         {
             $female = 0;
@@ -56,14 +58,11 @@ class Student extends Controller
             }
             array_push($countsfemale,$female);
             array_push($countsmale,$male);
+            array_push($periodsdata,$value->Name);
+            array_push($averagenotes,$value->Name);
         }
-        array_push($countsfemale,0);
-        array_push($countsfemale,0);
-        array_push($countsmale,0);
-        array_push($countsfemale,0);
-        array_push($countsmale,0);
-        array_push($countsmale,0);
-        return view('Administration/Student/statistics ',compact('countsfemale','countsmale'));
+        
+        return view('Administration/Student/statistics ',compact('countsfemale','countsmale','periodsdata'));
     }
 
     #FUNCIONES DE ESTUDIANTE
@@ -617,7 +616,7 @@ class Student extends Controller
                     'phone' => $student->Phone,
                     'user' => $user->name,
                     'email' => $user->email,
-                    'grade' => $grade->GradeName(),
+                    'grade' => $grade->GradeNamePeriod(),
                     'conexion' => $conection ?? 'El usuario no se ha conectado'
                 ];
                 array_push($models,$query);
