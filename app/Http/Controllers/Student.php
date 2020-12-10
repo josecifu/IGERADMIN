@@ -87,7 +87,7 @@ class Student extends Controller
                     $question = Question::where('Test_id',$test->id)->first();
                     if($question != null)
                     {
-                        $answer = Asign_answer_test_student::where('Question_id',$question->id)->first();
+                        $answer = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$id])->first();
                         if ($answer == null)
                         {
                             $dateStrStart =str_replace("/","-",$test->StartDate);
@@ -195,7 +195,7 @@ class Student extends Controller
                     $question = Question::where('Test_id',$test->id)->first();
                     if($question != null)
                     {
-                        $answer = Asign_answer_test_student::where('Question_id',$question->id)->first();
+                        $answer = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$id])->first();
                         if ($answer == null)
                         {
                             $dateStrStart =str_replace("/","-",$test->StartDate);
@@ -303,24 +303,23 @@ class Student extends Controller
                     $state = [];
                     $question = Question::where('Test_id',$test->id)->first();
                     $check = Note::where(['Test_id'=>$test->id,'State'=>'Approved'])->first();
-                    if(($question == null)&&($check != null))
+                    if(($question == null) && ($check != null))
                     {
                         $notes = Note::where(['Test_id'=>$test->id,'State'=>'Approved','Year'=>$year])->get('Score');
                         $state = "written";
                     }
                     if($question != null)
                     {
-                        $answer = Asign_answer_test_student::where('Question_id',$question->id)->first();
+                        $answer = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$id])->first();
                         if ($answer == null)
                         {
                             $state = "start";
                         }
-                        $option = Asign_answer_test_student::where(['Question_id'=>$question->id,'State'=> 'Qualified'])->first();
+                        $option = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$id,'State'=>'Qualified'])->first();
                         if (($answer != null) && ($option == null))
                         {
                             $state = "qualify";
                         }
-                        //dd($option);
                         if(($option != null) && ($check != null))
                         {
                             $notes = Note::where(['Test_id'=>$test->id,'State'=>'Approved','Year'=>$year])->get('Score');
