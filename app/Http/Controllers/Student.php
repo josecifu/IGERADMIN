@@ -19,7 +19,7 @@ use App\Models\test;
 use App\Models\Note;
 use App\Models\Assign_activity;
 use App\Models\Asign_teacher_course;
-
+use DateTime;
 class Student extends Controller
 {
     public function __construct()
@@ -91,12 +91,14 @@ class Student extends Controller
                         $answer = Asign_answer_test_student::where('Question_id',$question->id)->first();
                         if ($answer == null)
                         {
-                            $StartDate = date("d-m-Y",strtotime($test->StartDate." - 5 days")); 
-                            $StartDate2 = date("d-m-Y H:i:00",strtotime($test->StartDate)); 
+                            $dateStrStart =str_replace("/","-",$test->StartDate);
+                            $StartDate = date("d-m-Y",strtotime($dateStrStart." - 5 days")); 
+                            $StartDate2 = date("d-m-Y H:i:00",strtotime($dateStrStart)); 
                             $date_now = strtotime(date("d-m-Y H:i:00"));
                             $date_teststart = strtotime($StartDate);
                             $date_teststart2 = strtotime($StartDate2);
-                            $EndDate = date("d-m-Y H:i:00",strtotime($test->EndDate)); 
+                            $dateStr =str_replace("/","-",$test->EndDate);
+                            $EndDate =date('d-m-Y H:i:00', strtotime($dateStr));
                             $date_testend = strtotime($EndDate);
                             $start = true;
                             if($date_now >= $date_teststart)
@@ -197,20 +199,16 @@ class Student extends Controller
                         $answer = Asign_answer_test_student::where('Question_id',$question->id)->first();
                         if ($answer == null)
                         {
-                            $StartDate = date("d-m-Y",strtotime($test->StartDate." - 5 days")); 
-                            $StartDate2 = date("d-m-Y H:i:00",strtotime($test->StartDate)); 
+                            $dateStrStart =str_replace("/","-",$test->StartDate);
+                            $StartDate = date("d-m-Y",strtotime($dateStrStart." - 5 days")); 
+                            $StartDate2 = date("d-m-Y H:i:00",strtotime($dateStrStart)); 
                             $date_now = strtotime(date("d-m-Y H:i:00"));
                             $date_teststart = strtotime($StartDate);
                             $date_teststart2 = strtotime($StartDate2);
-                            $EndDate = date("m-d-Y",strtotime($test->EndDate)); 
+                            $dateStr =str_replace("/","-",$test->EndDate);
+                            $EndDate =date('d-m-Y H:i:00', strtotime($dateStr));
                             $date_testend = strtotime($EndDate);
                             $start = true;
-                            if($test->id==12)
-                            {
-                                dd($StartDate2,$EndDate,$test->StartDate,$test->EndDate);
-                            }
-                            
-
                             if($date_now >= $date_teststart)
                             {
                                 if($date_now >= $date_teststart2)
@@ -225,8 +223,8 @@ class Student extends Controller
                                             'id' => $test->id,
                                             'course' => $course->Name,
                                             'test' => $test->Title,
-                                            'start' => date("d/m/Y h:i A",strtotime($test->StartDate)),
-                                            'end' => date("d/m/Y h:i A",strtotime($test->EndDate)),
+                                            'start' => $test->StartDate,
+                                            'end' => $test->EndDate,
                                             'score' => $test->Score,
                                             'NoQuestions' => $test->NoQuestions(),
                                             'activity' => $test->Activity()->Name,
@@ -305,28 +303,29 @@ class Student extends Controller
                 {
                     $state = [];
                     $question = Question::where('Test_id',$test->id)->first();
-                    if($question == null)
+                    $check = Note::where(['Test_id'=>$test->id,'State'=>'Approved'])->first();
+                    if(($question == null)&&($check != null))
                     {
+                        $notes = Note::where(['Test_id'=>$test->id,'State'=>'Approved','Year'=>$year])->get('Score');
                         $state = "written";
                     }
-                    else
+                    if($question != null)
                     {
                         $answer = Asign_answer_test_student::where('Question_id',$question->id)->first();
                         if ($answer == null)
                         {
                             $state = "start";
                         }
-                        else
+                        $option = Asign_answer_test_student::where(['Question_id'=>$question->id,'State'=> 'Qualified'])->first();
+                        if (($answer != null) && ($option == null))
                         {
-                            $option = Asign_answer_test_student::where(['Question_id'=>$question->id,'State'=> 'Qualified'])->first();
-                            if ($option == null)
-                            {
-                                $state = "qualify";
-                            }
-                            else
-                            {
-                                $state = "approved";
-                            }
+                            $state = "qualify";
+                        }
+                        //dd($option);
+                        if(($option != null) && ($check != null))
+                        {
+                            $notes = Note::where(['Test_id'=>$test->id,'State'=>'Approved','Year'=>$year])->get('Score');
+                            $state = "approved";
                         }
                     }
                     $StartDate = date("d-m-Y",strtotime($test->StartDate." - 5 days")); 
@@ -346,13 +345,12 @@ class Student extends Controller
                         }
                         if($date_now <= $date_testend)
                         {
-                            if($test->StartDate)
+                            if(($test->StartDate) && ($state != "qualify"))
                             {
                                 $availability = "enabled";
                             }
                         }
                     }
-                    $notes = Note::where(['Test_id'=>$test->id,'State'=>'Approved','Year'=>$year])->get('Score');
                     $query =[
                         'id' => $test->id,
                         'test' => $test->Title,
@@ -364,7 +362,7 @@ class Student extends Controller
                         'activity' => $test->Activity()->Name,
                         'teacher' => $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames,
                         'date' => date("d/m/Y",strtotime($test->StartDate)),
-                        'notes' => $notes,
+                        'notes' => $notes ?? '0',
                         'hundred' => '100',
                         'activation' => $start,
                         'state' => $state,
