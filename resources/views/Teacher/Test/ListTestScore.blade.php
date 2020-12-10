@@ -118,7 +118,7 @@
                                                         @foreach($model['Notas'] as $nota)
                                                             @if($nota['Student_id']== "0" )
                                                                 <td><center> El examen no ha sido contestado</center></td>
-                                                            @elseif($nota['Student_id'] == "Pre" )
+                                                            @elseif($nota['Student_id'] == "Qua" )
                                                                 <td>
                                                                     <center>
                                                                         <a href="#" disable class="btn btn-success btn-sm mr-3">
