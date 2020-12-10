@@ -11,6 +11,7 @@ use App\Models\Person;
 use App\Models\Assign_student_grade;
 use App\Models\period;
 use App\Models\grade;
+use App\Models\level;
 use App\Models\course;
 use App\Models\Asign_answer_test_student;
 use App\Models\Question;
@@ -790,6 +791,11 @@ class Student extends Controller
                 $type = "Se asigno registro";
                 $color = "warning";
             }
+            if($log->Type=="Actualizar")
+            {
+                $type = "Se asigno registro";
+                $color = "secundary";
+            }
             if($log->Type=="Eliminar")
             {
                 $type = "Se elimino registro";
@@ -936,23 +942,23 @@ class Student extends Controller
         $phone = $data['Telefono'];
         $username = $data['Usuario'];
         $email = $data['Email'];
-        $personid = $data['Persona'];
+        $student = Person::find($data['Persona']);
         $registered_user = User::where('name',$username)->first();
         $data_user = array(
             'name' => $username,
             'email' => $email
         );
-        User::where('Person_id', $personid)->update($data_user);
+        User::where('Person_id', $student->id)->update($data_user);
         $data_student = array(
             'Names' => $names,
             'LastNames' => $lastnames,
             'Phone' => $phone
         );
-        Person::where('id',$personid)->update($data_student);
+        Person::where('id',$student->id)->update($data_student);
         $log = new logs;
         $log->Table = "Estudiante";
         $log->User_ID = $responsible_user->name;
-        $log->Description = "Se actualizaron los datos del estudiante ".$names." ".$lastnames;
+        $log->Description = "Se actualizaron los datos del estudiante ".$student->Names." ".$student->LastNames;
         $log->Type = "Actualizar";
         $log->save();
         return response()->json(["Accion completada"]);
@@ -1014,6 +1020,41 @@ class Student extends Controller
         $log->User_ID = $responsible_user->name;
         $log->Description = "Se ha restablecido la contraseña del usuario: ".$user->name;
         $log->Type = "Restore";
+        $log->save();
+        return response()->json(["Accion completada"]);
+    }
+
+    public function edit_assign($id)
+    {
+        $user = User::where('Person_id',$id)->first();
+        $assign = Assign_student_grade::where([['user_id',$user->id],['State','Active']])->first();
+        $grade = grade::find($assign->Grade_id);
+        return view('Administration/Student/edit_assign',compact('user','grade'));
+    }
+
+    public function update_assign(Request $request)
+    {
+        $code = $request->session()->get('User_id');
+        $responsible_user = User::find($code);
+        $year = date("Y");
+        $data = $request->data[0];
+        $user = User::find($data['Usuario']);
+        $student = Person::where('id',$user->Person_id)->first();
+        $grade = grade::find($data['Grado']);
+        if ($grade == null)
+        {
+            return response()->json(['Error' => "Debe seleccionar el grado en el cual será inscrito el estudiante!"], 500);
+        }
+        $data_grade = array(
+            'Grade_id' => $grade->id,
+            'Year' => $year
+        );
+        Assign_student_grade::where('user_id',$user->id)->update($data_grade);
+        $log = new logs;
+        $log->Table = "Estudiante";
+        $log->User_ID = $responsible_user->name;
+        $log->Description = "El estudiante ".$student->Names." ".$student->LastNames." ha sido asignado al grado ".$grade->GradeName();
+        $log->Type = "Actualizar";
         $log->save();
         return response()->json(["Accion completada"]);
     }

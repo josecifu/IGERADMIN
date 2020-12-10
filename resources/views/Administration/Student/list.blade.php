@@ -128,13 +128,21 @@
                                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
                                                 <ul class="nav nav-hoverable flex-column">\
                                                     <li class="nav-item"><a class="nav-link" href="/administration/student/list/assists/'+full[0]+'"><i class="nav-icon la la-list"></i><span class="nav-text">Ver asistencias</span></a></li>\
-                                                    <li class="nav-item"><a class="btn nav-link" onclick="create('+full[0]+');"><i class="nav-icon la la-lock"></i><span class=" nav-text">Restablecer contraseña</span></a></li>\
+                                                    <li class="nav-item"><a class="btn nav-link" onclick="create('+full[0]+');"><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
                                                 </ul>\
                                             </div>\
                                         </div>\
-                                        <a href="/administration/student/edit/'+full[0]+'"  data-toggle="tooltip" data-placement="top" class="btn btn-sm btn-clean btn-icon" title="Actualizar datos del estudiante">\
-                                            <i class="la la-edit"></i>\
-                                        </a>\
+                                        <div class="dropdown dropdown-inline">\
+                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title ="Actualizaciones" data-toggle="dropdown">\
+                                                <i class="la la-edit"></i>\
+                                            </a>\
+                                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
+                                                <ul class="nav nav-hoverable flex-column">\
+                                                    <li class="nav-item"><a class="nav-link" href="/administration/student/edit/'+full[0]+'"><i class="nav-icon la la-user"></i><span class="nav-text">Actualizar datos del estudiante</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="/administration/student/assign/grade/'+full[0]+'"><i class="nav-icon la la-users"></i><span class="nav-text">Cambiar de grado</span></a></li>\
+                                                </ul>\
+                                            </div>\
+                                        </div>\
                                         <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\',\''+full[2]+'\')" data-toggle="tooltip" data-placement="top" class="btn btn-sm btn-clean btn-icon" title="Eliminar estudiante">\
                                             <i class="la la-trash"></i>\
                                         </a>\

@@ -121,6 +121,8 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::get('/statistics',$route.'\Student@statistics')->name('StudentStatistics');
 		Route::post('/restore/password/{model}', $route.'\Student@restore_password')->name('RestorePasswordStudent');
 		Route::get('list/assists/{model}', $route.'\Student@assists')->name('AssistsStudent');
+		Route::get('/assign/grade/{model}',$route.'\Student@edit_assign')->name('EditAssignGrade');
+		Route::post('/update/assign/grade',$route.'\Student@update_assign')->name('UpdateAssignGrade');
 	});
 	#Voluntarios
 	Route::group([ 'prefix' => 'teacher'], function(){
