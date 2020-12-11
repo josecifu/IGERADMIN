@@ -19,14 +19,11 @@
                         <span class="card-icon">
                             <i class="flaticon2-favourite text-primary"></i>
                         </span>
-                        <h3 class="card-label">
-                            Listado de estudiantes de {{$grade}}
-                        </h3>
+                        <h3 class="card-label">Listado de estudiantes de<br>{{$studentgrade}}</h3>
                     </div>
                     <div class="card-toolbar">
                         <!--begin::Button-->
-                        <a href="{{url('administration/student/create')}}" class="btn btn-success font-weight-bolder mr-2">
-                        <i class="la la-plus"></i>Añadir nuevo estudiante</a>
+                        <a href="{{url('administration/student/create')}}" class="btn btn-success font-weight-bolder mr-2"><i class="la la-plus"></i>Añadir nuevo estudiante</a>
                         <!--end::Button-->
                         <!--begin::Dropdown-->
                         <div class="dropdown dropdown-inline">

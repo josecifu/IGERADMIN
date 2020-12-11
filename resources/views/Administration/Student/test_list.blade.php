@@ -102,7 +102,7 @@
                                     @foreach($model['tests'] as $test)
                                     <td>
                                         @foreach($test['notes'] as $note)
-                                            @if($test['state']=="written")
+                                            @if(($test['state']=="written")||($test['state']=="none"))
                                             <center>
                                                 <button type="button" disabled class="btn btn-info">{{$note['Score']}}</button>
                                             </center>

@@ -27,7 +27,7 @@
                     <!--begin::Row-->
                     <div class="row">
                         @foreach($models as $model)
-                            @if(($model['availability']=="enabled")||($model['state']=="written")||($model['state']=="approved"))
+                            @if(($model['state']=="written")||(($model['availability']=="disabled")&&($model['state']=="approved"))||(($model['availability']=="enabled")&&($model['state']=="approved"))||(($model['availability']=="enabled")&&($model['state']=="start")))
                             <!--begin::Course-->
                             <div class="col-xl-6">
                                 <!--begin::Card-->

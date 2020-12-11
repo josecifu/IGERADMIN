@@ -26,8 +26,8 @@
                         <a href="{{url('administration/student/create')}}" class="btn btn-success font-weight-bolder mr-2"><i class="la la-plus"></i>Añadir nuevo estudiante</a>
                         <!--end::Button-->
                         <!--begin::Dropdown-->
-                        <div class="dropdown dropdown-inline mr-2" >
-                            <button style="color: white;" type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="la la-download" style="color: white;"></i>Exportar</button>
+                        <div class="dropdown dropdown-inline">
+                            <button style="color:white;" type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="la la-download" style="color: white;"></i>Exportar</button>
                             @include("Administration.Base._exports")
                         </div>
                         <!--end::Dropdown-->
