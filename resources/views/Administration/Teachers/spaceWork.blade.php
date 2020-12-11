@@ -133,7 +133,7 @@
 													</div>
 													<!--eng::Container-->
 													<!--begin::Footer-->
-													<div class="d-flex flex-center" id="kt_sticky_toolbar_chat_toggler_3" data-toggle="tooltip" title="" data-placement="right" data-original-title="Ver notas del curso">
+													<div class="d-flex flex-center" id="kt_sticky_toolbar_chat_toggler_3" data-toggle="tooltip" title="" data-placement="top" data-original-title="Ver notas del curso">
 														<button class="btn btn-success font-weight-bolder font-size-sm py-3 px-14" data-toggle="modal" data-target="#kt_chat_modal">Notas del curso</button>
 													</div>
 													<!--end::Footer-->
@@ -163,13 +163,17 @@
 														</div>
 														<!--end::Top-->		
 																		<div class="card-body">
+																			<input type="text" id="Titulo" class="form-control form-control-solid" placeholder="Ingrese el titulo de la publicación"/>
+																			<br>
 																			<textarea  id="kt-ckeditor-1">
 																			</textarea>
 																		</div>
 														
-														<div class="d-flex justify-content-between border-top mt-5 pt-10">
+														<div class="d-flex flex-center border-top mt-5 pt-10">
 															<div>
-																<button type="button" class="btn btn-success font-weight-bolder font-size-sm py-3 px-14" data-wizard-type="action-submit">Publicar</button>
+															
+																<button type="button" onclick="create()" class="btn btn-success font-weight-bolder font-size-sm py-3 px-14" data-toggle="tooltip" title="" data-placement="top" data-original-title="Publicar información al curso">Publicar</button>
+																
 															</div>
 														</div>
 														<!--end::Form-->
@@ -288,6 +292,7 @@
 	@section('scripts')
 		<script src="{{ asset ('assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js')}}"></script>
 		<script type="text/javascript">
+			var KTEDITORS;
 			var KTCkeditor = function () {
 				var demos = function () {
 					ClassicEditor
@@ -296,6 +301,7 @@
 							removePlugins: [  ],
 							toolbar: [ 'selectAll','undo','redo','|','Heading','paragraph','bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote','|', 'Link','mediaEmbed','|','insertTable','tableColumn','tableRow','mergeTableCells' ]
 						}).then( editor => {
+								KTEDITORS= editor;
 								mediaEmbed: {previewsInData: true}
 							} )
 							.catch( error => {
@@ -312,5 +318,49 @@
 			jQuery(document).ready(function() {
 				KTCkeditor.init();
 			});
+			function create()
+			{
+				var Titulo = $('#Titulo').val(); 
+				var Contenido = KTEDITORS.getData();
+				var data = [{
+					Titulo: Titulo,
+					Contenido: Contenido,
+				}];
+				
+            $.ajax({
+                url:'/administration/teacher/save/workspace',
+                type:'POST',
+                data: {"_token":"{{ csrf_token() }}","data":data,"ID":{{$id}}},
+                dataType: "JSON",
+                success: function(e){
+					if (e.Error) {
+						swal.fire({
+						title: 'Error!',
+						text: e.Error,
+						icon: 'error',
+						confirmButtonText: 'Aceptar',
+						})
+					} else {
+						swal.fire({ title: "Accion completada", 
+						text: "¡Se ha publicado con exito!", 
+						type: "success"
+                        }).then(function () {
+								var $url_path = '{!! url('/') !!}';
+								
+							window.location.href = $url_path+"/administration/teacher/workspace/"+id;
+                        });
+					}
+                     
+                },
+                error: function(e){
+					swal.fire({
+						title: 'Ocurrio un error!',
+						text:  '¡Los datos no han sido registrados!',
+						icon: 'error',
+						confirmButtonText: 'Aceptar',
+                    })
+                }
+            });
+		 }//fin de la funcion
 		</script>
 	@stop

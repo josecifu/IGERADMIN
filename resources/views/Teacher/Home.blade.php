@@ -185,7 +185,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="d-flex flex-row">
+                                {{--<div class="d-flex flex-row">
                                     <div class="col-12">
                                         <div class="card card-custom">
                                             <div class="card-header">
@@ -252,7 +252,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div>--}}
                                 <br>
 								<!--end::Card-->
 								<!--begin::Teachers-->

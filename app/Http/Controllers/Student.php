@@ -19,6 +19,8 @@ use App\Models\test;
 use App\Models\Note;
 use App\Models\Assign_activity;
 use App\Models\Asign_teacher_course;
+//tabla de informacion
+use App\Models\information;
 use DateTime;
 
 class Student extends Controller
@@ -82,9 +84,48 @@ class Student extends Controller
     #FUNCIONES DE ESTUDIANTE
     public function workSpace(Request $request)
     {
-        return view('Student/workspace');
+        $id2 = User::find($request->session()->get('User_id'));
+        $courses = $id2->Asssign_Grade()->Grade()->Courses();
+        $informations = [];
+        foreach($courses as $course)
+        {
+            $infos= information::where(['Type'=>'Course','To'=>$course->id])->get(); 
+            foreach($infos as $info)
+            {
+                setlocale(LC_TIME, "spanish");
+                $newDate = date("d-m-Y", strtotime($info->created_at));	
+                $mes = strftime("%d de %B del %Y", strtotime($newDate));
+                $conection= $mes." a las ".date("H:m A", strtotime($info->created_at));
+                $information=[
+                    "id"=>$info->id,
+                    "Course"=>$course->Name,
+                    "Title" =>$info->Title,
+                    "Date" => $conection,
+                ];
+                array_push($informations,$information);
+            }
+        }
+        return view('Student/workspace',compact('informations'));
     }
-
+    public function workspaceview(Request $request,$id)
+    {
+        $info= information::find($id); 
+        $course = course::find($info->To);
+        setlocale(LC_TIME, "spanish");
+        $newDate = date("d-m-Y", strtotime($info->created_at));	
+        $mes = strftime("%d de %B del %Y", strtotime($newDate));
+        $conection= $mes." a las ".date("H:m A", strtotime($info->created_at));
+        $teacher = $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames;
+        $information=[
+            "Course"=>$course->Name,
+            "Title" =>$info->Title,
+            "Description" =>$info->Message,
+            "Date" => $conection,
+            "Teacher"=>$teacher??'No asignado'
+        ];
+        
+        return view('Student/ViewWorkspace',compact('information'));
+    }
     public function dashboard(Request $request)
     {
         $id = $request->session()->get('User_id');
@@ -174,9 +215,21 @@ class Student extends Controller
         $titles = [
             'No',
             'Fecha y hora',
-            ''
         ];
         $student = Person::find($id);
+        $user = $student->User();
+        $logs = logs::where(['User_Id'=>$user->name,'Type'=>'Login'])->orderby('created_at','DESC')->get();
+        foreach($logs as $log)
+        {
+            setlocale(LC_TIME, "spanish");
+            $newDate = date("d-m-Y", strtotime($log->created_at));	
+            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $conection= $mes." a las ".date("H:m A", strtotime($log->created_at));
+            $l=[
+                "Date"=>$conection
+            ];
+            array_push($models,$l);
+        }
         return view('Administration/Student/assists',compact('models','titles','buttons','student'));
     }
 
@@ -526,6 +579,7 @@ class Student extends Controller
             ];
             array_push($titles,$title);
         }
+        dd($titles);
         foreach ($titles as $value)
         {
             foreach ($value['Test'] as $test)

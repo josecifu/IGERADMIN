@@ -15,6 +15,7 @@
 								<!--begin::Search-->
 								<div class="topbar-item mr-3 w-100 w-lg-auto justify-content-start">
 									<div class="quick-search quick-search-inline w-auto w-lg-200px" id="kt_quick_search_inline">
+										{{--
 										<!--begin::Form-->
 										<form method="get" class="quick-search-form">
 											<div class="input-group rounded bg-light">
@@ -41,18 +42,19 @@
 												</div>
 											</div>
 										</form>
-										<!--end::Form-->
-										<!--begin::Search Toggle-->
+										<!--end::Form-->--}}
+										{{--<!--begin::Search Toggle-->
 										<div id="kt_quick_search_toggle" data-toggle="dropdown" data-offset="0px,1px"></div>
 										<!--end::Search Toggle-->
 										<!--begin::Dropdown-->
 										<div class="dropdown-menu dropdown-menu-left dropdown-menu-lg dropdown-menu-anim-up">
 											<div class="quick-search-wrapper scroll" data-scroll="true" data-height="350" data-mobile-height="200"></div>
-										</div>
+										</div>--}}
 										<!--end::Dropdown-->
 									</div>
 								</div>
 								<!--end::Search-->
+								{{--
 								@if(session()->get('rol_Name')=="Administrador")
 								<!--begin::Notifications-->
 								<div class="dropdown">
@@ -344,7 +346,7 @@
 										</span>
 									</div>
 								</div>
-								<!--end::Quick panel-->
+								<!--end::Quick panel-->--}}
 								<!--begin::User-->
 								<div class="dropdown">
 									<!--begin::Toggle-->
@@ -361,7 +363,9 @@
 												</svg>
 												<!--end::Svg Icon-->
 											</span>
+											
 										</div>
+										
 									</div>
 									<!--end::Toggle-->
 									<!--begin::Dropdown-->
@@ -414,9 +418,9 @@
 											@elseif(session()->get('rol_Name')=="Estudiante")
 											<a href="{{url('student/profile')}}" class="navi-item px-8">
 											@elseif(session()->get('rol_Name')=="Voluntario")
-											<a href="custom/apps/user/profile-1/personal-information.html" class="navi-item px-8">
+											<a href="{{url('teacher/view/profile')}}" class="navi-item px-8">
 											@elseif(session()->get('rol_Name')=="Encargado de circulo")
-											<a href="{{url('attendant/profile')}}" class="navi-item px-8">
+											<a href="{{url('/view/profile')}}" class="navi-item px-8">
 											@endif
 												<div class="navi-link">
 													<div class="navi-icon mr-2">
@@ -432,7 +436,15 @@
 											<!--end::Item-->
 										
 											<!--begin::Item-->
-											<a href="custom/apps/user/profile-2.html" class="navi-item px-8">
+											@if(session()->get('rol_Name')=="Administrador")
+											<a href="custom/apps/user/profile-1/personal-information.html" class="navi-item px-8">
+											@elseif(session()->get('rol_Name')=="Estudiante")
+											<a href="{{url('student/profile')}}" class="navi-item px-8">
+											@elseif(session()->get('rol_Name')=="Voluntario")
+											<a href="{{url('teacher/activity/logs')}}" class="navi-item px-8">
+											@elseif(session()->get('rol_Name')=="Encargado de circulo")
+											<a href="{{url('/view/profile')}}" class="navi-item px-8">
+											@endif
 												<div class="navi-link">
 													<div class="navi-icon mr-2">
 														<i class="flaticon2-rocket-1 text-danger"></i>
@@ -445,7 +457,7 @@
 											</a>
 											<!--end::Item-->
 											<!--begin::Item-->
-											<a href="custom/apps/userprofile-1/overview.html" class="navi-item px-8">
+											{{--<a href="custom/apps/userprofile-1/overview.html" class="navi-item px-8">
 												<div class="navi-link">
 													<div class="navi-icon mr-2">
 														<i class="flaticon2-hourglass text-primary"></i>
@@ -455,7 +467,7 @@
 														<div class="text-muted">Tareas que requieren atención</div>
 													</div>
 												</div>
-											</a>
+											</a>--}}
 											<!--end::Item-->
 											<!--begin::Footer-->
 											<div class="navi-separator mt-3"></div>
