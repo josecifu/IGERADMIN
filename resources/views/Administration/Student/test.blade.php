@@ -94,7 +94,7 @@
                 <div class="card-body pt-0 pb-3">
                     <!--begin::Table-->
                     <div class="table-responsive">
-                        <table class="table table-head-custom table-head-bg table-vertical-center table-borderless">
+                        <table class="table table-separate table-head-custom table-checkable">
                             <thead>
                                 <tr class="bg-gray-100 text-left">
                                     @foreach($titles as $title)
@@ -113,23 +113,29 @@
                                         <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['question']}}</span>
                                     </td>
                                     <td>
-                                        <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
-                                            @if($model['type']=="V/F")
-                                                Verdadero/Falso
-                                            @endif
-                                            @if($model['type']=="Multiple")
-                                                Opción múltiple
-                                            @endif
-                                            @if($model['type']=="Respuesta Abierta")
-                                                Pregunta abierta
-                                            @endif   
-                                        </span>
+                                        <center>
+                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
+                                                @if($model['type']=="V/F")
+                                                    Verdadero/Falso
+                                                @endif
+                                                @if($model['type']=="Multiple")
+                                                    Opción múltiple
+                                                @endif
+                                                @if($model['type']=="Respuesta Abierta")
+                                                    Pregunta abierta
+                                                @endif   
+                                            </span>
+                                        </center>
                                     </td>
                                     <td>
-                                        <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['correct']}}</span>
+                                        <center>
+                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['correct']}}</span>
+                                        </center>
                                     </td>
                                     <td>
-                                        <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['answer']}}</span>
+                                        <center>
+                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['answer']}}</span>
+                                        </center>
                                     </td>
                                     <td>
                                         <center>
