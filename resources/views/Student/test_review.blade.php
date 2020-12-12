@@ -109,19 +109,10 @@
                                 @foreach($models as $model)
                                 <tr>
                                     <td>
-                                        <center>
-                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['question']}}</span>
-                                        </center>
+                                        <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['question']}}</span>
                                     </td>
                                     <td>
-                                        <center>
-                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['correct']}}</span>
-                                        </center>
-                                    </td>
-                                    <td>
-                                        <center>
-                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['answer']}}</span>
-                                        </center>
+                                        <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['answer']}}</span>
                                     </td>
                                     <td>
                                         <center>

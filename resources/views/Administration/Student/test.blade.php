@@ -110,24 +110,26 @@
                                 @foreach($models as $model)
                                 <tr>
                                     <td>
-                                        <center>
-                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['question']}}</span>
-                                        </center>
+                                        <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['question']}}</span>
                                     </td>
                                     <td>
-                                        <center>
-                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['type']}}</span>
-                                        </center>
+                                        <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
+                                            @if($model['type']=="V/F")
+                                                Verdadero/Falso
+                                            @endif
+                                            @if($model['type']=="Multiple")
+                                                Opción múltiple
+                                            @endif
+                                            @if($model['type']=="Respuesta Abierta")
+                                                Pregunta abierta
+                                            @endif   
+                                        </span>
                                     </td>
                                     <td>
-                                        <center>
-                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['correct']}}</span>
-                                        </center>
+                                        <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['correct']}}</span>
                                     </td>
                                     <td>
-                                        <center>
-                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['answer']}}</span>
-                                        </center>
+                                        <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['answer']}}</span>
                                     </td>
                                     <td>
                                         <center>

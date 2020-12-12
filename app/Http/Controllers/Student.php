@@ -454,9 +454,8 @@ class Student extends Controller
         $scores = [];
         $titles = [
             'Preguntas',
-            'Respuestas Correctas',
-            'Respuestas del estudiante',
-            'Punteo Obtenido',
+            'Mis Respuestas',
+            'Puntajes Obtenido'
         ];
         $assign_student = Assign_student_grade::find($assign);
         $user_student = User::find($assign_student->user_id);
@@ -482,7 +481,6 @@ class Student extends Controller
             $query = [
                 "id" => $question->id,
                 "question" => $question->Title,
-                "correct" => $question->CorrectAnswers  ?? 'No aplica',
                 "answer" => $answer->Answers ?? 'No contestada',
                 "score" => $answer->Score ?? '0',
             ];
@@ -532,6 +530,7 @@ class Student extends Controller
     public function score_list(Request $request)
     {
         $id = $request->session()->get('User_id');
+        $year = date("Y");
         $models = [];
         $titles = [];
         $assign = Assign_student_grade::where(['user_id'=>$id,'Year'=>$year,'State'=>'Active'])->first();
@@ -579,7 +578,6 @@ class Student extends Controller
             ];
             array_push($titles,$title);
         }
-        dd($titles);
         foreach ($titles as $value)
         {
             foreach ($value['Test'] as $test)
@@ -1233,10 +1231,10 @@ class Student extends Controller
         $scores = [];
         $titles = [
             'Preguntas',
-            'Tipo de Pregunta',
+            'Tipos de Pregunta',
             'Respuestas Correctas',
-            'Respuestas del estudiante',
-            'Punteo Obtenido',
+            'Respuestas del Estudiante',
+            'Puntajes Obtenido'
         ];
         $year = date("Y");
         $assign_student = Assign_student_grade::find($assign);
