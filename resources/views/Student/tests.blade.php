@@ -27,7 +27,7 @@
                     <!--begin::Row-->
                     <div class="row">
                         @foreach($models as $model)
-                            @if(($model['availability']=="enabled")||($model['state']=="written")||($model['state']=="approved"))
+                            @if(($model['state']=="written")||(($model['availability']=="disabled")&&($model['state']=="approved"))||(($model['availability']=="enabled")&&($model['state']=="approved"))||(($model['availability']=="enabled")&&($model['state']=="start")))
                             <!--begin::Course-->
                             <div class="col-xl-6">
                                 <!--begin::Card-->
@@ -120,6 +120,26 @@
                     </div>
                     <!--end::Row-->
                     <!--begin::Pagination-->
+                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                        <div class="d-flex flex-wrap mr-3">
+                            <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-2 my-1">
+                                <i class="ki ki-bold-double-arrow-back icon-xs"></i>
+                            </a>
+                            <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-2 my-1">
+                                <i class="ki ki-bold-arrow-back icon-xs"></i>
+                            </a>
+                            <a href="#" class="btn btn-icon btn-sm border-0 btn-hover-primary active mr-2 my-1">1</a>
+                            <a href="#" class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1">2</a>
+                            <a href="#" class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1">3</a>
+                            <a href="#" class="btn btn-icon btn-sm border-0 btn-hover-primary mr-2 my-1">...</a>
+                            <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-2 my-1">
+                                <i class="ki ki-bold-arrow-next icon-xs"></i>
+                            </a>
+                            <a href="#" class="btn btn-icon btn-sm btn-light-primary mr-2 my-1">
+                                <i class="ki ki-bold-double-arrow-next icon-xs"></i>
+                            </a>
+                        </div>
+                    </div>
                     <!--end::Pagination-->
                 </div>
             </div>

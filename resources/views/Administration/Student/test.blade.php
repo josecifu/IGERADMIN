@@ -46,55 +46,13 @@
                         <div class="card-toolbar">
                             <a href="{{url('administration/student/list/test/'.$course->id)}}" class="btn btn-danger font-weight-bolder mr-2"><i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
                         </div>
-                        <!--begin::Dropdown-->
-                        <div class="dropdown dropdown-inline">
-                            <button style="color:white;" type="button" class="btn btn-light-primary font-weight-bolder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="la la-download" style="color:white;"></i>Exportar</button>
-                            <!--begin::Dropdown Menu-->
-                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                                <ul class="nav flex-column nav-hover">
-                                    <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opción:</li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-print"></i>
-                                            <span class="nav-text">Imprimir</span>
-                                        </a>
-                                    </li>a
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-copy"></i>
-                                            <span class="nav-text">Copiar</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-file-excel-o"></i>
-                                            <span class="nav-text">Excel</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-file-text-o"></i>
-                                            <span class="nav-text">CSV</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-file-pdf-o"></i>
-                                            <span class="nav-text">PDF</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!--end::Dropdown Menu-->
-                        </div>
-                        <!--end::Dropdown-->
                     </div>
                 </div>
                 <!--begin::Body-->
                 <div class="card-body pt-0 pb-3">
                     <!--begin::Table-->
                     <div class="table-responsive">
-                        <table class="table table-head-custom table-head-bg table-vertical-center table-borderless">
+                        <table class="table table-separate table-head-custom table-checkable">
                             <thead>
                                 <tr class="bg-gray-100 text-left">
                                     @foreach($titles as $title)
@@ -110,13 +68,21 @@
                                 @foreach($models as $model)
                                 <tr>
                                     <td>
-                                        <center>
-                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['question']}}</span>
-                                        </center>
+                                        <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['question']}}</span>
                                     </td>
                                     <td>
                                         <center>
-                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">{{$model['type']}}</span>
+                                            <span class="text-dark-75 font-weight-bolder d-block font-size-lg">
+                                                @if($model['type']=="V/F")
+                                                    Verdadero/Falso
+                                                @endif
+                                                @if($model['type']=="Multiple")
+                                                    Opción múltiple
+                                                @endif
+                                                @if($model['type']=="Respuesta Abierta")
+                                                    Pregunta abierta
+                                                @endif   
+                                            </span>
                                         </center>
                                     </td>
                                     <td>

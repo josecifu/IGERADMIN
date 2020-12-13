@@ -16,7 +16,7 @@
             <div class="alert alert-custom alert-white alert-shadow fade show gutter-b" role="alert">
                 <div class="alert-icon">
                 </div>
-                <div class="alert-text"><center><h1>{{$test->Title}}- {{$course}}</h1><h2>Fecha de finalización: {{$test->EndDate}}</h2></center></div>
+                <div class="alert-text"><center><h1>{{$test->Title}} - {{$course}}</h1><h2>Fecha de finalización: {{$test->EndDate}}</h2></center></div>
             </div>
             <div class="card card-custom">
                 <div class="card-body p-0">
@@ -28,11 +28,14 @@
                                @foreach($test->Questions() as $key => $Question)
                                 <!--begin::Wizard Step 1 Nav-->
                                 <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
-                                    <div class="wizard-label">
-                                        <h3 class="wizard-title" style="color:#6299ca;">
-                                        <span>{{$key+1}}.</span>{{$Question->Title}}</h3>
-                                        <div class="wizard-bar" ></div>
-                                    </div>
+                                	<center>
+	                                    <div class="wizard-label">
+	                                        <h3 class="wizard-title" style="color:#6299ca;">
+	                                        	<span>{{$key+1}}</span>
+	                                    	</h3>
+	                                        <div class="wizard-bar"></div>
+	                                    </div>
+                                    </center>
                                 </div>
                                 <!--end::Wizard Step 1 Nav-->
                               @endforeach
