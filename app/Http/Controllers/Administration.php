@@ -1313,7 +1313,32 @@ class Administration extends Controller
     }
     public function Statistics()
     {
-        return view('Administration/Workspace/Statistics');
+        $periods = period::where('State','Active')->get();
+        $models=[];
+        foreach($periods as $period)
+        {
+            $asing=[];
+            $vol=0;
+            $asing = Assign_attendant_periods::where(['Period_id'=>$period->id,'Year'=>date('Y'),'State'=>'Active'])->get();
+            $vol=$vol+count($asing);
+            $Activity=[];
+            for($i=1;$i<=12;$i++)
+            {
+                $month=date("m", strtotime("01-".$i."-2020"));
+                $logs = logs::whereMonth('created_at', '=', $month)->get();
+                $logs = $logs->where('Table','Encargado de Circulo');
+                $logs = $logs->where('Period_id',$period->id);
+                array_push($Activity,count($logs));
+            }
+            $model =[
+                "Name"=>$period->Name,
+                "Activity"=>$Activity,
+                "Teachers"=>$vol,
+            ];
+            array_push($models,$model);
+        }
+       
+        return view('Administration/Workspace/Statistics',compact('models'));
     }
     public function Reports(Request $request,$id,$type)
     {        
