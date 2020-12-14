@@ -31,10 +31,17 @@ use App\Models\Assign_student_grade;
 use App\Models\logs;
 use RegistersEventListeners;
 use App\Models\grade;
-class StudentExport implements WithEvents,ShouldAutoSize,WithCalculatedFormulas
+class StudentGradeExport implements WithEvents,ShouldAutoSize,WithCalculatedFormulas
 {
+
+ protected $id;
+ function __construct($id) {
+        $this->id = $id;
+        
+ }
   public function collection()
   {
+    
       $models=[];
       $year = date("Y");
         $rols = Assign_user_rol::where(['Rol_id'=>2,'State'=>'Active'])->get();
@@ -75,21 +82,23 @@ class StudentExport implements WithEvents,ShouldAutoSize,WithCalculatedFormulas
          BeforeExport::class => function(BeforeExport $event){
             $event->writer->reopen(new \Maatwebsite\Excel\Files\LocalTemporaryFile(Storage::path('StudentList.xlsx')),Excel::XLSX);
             $event->writer->getSheetByIndex(0);
+            $models = [];
+            $grade = grade::find($this->id);
             $year = date("Y");
             $rols = Assign_user_rol::where(['Rol_id'=>2,'State'=>'Active'])->get();
-
-            foreach ($rols as $key => $rol)
+            $event->getWriter()->getSheetByIndex(0)->setCellValue('E6',("Listado de alumnos de ".$grade->GradeNamePeriod()));
+            foreach ($rols as $rol)
             {
                 $user = User::find($rol->user_id);
                 $student = Person::find($user->Person_id);
-                $assigns = Assign_student_grade::where(['User_id'=>$user->id,'Year'=>$year,'State'=>'Active'])->get('Grade_id');
-                foreach ($assigns as $assign)
+                $assigns = Assign_student_grade::where(['User_id'=>$user->id,'Year'=>$year,'State'=>'Active','Grade_id'=>$grade->id])->get('Grade_id');
+                foreach ($assigns as $key => $assign)
                 {
                     $conection = logs::where(['Type'=>'Login','User_Id'=>$user->name])->orderby('created_at','DESC')->take(1)->first();
                     if($conection)
                     {
                         setlocale(LC_TIME, "spanish");
-                        $newDate = date("d-m-Y", strtotime($conection->created_at));	
+                        $newDate = date("d-m-Y", strtotime($conection->created_at));    
                         $mes = strftime("%d de %B del %Y", strtotime($newDate));
                         $conection= $mes." a las ".date("H:m A", strtotime($conection->created_at));
                     }
@@ -104,10 +113,10 @@ class StudentExport implements WithEvents,ShouldAutoSize,WithCalculatedFormulas
                     $event->getWriter()->getSheetByIndex(0)->setCellValue('I'.(11+$key),$grade->Period()->Name);
                     $event->getWriter()->getSheetByIndex(0)->setCellValue('J'.(11+$key),$conection ?? 'El usuario no se ha conectado');
                 }
-            }
-                $event->getWriter()->getSheetByIndex(0)->autoSize();
-                return $event->getWriter()->getSheetByIndex(0);
-            
+            }              
+            $event->getWriter()->getSheetByIndex(0)->autoSize();
+            return $event->getWriter()->getSheetByIndex(0);
+                    
         }
       ];
     } 

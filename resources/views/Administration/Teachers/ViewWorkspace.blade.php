@@ -1,4 +1,4 @@
-@extends('Administration.Base/BaseTeacher')
+@extends('Administration.Base/Base')
 @section('title')
     Inicio
     @stop
@@ -6,7 +6,7 @@
     Espacio de Trabajo
     @stop
     @section('breadcrumb2')
-    Estudiante
+    Voluntario
     @stop
     {{-- Page content --}}
     @section('content')
@@ -23,7 +23,9 @@
 						<!--begin::Header-->
 						<div class="card-header border-0">
                             <h3 class="card-title font-weight-bolder text-dark">informacion de cursos</h3>
-                           
+                            <div class="card-toolbar">
+                                <a href="{{url('administration/teacher/workspace/list/'.$id)}}" class="btn btn-danger font-weight-bolder mr-2"><i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
+                            </div>
 						</div>
 						<!--end::Header-->
 						<!--begin::Body-->
@@ -115,6 +117,37 @@
 	@section('scripts')
 		<script src="{{ asset ('assets/plugins/custom/ckeditor/ckeditor-classic.bundle.js')}}"></script>
         <script type="text/javascript">
+            function deleteinfo($url)
+			{
+                Swal.fire({
+                        text: "¿Esta seguro que desea eliminar la publicacion?",
+                        icon: "error",
+                        showCancelButton: true,
+                        buttonsStyling: false,
+                        confirmButtonText: "Eliminar",
+                        cancelButtonText: "Cancelar",
+                        customClass: {
+                            confirmButton: "btn font-weight-bold btn-danger",
+                            cancelButton: "btn font-weight-bold btn-default"
+                        }
+                    }).then(function (result) {
+                        if (result.value) {
+                            console.log($url);
+                            window.location.href = $url;
+                        } else if (result.dismiss === 'cancel') {
+                            Swal.fire({
+                                text: "La publicacion no ha sido eliminada!.",
+                                icon: "error",
+                                buttonsStyling: false,
+                                confirmButtonText: "Aceptar",
+                                customClass: {
+                                    confirmButton: "btn font-weight-bold btn-success",
+                                }
+                            });
+                        }
+                    });
+                    
+			}
             function getId(url) {
                 var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
                 var match = url.match(regExp);

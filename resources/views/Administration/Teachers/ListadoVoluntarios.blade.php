@@ -4,10 +4,10 @@
     Inicio
     @stop
     @section('breadcrumb1')
-    Tablero
+    Voluntarios
     @stop
     @section('breadcrumb2')
-    Voluntarios
+    Listado
     @stop
     {{-- Page content --}}
     @section('content')
@@ -41,18 +41,21 @@
                                             <h3 class="card-label">Listado de Voluntarios</h3>
                                         </div>
                                         <div class="card-toolbar">
+                                            <!--begin::Button-->
+                                            <a href="{{url('administration/teacher/create')}}" class="btn btn-success font-weight-bolder mr-2"><i class="la la-plus"></i>Añadir un voluntario</a>
+                                            <!--end::Button-->
+                                            <!--begin::Dropdown-->
                                             <!--begin::Dropdown-->
                                             <div class="dropdown dropdown-inline mr-2" >
-                                                <button style="color: white;" type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="la la-download" style="color: white;"></i>Exportar</button>
+                                                <button style="color: white;" type="button" class="btn btn-light-primary font-weight-bolder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="la la-download" style="color: white;"></i>Exportar datos</button>
                                                 @include("Administration.Base._exports")
                                             </div>
                                             <!--end::Dropdown-->
-                                            <a href="{{url('administration/teacher/create')}}" class="btn btn-success font-weight-bolder">
-                                            <i class="la la-plus"></i>Añadir un voluntario</a>
                                         </div>
                                     </div>
                                     <div class="card-body">
+                                        <div class="scroll scroll-pull" data-scroll="true" data-suppress-scroll-x="false" data-swipe-easing="false" style="height: 600px">
                                         <!--begin: Datatable-->
                                         <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
                                             <thead>
@@ -90,6 +93,7 @@
                                             </tbody>
                                         </table>
                                         <!--end: Datatable-->
+                                        </div>
                                     </div>
                                 </div>
                                 <!--end::Card-->
@@ -109,7 +113,7 @@
             "use strict";
             var KTDatatablesDataSourceHtml = function() {
                 var d = new Date();
-                var strDate =  d.getDate()+ "-" + (d.getMonth()+1) + "-" + d.getFullYear() + " " + d.getHours() + "-" + d.getMinutes();
+                var strDate =  d.getDate()+ "-" + (d.getMonth()+1) + "-" + d.getFullYear();
                 var initTable1 = function() {
                     var table = $('#kt_datatable');
 
@@ -125,7 +129,7 @@
                                 exportOptions: {
                                     columns: [ 0, 1, 2, 3, 4 , 5 ,6,7 ],
                                 },
-                                title: 'ListadoAlumnos-'+strDate
+                                title: 'Listado Voluntarios -'+strDate
                             },
                             {
                                 text: 'Exportar a csv',
@@ -134,16 +138,41 @@
                                 exportOptions: {
                                     columns: [ 0, 1, 2, 3, 4 , 5 ,6,7 ],
                                 },
-                                messageTop: 'Listado de voluntarios'
+                                title: 'Listado Voluntarios -'+strDate
                             },
                             {
                                 text: 'Exportar a PDF',
                                 extend: 'pdfHtml5',
                                 extension: '.pdf',
+                                orientation: 'landscape',
+                                pageSize: 'LEGAL',
                                 exportOptions: {
                                     columns: [ 0, 1, 2, 3, 4 , 5 ,6,7 ],
                                 },
-                                messageTop: 'Listado de voluntarios'
+                                title: 'Listado Voluntarios -'+strDate,
+                                customize: function(doc) {
+                                    doc['styles'] = {
+                                        userTable: {
+                                            margin: [0, 15, 0, 15]
+                                        },
+                                        tableHeader: {
+                                            bold:!0,
+                                            fontSize:11,
+                                            color:'white',
+                                            fillColor:'#85AED1',
+                                            alignment:'center'
+                                        }
+                                    },
+                                    doc.styles.tableBodyOdd = {
+                                        alignment: 'center'
+                                      },
+                                    doc.styles.title = {
+                                      color: 'white',
+                                      fontSize: '40',
+                                      background: '#ec7e35',
+                                      alignment: 'center'
+                                    }   
+                                  } ,
                             }
                             
                         ],
@@ -164,15 +193,22 @@
                                             </a>\
                                             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
                                                 <ul class="nav nav-hoverable flex-column">\
-                                                    <li class="nav-item"><a class="nav-link" href="/administration/teacher/edit/'+full[0]+'"><i class="nav-icon la la-edit"></i><span class="nav-text">Editar</span></a></li>\
-                                                    <li class="nav-item"><a class="nav-link" onclick="create('+full[0]+');"><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="javascript:;" onclick="create('+full[0]+');"><i class="nav-icon la la-lock"></i><span class="nav-text">Restablecer contraseña</span></a></li>\
                                                 </ul>\
                                             </div>\
                                         </div>\
-                                        <a href="/administration/teacher/assign/courses/'+full[0]+'" class="btn btn-sm btn-clean btn-icon" title="Administrar asignación de cursos">\
-                                            <i class="la la-edit"></i>\
-                                        </a>\
-                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Eliminar">\
+                                        <div class="dropdown dropdown-inline">\
+                                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title ="Actualizaciones" data-toggle="dropdown">\
+                                                <i class="la la-edit"></i>\
+                                            </a>\
+                                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
+                                                <ul class="nav nav-hoverable flex-column">\
+                                                    <li class="nav-item"><a class="nav-link" href="/administration/teacher/edit/'+full[0]+'"><i class="nav-icon la la-edit"></i><span class="nav-text">Editar</span></a></li>\
+                                                    <li class="nav-item"><a class="nav-link" href="/administration/teacher/assign/courses/'+full[0]+'"><i class="nav-icon flaticon-presentation"></i><span class="nav-text">asignación de cursos</span></a></li>\
+                                                </ul>\
+                                            </div>\
+                                        </div>\
+                                        <a href="javascript:;" onclick="deletePeriod(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" data-placement="top" title="Eliminar voluntario">\
                                             <i class="la la-trash"></i>\
                                         </a>\
                                     ';

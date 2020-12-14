@@ -4,10 +4,10 @@
     Inicio
     @stop
     @section('breadcrumb1')
-    Tablero
+    Voluntarios
     @stop
     @section('breadcrumb2')
-    Logs
+    Historial
     @stop
     {{-- Page content --}}
     @section('content')
@@ -41,42 +41,19 @@
                                             <h3 class="card-label">Registro de actividad de la tabla Voluntarios</h3>
                                         </div>
                                         <div class="card-toolbar">
+                                            <a href="{{url('administration/teacher/list')}}" class="btn btn-danger font-weight-bolder mr-2"><i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
                                             <!--begin::Dropdown-->
                                             <div class="dropdown dropdown-inline mr-2">
-                                                <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="la la-download"></i>Exportar</button>
+                                                <button style="color:white;" type="button" class="btn btn-light-primary font-weight-bolder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="la la-download" style="color:white;"></i>Exportar</button>
                                                 <!--begin::Dropdown Menu-->
                                                 <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                                                     <ul class="nav flex-column nav-hover">
-                                                        <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opcion:</li>
+                                                        <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opción:</li>
+                                            
                                                         <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-print"></i>
-                                                                <span class="nav-text">Imprimir</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-copy"></i>
-                                                                <span class="nav-text">Copiar</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-file-excel-o"></i>
-                                                                <span class="nav-text">Excel</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-file-text-o"></i>
-                                                                <span class="nav-text">CSV</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
+                                                            <a href="javascript:;" onclick="exportdata(1);" class="nav-link">
                                                                 <i class="nav-icon la la-file-pdf-o"></i>
-                                                                <span class="nav-text">PDF</span>
+                                                                <span class="nav-text">Exportar archivo PDF</span>
                                                             </a>
                                                         </li>
                                                     </ul>
@@ -88,22 +65,24 @@
                                     </div>
                                     <div class="card-body">
                                         <!--begin: Datatable-->
-                                        <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
+                                        <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top:13px !important">
                                             <thead>
                                                 <tr>
-                                                    @foreach($Titles as $Title)
-                                                    <th>{{ $Title }}</th>
+                                                    @foreach($Titles as $title)
+                                                    <th>{{$title}}</th>
                                                     @endforeach
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($Models as $Model)
+                                                @foreach($Models as $key => $model)
                                                 <tr>
-                                                    <td>{{$Model['Id']}}</td>
-                                                    <td>{{$Model['Usuario']}}</td>
-                                                    <td>{{$Model['Descripcion']}}</td>
-                                                    <td>{{$Model['Tipo']}}</td>
-                                                    <td>{{$Model['HF']}}</td>
+                                                    <td>{{$key+1}}</td>
+                                                    <td>{{$model['responsible']}}</td>
+                                                    <td>{{$model['activity']}}</td>
+                                                    <td>
+                                                        <span class="label label-{{$model['color']}} label-pill label-inline mr-2" style="height: 100%;width: 100%" >{{$model['type']}}</span>
+                                                    </td>
+                                                    <td>{{$model['datatime']}}</td>
                                                 </tr>
                                                 @endforeach
                                             </tbody>
@@ -127,12 +106,70 @@
            
             "use strict";
             var KTDatatablesDataSourceHtml = function() {
-
+                var d = new Date();
+                var strDate =  d.getDate()+ "-" + (d.getMonth()+1) + "-" + d.getFullYear() + " " + d.getHours() + "-" + d.getMinutes();
+                
                 var initTable1 = function() {
                     var table = $('#kt_datatable');
 
                     // begin first table
                     table.DataTable({
+                        dom: 'Bfrtip',
+                        buttons: [
+                            {
+                                text: 'Exportar a excel',
+                                extend: 'excelHtml5',
+                                fieldSeparator: '\t',
+                                messageTop: 'Listado de voluntarios.',
+                                exportOptions: {
+                                    columns: [ 0, 1, 2, 3, 4  ],
+                                },
+                                title: 'Historial Voluntarios (eliminados)-'+strDate
+                            },
+                            {
+                                text: 'Exportar a csv',
+                                extend: 'csvHtml5',
+                                extension: '.csv',
+                                exportOptions: {
+                                    columns: [ 0, 1, 2, 3, 4 ],
+                                },
+                                title: 'Historial Voluntarios (eliminados)-'+strDate
+                            },
+                            {
+                                text: 'Exportar a PDF',
+                                extend: 'pdfHtml5',
+                                extension: '.pdf',
+                                pageSize: 'LEGAL',
+                                exportOptions: {
+                                    columns: [ 0, 1, 2, 3, 4  ],
+                                },
+                                title: 'Historial Voluntarios (eliminados)-'+strDate,
+                                customize: function(doc) {
+                                    doc['styles'] = {
+                                        userTable: {
+                                            margin: [0, 15, 0, 15]
+                                        },
+                                        tableHeader: {
+                                            bold:!0,
+                                            fontSize:11,
+                                            color:'white',
+                                            fillColor:'#85AED1',
+                                            alignment:'center'
+                                        }
+                                    },
+                                    doc.styles.tableBodyOdd = {
+                                        alignment: 'center'
+                                      },
+                                    doc.styles.title = {
+                                      color: 'white',
+                                      fontSize: '40',
+                                      background: '#ec7e35',
+                                      alignment: 'center'
+                                    }   
+                                  } ,
+                            }
+                        
+                        ],
                         responsive: true,
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
@@ -166,7 +203,11 @@
             jQuery(document).ready(function() {
                 KTDatatablesDataSourceHtml.init();
             });
-
+            function exportdata(Type)
+            {
+                var $url_path = '{!! url('/') !!}';
+			    window.location.href = $url_path+"/reports/pdf/"+Type+"/logsvoluntarios";
+            }
        </script>
 
       

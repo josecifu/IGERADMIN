@@ -1,4 +1,4 @@
-@extends('Administration.Base/BaseTeacher')
+@extends('Administration.Base/Base')
 {{-- Page title --}}
     @section('title')
     Voluntarios
@@ -23,7 +23,7 @@
                     </div>
                     <div class="card-toolbar">
                         <div class="card-toolbar">
-                            <a href="{{url('teacher/home/dashboard')}}" class="btn btn-danger font-weight-bolder mr-2"><i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
+                            <a href="{{url('attendant/home/dashboard')}}" class="btn btn-danger font-weight-bolder mr-2"><i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
                         </div>
                        
                     </div>

@@ -220,7 +220,7 @@
 										</div>
 										<div>
 											<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Guardar Registro</button>
-											<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>
+											<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" style="height: 100%" data-wizard-type="action-next">Siguiente</button>
 										</div>
 									</div>
 									<!--end::Wizard Actions-->
@@ -367,14 +367,14 @@
 					// Submit event
 					_wizardObj.on('submit', function (wizard) {
 						Swal.fire({
-							text: "Por favor, complete el registro!",
+							text: "¿Desea guardar los cambios?",
 							icon: "success",
 							showCancelButton: true,
 							buttonsStyling: false,
 							confirmButtonText: "Guardar",
 							cancelButtonText: "Cancelar",
 							customClass: {
-								confirmButton: "btn font-weight-bold btn-primary",
+								confirmButton: "btn font-weight-bold btn-success",
 								cancelButton: "btn font-weight-bold btn-default"
 							}
 						}).then(function (result) {
@@ -387,7 +387,7 @@
 									buttonsStyling: false,
 									confirmButtonText: "Aceptar",
 									customClass: {
-										confirmButton: "btn font-weight-bold btn-primary",
+										confirmButton: "btn font-weight-bold btn-success",
 									}
 								});
 							}

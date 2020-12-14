@@ -19,9 +19,12 @@ use App\Models\User;
 use App\Models\Person;
 use App\Models\grade;
 use App\Models\Asign_teacher_course;
+use App\Models\period;
 #Tabla logs
 use App\Models\logs;
 use App\Models\Assign_student_grade;
+use App\Models\Asign_test_course;
+use App\Models\information;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 class Attendant extends Controller
@@ -229,9 +232,222 @@ class Attendant extends Controller
             "Periods" => $periods,
             ]);
     }
-    public function ProfileAttendant()
+
+    public function ProfileAttendant(Request $request)
     {
-        return view('Attendant/Profile');
+        $Titles = ['Titulo','Contenido'];
+        $user = User::find($request->session()->get('User_id')); 
+        $person = Person::find($user->Person_id);
+        $perids = Assign_attendant_periods::where([['user_id',$user->id],['State','Active'],['Year',date('Y')]])->get();
+        $dataT = [];
+        foreach ($perids as $value) {
+            $period = period::find($value->Period_id);
+            $dataC = [
+                'Curso' => $period->Name,
+            ];
+            array_push($dataT,$dataC);
+        }
+        $info = [
+            'titulo' => 'Circulos de estudio Asignados',
+            'cursos' => $dataT,
+        ];
+        $data = [
+            'Email' => $user->email,
+            'Phone' => $person->Phone,
+            'Name' => $person->Names,
+            'LastNames' => $person->LastNames,
+            'User' => $user->name,
+            
+        ];
+        return view('Attendant/Profile',compact('info','data','Titles'));
+    }
+    public function UpdateProfileAttendant(Request $request)
+    {
+        $user = User::find($request->session()->get('User_id')); 
+        $person = Person::find($user->Person_id);
+        $data = $request->data[0];
+        $telefono = $data['Telefono'];
+        $correo = $data['Email'];
+        if($telefono == "" || $correo ==""){
+            return response()->json(["Error"=>"Los campos no pueden estar vacios"]);
+        }
+        $user->email = $correo;
+        $user->save();
+        $person->Phone = $telefono;
+        $person->save();
+        return response()->json(["Accion completada"]);
+    }
+    public function ActivitiesLogs(Request $request)
+    {
+        $models=[];
+        $titles = [
+            'No',
+            'Responsable',
+            'Actividad',
+            'Tipo',
+            'Fecha y hora'
+        ];
+        $id2 = User::find($request->session()->get('User_id'));
+        $logs = logs::where(['User_Id'=>$id2->name])->get();
+        foreach ($logs as $log)
+        {
+            setlocale(LC_TIME, "spanish");
+            $newDate = date("d-m-Y", strtotime($log->created_at));	
+            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $type = "";
+            $color = "Success";
+            if($log->Type=="Crear")
+            {
+                $type = "Nuevo registro";
+                $color = "success";
+            }
+            if($log->Type=="Asignar")
+            {
+                $type = "Se asigno registro";
+                $color = "warning";
+            }
+            if($log->Type=="Actualizar")
+            {
+                $type = "Se asigno registro";
+                $color = "secundary";
+            }
+            if($log->Type=="Eliminar")
+            {
+                $type = "Se elimino registro";
+                $color = "danger";
+            }
+            if($log->Type=="Login")
+            {
+                $type = "Ha iniciado sesión";
+                $color = "primary";
+            }
+            if($log->Type=="Activar")
+            {
+                $type = "Se ha activado";
+                $color = "primary";
+            }
+            $data = [
+                'id' => $log->id,
+                'responsible' => $log->User_Id,
+                'activity' => $log->Description,
+                'type' => $type,
+                'color' => $color,
+                'datatime' => $mes." a las ".date("g:i A", strtotime($log->created_at))
+            ];
+            array_push($models,$data);
+        }
+        return view('Attendant/Activity',compact('models','titles'));
+    }
+
+    public function __construct()
+	{
+		$this->middleware('auth');
+	} 
+    public function workspaceview(Request $request,$id)
+    {
+        $buttons =[];
+        $button = [
+            "Name" => 'Eliminar publicación',
+            "Link" => 'administration/teacher/workspace/delete/'.$id,
+            "Type" => "btndelete"
+        ];
+        array_push($buttons,$button);
+        $info= information::find($id); 
+        $course = course::find($info->To);
+        setlocale(LC_TIME, "spanish");
+        $newDate = date("d-m-Y", strtotime($info->created_at));	
+        $mes = strftime("%d de %B del %Y", strtotime($newDate));
+        $conection= $mes." a las ".date("H:m A", strtotime($info->created_at));
+        if($course->Teacher())
+        $teacher = $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames;
+        else
+        $teacher = "No asignado";
+        $information=[
+            "Course"=>$course->Name,
+            "Title" =>$info->Title,
+            "Description" =>$info->Message,
+            "Date" => $conection,
+            "Teacher"=>$teacher??'No asignado'
+        ];
+        if($request->session()->get('rol_Name')=="Voluntario")
+        {
+            return view('Teacher/ViewWorkspace',compact('information'));
+        }
+        $id=$info->To;
+        return view('Attendant/ViewWorkspace',compact('buttons','information','id'));
+    }
+    public function workspacedelete($id)
+    {
+        $info= information::find($id); 
+        $info->State="Delete";
+        $info->save();
+        $id=$info->To;
+        Session::put([
+            'message' => "¡Se ha eliminado con exito la publicación!",
+             ]);
+        return redirect()->route('WorkspaceTeacher',$id);
+    }
+    public function workspaceT(Request $request, $id)
+    {
+        $id2 = User::find($request->session()->get('User_id'));
+        $course = course::find($id);
+        $model = [];
+        $grade = grade::find($course->Grade_id)->Period();
+        $students = Assign_student_grade::where([['Grade_id',$course->Grade_id],['State','Active']])->get();
+        $tests = Asign_test_course::where('Teacher_id',$id2->id)->get();
+        $teacher = $id2->Person()->Names." ".$id2->Person()->Lastnames;
+        $model = [
+            "Course" => $course->Name,
+            "Period" => $grade->Name,
+            "Students" => count($students),
+            "Teacher"=> $teacher ?? 'No asignado',
+            "Test" => count($tests),
+        ];
+        $teacher = Person::find($id2->Person_id);
+        $infos= information::where(['Type'=>'Course','To'=>$id,'State'=>'Active'])->get(); 
+        $informations = [];
+        foreach($infos as $info)
+        {
+            setlocale(LC_TIME, "spanish");
+            $newDate = date("d-m-Y", strtotime($info->created_at));	
+            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $conection= $mes." a las ".date("H:m A", strtotime($info->created_at));
+            $information=[
+                "id" =>$info->id,
+                "Title" =>$info->Title,
+                "Date" => $conection,
+            ];
+            array_push($informations,$information);
+        }
+        return view('/Attendant/WorkSpace',compact('model','teacher','id','informations'));
+    }
+    public function workspacesave(Request $request)
+    {
+        $data = $request['data'][0];
+        $id = User::find($request->session()->get('User_id'));
+        DB::beginTransaction();
+        try {
+            $course=course::find($request['ID']);
+            $model = new information;
+            $model->Title = $data['Titulo'];
+            $model->Message = $data['Contenido'];
+            $model->Type = "Course";
+            $model->To = $request['ID'];
+            $model->State = "Active";
+            $model->save();
+            $log = new logs;
+            $log->Table = "Voluntario";
+            $log->User_ID = $id->name;
+            $log->Description = "Se ha asignado información ".$model->Title." para el curso ".$course->name." del grado ".$course->Grade()->GradeNamePeriod();
+            $log->Type = "Create";
+            $log->save();
+            DB::commit();
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return response()->json(["Error" => "No se ha guardado la publicación debe llenar todos los campos..."]);;
+        }
+        return response()->json(["Accion completada"]);
     }
     public function UpdateStateNotesAttendant(Request $request, $id,$type)
     {

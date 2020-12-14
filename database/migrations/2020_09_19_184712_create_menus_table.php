@@ -21,6 +21,7 @@ class CreateMenusTable extends Migration
             $table->string('Url')->nullable();
             $table->integer('Order')->nullable();
             $table->string('Type')->nullable();
+            $table->string('Function')->nullable();
             $table->boolean('State');
             $table->timestamps();
         });

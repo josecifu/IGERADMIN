@@ -264,7 +264,7 @@
 																			@elseif($Log['State']=="Delete")
 																				<span class="label label-lg label-light-danger label-inline">Eliminado</span>
 																			@elseif($Log['State']=="Progress")
-																				<span class="label label-lg label-light-warning label-inline">En progreso</span>
+																				<span class="label label-lg label-light-warning label-inline">Asignación</span>
 																			@endif
 																		</td>
 																		<td class="text-right pr-0">

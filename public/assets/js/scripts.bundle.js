@@ -9212,9 +9212,9 @@ KTUtil.ready(function() {
     }
 
     // Init Quick Search Handle
-    if (typeof KTLayoutSearchInline !== 'undefined') {
-        KTLayoutSearchInline().init('kt_quick_search_inline');
-    }
+   //if (typeof KTLayoutSearchInline !== 'undefined') {
+    //    KTLayoutSearchInline().init('kt_quick_search_inline');
+    //}
 });
 
 "use strict";

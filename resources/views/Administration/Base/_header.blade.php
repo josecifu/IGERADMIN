@@ -4,7 +4,7 @@
 							<!--begin::Left-->
 							<div class="d-none d-lg-flex align-items-center mr-3">
 								<!--begin::Logo-->
-								<a href="index.html" class="mr-20">
+								<a href="{{url('/')}}" class="mr-20">
 									<img alt="Logo" src="{{ asset('assets/media/logos/Logo-Iger.png')}}" class="logo-default max-h-75px" />
 								</a>
 								<!--end::Logo-->
@@ -420,7 +420,7 @@
 											@elseif(session()->get('rol_Name')=="Voluntario")
 											<a href="{{url('teacher/view/profile')}}" class="navi-item px-8">
 											@elseif(session()->get('rol_Name')=="Encargado de circulo")
-											<a href="{{url('/view/profile')}}" class="navi-item px-8">
+											<a href="{{url('attendant/profile')}}" class="navi-item px-8">
 											@endif
 												<div class="navi-link">
 													<div class="navi-icon mr-2">
@@ -443,7 +443,7 @@
 											@elseif(session()->get('rol_Name')=="Voluntario")
 											<a href="{{url('teacher/activity/logs')}}" class="navi-item px-8">
 											@elseif(session()->get('rol_Name')=="Encargado de circulo")
-											<a href="{{url('/view/profile')}}" class="navi-item px-8">
+											<a href="{{url('attendant/activity/logs')}}" class="navi-item px-8">
 											@endif
 												<div class="navi-link">
 													<div class="navi-icon mr-2">

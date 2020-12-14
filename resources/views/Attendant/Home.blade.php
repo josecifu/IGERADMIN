@@ -39,7 +39,7 @@
                                                             <!--begin::User-->
                                                             <div class="mr-3">
                                                                 <!--begin::Name-->
-                                                                <a href="#" class="d-flex align-items-center text-dark text-hover-primary font-size-h5 font-weight-bold mr-3">{{session()->get('Name')}}
+                                                                <a href="#" class="d-flex align-items-center text-dark text-hover-success font-size-h5 font-weight-bold mr-3">{{session()->get('Name')}}
                                                                 <i class="flaticon2-correct text-warning icon-md ml-2"></i></a>
                                                                 <!--end::Name-->
                                                                 <!--begin::Contacts-->
@@ -75,7 +75,7 @@
                                                             <!--begin::Actions-->
                                                             <div class="my-lg-0 my-1">
                                                                 
-                                                                <a href="/attendant/view/profile" class="btn btn-sm btn-primary font-weight-bolder text-uppercase">Ver perfil</a>
+                                                                <a href="{{url('/attendant/profile')}}" class="btn btn-sm btn-success font-weight-bolder text-uppercase">Ver perfil</a>
                                                             </div>
                                                             <!--end::Actions-->
                                                         </div>
@@ -126,7 +126,7 @@
                                                         </span>
                                                         <div class="d-flex flex-column flex-lg-fill">
                                                             <span class="text-dark-75 font-weight-bolder font-size-sm">{{$DataAttendant['NotesPending']}} Notas pendientes</span>
-                                                            <a href="#" data-toggle="modal" data-target="#kt_select_modalSelect1" onclick="ListGrade(7)" class="text-primary font-weight-bolder">Ver</a>
+                                                            <a href="#" data-toggle="modal" data-target="#kt_select_modalSelect1" onclick="ListGrade(7)" class="text-warning font-weight-bolder">Ver</a>
                                                         </div>
                                                     </div>
                                                     <!--end: Item-->
@@ -137,7 +137,7 @@
                                                         </span>
                                                         <div class="d-flex flex-column">
                                                             <span class="text-dark-75 font-weight-bolder font-size-sm">{{$DataAttendant['NotesAproved']}} Notas aprobadas</span>
-                                                            <a href="{{url('attendant/notes/aproved')}}"  class="text-primary font-weight-bolder">Ver</a>
+                                                            <a href="{{url('attendant/notes/aproved')}}"  class="text-warning font-weight-bolder">Ver</a>
                                                         </div>
                                                     </div>
                                                     <!--end: Item-->

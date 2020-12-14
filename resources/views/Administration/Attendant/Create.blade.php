@@ -229,7 +229,7 @@
 												</div>
 												<div>
 													<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Registrar</button>
-													<button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>*
+													<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>*
 												</div>
 											</div>
 											<!--end::Wizard Actions-->
@@ -395,7 +395,7 @@ var KTWizard1 = function () {
 					confirmButtonText: "Si, Enviar!",
 					cancelButtonText: "No, Cancelar",
 					customClass: {
-						confirmButton: "btn font-weight-bold btn-primary",
+						confirmButton: "btn font-weight-bold btn-success",
 						cancelButton: "btn font-weight-bold btn-default"
 					}
 				}).then(function (result) {
@@ -408,7 +408,7 @@ var KTWizard1 = function () {
 							buttonsStyling: false,
 							confirmButtonText: "Ok, lo tengo!",
 							customClass: {
-								confirmButton: "btn font-weight-bold btn-primary",
+								confirmButton: "btn font-weight-bold btn-success",
 							}
 						});
 					}

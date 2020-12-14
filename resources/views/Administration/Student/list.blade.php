@@ -27,13 +27,15 @@
                         <!--end::Button-->
                         <!--begin::Dropdown-->
                         <div class="dropdown dropdown-inline">
-                            <button style="color:white;" type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="la la-download" style="color: white;"></i>Exportar</button>
+                            <button style="color:white;" type="button" class="btn btn-light-primary font-weight-bolder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="la la-download" style="color: white;"></i>Exportar datos</button>
                             @include("Administration.Base._exports")
                         </div>
                         <!--end::Dropdown-->
                     </div>
                 </div>
                 <div class="card-body">
+                    <div class="scroll scroll-pull" data-scroll="true" data-suppress-scroll-x="false" data-swipe-easing="false" style="height: 600px">
+                                        
                     <!--begin: Datatable-->
                     <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top:13px !important">
                         <thead>
@@ -60,6 +62,7 @@
                         </tbody>
                     </table>
                     <!--end: Datatable-->
+                    </div>
                 </div>
             </div>
             <!--end::Card-->
@@ -73,12 +76,14 @@
             "use strict";
             var KTDatatablesDataSourceHtml = function() {
                 var d = new Date();
-                var strDate =  d.getDate()+ "-" + (d.getMonth()+1) + "-" + d.getFullYear() + " " + d.getHours() + "-" + d.getMinutes();
+                var strDate =  d.getDate()+ "-" + (d.getMonth()+1) + "-" + d.getFullYear() ;
                 var initTable1 = function() {
                     var table = $('#kt_datatable');
                     // begin first table
                     table.DataTable({
-                        dom: 'Bfrtip',
+                        dom: 'Bfrltip',
+                        pageLength : 10,
+                        lengthMenu: [ 10, 25, 50, 75, 100 ],
                         buttons: [
                             {
                                 text: 'Exportar a excel',
@@ -97,16 +102,41 @@
                                 exportOptions: {
                                     columns: [ 0, 1, 2, 3, 4 , 5 ,6,7 ],
                                 },
-                                messageTop: 'Listado de alumnos'
+                                messageTop: 'Listado de alumnos'+strDate
                             },
+                         
                             {
                                 text: 'Exportar a PDF',
                                 extend: 'pdfHtml5',
                                 extension: '.pdf',
+                                orientation: 'landscape',
+                                pageSize: 'LEGAL',
+                                title: 'Listado de alumnos'+strDate,
+                                customize: function(doc) {
+                                    doc['styles'] = {
+                                        userTable: {
+                                            margin: [0, 15, 0, 15]
+                                        },
+                                        tableHeader: {
+                                            bold:!0,
+                                            fontSize:11,
+                                            color:'white',
+                                            fillColor:'#85AED1',
+                                            alignment:'center'
+                                        }
+                                    },
+                                   
+                                    doc.styles.title = {
+                                      color: 'white',
+                                      fontSize: '40',
+                                      background: '#ec7e35',
+                                      alignment: 'center'
+                                    }   
+                                  } ,
                                 exportOptions: {
-                                    columns: [ 0, 1, 2, 3, 4 , 5 ,6,7 ],
+                                    columns: [ 0, 1, @for($i= 2; $i<count($titles)+2;$i++){{$i}},@endfor ]
                                 },
-                                messageTop: 'Listado de alumnos'
+                                
                             }
                             
                         ],

@@ -20,7 +20,7 @@
                             <i class="flaticon2-favourite text-primary"></i>
                         </span>
                         <h3 class="card-label">
-                            Listado de cursos y notas de: {{$student->Names}} {{$student->LastNames}}
+                            Listado de cursos y notas de {{$student->Names}} {{$student->LastNames}} del grado  {{$grade->GradeNamePeriod()}}
                         </h3>
                     </div>
                     <div class="card-toolbar">
@@ -31,16 +31,16 @@
                 </div>
                 <div class="card-body">
                     <!--begin: Datatable-->
-                    <table class="table table-bordered table-hover table-checkable" style="margin-top:13px !important">
+                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top:13px !important">
                         <thead>
-                            <tr style="background:#cecece">
-                                <th rowspan="1"></th>
+                            <tr style="background:#85AED1" >
+                                <th rowspan="1" style="background:#fff" ></th>
                                 @foreach($titles as $t)
-                                    <th colspan="{{$t['No']}}"><center>{{$t['Activity']}}</center></th>
+                                    <th style="color:white;" colspan="{{$t['No']}}"><center>{{$t['Activity']}}</center></th>
                                 @endforeach
                             </tr>
-                            <tr style="background:#e5e5e5">
-                                <th>
+                            <tr >
+                                <th style="background:#85AED1;color:white;">
                                     <center>Cursos</center>
                                 </th>
                                 @foreach($titles as $title)
@@ -97,10 +97,83 @@
         <script type="text/javascript">
             "use strict";
             var KTDatatablesDataSourceHtml = function() {
+                var d = new Date();
+                var strDate =  d.getDate()+ "-" + (d.getMonth()+1) + "-" + d.getFullYear() + " " + d.getHours() + "-" + d.getMinutes();
+               
                 var initTable1 = function() {
                     var table = $('#kt_datatable');
                     // begin first table
                     table.DataTable({
+                        dom: 'Bfrltip',
+                        pageLength : 10,
+                        lengthMenu: [ 10, 25, 50, 75, 100 ],
+                        buttons: [
+                            {
+                                text: 'Exportar a excel',
+                                extend: 'excelHtml5',
+                                fieldSeparator: '\t',
+                               
+                                exportOptions: {
+                                    columns: [ 0, @for($i= 1; $i<=count($title['Test'])+1;$i++) {{$i}}, @endfor]
+                                },
+                                customize: function(xlsx) {
+                                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+                                    $('c[r=A1] t', sheet).text( 'Listado de notas / {{$grade->GradeNamePeriod()}}' );
+                                    $('row c[r^="C"]', sheet).attr( 's', '32' );
+                                    $('row c', sheet).attr('s', '25');
+                                    $('row:first c', sheet).attr( 's', '51' );
+                                    $('c[r=A2] t', sheet).attr( 's', '25' );
+                                    $('c[r=A2] t', sheet).css('background-color', 'Red');
+                                    $('row c[r*="2"]', sheet).attr('s', '32');
+                                    
+                                },
+                                title: 'NotasAlumnos-{{$grade->GradeNamePeriod()}} '+strDate,
+                            },
+                            {
+                                text: 'Exportar a csv',
+                                extend: 'csvHtml5',
+                                extension: '.csv',
+                                exportOptions: {
+                                    columns: [ 0, @for($i= 1; $i<=count($title['Test'])+1;$i++){{$i}},@endfor]
+                                },
+                                
+                            },
+                            {
+                                text: 'Exportar a PDF',
+                                extend: 'pdfHtml5',
+                                extension: '.pdf',
+                                orientation: 'landscape',
+                                pageSize: 'LEGAL',
+                                title: 'Notas Alumnos {{$grade->GradeNamePeriod()}} '+strDate,
+                                customize: function(doc) {
+                                    doc['styles'] = {
+                                        userTable: {
+                                            margin: [0, 15, 0, 15]
+                                        },
+                                        tableHeader: {
+                                            bold:!0,
+                                            fontSize:11,
+                                            color:'white',
+                                            fillColor:'#85AED1',
+                                            alignment:'center'
+                                        }
+                                    },
+                                   
+                                    doc.styles.title = {
+                                      color: 'white',
+                                      fontSize: '40',
+                                      background: '#ec7e35',
+                                      alignment: 'center'
+                                    }   
+                                  } ,
+                                exportOptions: {
+                                    columns: [ 0, 1, @for($i= 2; $i<count($titles)+2;$i++){{$i}},@endfor ]
+                                },
+                                
+                            }
+                            
+                        ],
                         responsive: true,
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"

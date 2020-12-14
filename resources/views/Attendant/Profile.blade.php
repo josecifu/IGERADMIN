@@ -4,10 +4,10 @@
     Perfil
     @stop
     @section('breadcrumb1')
-    Voluntario
+    Encargado de circulo
     @stop
     @section('breadcrumb2')
-    Información
+    Perfil
     @stop
     {{-- Page content --}}
     @section('content')
@@ -26,7 +26,7 @@
                             <div class="d-flex align-items-center">
                                 <div class="symbol symbol-60 symbol-xxl-100 mr-5 align-self-start align-self-xxl-center">
                                     @if(session()->get('Gender')=="Masculino")
-                                        <div class="symbol-label" style="background-image:url({{ asset ('assets/media/svg/avatars/Teacher-boy-1.svg')}})"></div>
+                                        <div class="symbol-label" style="background-image:url({{ asset ('assets/media/svg/avatars/Admin.svg')}})"></div>
                                     @else
                                     <div class="symbol-label" style="background-image:url({{ asset ('assets/media/svg/avatars/Teacher-girl-1.svg')}})"></div>
                                     @endif
@@ -34,7 +34,7 @@
                                 </div>
                                 <div>
                                     <a href="#" class="font-weight-bolder font-size-h5 text-dark-75 text-hover-primary">{{$data['Name']}} {{$data['LastNames']}}</a>
-                                    <div class="text-muted">Voluntario IGER</div>
+                                    <div class="text-muted">Encargado de circulo IGER</div>
                                 </div>
                             </div>
                             <!--end::User-->
@@ -254,7 +254,7 @@
                 }];
 
                 $.ajax({
-                    url:'/teacher/save/profile',
+                    url:'/attendant/profile/update',
                     type:'POST',
                     data: {"_token":"{{ csrf_token() }}","data":data},
                     dataType: "JSON",
@@ -272,7 +272,7 @@
                             type: "success"
                             }).then(function () {
                             var $url_path = '{!! url('/') !!}';
-                            window.location.href = $url_path+"/teacher/view/profile";
+                            window.location.href = $url_path+"/attendant/profile";
                             });
                         }//fin else 
                     },

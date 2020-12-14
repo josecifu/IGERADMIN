@@ -144,11 +144,11 @@
 														<!--begin::Wizard Actions-->
 														<div class="d-flex justify-content-between border-top mt-5 pt-10">
 															<div class="mr-2">
-																<button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev">Anterior</button>
+																<button type="button" class="btn btn-light-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-prev" style="color: white;">Anterior</button>
 															</div>
 															<div>
 																<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Actualizar</button>
-																<button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>
+																<button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>
 															</div>
 														</div>
 														<!--end::Wizard Actions-->
@@ -303,7 +303,7 @@
 						confirmButtonText: "Si, Enviar!",
 						cancelButtonText: "No, Cancelar",
 						customClass: {
-							confirmButton: "btn font-weight-bold btn-primary",
+							confirmButton: "btn font-weight-bold btn-success",
 							cancelButton: "btn font-weight-bold btn-default"
 						}
 					}).then(function (result) {
@@ -316,7 +316,7 @@
 								buttonsStyling: false,
 								confirmButtonText: "Ok, lo tengo!",
 								customClass: {
-									confirmButton: "btn font-weight-bold btn-primary",
+									confirmButton: "btn font-weight-bold btn-success",
 								}
 							});
 						}

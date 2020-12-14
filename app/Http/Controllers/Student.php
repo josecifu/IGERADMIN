@@ -219,6 +219,7 @@ class Student extends Controller
         $student = Person::find($id);
         $user = $student->User();
         $logs = logs::where(['User_Id'=>$user->name,'Type'=>'Login'])->orderby('created_at','DESC')->get();
+        $grade = grade::find($user->Asssign_Grade()->Grade_id)->GradeNamePeriod();
         foreach($logs as $log)
         {
             setlocale(LC_TIME, "spanish");
@@ -230,7 +231,7 @@ class Student extends Controller
             ];
             array_push($models,$l);
         }
-        return view('Administration/Student/assists',compact('models','titles','buttons','student'));
+        return view('Administration/Student/assists',compact('models','titles','buttons','student','grade'));
     }
 
 
@@ -638,7 +639,7 @@ class Student extends Controller
         $button = [
             "Name" => 'Añadir nuevo estudiante',
             "Link" => 'administration/student/create',
-            "Type" => "btn1"
+            "Type" => "add"
         ];
         array_push($buttons,$button);
         $button = [
@@ -648,7 +649,7 @@ class Student extends Controller
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Historial de registros',
+            "Name" => 'Historial de estudiantes',
             "Link" => 'administration/student/logs',
             "Type" => "btn1"
         ];
@@ -762,7 +763,7 @@ class Student extends Controller
             }
         }
         $studentgrade = $grade->GradeNamePeriod();
-        return view('Administration/Student/list_bygrade',compact('models','titles','buttons','studentgrade'));
+        return view('Administration/Student/list_bygrade',compact('models','titles','buttons','studentgrade','id'));
     }
 
     public function eliminated_students()
@@ -991,6 +992,7 @@ class Student extends Controller
             $log->User_ID = $responsible_user->name;
             $log->Description = "El estudiante ".$student->Names." ".$student->LastNames." ha sido asignado al grado ".$grade->GradeName();
             $log->Type = "Asignar";
+            $log->Period_id = $grade->Period()->id;
             $log->save();
             DB::commit();
         }
@@ -1147,6 +1149,7 @@ class Student extends Controller
         $log->User_ID = $responsible_user->name;
         $log->Description = "El estudiante ".$student->Names." ".$student->LastNames." ha sido asignado al grado ".$grade->GradeName();
         $log->Type = "Actualizar";
+        $log->Period_id = $grade->Period()->id;
         $log->save();
         return response()->json(["Accion completada"]);
     }
@@ -1172,46 +1175,59 @@ class Student extends Controller
             $tests = [];
             foreach($activities as $activity)
             {
-                foreach($activity->Tests()->where('Year',$year) as $test)
+                if(count($activity->Tests()->where('Year',$year))>0)
                 {
-                    $state = [];
-                    $question = Question::where('Test_id',$test->id)->first();
-                    $check = Note::where(['Test_id'=>$test->id,'Student_id'=>$student->Asssign_Grade()->id,'State'=>'Approved','Year'=>$year])->first();
-                    if(($question == null) && ($check != null))
+                    foreach($activity->Tests()->where('Year',$year) as $test)
                     {
-                        $state = "written";
+                        $state = [];
+                        $question = Question::where('Test_id',$test->id)->first();
+                        $check = Note::where(['Test_id'=>$test->id,'Student_id'=>$student->Asssign_Grade()->id,'State'=>'Approved','Year'=>$year])->first();
+                        if(($question == null) && ($check != null))
+                        {
+                            $state = "written";
+                        }
+                        if($question != null)
+                        {
+                            $answer = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$student->Asssign_Grade()->id])->first();
+                            if($answer == null)
+                            {
+                                $state = "start";
+                            }
+                            $option = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$student->Asssign_Grade()->id,'State'=>'Qualified'])->first();
+                            if(($answer == null) && ($check != null))
+                            {
+                                $state = "none";
+                            }
+                            if(($answer != null) && ($option == null))
+                            {
+                                $state = "qualify";
+                            }
+                            if(($option != null) && ($check != null))
+                            {
+                                $state = "approved";
+                            }
+                        }
+                        $notes = Note::where(['Test_id'=>$test->id,'Student_id'=>$student->Asssign_Grade()->id,'State'=>'Approved','Year'=>$year])->get('Score');
+                        $values =[
+                            'Id' => $test->id,
+                            'state' => $state,
+                            'NoQuestions' => $test->NoQuestions(),
+                            'notes' => $notes,
+                        ];
+                        array_push($tests,$values);
                     }
-                    if($question != null)
-                    {
-                        $answer = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$student->Asssign_Grade()->id])->first();
-                        if($answer == null)
-                        {
-                            $state = "start";
-                        }
-                        $option = Asign_answer_test_student::where(['Question_id'=>$question->id,'Studen_id'=>$student->Asssign_Grade()->id,'State'=>'Qualified'])->first();
-                        if(($answer == null) && ($check != null))
-                        {
-                            $state = "none";
-                        }
-                        if(($answer != null) && ($option == null))
-                        {
-                            $state = "qualify";
-                        }
-                        if(($option != null) && ($check != null))
-                        {
-                            $state = "approved";
-                        }
-                    }
-                    $notes = Note::where(['Test_id'=>$test->id,'Student_id'=>$student->Asssign_Grade()->id,'State'=>'Approved','Year'=>$year])->get('Score');
+                }
+                else{
                     $values =[
-                        'Id' => $test->id,
-                        'state' => $state,
-                        'NoQuestions' => $test->NoQuestions(),
-                        'notes' => $notes,
+                        'Id' => 0,
+                        'state' => 0,
+                        'NoQuestions' => 0,
+                        'notes' =>"0",
                     ];
                     array_push($tests,$values);
                 }
             }
+            
             $query = [
                 'id' => $student->person()->id,
                 'assign' => $student->Asssign_Grade()->id,
@@ -1221,7 +1237,7 @@ class Student extends Controller
             ];
             array_push($models,$query);
         }
-        $grade = grade::find($course->Grade_id)->GradeName();
+        $grade = grade::find($course->Grade_id)->GradeNamePeriod();
         return view('Administration/Student/test_list',compact('models','titles','course','grade'));
     }
 
@@ -1275,38 +1291,45 @@ class Student extends Controller
     public function score($id)
     {
         $models = [];
-        $titles = [
-            'Nombres',
-            'Apellidos',
-            'Última conexión',
-            'Acciones'
-        ];
         $grade = grade::find($id);
-        foreach ($grade->Students() as $user)
-        {
-            $conection = logs::where(['Type'=>'Login','User_Id'=>$user->name])->orderby('created_at','DESC')->take(1)->first();
-            if($conection)
+        $courses =$grade->courses();
+        $titles=[];
+        
+            foreach ($grade->Students() as $user)
             {
-                setlocale(LC_TIME, "spanish");
-                $newDate = date("d-m-Y", strtotime($conection->created_at));    
-                $mes = strftime("%d de %B del %Y", strtotime($newDate));
-                $conection= $mes." a las ".date("H:m A", strtotime($conection->created_at));
+                $notes =[];
+                
+                foreach($courses as $course)
+                {
+                    if(!in_array($course->Name,$titles))
+                    {
+                        array_push($titles,$course->Name);
+                    }
+                    $total = 0;
+                    $student = Person::find($user->Person_id);
+                    $assign = Assign_student_grade::where(['user_id'=>$user->id,"Year"=>date('Y')])->first();
+                    $ns = Note::where(['Course_id'=>$course->id,"Student_id"=>$assign->id,"State"=>"Approved","Year"=>date('Y')])->get();
+                    foreach($ns as $note)
+                    {
+                        $total = intval($total)+intval($note->Score);
+                    }
+                    array_push($notes,$total);
+                }
+                $query = [
+                    'id' => $student->id,
+                    'names' => $student->Names.$student->LastNames,
+                    'assign' => $user->Asssign_Grade()->id,
+                    'notes' => $notes,
+                ];
+                array_push($models,$query);
             }
-            $student = Person::find($user->Person_id);
-            $query = [
-                'id' => $student->id,
-                'name' => $student->Names,
-                'lastname' => $student->LastNames,
-                'assign' => $user->Asssign_Grade()->id,
-                'conexion' => $conection ?? 'El usuario no se ha conectado'
-            ];
-            array_push($models,$query);
-        }
-        $grade = $grade->GradeName();
+            $grade = $grade->GradeNamePeriod();
+        
+            
         return view('Administration/Student/score',compact('models','titles','grade'));
     }
 
-    public function course_scores($id)
+    public function course_scores(Request $request,$id)
     {
         $assign = Assign_student_grade::find($id);
         $user = User::find($assign->user_id);
@@ -1334,7 +1357,9 @@ class Student extends Controller
             foreach ($courses as $key=> $course)
             {
                 $asignactivity = Assign_activity::where(['Name'=>$period,'Course_id'=>$course->id])->first();
-                $tests = test::where('Activity_id',$asignactivity->id)->get();
+                $tests =[];
+                if($asignactivity)
+                    $tests = test::where('Activity_id',$asignactivity->id)->get();
                 if(count($tests)>0)
                 {
                     foreach ($tests as $test)
@@ -1366,9 +1391,12 @@ class Student extends Controller
                     $notes =[]; 
                     $id = $request->session()->get('User_id');
                     $year = date('Y');
-                    $assign = Assign_student_grade::where(['user_id'=>$id,'Year'=>$year])->first();
+                    $assign = Assign_student_grade::where(['user_id'=>$assign->user_id,'Year'=>$year])->first();
                     $asignactivity = Assign_activity::where(['Name'=>$value['Activity'],'Course_id'=>$course->id])->first();
-                    $testInfo = test::where(['Activity_id'=>$asignactivity->id,'Title'=> $test])->first();
+                    $testInfo = null;
+                    if($asignactivity)
+                        $testInfo = test::where(['Activity_id'=>$asignactivity->id,'Title'=> $test])->first();
+                    
                     if($testInfo!=null)
                     {
                         $note = Note::where(['Test_id'=>$testInfo->id,'Course_id'=>$course->id,"Student_id"=>$assign->id,"State"=>"Approved"])->first();

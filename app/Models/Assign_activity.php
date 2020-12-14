@@ -12,6 +12,6 @@ class Assign_activity extends Model
         return $this->hasMany('App\Models\test','Activity_id','id')->get();
     }
     public function Course(){
-        return $this->hasOne(Course::class,'Course_id','id')->first();
+        return $this->hasOne(Course::class,'id','Course_id')->first();
     }
 }
