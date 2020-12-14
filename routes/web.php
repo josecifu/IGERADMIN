@@ -92,9 +92,9 @@ Route::group([ 'prefix' => 'attendant','middleware' => 'auth'], function(){
 	Route::get('/activity/logs', $route.'\Attendant@ActivitiesLogs')->name('ActivitiesLogsAttendant');
 });
 Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
+	$route = "App\Http\Controllers";
 	Route::get('/profile',$route.'\Attendant@ProfileAttendant')->name('ProfileAttendant');
 	Route::post('/profile/update', $route.'\Attendant@UpdateProfileAttendant')->name('UpdateProfileAttendant');
-	$route = "App\Http\Controllers";
 	Route::get('/test/{model}', $route.'\Administration@test')->name('test');
 	Route::get('/load/periods', $route.'\Administration@LoadPeriods')->name('LoadPeriods');
 	Route::post('/load/levels', $route.'\Administration@LoadLevels')->name('LoadLevels');
