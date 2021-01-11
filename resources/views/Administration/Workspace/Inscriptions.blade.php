@@ -129,6 +129,9 @@
                             
                         ],
                     responsive: true,
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+                    },
                     pageLength: 25,
                     order: [[2, 'asc']],
                     drawCallback: function(settings) {
@@ -153,7 +156,7 @@
                         },
                         {
                             targets: -1,
-                            title: 'Actions',
+                            title: 'Actiones',
                             orderable: false,
                             render: function(data, type, full, meta) {
                                 return '\

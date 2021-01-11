@@ -181,7 +181,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 			#Encargados de circulo
 			Route::get('/list', $route.'\Administration@AttendantList')->name('AttendantList');
 			Route::get('/create', $route.'\Administration@AttendantCreate')->name('AttendantCreate');
-			Route::get('/notes/{model}', $route.'\Administration@es')->name('es');
+			Route::get('/notes/{model}', $route.'\Administration@AttendantNotes')->name('notesAdministration');
 			Route::get('/assign/{model}', $route.'\Administration@AttendantAssign')->name('AttendantAssign');
 			Route::get('/deletes', $route.'\Administration@AttendantDeletes')->name('AttendantDeletes');
 			Route::post('/save', $route.'\Administration@AttendantSave')->name('AttendantSave');
