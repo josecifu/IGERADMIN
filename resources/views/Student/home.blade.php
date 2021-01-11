@@ -1,4 +1,4 @@
-@extends('Administration.Base/BaseStudent')
+@extends('Administration.Base/BaseAttendant')
     {{-- Page title --}}
     @section('title')
     Inicio
@@ -77,7 +77,7 @@
                             <div class="card-spacer mt-n25">
                                 <!--begin::Row-->
                                 <div class="row m-0">
-                                    <a href="#">
+                                    <a href="{{url('student/score/list')}}">
                                     <div class="col bg-light-warning px-6 py-8 rounded-xl mr-7 mb-7">
                                         <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
                                             <!--begin::Svg Icon | path:assets/media/svg/icons/Media/Equalizer.svg-->
@@ -95,7 +95,7 @@
                                         <a href="{{url('student/score/list')}}" class="text-warning font-weight-bold font-size-h6">Visualizar notas</a>
                                     </div>
                                     </a>
-                                    <a href="#">
+                                    <a href="{{url('student/profile')}}">
                                     <div class="col bg-light-warning px-6 py-8 rounded-xl mb-7" onclick="hola();">
                                         <span class="svg-icon svg-icon-3x svg-icon-warning d-block my-2">
                                             <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Add-user.svg-->
@@ -108,14 +108,14 @@
                                             </svg>
                                             <!--end::Svg Icon-->
                                         </span>
-                                        <a href="#" class="text-warning font-weight-bold font-size-h6 mt-2">Actualizar mi información</a>
+                                        <a href="{{url('student/profile')}}" class="text-warning font-weight-bold font-size-h6 mt-2">Actualizar mi información</a>
                                     </div>
                                     </a>
                                 </div>
                                 <!--end::Row-->
                                 <!--begin::Row-->
                                 <div class="row m-0">
-                                    <a href="#">
+                                    <a href="{{url('student/test/list')}}#">
                                     <div class="col bg-light-danger px-6 py-8 rounded-xl mr-7">
                                         <span class="svg-icon svg-icon-3x svg-icon-danger d-block my-2">
                                             <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Layers.svg-->
@@ -128,10 +128,10 @@
                                             </svg>
                                             <!--end::Svg Icon-->
                                         </span>
-                                        <a href="/student/test/list" class="text-danger font-weight-bold font-size-h6 mt-2">Visualizar todos los examenes</a>
+                                        <a href="{{url('student/test/list')}}" class="text-danger font-weight-bold font-size-h6 mt-2">Visualizar todos los examenes</a>
                                     </div>
                                     </a>
-                                    <a href="#">
+                                    <a href="{{url('student/course/list')}}">
                                     <div class="col bg-light-danger px-6 py-8 rounded-xl">
                                         <span class="svg-icon svg-icon-3x svg-icon-danger d-block my-2">
                                             <!--begin::Svg Icon | path:assets/media/svg/icons/Communication/Urgent-mail.svg-->

@@ -1710,4 +1710,105 @@ class Administration extends Controller
         }
         return false;
     }
+    public function UpdateProfileAdministration(Request $request)
+    {
+        $user = User::find($request->session()->get('User_id')); 
+        $person = Person::find($user->Person_id);
+        $data = $request->data[0];
+        $telefono = $data['Telefono'];
+        $correo = $data['Email'];
+        $Name = $data['Name'];
+        $LastName = $data['LastName'];
+        if($telefono == "" || $correo ==""){
+            return response()->json(["Error"=>"Los campos no pueden estar vacios"]);
+        }
+        $user->email = $correo;
+        $user->save();
+        $person->Phone = $telefono;
+        $person->Names = $data['Name'];
+        $person->LastNames =$data['LastName'];
+        $person->save();
+        return response()->json(["Accion completada"]);
+    }
+    public function ProfileAdministration(Request $request)
+    {
+        $Titles = ['Titulo','Contenido'];
+        $user = User::find($request->session()->get('User_id')); 
+        $person = Person::find($user->Person_id);
+        $period = period::where('State','Active')->get();
+        $info = [
+            'titulo' => 'Circulos de estudio creados',
+            'Curso' => count($period),
+        ];
+        $data = [
+            'Email' => $user->email,
+            'Phone' => $person->Phone,
+            'Name' => $person->Names,
+            'LastNames' => $person->LastNames,
+            'User' => $user->name,
+            
+        ];
+        return view('Administration/Profile',compact('info','data','Titles'));
+    }
+    public function ActivitiesLogs(Request $request)
+    {
+        $models=[];
+        $titles = [
+            'No',
+            'Responsable',
+            'Actividad',
+            'Tipo',
+            'Fecha y hora'
+        ];
+        $id2 = User::find($request->session()->get('User_id'));
+        $logs = logs::where(['User_Id'=>$id2->name])->get();
+        foreach ($logs as $log)
+        {
+            setlocale(LC_TIME, "spanish");
+            $newDate = date("d-m-Y", strtotime($log->created_at));	
+            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $type = "";
+            $color = "Success";
+            if($log->Type=="Create")
+            {
+                $type = "Nuevo registro";
+                $color = "success";
+            }
+            if($log->Type=="Assign")
+            {
+                $type = "Se asigno registro";
+                $color = "warning";
+            }
+            if($log->Type=="Update")
+            {
+                $type = "Se asigno registro";
+                $color = "secundary";
+            }
+            if($log->Type=="Delete")
+            {
+                $type = "Se elimino registro";
+                $color = "danger";
+            }
+            if($log->Type=="Login")
+            {
+                $type = "Ha iniciado sesión";
+                $color = "primary";
+            }
+            if($log->Type=="Activar")
+            {
+                $type = "Se ha activado";
+                $color = "primary";
+            }
+            $data = [
+                'id' => $log->id,
+                'responsible' => $log->User_Id,
+                'activity' => $log->Description,
+                'type' => $type,
+                'color' => $color,
+                'datatime' => $mes." a las ".date("g:i A", strtotime($log->created_at))
+            ];
+            array_push($models,$data);
+        }
+        return view('Administration/Activity',compact('models','titles'));
+    }
 }

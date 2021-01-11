@@ -44,10 +44,14 @@ class Attendant extends Controller
         if($data)
         {
             foreach ($data->PeriodsAttendantData() as $key => $period) {
+                
                 foreach ($period->Grades() as $grade) {
+                   
                    foreach($grade->Courses() as $course)
                    {
+                    
                        $notes = Note::where(['Course_id'=>$course->id,'State'=>"Qualified"])->first();
+                       
                        if($notes!=null)
                        {
                         $nPending++;
@@ -66,7 +70,7 @@ class Attendant extends Controller
                        }
                        
                        $notes = Note::where(['Course_id'=>$course->id,'State'=>"Approved"])->first();
-  
+                       
                        if($notes!=null)
                        {
                             $nAproved++;

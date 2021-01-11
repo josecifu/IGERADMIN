@@ -46,7 +46,7 @@ Route::group([ 'prefix' => 'student','middleware' => 'auth'], function(){
 	Route::get('/test/review/{model}/{assign}',$route.'\Student@test_review')->name('ViewTestStudent');
 	Route::get('/profile/edit/{model}',$route.'\Student@edit_profile')->name('EditProfileStudent');
 	Route::post('/profile/update', $route.'\Student@update_profile')->name('UpdateProfileStudent');
-	
+	Route::get('/activity/logs', $route.'\Student@ActivitiesLogs')->name('ActivitiesLogsStudent');
 });
 Route::group([ 'prefix' => 'teacher','middleware' => 'auth'], function(){									// =======================================
 	$route = "App\Http\Controllers";
@@ -93,14 +93,15 @@ Route::group([ 'prefix' => 'attendant','middleware' => 'auth'], function(){
 });
 Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 	$route = "App\Http\Controllers";
-	Route::get('/profile',$route.'\Attendant@ProfileAttendant')->name('ProfileAttendant');
-	Route::post('/profile/update', $route.'\Attendant@UpdateProfileAttendant')->name('UpdateProfileAttendant');
+	Route::get('/profile',$route.'\Administration@ProfileAdministration')->name('ProfileAdministration');
+	Route::post('/profile/update', $route.'\Administration@UpdateProfileAdministration')->name('UpdateProfileAdministration');
 	Route::get('/test/{model}', $route.'\Administration@test')->name('test');
 	Route::get('/load/periods', $route.'\Administration@LoadPeriods')->name('LoadPeriods');
 	Route::post('/load/levels', $route.'\Administration@LoadLevels')->name('LoadLevels');
 	Route::post('/load/grades', $route.'\Administration@LoadGrades')->name('LoadGrades');
 	Route::post('/load/courses', $route.'\Administration@LoadCourses')->name('LoadCourses');
-	
+	Route::get('/activity/logs', $route.'\Administration@ActivitiesLogs')->name('ActivitiesLogsAdministration');
+
 	#Inicio
 	Route::group([ 'prefix' => 'home'], function(){
 		$route = "App\Http\Controllers";

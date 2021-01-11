@@ -414,7 +414,7 @@
 										<div class="navi navi-spacer-x-0 pt-5">
 											<!--begin::Item-->
 											@if(session()->get('rol_Name')=="Administrador")
-											<a href="custom/apps/user/profile-1/personal-information.html" class="navi-item px-8">
+											<a href="{{url('administration/profile')}}" class="navi-item px-8">
 											@elseif(session()->get('rol_Name')=="Estudiante")
 											<a href="{{url('student/profile')}}" class="navi-item px-8">
 											@elseif(session()->get('rol_Name')=="Voluntario")
@@ -437,9 +437,9 @@
 										
 											<!--begin::Item-->
 											@if(session()->get('rol_Name')=="Administrador")
-											<a href="custom/apps/user/profile-1/personal-information.html" class="navi-item px-8">
+											<a href="{{url('administration/activity/logs')}}" class="navi-item px-8">
 											@elseif(session()->get('rol_Name')=="Estudiante")
-											<a href="{{url('student/profile')}}" class="navi-item px-8">
+											<a href="{{url('student/activity/logs')}}" class="navi-item px-8">
 											@elseif(session()->get('rol_Name')=="Voluntario")
 											<a href="{{url('teacher/activity/logs')}}" class="navi-item px-8">
 											@elseif(session()->get('rol_Name')=="Encargado de circulo")

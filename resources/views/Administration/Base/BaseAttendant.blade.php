@@ -666,7 +666,7 @@
 					if(Id>0)
 					{
 						var $url_path = '{!! url('/') !!}';
-                    	window.location.href = $url_path+"/attendant/home/workspace/"+Id;
+                    	window.location.href = $url_path+"/attendant/home/workspace/list/"+Id;
 					}
 					
 				}

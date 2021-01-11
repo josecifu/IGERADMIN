@@ -192,7 +192,7 @@ class MenuSeeder extends Seeder
             'Name' => 'Espacio de trabajo',
             'State' => '1',
             'Url' => 'student/home/workspace',  //26
-            'menu_id' => '26'          
+            'menu_id' => '24'          
         ]); 
         DB::table('menus')->insert([
             'Name' => 'Notas', //27

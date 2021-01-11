@@ -1,13 +1,13 @@
-@extends('Administration.Base/BaseStudent')
+@extends('Administration.Base/Base')
 {{-- Page title --}}
     @section('title')
     Perfil
     @stop
     @section('breadcrumb1')
-    Voluntario
+    Administrador
     @stop
     @section('breadcrumb2')
-    Información
+    Perfil
     @stop
     {{-- Page content --}}
     @section('content')
@@ -26,15 +26,15 @@
                             <div class="d-flex align-items-center">
                                 <div class="symbol symbol-60 symbol-xxl-100 mr-5 align-self-start align-self-xxl-center">
                                     @if(session()->get('Gender')=="Masculino")
-                                        <div class="symbol-label" style="background-image:url({{ asset ('assets/media/svg/avatars/001-boy.svg')}})"></div>
+                                        <div class="symbol-label" style="background-image:url({{ asset ('assets/media/svg/avatars/Admin.svg')}})"></div>
                                     @else
-                                    <div class="symbol-label" style="background-image:url({{ asset ('assets/media/svg/avatars/002-girl.svg')}})"></div>
+                                    <div class="symbol-label" style="background-image:url({{ asset ('assets/media/svg/avatars/Admin.svg')}})"></div>
                                     @endif
                                     <i class="symbol-badge bg-success"></i>
                                 </div>
                                 <div>
                                     <a href="#" class="font-weight-bolder font-size-h5 text-dark-75 text-hover-primary">{{$data['Name']}} {{$data['LastNames']}}</a>
-                                    <div class="text-muted">Alumno de IGER</div>
+                                    <div class="text-muted">Administrador IGER</div>
                                 </div>
                             </div>
                             <!--end::User-->
@@ -128,11 +128,11 @@
                                                         <td>{{$info['titulo']}}</td>
                                                         <td>
                                                             <ul>
-                                                           
+                                                            
                                                                 <li>
-                                                                    {{$info['grado']}}
+                                                                    {{$info['Curso']}}
                                                                 </li>
-                                                           
+                                                            
                                                             </ul>
                                                         </td>
                                                     </tr>
@@ -153,7 +153,7 @@
                                             </div>
                                             <div class="card-toolbar">
                                                 <button onclick="crearDatos();" class="btn btn-success mr-2">Guardar Cambios</button>
-                                                <button type="reset" class="btn btn-secondary">Cancelar</button>
+                                                
                                             </div>
                                         </div>
                                         <!--end::Header-->
@@ -164,19 +164,19 @@
                                                 <div class="row">
                                                     <label class="col-xl-3"></label>
                                                     <div class="col-lg-9 col-xl-6">
-                                                        <h5 class="font-weight-bold mb-6">Información del estudiante</h5>
+                                                        <h5 class="font-weight-bold mb-6">Información voluntario</h5>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-xl-3 col-lg-3 col-form-label">Nombres</label>
                                                     <div class="col-lg-9 col-xl-6">
-                                                        <input disabled class="form-control form-control-lg form-control-solid" type="text" value="{{$data['Name']}}" />
+                                                        <input class="form-control form-control-lg form-control-solid" id="Name" type="text" value="{{$data['Name']}}" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-xl-3 col-lg-3 col-form-label">Apellidos</label>
                                                     <div class="col-lg-9 col-xl-6">
-                                                        <input disabled class="form-control form-control-lg form-control-solid" type="text" value="{{$data['LastNames']}}" />
+                                                        <input  class="form-control form-control-lg form-control-solid" id="LastName" type="text" value="{{$data['LastNames']}}" />
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -248,13 +248,17 @@
             {
                 var TelefonoPersona = $('#PhoneVol').val();
                 var EmailPersona = $('#EmailVol').val();
+                var Name = $('#Name').val();
+                var LastName = $('#LastName').val();
                 var data = [{
                     Telefono: TelefonoPersona,
                     Email: EmailPersona,
+                    Name:Name,
+                    LastName:LastName,
                 }];
 
                 $.ajax({
-                    url:'/student/profile/update',
+                    url:'/administration/profile/update',
                     type:'POST',
                     data: {"_token":"{{ csrf_token() }}","data":data},
                     dataType: "JSON",
@@ -272,7 +276,7 @@
                             type: "success"
                             }).then(function () {
                             var $url_path = '{!! url('/') !!}';
-                            window.location.href = $url_path+"/student/profile";
+                            window.location.href = $url_path+"/administration/profile";
                             });
                         }//fin else 
                     },
