@@ -112,7 +112,13 @@
                                         <div class="card-body">
                                             <!--begin: Datatable-->
                                             <div class="card-header py-3">
-                                            <h4>Detalles</h4>
+                                                <div class="card-title align-items-start flex-column">
+                                                 <h4>Detalles</h4>
+                                                </div>
+                                            <div class="card-toolbar">
+                                                <button onclick="vermanual();" class="btn btn-success mr-2">Ver manual de usuario</button>
+                                                
+                                            </div>
                                             </div>
                                             
                                             <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
