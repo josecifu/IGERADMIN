@@ -74,7 +74,6 @@ Route::group([ 'prefix' => 'teacher','middleware' => 'auth'], function(){							
 	Route::get('/send/state/test/{model}', $route.'\Teacher@SendQualify')->name('TeacherSendQualify');
 	Route::get('/test/score/{model}', $route.'\Teacher@TestScore')->name('TestScore');
 	Route::post('/save/test', $route.'\Teacher@saveExam')->name('TeachersaveExam');
-	Route::get('/edit/exam/{model}/{test}',$route.'\Teacher@editExam')->name('TeacherEditExam');
 	Route::post('/save/score/physical', $route.'\Teacher@SaveScorePhysic')->name('SaveScorePhysic');
 	Route::get('/activity/logs', $route.'\Teacher@ActivitiesLogs')->name('ActivitiesLogs');
 	
