@@ -939,7 +939,11 @@ class Teacher extends Controller
         }
         
         $grado = grade::find($course->Grade_id)->GradeName();
-        $Nombre = $vol->Names .' '.$vol->LastNames;
+        $Nombre =" ";
+        if($vol!=null)
+        {
+            $Nombre = $vol->Names .' '.$vol->LastNames;
+        }
         if (session()->get('rol_Name')=="Voluntario") {
             return view('Teacher/ViewTests',compact('Titles','buttons','Nombre','course','grado','Models'));
         } else {

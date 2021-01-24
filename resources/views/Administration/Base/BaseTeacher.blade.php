@@ -166,6 +166,15 @@
 																	</span>
 																</a>
 															</li>
+															@elseif ($button['Type']=='btncheck')
+															<li class="navi-item">
+																<a href="javascript:;" onclick="checkinfo('{{ url($button['Link'])}}');" class="navi-link">
+																	<span class="navi-text">
+																		<span class="btn btn-success label label-xl label-inline"  style="height:100%; width: 100%">{{$button['Name']}}</span>
+																	</span>
+																</a>
+															</li>
+														
 															@endif
 														@endforeach
 													
