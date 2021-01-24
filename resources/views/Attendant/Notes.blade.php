@@ -43,49 +43,7 @@
                                             @endisset
                                         </div>
                                         <div class="card-toolbar">
-                                            <!--begin::Dropdown-->
-                                            <div class="dropdown dropdown-inline mr-2">
-                                                <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white">
-                                                <i class="la la-download" style="color: white"></i>Exportar</button>
-                                                <!--begin::Dropdown Menu-->
-                                                <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                                                    <ul class="nav flex-column nav-hover">
-                                                        <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opcion:</li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-print"></i>
-                                                                <span class="nav-text">Imprimir</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-copy"></i>
-                                                                <span class="nav-text">Copiar</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-file-excel-o"></i>
-                                                                <span class="nav-text">Excel</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-file-text-o"></i>
-                                                                <span class="nav-text">CSV</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-file-pdf-o"></i>
-                                                                <span class="nav-text">PDF</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <!--end::Dropdown Menu-->
-                                            </div>
-                                            <!--end::Dropdown-->
+                                           
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -192,20 +150,84 @@
            
             "use strict";
             var KTDatatablesDataSourceHtml = function() {
-
+                var d = new Date();
+                var strDate =  d.getDate()+ "-" + (d.getMonth()+1) + "-" + d.getFullYear();
                 var initTable1 = function() {
                     var table = $('#kt_datatable');
 
                     // begin first table
                     table.DataTable({
+                        dom: 'Brfltip',
+                        buttons: [
+                            {
+                                text: 'Exportar a excel',
+                                extend: 'excelHtml5',
+                                fieldSeparator: '\t',
+                               
+                                exportOptions: {
+                                    columns: [ 0,1,2 ],
+                                },
+                                customize: function(xlsx) {
+                                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+                                    $('c[r=A1] t', sheet).text( 'Notas Circulo ' );
+                                    $('row c[r^="C"]', sheet).attr( 's', '32' );
+                                    $('row c', sheet).attr('s', '25');
+                                    $('row:first c', sheet).attr( 's', '51' );
+                                    $('c[r=A2] t', sheet).attr( 's', '25' );
+                                    $('c[r=A2] t', sheet).css('background-color', 'Red');
+                                    $('row c[r*="2"]', sheet).attr('s', '32');
+                                    
+                                },
+                                title: 'NotasCirculo-'+strDate,
+                            },
+                            {
+                                text: 'Exportar a csv',
+                                extend: 'csvHtml5',
+                                extension: '.csv',
+                                exportOptions: {
+                                    columns: [ 0,1,2,3 ],
+                                },
+                                title: 'Notas Circulo -'+strDate
+                            },
+                            {
+                                text: 'Exportar a PDF',
+                                extend: 'pdfHtml5',
+                                extension: '.pdf',
+                                orientation: 'landscape',
+                                pageSize: 'LEGAL',
+                                exportOptions: {
+                                    columns: [ 0,1,2,3 ],
+                                },
+                                title: 'Notas Circulo -'+strDate,
+                                customize: function(doc) {
+                                    doc['styles'] = {
+                                        userTable: {
+                                            margin: [0, 15, 0, 15]
+                                        },
+                                        tableHeader: {
+                                            bold:!0,
+                                            fontSize:11,
+                                            color:'white',
+                                            fillColor:'#85AED1',
+                                            alignment:'center'
+                                        }
+                                    },
+                                  
+                                    doc.styles.title = {
+                                      color: 'white',
+                                      fontSize: '40',
+                                      background: '#ec7e35',
+                                      alignment: 'center'
+                                    }   
+                                  } ,
+                            }
+                            
+                        ],
                         responsive: true,
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                         },
-                        
-                           
-                          
-                        ],
                     });
 
                 };

@@ -1,4 +1,4 @@
-@extends('Administration.Base/Base')
+@extends('Administration.Base/BaseAttendant')
 {{-- Page title --}}
     @section('title')
     Inicio
@@ -138,9 +138,9 @@
 																</div>
 																<!--eng::Container-->
 																<!--begin::Footer-->
-																<div class="d-flex flex-center" id="kt_sticky_toolbar_chat_toggler_3" data-toggle="tooltip" title="" data-placement="top" data-original-title="Ver notas del curso">
+																{{--<div class="d-flex flex-center" id="kt_sticky_toolbar_chat_toggler_3" data-toggle="tooltip" title="" data-placement="top" data-original-title="Ver notas del curso">
 																	<button class="btn btn-success font-weight-bolder font-size-sm py-3 px-14" onclick="viewNotes();">Notas del curso</button>
-																</div>
+																</div>--}}
 																<!--end::Footer-->
 															</div>
 															<!--end::Wrapper-->
@@ -265,7 +265,7 @@
 																						<span class="text-muted font-weight-bold d-block font-size-sm">Fecha de creacion</span>
 																					</td>
 																					<td class="text-right pr-0">
-																						<a href="{{url('administration/teacher/workspace/view/'.$information['id'])}}"  class="btn btn-icon btn-light btn-sm">
+																						<a href="{{url('attendant/home/workspace/view/'.$information['id'])}}"  class="btn btn-icon btn-light btn-sm">
 																							<span class="svg-icon svg-icon-md svg-icon-success">
 																								<!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg-->
 																								<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">

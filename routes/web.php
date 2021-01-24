@@ -36,6 +36,7 @@ Route::group([ 'prefix' => 'student','middleware' => 'auth'], function(){
 	Route::get('/profile',$route.'\Student@Profile')->name('ProfileStudent');
 	Route::get('/home/dashboard',$route.'\Student@dashboard')->name('StudentDashboard');
 	Route::get('/home/workspace',$route.'\Student@workspace')->name('StudentWorkspace');
+	Route::get('/home/workspace/view/{model}',$route.'\Student@workspaceview')->name('Studentworkspaceview');
 	Route::get('/test/list',$route.'\Student@all_tests')->name('StudentAllTest');
 	Route::get('/test/view',$route.'\Student@student_test_list')->name('TestStudentView');
 	Route::get('/test/view/questions/{model}',$route.'\Student@test_questions')->name('TestQuestions');
@@ -45,12 +46,13 @@ Route::group([ 'prefix' => 'student','middleware' => 'auth'], function(){
 	Route::get('/test/review/{model}/{assign}',$route.'\Student@test_review')->name('ViewTestStudent');
 	Route::get('/profile/edit/{model}',$route.'\Student@edit_profile')->name('EditProfileStudent');
 	Route::post('/profile/update', $route.'\Student@update_profile')->name('UpdateProfileStudent');
-	
+	Route::get('/activity/logs', $route.'\Student@ActivitiesLogs')->name('ActivitiesLogsStudent');
 });
 Route::group([ 'prefix' => 'teacher','middleware' => 'auth'], function(){									// =======================================
 	$route = "App\Http\Controllers";
 	Route::get('/home/dashboard',$route.'\Teacher@dashboard')->name('TeacherDashboard') ;
 	Route::get('/home/workspace/{model}',$route.'\Teacher@workspaceT')->name('Teacherworkspace');
+	Route::get('/home/workspace/view/{model}',$route.'\Teacher@workspaceview')->name('Teacherworkspaceview');
 	Route::get('/view/profile',$route.'\Teacher@viewProfile')->name('TeacherProfile');
 	Route::post('/save/profile',$route.'\Teacher@SaveviewProfile')->name('TeachersaveProfile');
 	Route::get('/score/list/{model}',$route.'\Teacher@score')->name('TeacherScore');
@@ -74,27 +76,33 @@ Route::group([ 'prefix' => 'teacher','middleware' => 'auth'], function(){							
 	Route::post('/save/test', $route.'\Teacher@saveExam')->name('TeachersaveExam');
 	Route::get('/edit/exam/{model}/{test}',$route.'\Teacher@editExam')->name('TeacherEditExam');
 	Route::post('/save/score/physical', $route.'\Teacher@SaveScorePhysic')->name('SaveScorePhysic');
+	Route::get('/activity/logs', $route.'\Teacher@ActivitiesLogs')->name('ActivitiesLogs');
+	
 });
 Route::group([ 'prefix' => 'attendant','middleware' => 'auth'], function(){
 	$route = "App\Http\Controllers";
 	Route::get('/home/dashboard',$route.'\Attendant@AttendantHome')->name('AttendantHome');
-	Route::get('/home/workspace',$route.'\Attendant@AttendantWorkspace')->name('AttendantWorkspace');
+	Route::get('/home/workspace/list/{model}',$route.'\Attendant@workspaceT')->name('Attendantworkspace');
+	Route::get('/home/workspace/view/{model}',$route.'\Attendant@workspaceview')->name('Attendantworkspaceview');
 	Route::get('/load/periods', $route.'\Attendant@LoadPeriodsAttendantAsign')->name('LoadPeriodsAttendantAsign');
 	Route::get('/profile',$route.'\Attendant@ProfileAttendant')->name('ProfileAttendant');
 	Route::post('/profile/update', $route.'\Attendant@UpdateProfileAttendant')->name('UpdateProfileAttendant');
 	Route::get('/notes/view/{model}', $route.'\Attendant@NotesAttendant')->name('NotesAttendant');
 	Route::get('/send/state/{model}/{state}', $route.'\Attendant@UpdateStateNotesAttendant')->name('UpdateStateNotesAttendant');
 	Route::get('/notes/aproved', $route.'\Attendant@NotesAprovedAttendant')->name('NotesAprovedAttendant');
+	Route::get('/activity/logs', $route.'\Attendant@ActivitiesLogs')->name('ActivitiesLogsAttendant');
 });
 Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
-	
 	$route = "App\Http\Controllers";
+	Route::get('/profile',$route.'\Administration@ProfileAdministration')->name('ProfileAdministration');
+	Route::post('/profile/update', $route.'\Administration@UpdateProfileAdministration')->name('UpdateProfileAdministration');
 	Route::get('/test/{model}', $route.'\Administration@test')->name('test');
 	Route::get('/load/periods', $route.'\Administration@LoadPeriods')->name('LoadPeriods');
 	Route::post('/load/levels', $route.'\Administration@LoadLevels')->name('LoadLevels');
 	Route::post('/load/grades', $route.'\Administration@LoadGrades')->name('LoadGrades');
 	Route::post('/load/courses', $route.'\Administration@LoadCourses')->name('LoadCourses');
-	
+	Route::get('/activity/logs', $route.'\Administration@ActivitiesLogs')->name('ActivitiesLogsAdministration');
+
 	#Inicio
 	Route::group([ 'prefix' => 'home'], function(){
 		$route = "App\Http\Controllers";
@@ -111,12 +119,12 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::post('/save', $route.'\Student@save')->name('SaveStudent');
 		Route::get('/edit/{model}',$route.'\Student@edit')->name('EditStudent');
 		Route::post('/update', $route.'\Student@update')->name('UpdateStudent');
-		Route::get('/list/bygrade/{model}',$route.'\Student@list_bygrade')->name('ListGradeStudent');
+		Route::get('/bygrade/{model}',$route.'\Student@list_bygrade')->name('ListGradeStudent');
 		Route::get('/score/{model}',$route.'\Student@score')->name('ListScoreStudent');
 		Route::get('/score/course/{model}',$route.'\Student@course_scores')->name('CourseScores');
 		Route::get('/logs',$route.'\Student@logs')->name('LogsStudent');
 		Route::get('/test/{model}/{assign}',$route.'\Student@test')->name('TestStudent');
-		Route::get('/list/test/{model}',$route.'\Student@test_list')->name('ListTestStudent');
+		Route::get('/tests/{model}',$route.'\Student@test_list')->name('ListTestStudent');
 		Route::get('/list/eliminated',$route.'\Student@eliminated_students')->name('ListEliminatedStudents');
 		Route::get('/delete/{model}', $route.'\Student@delete')->name('DeleteStudent');
 		Route::get('/activate/{model}', $route.'\Student@activate')->name('ActivateStudent');
@@ -139,14 +147,16 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::post('/save/assign/courses',$route.'\Teacher@SaveAdministrationCourses')->name('SaveAdministrationCourses');
 		Route::post('/update', $route.'\Teacher@update')->name('UpdateTeacher');
 		Route::get('/score/{model}',$route.'\Teacher@score')->name('ScoreTeacher');
-		Route::get('/logs',$route.'\Teacher@logs')->name('LogsTeacher');
+		Route::get('/list/logs',$route.'\Teacher@logs')->name('LogsTeacher');
 		Route::get('/delete/{model}', $route.'\Teacher@delete')->name('DeleteTeacher');
 		Route::get('/search',$route.'\Teacher@seach')->name('SceachTeacher');
-		Route::get('/workspace/{model}',$route.'\Teacher@workspace')->name('WorkspaceTeacher');
+		Route::get('/workspace/list/{model}',$route.'\Teacher@workspace')->name('WorkspaceTeacher');
+		Route::get('/workspace/view/{model}',$route.'\Teacher@workspaceview')->name('Adminworkspaceview');
+		Route::get('/workspace/delete/{model}',$route.'\Teacher@workspacedelete')->name('AdminworkspaceDelete');
 		Route::post('/save/workspace', $route.'\Teacher@workspacesave')->name('workspacesave');
 		Route::get('/statistics',$route.'\Teacher@statistics')->name('StatisticsTeacher');
 		Route::post('/load/courses', $route.'\Teacher@LoadCourses')->name('LoadCoursesTeacher');
-		Route::get('/desactive', $route.'\Teacher@Desactive')->name('Desactive');
+		Route::get('/list/desactive', $route.'\Teacher@Desactive')->name('Desactive');
 		Route::get('/activate/{model}', $route.'\Teacher@Activate')->name('ActivateTeacher');
 		Route::get('/test/{model}', $route.'\Teacher@TestTeacher')->name('TestTeacher');
 		Route::get('/question/{model}/{no}', $route.'\Teacher@QuestionTest')->name('QuestionsTest');
@@ -159,7 +169,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::post('/save/activity/{model}', $route.'\Teacher@saveActivity')->name('saveActivity');
 		Route::post('/update/activity', $route.'\Teacher@updateActivity')->name('updateActivity');
 		Route::get('/delete/activity/{curso}/{model}', $route.'\Teacher@deleteActivity')->name('deleteActivity');
-		Route::get('/detail/activity/{curso}/{model}', $route.'\Teacher@DetailActivity')->name('DetailActivity');
+		Route::get('score/detail/activity/{curso}/{model}', $route.'\Teacher@DetailActivity')->name('DetailActivity');
 		Route::post('/change/pass/{model}', $route.'\Teacher@changePassword')->name('ChangePasswordTeacher');
 	});
 	Route::group([ 'prefix' => 'workspace'], function(){
@@ -173,7 +183,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 			#Encargados de circulo
 			Route::get('/list', $route.'\Administration@AttendantList')->name('AttendantList');
 			Route::get('/create', $route.'\Administration@AttendantCreate')->name('AttendantCreate');
-			Route::get('/notes/{model}', $route.'\Administration@es')->name('es');
+			Route::get('/notes/{model}', $route.'\Administration@AttendantNotes')->name('notesAdministration');
 			Route::get('/assign/{model}', $route.'\Administration@AttendantAssign')->name('AttendantAssign');
 			Route::get('/deletes', $route.'\Administration@AttendantDeletes')->name('AttendantDeletes');
 			Route::post('/save', $route.'\Administration@AttendantSave')->name('AttendantSave');

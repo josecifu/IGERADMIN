@@ -38,7 +38,7 @@
 					<!--begin::Header Mobile-->
 					<div id="kt_header_mobile" class="header-mobile">
 						<!--begin::Logo-->
-						<a href="index.html">
+						<a href="{{url('/')}}">
 							<img alt="Logo" src="{{ asset('assets/media/logos/Logo-Iger.png')}}" class="max-h-30px" />
 						</a>
 						<!--end::Logo-->
@@ -166,7 +166,24 @@
 																	</span>
 																</a>
 															</li>
+															@elseif ($button['Type']=='btndelete')
+															<li class="navi-item">
+																<a href="javascript:;" onclick="deleteinfo('{{ url($button['Link'])}}');" class="navi-link">
+																	<span class="navi-text">
+																		<span class="btn btn-danger label label-xl label-inline"  style="height:100%; width: 100%">{{$button['Name']}}</span>
+																	</span>
+																</a>
+															</li>
+															@elseif ($button['Type']=='btncheck')
+															<li class="navi-item">
+																<a href="javascript:;" onclick="checkinfo('{{ url($button['Link'])}}');" class="navi-link">
+																	<span class="navi-text">
+																		<span class="btn btn-success label label-xl label-inline"  style="height:100%; width: 100%">{{$button['Name']}}</span>
+																	</span>
+																</a>
+															</li>
 															@endif
+															
 														@endforeach
 													
 												</ul>
@@ -235,7 +252,7 @@
 											 </div>
 											 <div class="modal-footer">
 												 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-												 <button type="button" class="btn btn-primary mr-2" onclick="save();" id="btnModal">Visualizar</button>
+												 <button type="button" class="btn btn-warning mr-2" onclick="save();" id="btnModal" disabled>Visualizar</button>
 											 </div>
 										 </form>
 									 </div>
@@ -591,16 +608,26 @@
 		<script src="{{ asset('assets/js/pages/widgets.js')}}"></script>
 		<script type="text/javascript">
 			var posGrade;
+			function check()
+			{
+				@if (!session()->has('User_id')) {
+					window.location = "{{url('/login')}}";    
+				@endif
+			}
 			function clearLvls()
 			{
+				check();
 				$('#SelectLvl').css("visibility", "hidden");
 				$('#SelectGrd').css("visibility", "hidden");
 				$('#SelectCourse').css("visibility", "hidden");
+				$("#btnModal").attr('disabled','disabled');
 			}
 			
 			function ListGrade(pos)
 			{
+				check();
 				clearLvls();
+				
 				posGrade=pos;
 				var url = '{{route('LoadPeriods')}}';
 				if(pos==1)
@@ -654,17 +681,22 @@
 			}
 			function save()
 			{			
+				check();
 				if(posGrade==1)
 				{
 					var Id = $('#gradeselect1').val();
+					if(Id > 0){
 					var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/student/list/bygrade/"+Id;
+					window.location.href = $url_path+"/administration/student/bygrade/"+Id;
+					}
 				}
 				if(posGrade==2)
 				{
 					var Id = $('#gradeselect1').val();
+					if(Id > 0){
 					var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/student/score/"+Id;
+					window.location.href = $url_path+"/administration/student/score/"+Id;
+					}
 				}
 				if(posGrade==3)
 				{
@@ -685,30 +717,40 @@
 				if(posGrade==5)
 				{
 					var Id = $('#courseselect1').val();
+					if(Id > 0){
 					var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/student/list/test/"+Id;
+					window.location.href = $url_path+"/administration/student/tests/"+Id;
+					}
 				}
 				if(posGrade==6)
 				{
 					var Id = $('#courseselect1').val();
+					if(Id > 0){
 					var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/workspace/attendant/notes/"+Id;
+					window.location.href = $url_path+"/administration/workspace/attendant/notes/"+Id;
+					}
 				}
 				if(posGrade==7)
 				{
 					var Id = $('#courseselect1').val();
+					if(Id > 0){
 					var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/workspace/attendant/notes/"+Id;
+					window.location.href = $url_path+"/administration/workspace/attendant/notes/"+Id;
+					}
 				}
 				if(posGrade==8)
 				{
 					var Id = $('#courseselect1').val();
+					if(Id > 0){
 					var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/administration/teacher/workspace/"+Id;
+					window.location.href = $url_path+"/administration/teacher/workspace/list/"+Id;
+					}
 				}
 			}
+			
 			function ListLevel(Period)
 			{
+				check();
 				$.ajax ({
 					url: '{{route('LoadLevels')}}',
 					type: 'POST',
@@ -729,9 +771,11 @@
 			$('#periodselect1').on('change', function() {
 				$('#SelectLvl').css("visibility", "visible");
 				ListLevel($('#periodselect1').val());
+				$("#btnModal").attr('disabled','disabled');
 			  });
 			  function ListGrades(Level)
 			  {
+				check();
 				  $.ajax ({
 					  url: '{{route('LoadGrades')}}',
 					  type: 'POST',
@@ -749,10 +793,12 @@
 				  });
 			  }
 			  $('#lvlmodalselect1').on('change', function() {
+				$("#btnModal").attr('disabled','disabled');
 				$('#SelectGrd').css("visibility", "visible");
 				ListGrades($('#lvlmodalselect1').val());
 			  });
 			function ListCourse(Grade) {
+				check();
 				$.ajax ({
 					url: '{{route('LoadCourses')}}',
 					type: 'POST',
@@ -774,6 +820,13 @@
 					$('#SelectCourse').css("visibility", "visible");
 					ListCourse($('#gradeselect1').val());
 				}
+				else{
+					$("#btnModal").removeAttr('disabled');
+				}
+			});
+			$('#SelectCourse').on('change', function() {
+				$("#btnModal").removeAttr('disabled');
+				
 			});
 			@if(Session::has('error'))
 			Swal.fire({
@@ -798,7 +851,7 @@
 		
 
 		@section('scripts')
-																					          
+																				          
 		@show
 		<!--end::Page Scripts-->
 	</body>

@@ -234,7 +234,7 @@ var KTWizard1 = function () {
 					confirmButtonText: "Si, Enviar!",
 					cancelButtonText: "No, Cancelar",
 					customClass: {
-						confirmButton: "btn font-weight-bold btn-primary",
+						confirmButton: "btn font-weight-bold btn-success",
 						cancelButton: "btn font-weight-bold btn-default"
 					}
 				}).then(function (result) {
@@ -247,7 +247,7 @@ var KTWizard1 = function () {
 							buttonsStyling: false,
 							confirmButtonText: "Ok, lo tengo!",
 							customClass: {
-								confirmButton: "btn font-weight-bold btn-primary",
+								confirmButton: "btn font-weight-bold btn-success",
 							}
 						});
 					}

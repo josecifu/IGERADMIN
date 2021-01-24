@@ -25,7 +25,7 @@
                             <!--begin::Wizard Step 1 Nav-->
                             <div class="wizard-step" data-wizard-type="step" data-wizard-state="current">
                                 <div class="wizard-wrapper">
-                                    <div class="wizard-icon">
+                                    <div class="wizard-icon"  >
                                         <span class="svg-icon svg-icon-2x">
                                             <!--begin::Svg Icon | path:assets/media/svg/icons/General/User.svg-->
                                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -152,7 +152,7 @@
                                         </div>
                                         <div>
                                             <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-submit">Crear exámen</button>
-                                            <button type="button" class="btn btn-primary font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>
+                                            <button type="button" class="btn btn-success font-weight-bolder text-uppercase px-9 py-4" data-wizard-type="action-next">Siguiente</button>
                                         </div>
                                     </div>
                                     <!--end: Wizard Actions-->
@@ -367,7 +367,7 @@
 						confirmButtonText: "Si, Enviar!",
 						cancelButtonText: "No, Cancelar",
 						customClass: {
-							confirmButton: "btn font-weight-bold btn-primary",
+							confirmButton: "btn font-weight-bold btn-success",
 							cancelButton: "btn font-weight-bold btn-default"
 						}
 					}).then(function (result) {
@@ -380,7 +380,7 @@
 								buttonsStyling: false,
 								confirmButtonText: "Ok, lo tengo!",
 								customClass: {
-									confirmButton: "btn font-weight-bold btn-primary",
+									confirmButton: "btn font-weight-bold btn-success",
 								}
 							});
 						}

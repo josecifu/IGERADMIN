@@ -102,6 +102,28 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="form-group row">
+                                                <label class="col-3">Género</label>
+                                                <div class="col-9 col-form-label">
+                                                    <div class="radio-inline">
+                                                        @if($student->Gender=="Masculino")
+                                                        <label class="radio radio-primary">
+                                                        <input type="radio" id="Genero" name="radios5" checked/>
+                                                        <span></span>Masculino</label>
+                                                        <label class="radio radio-primary">
+                                                        <input type="radio" id="Sexo" name="radios5"/>
+                                                        <span></span>Femenino</label>
+                                                        @else
+                                                        <label class="radio radio-primary">
+                                                        <input type="radio" id="Genero" name="radios5"/>
+                                                        <span></span>Masculino</label>
+                                                        <label class="radio radio-primary">
+                                                        <input type="radio" id="Sexo" name="radios5" checked/>
+                                                        <span></span>Femenino</label>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <!--end::Wizard Step 1-->
@@ -207,6 +229,13 @@
                                 }
                             },
                             Telefono: {
+                                validators: {
+                                    notEmpty: {
+                                        message: 'Es un campo obligatorio'
+                                    }
+                                }
+                            },
+                            radios5: {
                                 validators: {
                                     notEmpty: {
                                         message: 'Es un campo obligatorio'
@@ -344,6 +373,7 @@
                 var NombrePersona = $('#Nombres').val(); 
                 var ApellidosPersona = $('#Apellidos').val();
                 var TelefonoPersona = $('#Telefono').val();
+                var GeneroPersona = $('#Genero').is(":checked");
                 var NombreUsuario = $('#Usuario').val(); 
                 var EmailUsuario = $('#Email').val();
                 var PersonaId = $('#Persona').val();
@@ -352,6 +382,7 @@
                     Nombre: NombrePersona,
                     Apellido: ApellidosPersona,
                     Telefono: TelefonoPersona,
+                    Genero: GeneroPersona,
                     Usuario: NombreUsuario,
                     Email: EmailUsuario,
                 }];

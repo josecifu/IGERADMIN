@@ -27,7 +27,7 @@
                 </div>
                 <div class="card-body">
                     <!--begin: Datatable-->
-                    <table class="table table-bordered table-hover table-checkable" style="margin-top:13px !important">
+                    <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top:13px !important">
                         <thead>
                             <tr style="background:#cecece">
                                 <th rowspan="1"></th>
@@ -68,7 +68,7 @@
                                             <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: {{$score[0]['Porcentage']}}%" aria-valuenow="{{$score[0]['Note']}}" aria-valuemin="0" aria-valuemax="{{$score[0]['Max']}}">{{$score[0]['Note']}} Pts</div>
                                             
                                         </div>
-                                        <center><h4>{{$score[0]['Note']}}</h4></center>
+                                        <center><h4>{{$score[0]['Note']}} Pts</h4></center>
                                     </td>
                                     @else
                                     <td>
@@ -95,11 +95,40 @@
         <!--end::Page Vendors-->
         <script type="text/javascript">
             "use strict";
+            var d = new Date();
+                var strDate =  d.getDate()+ "-" + (d.getMonth()+1) + "-" + d.getFullYear() + " " + d.getHours() + "-" + d.getMinutes();
+               
             var KTDatatablesDataSourceHtml = function() {
                 var initTable1 = function() {
                     var table = $('#kt_datatable');
                     // begin first table
                     table.DataTable({
+                        dom: 'Bfrtip',
+                        buttons: [
+                            {
+                                text: 'Exportar a excel',
+                                extend: 'excelHtml5',
+                                fieldSeparator: '\t',
+                                messageTop: 'Listado de notas.',
+                               
+                                title: 'ListadoNotas-'+strDate
+                            },
+                            {
+                                text: 'Exportar a csv',
+                                extend: 'csvHtml5',
+                                extension: '.csv',
+                               
+                                messageTop: 'Listado de notas'
+                            },
+                            {
+                                text: 'Exportar a PDF',
+                                extend: 'pdfHtml5',
+                                extension: '.pdf',
+                                
+                                messageTop: 'Listado de notas'
+                            }
+                            
+                        ],
                         responsive: true,
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"

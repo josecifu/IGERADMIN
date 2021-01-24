@@ -40,6 +40,8 @@ use App\Models\Assign_attendant_periods;
 use App\Models\Asign_teacher_course;
 use App\Models\Assign_activity;
 use App\Exports\StudentExport;
+use App\Exports\StudentGradeExport;
+use App\Exports\TeacherExport;
 use Session;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -309,13 +311,7 @@ class Administration extends Controller
     public function AttendantAssign($id)
     {
         $buttons =[];
-        $button = [
-            "Name" => 'Listado Voluntarios',
-            "Link" => 'administration/teacher/list',
-            "Type" => "add"
-        ];
         $person = Person::find($id);
-        array_push($buttons,$button);
         $assignT = Assign_attendant_periods::where([['user_id',$person->User()->id],['State','Active']])->get();
         $PeriodsAssign = [];
         if(!$assignT->isEmpty()){
@@ -507,7 +503,7 @@ class Administration extends Controller
                         $grado = grade::find($period->Grade_id)->GradeName();
                         $user_Attendant->user_id = $user->id;
                         $user_Attendant->Period_id = $Periods[$i];
-                        $user_Attendant->Year = date('YY');
+                        $user_Attendant->Year = date('Y');
                         $user_Attendant->State = "Active";
                         $user_Attendant->save();
                         #logs registro de asignación
@@ -527,6 +523,10 @@ class Administration extends Controller
         }
         return response()->json(["Accion completada"]);
     }
+    public function __construct()
+	{
+		$this->middleware('auth');
+	} 
     public function GradesPeriod(Request $request)
     {
         $data = $request->data[0];
@@ -679,7 +679,7 @@ class Administration extends Controller
         foreach ($PeriodsData as $value) {
             $assign=Assign_attendant_periods::where('Period_id',$value->id)->get();
             if($assign->isEmpty()){
-                $CoursesData = course::where('Period_id',$request['GradeId'])->get();
+                $CoursesData = course::where('Grade_id',$request['GradeId'])->get();
             }else{
             $ids = [];
             foreach ($assign as $value) {
@@ -1158,7 +1158,7 @@ class Administration extends Controller
         ];
         array_push($buttons,$button);
         $Month = [];
-        $logs = logs::whereMonth('created_at', '=', \Carbon\Carbon::now()->format('m'))->get();
+        $logs = logs::whereMonth('created_at', '=', \Carbon\Carbon::now()->format('m'))->orderby('created_at','DESC')->get();
         foreach ($logs as $value) {
             setlocale(LC_TIME, "spanish");
             $newDate = date("d-m-Y", strtotime($value->created_at));	
@@ -1191,7 +1191,7 @@ class Administration extends Controller
             array_push($Month,$M);
         }
         $Week = [];
-        $logs = logs::all();
+        $logs = logs::orderby('created_at','DESC')->get();
         foreach ($logs as $value) {
             setlocale(LC_TIME, "spanish");
             $newDate = date("d-m-Y", strtotime($value->created_at));	
@@ -1224,7 +1224,7 @@ class Administration extends Controller
             array_push($Week,$M);
         }
         $Days = [];
-        $logs = logs::whereDay('created_at', '=', \Carbon\Carbon::now()->format('d-m'))->get();
+        $logs = logs::whereDay('created_at', '=', \Carbon\Carbon::now()->format('d-m'))->orderby('created_at','DESC')->get();
         foreach ($logs as $value) {
             setlocale(LC_TIME, "spanish");
             $newDate = date("d-m-Y", strtotime($value->created_at));	
@@ -1250,6 +1250,13 @@ class Administration extends Controller
                 $title ="Activo ".$value->Table;
                 $state ="Success";
                 $type = "Edit";
+                
+            }
+            if($value->Type=="Assign")
+            {
+                $title ="Asignar ".$value->Table;
+                $state ="Progress";
+                $type = "Notes";
                 
             }
             $M = [
@@ -1306,7 +1313,32 @@ class Administration extends Controller
     }
     public function Statistics()
     {
-        return view('Administration/Workspace/Statistics');
+        $periods = period::where('State','Active')->get();
+        $models=[];
+        foreach($periods as $period)
+        {
+            $asing=[];
+            $vol=0;
+            $asing = Assign_attendant_periods::where(['Period_id'=>$period->id,'Year'=>date('Y'),'State'=>'Active'])->get();
+            $vol=$vol+count($asing);
+            $Activity=[];
+            for($i=1;$i<=12;$i++)
+            {
+                $month=date("m", strtotime("01-".$i."-2020"));
+                $logs = logs::whereMonth('created_at', '=', $month)->get();
+                $logs = $logs->where('Table','Encargado de Circulo');
+                $logs = $logs->where('Period_id',$period->id);
+                array_push($Activity,count($logs));
+            }
+            $model =[
+                "Name"=>$period->Name,
+                "Activity"=>$Activity,
+                "Teachers"=>$vol,
+            ];
+            array_push($models,$model);
+        }
+       
+        return view('Administration/Workspace/Statistics',compact('models'));
     }
     public function Reports(Request $request,$id,$type)
     {        
@@ -1363,9 +1395,17 @@ class Administration extends Controller
                 }
                 $title1 = "Listado de voluntarios";
                 $pdf = PDF::loadView('Administration.Reports.pdf', compact('Titles','models','title1'));
-                return $pdf->download('ListadoVoluntarios-'.date("d-m-y-H-i-A").'.pdf');
+                return $pdf->download('ListadoVoluntarios-'.date("d-m-Y-H-i-A").'.pdf');
             }
-            
+            if($id==2)
+            {
+                
+                return Excel::download(new TeacherExport, 'ListadoVoluntarios-'.date("d-m-Y-H-i-A").'.xlsx');
+            }
+            if($id==3)
+            {
+                return Excel::download(new TeacherExport, 'ListadoVoluntarios-'.date("d-m-Y-H-i-A").'.csv');
+            }
         }
         if($type=="listadoalumnos")
         {
@@ -1413,13 +1453,189 @@ class Administration extends Controller
 
                 $title1 = "Listado de alumnos";
                 $pdf = PDF::loadView('Administration.Reports.pdf', compact('Titles','models','title1'));
-                return $pdf->download('ListadoAlumnos-'.date("d-m-y-H-i-A").'.pdf');
+                return $pdf->download('ListadoAlumnos-'.date("d-m-Y-H-i-A").'.pdf');
             }   
             if($id==2)
             {
                 
-                return Excel::download(new StudentExport, 'users-collection.xlsx');
+                return Excel::download(new StudentExport, 'ListadoAlumnos-'.date("d-m-Y-H-i-A").'.xlsx');
             }
+            if($id==3)
+            {
+                return Excel::download(new StudentExport, 'ListadoAlumnos-'.date("d-m-Y-H-i-A").'.csv');
+             
+            }
+        }
+        if($type=="listadoalumnosgrado1")
+        {
+            $models = [];
+            $Titles = [
+                'No',
+                'Nombres',
+                'Apellidos',
+                'Teléfono',
+                'Usuario',
+                'Correo electrónico',
+                'Última conexión',
+            ];
+            $grade = grade::find($id);
+            $year = date("Y");
+            $rols = Assign_user_rol::where(['Rol_id'=>2,'State'=>'Active'])->get();
+            foreach ($rols as $rol)
+            {
+                $user = User::find($rol->user_id);
+                $student = Person::find($user->Person_id);
+                $assigns = Assign_student_grade::where(['User_id'=>$user->id,'Year'=>$year,'State'=>'Active','Grade_id'=>$grade->id])->get('Grade_id');
+                foreach ($assigns as $assign)
+                {
+                    $conection = logs::where(['Type'=>'Login','User_Id'=>$user->name])->orderby('created_at','DESC')->take(1)->first();
+                    if($conection)
+                    {
+                        setlocale(LC_TIME, "spanish");
+                        $newDate = date("d-m-Y", strtotime($conection->created_at));    
+                        $mes = strftime("%d de %B del %Y", strtotime($newDate));
+                        $conection= $mes." a las ".date("H:m A", strtotime($conection->created_at));
+                    }
+                    $query = [
+                        'id' => $student->id,
+                        'name' => $student->Names,
+                        'lastname' => $student->LastNames,
+                        'phone' => $student->Phone,
+                        'user' => $user->name,
+                        'email' => $user->email,
+                        'conexion' => $conection ?? 'El usuario no se ha conectado'
+                    ];
+                    array_push($models,$query);
+                }
+            }
+            $studentgrade = $grade->GradeNamePeriod();
+            $title1 = "Listado de alumnos de ".$studentgrade;
+            $pdf = PDF::loadView('Administration.Reports.pdf', compact('Titles','models','title1'));
+            return $pdf->download('ListadoAlumnos-'.$grade->GradeName()."-".date("d-m-Y-H-i-A").'.pdf');
+        }
+        if($type=="listadoalumnosgrado2")
+        {
+            $grade = grade::find($id);
+            return Excel::download(new StudentGradeExport($id), 'ListadoAlumnos-'.$grade->GradeName()."-".date("d-m-Y-H-i-A").'.xlsx');
+        }
+        if($type=="listadoalumnosgrado3")
+        {
+            $grade = grade::find($id);
+            return Excel::download(new StudentGradeExport($id), 'ListadoAlumnos-'.$grade->GradeName()."-".date("d-m-Y-H-i-A").'.csv');
+        }
+        if($type=="logsalumnos")
+        {
+            $Titles=['No',
+            'Responsable',
+            'Actividad',
+            'Tipo',
+            'Fecha y hora'];
+            if($id==1)
+            {
+                $models = [];
+              
+                $logs = logs::whereIn('Table',['Estudiante','Usuario','Rol','Grado'])->get();
+                foreach ($logs as $log)
+                {
+                    setlocale(LC_TIME, "spanish");
+                    $newDate = date("d-m-Y", strtotime($log->created_at));	
+                    $mes = strftime("%d de %B del %Y", strtotime($newDate));
+                    $type = "";
+                    if($log->Type=="Crear")
+                    {
+                        $type = "Nuevo registro";
+                    }
+                    if($log->Type=="Asignar")
+                    {
+                        $type = "Se asigno registro";
+                    }
+                    if($log->Type=="Actualizar")
+                    {
+                        $type = "Se asigno registro";
+                    }
+                    if($log->Type=="Eliminar")
+                    {
+                        $type = "Se elimino registro";
+                    }
+                    if($log->Type=="Login")
+                    {
+                        $type = "Ha iniciado sesión";
+                    }
+                    if($log->Type=="Activar")
+                    {
+                        $type = "Se ha activado";
+                    }
+                    $data = [
+                        'id' => $log->id,
+                        'responsible' => $log->User_Id,
+                        'activity' => $log->Description,
+                        'type' => $type,
+                        'datatime' => $mes." a las ".date("g:i A", strtotime($log->created_at))
+                    ];
+                    array_push($models,$data);
+                }
+
+                $title1 = "Historial de alumnos";
+                $pdf = PDF::loadView('Administration.Reports.pdf', compact('Titles','models','title1'));
+                return $pdf->download('LogsAlumnos-'.date("d-m-Y-H-i-A").'.pdf');
+            }   
+        }
+        if($type=="logsvoluntarios")
+        {
+            $Titles=['No',
+            'Responsable',
+            'Actividad',
+            'Tipo',
+            'Fecha y hora'];
+            if($id==1)
+            {
+                $models = [];
+              
+                $logs = logs::whereIn('Table',['Voluntario'])->get();
+                foreach ($logs as $log)
+                {
+                    setlocale(LC_TIME, "spanish");
+                    $newDate = date("d-m-Y", strtotime($log->created_at));	
+                    $mes = strftime("%d de %B del %Y", strtotime($newDate));
+                    $type = "";
+                    if($log->Type=="Crear")
+                    {
+                        $type = "Nuevo registro";
+                    }
+                    if($log->Type=="Asignar")
+                    {
+                        $type = "Se asigno registro";
+                    }
+                    if($log->Type=="Actualizar")
+                    {
+                        $type = "Se asigno registro";
+                    }
+                    if($log->Type=="Eliminar")
+                    {
+                        $type = "Se elimino registro";
+                    }
+                    if($log->Type=="Login")
+                    {
+                        $type = "Ha iniciado sesión";
+                    }
+                    if($log->Type=="Activar")
+                    {
+                        $type = "Se ha activado";
+                    }
+                    $data = [
+                        'id' => $log->id,
+                        'responsible' => $log->User_Id,
+                        'activity' => $log->Description,
+                        'type' => $type,
+                        'datatime' => $mes." a las ".date("g:i A", strtotime($log->created_at))
+                    ];
+                    array_push($models,$data);
+                }
+
+                $title1 = "Historial de Voluntarios";
+                $pdf = PDF::loadView('Administration.Reports.pdf', compact('Titles','models','title1'));
+                return $pdf->download('LogsVoluntarios-'.date("d-m-Y-H-i-A").'.pdf');
+            }   
         }
         if($type=="generalreportpdf")
         {
@@ -1490,8 +1706,109 @@ class Administration extends Controller
                 $d = "deldia";
             }
             $pdf = PDF::loadView('Administration.Reports.pdf', compact('Titles','models','title1'));
-            return $pdf->download('ReporteGeneral-'.$d.'-'.date("d-m-y-H-i-A").'.pdf');
+            return $pdf->download('ReporteGeneral-'.$d.'-'.date("d-m-Y-H-i-A").'.pdf');
         }
         return false;
+    }
+    public function UpdateProfileAdministration(Request $request)
+    {
+        $user = User::find($request->session()->get('User_id')); 
+        $person = Person::find($user->Person_id);
+        $data = $request->data[0];
+        $telefono = $data['Telefono'];
+        $correo = $data['Email'];
+        $Name = $data['Name'];
+        $LastName = $data['LastName'];
+        if($telefono == "" || $correo ==""){
+            return response()->json(["Error"=>"Los campos no pueden estar vacios"]);
+        }
+        $user->email = $correo;
+        $user->save();
+        $person->Phone = $telefono;
+        $person->Names = $data['Name'];
+        $person->LastNames =$data['LastName'];
+        $person->save();
+        return response()->json(["Accion completada"]);
+    }
+    public function ProfileAdministration(Request $request)
+    {
+        $Titles = ['Titulo','Contenido'];
+        $user = User::find($request->session()->get('User_id')); 
+        $person = Person::find($user->Person_id);
+        $period = period::where('State','Active')->get();
+        $info = [
+            'titulo' => 'Circulos de estudio creados',
+            'Curso' => count($period),
+        ];
+        $data = [
+            'Email' => $user->email,
+            'Phone' => $person->Phone,
+            'Name' => $person->Names,
+            'LastNames' => $person->LastNames,
+            'User' => $user->name,
+            
+        ];
+        return view('Administration/Profile',compact('info','data','Titles'));
+    }
+    public function ActivitiesLogs(Request $request)
+    {
+        $models=[];
+        $titles = [
+            'No',
+            'Responsable',
+            'Actividad',
+            'Tipo',
+            'Fecha y hora'
+        ];
+        $id2 = User::find($request->session()->get('User_id'));
+        $logs = logs::where(['User_Id'=>$id2->name])->get();
+        foreach ($logs as $log)
+        {
+            setlocale(LC_TIME, "spanish");
+            $newDate = date("d-m-Y", strtotime($log->created_at));	
+            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $type = "";
+            $color = "Success";
+            if($log->Type=="Create")
+            {
+                $type = "Nuevo registro";
+                $color = "success";
+            }
+            if($log->Type=="Assign")
+            {
+                $type = "Se asigno registro";
+                $color = "warning";
+            }
+            if($log->Type=="Update")
+            {
+                $type = "Se asigno registro";
+                $color = "secundary";
+            }
+            if($log->Type=="Delete")
+            {
+                $type = "Se elimino registro";
+                $color = "danger";
+            }
+            if($log->Type=="Login")
+            {
+                $type = "Ha iniciado sesión";
+                $color = "primary";
+            }
+            if($log->Type=="Activar")
+            {
+                $type = "Se ha activado";
+                $color = "primary";
+            }
+            $data = [
+                'id' => $log->id,
+                'responsible' => $log->User_Id,
+                'activity' => $log->Description,
+                'type' => $type,
+                'color' => $color,
+                'datatime' => $mes." a las ".date("g:i A", strtotime($log->created_at))
+            ];
+            array_push($models,$data);
+        }
+        return view('Administration/Activity',compact('models','titles'));
     }
 }

@@ -51,21 +51,24 @@ class MenuSeeder extends Seeder
             'Name' => 'Listado por grados',
             'State' => '1',
             'Type' => '1',
-            'Url' => 'ListGrade(1)',  
+            'Function'=> 'ListGrade(1)',
+            'Url' => 'administration/student/bygrade',  
             'menu_id' => '4'          
         ]);
         DB::table('menus')->insert([
             'Name' => 'Visualización de notas',
             'State' => '1',
             'Type' => '2',
-            'Url' => 'ListGrade(2)',  
+            'Function'=> 'ListGrade(2)',
+            'Url' => 'administration/student/score',  
             'menu_id' => '4'          
         ]);
         DB::table('menus')->insert([
             'Name' => 'Visualización de examenes',
             'State' => '1',
             'Type' => '3',
-            'Url' => 'ListGrade(5)',  
+            'Function'=> 'ListGrade(5)',
+            'Url' => 'administration/student/tests',   
             'menu_id' => '4'          
         ]);
         DB::table('menus')->insert([//9
@@ -91,21 +94,24 @@ class MenuSeeder extends Seeder
             'Name' => 'Visualización de espacio de trabajo',
             'State' => '1',
             'Type' => '3',
-            'Url' => 'ListGrade(8)',
+            'Function'=> 'ListGrade(8)',
+            'Url' => 'administration/teacher/workspace',   
             'menu_id' => '10'          
         ]);
         DB::table('menus')->insert([
             'Name' => 'Visualización de notas',
             'State' => '1',
             'Type' => '4',
-            'Url' => 'ListGrade(3)', 
+            'Function'=> 'ListGrade(3)',
+            'Url' => 'administration/teacher/score',   
             'menu_id' => '10'          
         ]);
         DB::table('menus')->insert([
             'Name' => 'Visualización de examenes',
             'State' => '1',
             'Type' => '4',
-            'Url' => 'ListGrade(4)',    
+            'Function'=> 'ListGrade(4)',
+            'Url' => 'administration/teacher/test',   
             'menu_id' => '10'          
         ]);
         DB::table('menus')->insert([ //15
@@ -131,7 +137,8 @@ class MenuSeeder extends Seeder
             'Name' => 'Ver listado de notas aprobadas',
             'State' => '1',
             'Type' => '4',
-            'Url' => 'ListGrade(6)',  
+            'Function'=> 'ListGrade(6)',
+            'Url' => 'administration/workspace/attendant/notes',  
             'menu_id' => '16'          
         ]);  
         DB::table('menus')->insert([ //19
@@ -140,20 +147,14 @@ class MenuSeeder extends Seeder
             'Url' => 'administration/workspace/inscriptions',  
             'menu_id' => '16'          
         ]);  
-        DB::table('menus')->insert([ 
-            'Name' => 'Ver espacios de trabajo',
-            'State' => '1',
-            'Url' => 'administration/workspace/list',  
-            'menu_id' => '16'          
-        ]);  
-        DB::table('menus')->insert([ //21
-            'Name' => 'Ver estadisticas de trabajo',
+        DB::table('menus')->insert([ //20
+            'Name' => 'Estadisticas generales ',
             'State' => '1',
             'Url' => 'administration/workspace/statistics',  
             'menu_id' => '16'          
         ]);  
         DB::table('menus')->insert([
-            'Name' => 'Configuración', //22
+            'Name' => 'Configuración', //21
             'Icon' => 'pe-7s-home',
             'Url' => 'administration/configurations',
             'State' => '1',     
@@ -163,19 +164,19 @@ class MenuSeeder extends Seeder
             'Name' => 'Ver asignaciones de circulos de estudio, niveles y grados',
             'State' => '1',
             'Url' => 'administration/configurations/level/list',  
-            'menu_id' => '22'          
+            'menu_id' => '21'          
         ]); 
         DB::table('menus')->insert([ 
             'Name' => 'Configuraciones generales',
             'State' => '1',
-            'Url' => 'administration/configurations/list',  //24
-            'menu_id' => '22'          
+            'Url' => 'administration/configurations/list',  //23
+            'menu_id' => '21'          
         ]); 
 
 
         //Students
         DB::table('menus')->insert([
-            'Name' => 'Inicio', //25
+            'Name' => 'Inicio', //24
             'Icon' => 'pe-7s-home',
             'Url' => 'student/home',
             'State' => '1',     
@@ -184,17 +185,17 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([ 
             'Name' => 'Tablero',
             'State' => '1',
-            'Url' => 'student/home/dashboard',  //26
-            'menu_id' => '25'          
+            'Url' => 'student/home/dashboard',  //25
+            'menu_id' => '24'          
         ]); 
         DB::table('menus')->insert([ 
             'Name' => 'Espacio de trabajo',
             'State' => '1',
-            'Url' => 'student/home/workspace',  //27
-            'menu_id' => '25'          
+            'Url' => 'student/home/workspace',  //26
+            'menu_id' => '24'          
         ]); 
         DB::table('menus')->insert([
-            'Name' => 'Notas', //28
+            'Name' => 'Notas', //27
             'Icon' => 'pe-7s-home',
             'Url' => 'student/score',
             'State' => '1',     
@@ -203,11 +204,11 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([ 
             'Name' => 'Visualizar notas',
             'State' => '1',
-            'Url' => 'student/score/list',  //29
-            'menu_id' => '28'          
+            'Url' => 'student/score/list',  //28
+            'menu_id' => '27'          
         ]); 
         DB::table('menus')->insert([
-            'Name' => 'Examenes', //30
+            'Name' => 'Examenes', //29
             'Icon' => 'pe-7s-home',
             'Url' => 'student/test',
             'State' => '1',     
@@ -216,19 +217,19 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([ 
             'Name' => 'Visualizar examenes programados',
             'State' => '1',
-            'Url' => 'student/test/view',  //31
-            'menu_id' => '30'          
+            'Url' => 'student/test/view',  //30
+            'menu_id' => '29'          
         ]); 
         DB::table('menus')->insert([ 
             'Name' => 'Visualizar todos los examenes',
             'State' => '1',
-            'Url' => 'student/test/list',  //32
-            'menu_id' => '30'          
+            'Url' => 'student/test/list',  //31
+            'menu_id' => '29'          
         ]); 
 
             //Teachers
         DB::table('menus')->insert([
-            'Name' => 'Inicio', //33
+            'Name' => 'Inicio', //32
             'Icon' => 'pe-7s-home',
             'Url' => 'teacher/home',
             'State' => '1',     
@@ -237,19 +238,20 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([ 
             'Name' => 'Tablero',
             'State' => '1',
-            'Url' => 'teacher/home/dashboard',  //34
-            'menu_id' => '33'          
+            'Url' => 'teacher/home/dashboard',  //33
+            'menu_id' => '32'          
         ]); 
         DB::table('menus')->insert([ 
             'Name' => 'Espacio de trabajo',
             'State' => '1',
-            // 'Url' => 'teacher/home/workspace',  //35
+            // 'Url' => 'teacher/home/workspace',  //34
+            'Function'=> 'listCourse(4)',
             'Type' => '3',
-            'Url' => 'listCourse(4)',
-            'menu_id' => '33'          
+            'Url' => 'teacher/home/workspace',
+            'menu_id' => '32'          
         ]); 
         DB::table('menus')->insert([
-            'Name' => 'Notas', //36
+            'Name' => 'Notas', //35
             'Icon' => 'pe-7s-home',
             'Url' => 'teacher/score',
             'State' => '1',     
@@ -258,13 +260,14 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([ 
             'Name' => 'Visualizar notas',
             'State' => '1',
-            // 'Url' => 'teacher/score/list/vol',  //37
+            // 'Url' => 'teacher/score/list/vol',  //36
             'Type' => '3',
-            'Url' => 'listCourse(1)',       
-            'menu_id' => '36'
+            'Function'=> 'listCourse(1)',
+            'Url' => 'teacher/score/list/vol',       
+            'menu_id' => '35'
         ]); 
         DB::table('menus')->insert([
-            'Name' => 'Examenes', //38
+            'Name' => 'Examenes', //37
             'Icon' => 'pe-7s-home',
             'Url' => 'teacher/test',
             'State' => '1',     
@@ -273,26 +276,26 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([ 
             'Name' => 'Visualizar examenes programados',
             'State' => '1',
-            // 'Url' => 'teacher/test/view',  //39
+             'Url' => 'teacher/test/view',  //38
             'Type' => '3',
-            'Url' => 'listCourse(3)',
-            'menu_id' => '38'          
+            'Function'=> 'listCourse(3)',
+            'menu_id' => '37'          
         ]); 
         DB::table('menus')->insert([ 
             'Name' => 'Visualizar todos los examenes',
             'State' => '1',
-            // 'Url' => 'teacher/test/list/vol',  //40
+            'Url' => 'teacher/test/list/vol',  //39
             'Type' => '3',
-            'Url' => 'listCourse(2)',
-            'menu_id' => '38'      
+            'Function' => 'listCourse(2)',
+            'menu_id' => '37'      
         ]); 
         DB::table('menus')->insert([ 
             'Name' => 'Calificar examenes',
             'State' => '1',
-            // 'Url' => 'teacher/test/list/vol',  //41
+            'Url' => 'teacher/test/list/vol',  //40
             'Type' => '3',
-            'Url' => 'listCourse(5)',
-            'menu_id' => '38'      
+            'Function' => 'listCourse(5)',
+            'menu_id' => '37'      
         ]); 
 
 
@@ -302,7 +305,7 @@ class MenuSeeder extends Seeder
 
             //Attendant
             DB::table('menus')->insert([
-                'Name' => 'Inicio', //42
+                'Name' => 'Inicio', //41
                 'Icon' => 'pe-7s-home',
                 'Url' => 'attendant/home',
                 'State' => '1',     
@@ -311,19 +314,19 @@ class MenuSeeder extends Seeder
             DB::table('menus')->insert([ 
                 'Name' => 'Tablero',
                 'State' => '1',
-                'Url' => 'attendant/home/dashboard',  //43
-                'menu_id' => '42'          
+                'Url' => 'attendant/home/dashboard',  //42
+                'menu_id' => '41'          
             ]); 
             DB::table('menus')->insert([ 
-                'Name' => 'Espacio de trabajo',
+                'Name' => 'Espacio de trabajo', 
                 'State' => '1',
-                // 'Url' => 'teacher/home/workspace',  //44
-                'Type' => '3',
-                'Url' => 'listCourse(4)',
-                'menu_id' => '42'          
+                'Url' => 'attendant/home/workspace',  //43
+                'Type' => '4',
+                'Function' => 'ListGrade(4)',
+                'menu_id' => '41'          
             ]); 
             DB::table('menus')->insert([
-                'Name' => 'Notas', //45
+                'Name' => 'Notas', //44
                 'Icon' => 'pe-7s-home',
                 'Url' => 'attendant/notes',
                 'State' => '1',     
@@ -332,17 +335,17 @@ class MenuSeeder extends Seeder
             DB::table('menus')->insert([ 
                 'Name' => 'Visualizar notas',
                 'State' => '1',
-                // 'Url' => 'teacher/score/list/vol',  //46
+                'Url' => 'attendant/score/list/',  //45
                 'Type' => '4',
-                'Url' => 'ListGrade(7)',       
-                'menu_id' => '45'
+                'Function' => 'ListGrade(7)',       
+                'menu_id' => '44'
             ]); 
             DB::table('menus')->insert([ 
                 'Name' => 'Visualizar notas aprobadas y reprobadas',
                 'State' => '1',
-                // 'Url' => 'teacher/test/view',  //47
+                // 'Url' => 'teacher/test/view',  //46
                 'Url' => 'attendant/notes/aproved',
-                'menu_id' => '45'          
+                'menu_id' => '44'          
             ]); 
             
     }

@@ -35,62 +35,21 @@
                                 <div class="card card-custom">
                                     <div class="card-header">
                                         <div class="card-title">
-                                            <div class="card-toolbar">
-                                                <a href="{{url('administration/teacher/score/'.$course->id)}}" class="btn btn-danger font-weight-bolder mr-2">
-                                                <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
-                                            </div>
+                                            
                                             <span class="card-icon">
                                                 <i class="flaticon2-favourite text-primary"></i>
                                             </span>
                                             @if($course)
-                                                <h3 class="card-label">Detalle de la actividad: {{$actividad->Name}} del curso {{$course->Name}}</h3>
+                                                <h3 class="card-label">Detalle de la actividad: {{$actividad->Name}} del curso {{$course->Name}} {{$course->Grade()->GradeNamePeriod()}}</h3>
                                             @endif
                                             
                                         </div>
                                         <div class="card-toolbar">
-                                            <!--begin::Dropdown-->
-                                            <div class="dropdown dropdown-inline mr-2">
-                                                <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="la la-download"></i>Exportar</button>
-                                                <!--begin::Dropdown Menu-->
-                                                <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                                                    <ul class="nav flex-column nav-hover">
-                                                        <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opcion:</li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-print"></i>
-                                                                <span class="nav-text">Imprimir</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-copy"></i>
-                                                                <span class="nav-text">Copiar</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-file-excel-o"></i>
-                                                                <span class="nav-text">Excel</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-file-text-o"></i>
-                                                                <span class="nav-text">CSV</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-file-pdf-o"></i>
-                                                                <span class="nav-text">PDF</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <!--end::Dropdown Menu-->
-                                            </div>
-                                            <!--end::Dropdown-->
+                                            
+                                                <a href="{{url('administration/teacher/score/'.$course->id)}}" class="btn btn-danger font-weight-bolder mr-2">
+                                                <i class="ki ki-long-arrow-back icon-sm"></i>Regresar</a>
+                                            
+                                          
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -141,9 +100,70 @@
 
                 var initTable1 = function() {
                     var table = $('#kt_datatable');
-
+                    var d = new Date();
+                    var strDate =  d.getDate()+ "-" + (d.getMonth()+1) + "-" + d.getFullYear() ;
                     // begin first table
                     table.DataTable({
+                        dom: 'Bfrltip',
+                        pageLength : 10,
+                        lengthMenu: [ 10, 25, 50, 75, 100 ],
+                        buttons: [
+                            {
+                                text: 'Exportar a excel',
+                                extend: 'excelHtml5',
+                                fieldSeparator: '\t',
+                                messageTop: 'Listado de actividades ',
+                                exportOptions: {
+                                    columns: [ 0, 1, 2, 3 ],
+                                },
+                                title: 'Listado de actividades-{{$course->Name}} {{$course->Grade()->GradeNamePeriod()}}-'+strDate
+                            },
+                            {
+                                text: 'Exportar a csv',
+                                extend: 'csvHtml5',
+                                extension: '.csv',
+                                exportOptions: {
+                                    columns: [ 0, 1, 2, 3],
+                                },
+                                title: 'Listado de actividades-{{$course->Name}} {{$course->Grade()->GradeNamePeriod()}}-'+strDate
+                            
+                            },
+                            {
+                                text: 'Exportar a PDF',
+                                extend: 'pdfHtml5',
+                                extension: '.pdf',
+                                pageSize: 'LEGAL',
+                                title: 'Listado de actividades-{{$course->Name}} {{$course->Grade()->GradeNamePeriod()}}-'+strDate,
+                                customize: function(doc) {
+                                    doc['styles'] = {
+                                        userTable: {
+                                            margin: [0, 15, 0, 15]
+                                        },
+                                        tableHeader: {
+                                            bold:!0,
+                                            fontSize:11,
+                                            color:'white',
+                                            fillColor:'#85AED1',
+                                            alignment:'center'
+                                        }
+                                    },
+                                    doc.styles.tableBodyOdd = {
+                                        alignment: 'center'
+                                      },
+                                    doc.styles.title = {
+                                      color: 'white',
+                                      fontSize: '40',
+                                      background: '#ec7e35',
+                                      alignment: 'center'
+                                    }   
+                                  } ,
+                                exportOptions: {
+                                    columns: [ 0, 1, 2, 3],
+                                },
+                                
+                            }
+                            
+                        ],
                         responsive: true,
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
@@ -155,10 +175,10 @@
                                 orderable: false,
                                 render: function(data, type, full, meta) {
                                     return '\
-                                        <a href="javascript:;" onclick="edit(\''+full[0]+'\',\''+full[1]+'\',\''+full[3]+'\')" class="btn btn-sm btn-clean btn-icon" title="Detalle de asignación">\
+                                        <a href="javascript:;" onclick="edit(\''+full[0]+'\',\''+full[1]+'\',\''+full[3]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" data-placement="top" title="Detalle de asignación">\
                                             <i class="la la-edit"></i>\
                                         </a>\
-                                        <a href="javascript:;" onclick="deleteActivity(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" title="Eliminar">\
+                                        <a href="javascript:;" onclick="deleteActivity(\''+full[0]+'\',\''+full[1]+'\')" class="btn btn-sm btn-clean btn-icon" data-toggle="tooltip" data-placement="top" title="Eliminar">\
                                             <i class="la la-trash"></i>\
                                         </a>\
                                     ';
@@ -280,6 +300,7 @@
                     }
                 })
             }
+            
             function deleteActivity($id,$name)
             {
                 const swalWithBootstrapButtons = Swal.mixin({
@@ -313,14 +334,16 @@
                     ) {
                     swalWithBootstrapButtons.fire({
                         title: 'Cancelado!',
-                        text:  'La Voluntario no ha sido eliminada!',
+                        text:  'La actividad no ha sido eliminada!',
                         icon: 'error',
                         confirmButtonText: 'Aceptar',
                     })
                     }
                 })
             }
-
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+              })
        </script>
 
       

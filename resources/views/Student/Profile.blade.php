@@ -1,4 +1,4 @@
-@extends('Administration.Base/BaseTeacher')
+@extends('Administration.Base/BaseStudent')
 {{-- Page title --}}
     @section('title')
     Perfil
@@ -26,15 +26,15 @@
                             <div class="d-flex align-items-center">
                                 <div class="symbol symbol-60 symbol-xxl-100 mr-5 align-self-start align-self-xxl-center">
                                     @if(session()->get('Gender')=="Masculino")
-                                        <div class="symbol-label" style="background-image:url({{ asset ('assets/media/svg/avatars/Teacher-boy-1.svg')}})"></div>
+                                        <div class="symbol-label" style="background-image:url({{ asset ('assets/media/svg/avatars/001-boy.svg')}})"></div>
                                     @else
-                                    <div class="symbol-label" style="background-image:url({{ asset ('assets/media/svg/avatars/Teacher-girl-1.svg')}})"></div>
+                                    <div class="symbol-label" style="background-image:url({{ asset ('assets/media/svg/avatars/002-girl.svg')}})"></div>
                                     @endif
                                     <i class="symbol-badge bg-success"></i>
                                 </div>
                                 <div>
                                     <a href="#" class="font-weight-bolder font-size-h5 text-dark-75 text-hover-primary">{{$data['Name']}} {{$data['LastNames']}}</a>
-                                    <div class="text-muted">Voluntario IGER</div>
+                                    <div class="text-muted">Alumno de IGER</div>
                                 </div>
                             </div>
                             <!--end::User-->
@@ -128,11 +128,11 @@
                                                         <td>{{$info['titulo']}}</td>
                                                         <td>
                                                             <ul>
-                                                            @foreach($info['cursos'] as $curso)
+                                                           
                                                                 <li>
-                                                                    {{$curso['Curso']}}
+                                                                    {{$info['grado']}}
                                                                 </li>
-                                                            @endforeach
+                                                           
                                                             </ul>
                                                         </td>
                                                     </tr>
@@ -164,7 +164,7 @@
                                                 <div class="row">
                                                     <label class="col-xl-3"></label>
                                                     <div class="col-lg-9 col-xl-6">
-                                                        <h5 class="font-weight-bold mb-6">Información voluntario</h5>
+                                                        <h5 class="font-weight-bold mb-6">Información del estudiante</h5>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -254,7 +254,7 @@
                 }];
 
                 $.ajax({
-                    url:'/teacher/save/profile',
+                    url:'/student/profile/update',
                     type:'POST',
                     data: {"_token":"{{ csrf_token() }}","data":data},
                     dataType: "JSON",
@@ -272,7 +272,7 @@
                             type: "success"
                             }).then(function () {
                             var $url_path = '{!! url('/') !!}';
-                            window.location.href = $url_path+"/teacher/view/profile";
+                            window.location.href = $url_path+"/student/profile";
                             });
                         }//fin else 
                     },

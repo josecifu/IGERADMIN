@@ -19,6 +19,7 @@ class CreateInformationTable extends Migration
             $table->string('Message');
             $table->string('Type');
             $table->string('To');
+            $table->string('State')->nullable();
             $table->timestamps();
         });
     }

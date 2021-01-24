@@ -432,64 +432,7 @@
     @section('scripts')
     <script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
 <script type="text/javascript">
-    "use strict";
-    var KTDatatablesAdvancedRowGrouping = function() {
-    
-        var init = function() {
-            var table = $('#TestTables');
-    
-            // begin first table
-            table.DataTable({
-                layout: {
-                    scroll: true,
-                    height: 550,
-                    footer: false
-                },
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-                },
-                responsive: true,
-                    pageLength: 25,
-                    order: [[2, 'asc']],
-                    drawCallback: function(settings) {
-                        var api = this.api();
-                        var rows = api.rows({page: 'current'}).nodes();
-                        var last = null;
-
-                        api.column(2, {page: 'current'}).data().each(function(group, i) {
-                            if (last !== group) {
-                                $(rows).eq(i).before(
-                                    '<tr class="group"><td colspan="10">' + group + '</td></tr>',
-                                );
-                                last = group;
-                            }
-                        });
-                    },
-                    columnDefs: [
-                        {
-                            // hide columns by index number
-                            targets: [0, 2],
-                            visible: false,
-                        },
-              
-                
-            });
-        };
-    
-        return {
-    
-            //main function to initiate the module
-            init: function() {
-                init();
-            },
-    
-        };
-    
-    }();
-    
-    jQuery(document).ready(function() {
-        KTDatatablesAdvancedRowGrouping.init();
-    });
+   
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
       })

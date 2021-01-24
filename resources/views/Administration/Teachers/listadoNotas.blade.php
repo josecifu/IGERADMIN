@@ -1,13 +1,13 @@
 @extends('Administration.Base/Base')
 {{-- Page title --}}
     @section('title')
-    Inicio
+    Voluntarios
     @stop
     @section('breadcrumb1')
-    Tablero
+    Voluntario
     @stop
     @section('breadcrumb2')
-    Notas
+    Visualización de notas
     @stop
     {{-- Page content --}}
     @section('content')
@@ -43,70 +43,45 @@
                                             @endisset
                                         </div>
                                         <div class="card-toolbar">
+                                            
+                                            <!--begin::Button-->
+                                            <a href="javascript:;" onclick="create();" class="btn btn-success font-weight-bolder mr-2"><i class="la la-plus"></i>Crear Actividad</a>
+                                            <!--end::Button-->
                                             <!--begin::Dropdown-->
-                                            <div class="dropdown dropdown-inline mr-2">
-                                                <button type="button" class="btn btn-light-primary font-weight-bolder dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="la la-download"></i>Exportar</button>
-                                                <!--begin::Dropdown Menu-->
-                                                <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                                                    <ul class="nav flex-column nav-hover">
-                                                        <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opcion:</li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-print"></i>
-                                                                <span class="nav-text">Imprimir</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-copy"></i>
-                                                                <span class="nav-text">Copiar</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-file-excel-o"></i>
-                                                                <span class="nav-text">Excel</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-file-text-o"></i>
-                                                                <span class="nav-text">CSV</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="nav-item">
-                                                            <a href="#" class="nav-link">
-                                                                <i class="nav-icon la la-file-pdf-o"></i>
-                                                                <span class="nav-text">PDF</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <!--end::Dropdown Menu-->
-                                            </div>
-                                            <a href="#" onclick="create();" class="btn btn-primary font-weight-bolder">
-                                                <i class="la la-plus"></i>Crear Actividad</a>
-                                            <!--end::Dropdown-->
+                                           {{-- <div class="dropdown dropdown-inline mr-2" >
+                                                <button style="color: white;" type="button" class="btn btn-light-primary font-weight-bolder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="la la-download" style="color: white;"></i>Exportar datos</button>
+                                                @include("Administration.Base._exports")
+                                            </div>--}}
+                                            
+                                            
                                         </div>
                                     </div>
                                     <div class="card-body">
+                                        <div class="scroll scroll-pull" data-scroll="true" data-suppress-scroll-x="false" data-swipe-easing="false" style="height: 600px">
+                                        
                                         <!--begin: Datatable-->
                                         <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
                                             <thead>
-                                                <tr>
-                                                    <th></th>
+                                                <tr style="background:#85AED1">
+                                                    <th style="background:#fff"></th>
                                                     @foreach($Titles as $Title)
-                                                        <th colspan="{{ $Title['No'] }}" ><center>{{ $Title['Name'] }}</center></th>
+                                                        <th style="color:white;" colspan="{{ $Title['No'] }}" ><center>{{ $Title['Name'] }}</center></th>
                                                     @endforeach
                                                 </tr>
                                                 <tr>
+                                                    @php 
+                                                    $titlestest=0;
+                                                    @endphp
                                                     <th>Nombre de los alumnos</th>
                                                     @foreach($Titles as $Title)
                                                         @if($Title['No']==0)
                                                         <th><center>No existen examenes asignados</center></th>
                                                         @endif
                                                         @foreach($Title['Test'] as $title)
+                                                        @php 
+                                                        $titlestest++;
+                                                        @endphp
                                                         <th><center>{{$title->Title}}</center></th>
                                                         @endforeach
                                                     @endforeach
@@ -132,6 +107,7 @@
                                             </tbody>
                                         </table>
                                         <!--end: Datatable-->
+                                    </div>
                                     </div>
                                 </div>
                                 <!--end::Card-->
@@ -162,7 +138,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                <button type="button" class="btn btn-primary mr-2" onclick="detalleActividad();">Visualizar</button>
+                                                <button type="button" class="btn btn-success mr-2" onclick="detalleActividad();">Visualizar</button>
                                             </div>
                                         </form>
                                     </div>
@@ -185,13 +161,81 @@
            
             "use strict";
             var KTDatatablesDataSourceHtml = function() {
-
+                var d = new Date();
+                var strDate =  d.getDate()+ "-" + (d.getMonth()+1) + "-" + d.getFullYear();
                 var initTable1 = function() {
                     var table = $('#kt_datatable');
 
                     // begin first table
                     table.DataTable({
-                        responsive: true,
+                        dom: 'Brtip',
+                        buttons: [
+                            {
+                                text: 'Exportar a excel',
+                                extend: 'excelHtml5',
+                                fieldSeparator: '\t',
+                               
+                                exportOptions: {
+                                    columns: [ 0, @for($i=1; $i<=($titlestest);$i++){{$i}},@endfor ],
+                                },
+                                customize: function(xlsx) {
+                                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+                                    $('c[r=A1] t', sheet).text( 'Listado de notas / {{$grado}}' );
+                                    $('row c[r^="C"]', sheet).attr( 's', '32' );
+                                    $('row c', sheet).attr('s', '25');
+                                    $('row:first c', sheet).attr( 's', '51' );
+                                    $('c[r=A2] t', sheet).attr( 's', '25' );
+                                    $('c[r=A2] t', sheet).css('background-color', 'Red');
+                                    $('row c[r*="2"]', sheet).attr('s', '32');
+                                    
+                                },
+                                title: 'NotasAlumnos{{$grado}}-'+strDate,
+                            },
+                            {
+                                text: 'Exportar a csv',
+                                extend: 'csvHtml5',
+                                extension: '.csv',
+                                exportOptions: {
+                                    columns: [ 0, @for($i=1; $i<=($titlestest);$i++){{$i}},@endfor ],
+                                },
+                                title: 'Listado notas / {{$grado}} -'+strDate
+                            },
+                            {
+                                text: 'Exportar a PDF',
+                                extend: 'pdfHtml5',
+                                extension: '.pdf',
+                                orientation: 'landscape',
+                                pageSize: 'LEGAL',
+                                exportOptions: {
+                                    columns: [ 0, @for($i=1; $i<=($titlestest);$i++){{$i}},@endfor ],
+                                },
+                                title: 'Listado notas / {{$grado}} -'+strDate,
+                                customize: function(doc) {
+                                    doc['styles'] = {
+                                        userTable: {
+                                            margin: [0, 15, 0, 15]
+                                        },
+                                        tableHeader: {
+                                            bold:!0,
+                                            fontSize:11,
+                                            color:'white',
+                                            fillColor:'#85AED1',
+                                            alignment:'center'
+                                        }
+                                    },
+                                  
+                                    doc.styles.title = {
+                                      color: 'white',
+                                      fontSize: '40',
+                                      background: '#ec7e35',
+                                      alignment: 'center'
+                                    }   
+                                  } ,
+                            }
+                            
+                        ],
+                        responsive: false,
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                         },
@@ -319,8 +363,40 @@
             function detalleActividad() {
                 var id = $('#detailA').val();
                 var $url_path = '{!! url('/') !!}';
-                window.location.href = $url_path+"/administration/teacher/detail/activity/"+{{$course->id}}+"/"+id;   
+                window.location.href = $url_path+"/administration/teacher/score/detail/activity/"+{{$course->id}}+"/"+id;   
             }
+            function checkinfo ($url)
+            {
+                Swal.fire({
+                        title: "¿Esta seguro que desea enviar las notas?",
+                        text:"Las notas no podran ser modificadas despues de enviadas",
+                        icon: "success",
+                        showCancelButton: true,
+                        buttonsStyling: false,
+                        confirmButtonText: "Enviar para confirmar",
+                        cancelButtonText: "Cancelar",
+                        customClass: {
+                            confirmButton: "btn font-weight-bold btn-warning",
+                            cancelButton: "btn font-weight-bold btn-default"
+                        }
+                    }).then(function (result) {
+                        if (result.value) {
+                            console.log($url);
+                            window.location.href = $url;
+                        } else if (result.dismiss === 'cancel') {
+                            Swal.fire({
+                                text: "¡Las notas no han sido enviadas!.",
+                                icon: "error",
+                                buttonsStyling: false,
+                                confirmButtonText: "Aceptar",
+                                customClass: {
+                                    confirmButton: "btn font-weight-bold btn-success",
+                                }
+                            });
+                        }
+                    });
+                    
+			}
        </script>
 
       

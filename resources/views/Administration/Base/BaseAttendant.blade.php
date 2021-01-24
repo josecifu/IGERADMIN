@@ -255,7 +255,7 @@
 											 </div>
 											 <div class="modal-footer">
 												 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-												 <button type="button" class="btn btn-primary mr-2" onclick="save();" id="btnModal">Visualizar</button>
+												 <button type="button" class="btn btn-success mr-2" onclick="save();" id="btnModal">Visualizar</button>
 											 </div>
 										 </form>
 									 </div>
@@ -620,6 +620,7 @@
 			
 			function ListGrade(pos)
 			{
+				console.log(pos);
 				clearLvls();
 				posGrade=pos;
 				var url = '{{route('LoadPeriodsAttendantAsign')}}';
@@ -629,7 +630,12 @@
 					$('#Title2').html("Visualice el listado de notas y examenes por curso, grados, nivel y circulo de estudio seleccionado");
 				
 				}
+				if(pos==4)
+				{			
+					$('#Title1').text("Visualización de espacios de trabajo");
+					$('#Title2').html("Visualice los espacios de trabajo por curso, grados, nivel y circulo de estudio seleccionado");
 				
+				}
 				$.ajax ({
 					url: url,
 					type: 'GET',
@@ -648,10 +654,22 @@
 				if(posGrade==7)
 				{
 					var Id = $('#courseselect1').val();
+					if(Id>0)
+					{
 					var $url_path = '{!! url('/') !!}';
-                    window.location.href = $url_path+"/attendant/notes/view/"+Id;
+					window.location.href = $url_path+"/attendant/notes/view/"+Id;
+					}
 				}
-				
+				if(posGrade==4)
+				{
+					var Id = $('#courseselect1').val();
+					if(Id>0)
+					{
+						var $url_path = '{!! url('/') !!}';
+                    	window.location.href = $url_path+"/attendant/home/workspace/list/"+Id;
+					}
+					
+				}
 			}
 			function ListLevel(Period)
 			{
@@ -716,7 +734,7 @@
 				});
 			}
 			$('#gradeselect1').on('change', function() {
-				if(posGrade==7 ) {
+				if(posGrade==7 ||posGrade==4) {
 					$('#SelectCourse').css("visibility", "visible");
 					ListCourse($('#gradeselect1').val());
 				}

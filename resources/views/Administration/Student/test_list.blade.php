@@ -25,46 +25,7 @@
                     </div>
                     <div class="card-toolbar">
                         <!--begin::Dropdown-->
-                        <div class="dropdown dropdown-inline">
-                            <button style="color:white;" type="button" class="btn btn-light-primary font-weight-bolder" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="la la-download" style="color:white;"></i>Exportar</button>
-                            <!--begin::Dropdown Menu-->
-                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                                <ul class="nav flex-column nav-hover">
-                                    <li class="nav-header font-weight-bolder text-uppercase text-primary pb-2">Elija una opcion:</li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-print"></i>
-                                            <span class="nav-text">Imprimir</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-copy"></i>
-                                            <span class="nav-text">Copiar</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-file-excel-o"></i>
-                                            <span class="nav-text">Excel</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-file-text-o"></i>
-                                            <span class="nav-text">CSV</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="nav-icon la la-file-pdf-o"></i>
-                                            <span class="nav-text">PDF</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!--end::Dropdown Menu-->
-                        </div>
+                       
                         <!--end::Dropdown-->
                     </div>
                 </div>
@@ -72,7 +33,7 @@
                     <!--begin: Datatable-->
                     <table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top:13px !important">
                         <thead>
-                            <tr style="background:#cecece">
+                            <tr >
                                 <th colspan="2">
                                     <center>Estudiantes</center>
                                 </th>
@@ -82,15 +43,21 @@
                                 </th>
                                 @endforeach
                             </tr>
-                            <tr style="background:#e5e5e5">
+                            <tr>
                                 <th>Nombres</th>
                                 <th>Apellidos</th>
                                 @foreach($titles as $title)
-                                    @foreach($title['test'] as $t)
+                                    
+                                        @foreach($title['test'] as $t)
+                                        <th>
+                                            <center>{{$t->Title}}</center>
+                                        </th>
+                                        @endforeach
+                                    @if($title['no']==0)
                                     <th>
-                                        <center>{{$t->Title}}</center>
+                                        <center>No existen examenes asignados</center>
                                     </th>
-                                    @endforeach
+                                    @endif
                                 @endforeach
                               </tr>
                         </thead>
@@ -100,19 +67,26 @@
                                     <td>{{$model['name']}}</td>
                                     <td>{{$model['lastname']}}</td>
                                     @foreach($model['tests'] as $test)
-                                    <td>
-                                        @foreach($test['notes'] as $note)
-                                            @if($test['state']=="written")
-                                            <center>
-                                                <button type="button" disabled class="btn btn-info">{{$note['Score']}}</button>
-                                            </center>
-                                            @endif
-                                            @if($test['state']=="approved")
-                                            <center>
-                                                <button type="button" class="btn btn-outline-info"  onclick="verExamen({{$test['Id']}},{{$model['assign']}});">{{$note['Score']}}</button>
-                                            </center>
-                                            @endif
-                                        @endforeach
+                                        @if($test['notes']=="0")
+                                        <center>
+                                            <td style="background-color: #E4E6EF">    
+                                        </center>
+                                        @else
+                                            <td>
+                                            @foreach($test['notes'] as $note)
+                                                @if(($test['state']=="written")||($test['state']=="none"))
+
+                                                <center>
+                                                    <button type="button" disabled class="btn btn-info">{{$note['Score']}} pts</button>
+                                                </center>
+                                                @endif
+                                                @if($test['state']=="approved")
+                                                <center>
+                                                    <button type="button" class="btn btn-outline-info"  onclick="verExamen({{$test['Id']}},{{$model['assign']}});">{{$note['Score']}} pts</button>
+                                                </center>
+                                                @endif
+                                            @endforeach
+                                        @endif
                                     </td>
                                     @endforeach
                                 </tr>
@@ -132,10 +106,82 @@
         <script type="text/javascript">
             "use strict";
             var KTDatatablesDataSourceHtml = function() {
+                var d = new Date();
+                var strDate =  d.getDate()+ "-" + (d.getMonth()+1) + "-" + d.getFullYear() ;
                 var initTable1 = function() {
                     var table = $('#kt_datatable');
                     // begin first table
                     table.DataTable({
+                        dom: 'Bfrltip',
+                        pageLength : 10,
+                        lengthMenu: [ 10, 25, 50, 75, 100 ],
+                        buttons: [
+                            {
+                                text: 'Exportar a excel',
+                                extend: 'excelHtml5',
+                                fieldSeparator: '\t',
+                               
+                                exportOptions: {
+                                    columns: [ 0, @for($i= 1; $i<=count($titles)+1;$i++) {{$i}}, @endfor]
+                                },
+                                customize: function(xlsx) {
+                                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+                                    $('c[r=A1] t', sheet).text( 'Listado de notas / {{$grade}}' );
+                                    $('row c[r^="C"]', sheet).attr( 's', '32' );
+                                    $('row c', sheet).attr('s', '25');
+                                    $('row:first c', sheet).attr( 's', '51' );
+                                    $('c[r=A2] t', sheet).attr( 's', '25' );
+                                    $('c[r=A2] t', sheet).css('background-color', 'Red');
+                                    $('row c[r*="2"]', sheet).attr('s', '32');
+                                    
+                                },
+                                title: 'Evaluaciones-{{$grade}} '+strDate,
+                            },
+                            {
+                                text: 'Exportar a csv',
+                                extend: 'csvHtml5',
+                                extension: '.csv',
+                                exportOptions: {
+                                    columns: [ 0, @for($i= 1; $i<=count($titles)+1;$i++){{$i}},@endfor]
+                                },
+                                
+                            },
+                            {
+                                text: 'Exportar a PDF',
+                                extend: 'pdfHtml5',
+                                extension: '.pdf',
+                                orientation: 'landscape',
+                                pageSize: 'LEGAL',
+                                title: 'Evaluaciones {{$grade}} '+strDate,
+                                customize: function(doc) {
+                                    doc['styles'] = {
+                                        userTable: {
+                                            margin: [0, 15, 0, 15]
+                                        },
+                                        tableHeader: {
+                                            bold:!0,
+                                            fontSize:11,
+                                            color:'white',
+                                            fillColor:'#85AED1',
+                                            alignment:'center'
+                                        }
+                                    },
+                                   
+                                    doc.styles.title = {
+                                      color: 'white',
+                                      fontSize: '40',
+                                      background: '#ec7e35',
+                                      alignment: 'center'
+                                    }   
+                                  } ,
+                                exportOptions: {
+                                    columns: [ 0, 1, @for($i= 2; $i<count($titles)+2;$i++){{$i}},@endfor ]
+                                },
+                                
+                            }
+                            
+                        ],
                         responsive: true,
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"

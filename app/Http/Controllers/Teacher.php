@@ -52,31 +52,149 @@ use Illuminate\Support\Facades\DB;
 
 class Teacher extends Controller
 {
-    public function workspace($id)
+    public function ActivitiesLogs(Request $request)
     {
-        $course=course::find($id);
+        $models=[];
+        $titles = [
+            'No',
+            'Responsable',
+            'Actividad',
+            'Tipo',
+            'Fecha y hora'
+        ];
+        $id2 = User::find($request->session()->get('User_id'));
+        $logs = logs::where(['User_Id'=>$id2->name])->get();
+        foreach ($logs as $log)
+        {
+            setlocale(LC_TIME, "spanish");
+            $newDate = date("d-m-Y", strtotime($log->created_at));	
+            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $type = "";
+            $color = "Success";
+            if($log->Type=="Crear")
+            {
+                $type = "Nuevo registro";
+                $color = "success";
+            }
+            if($log->Type=="Asignar")
+            {
+                $type = "Se asigno registro";
+                $color = "warning";
+            }
+            if($log->Type=="Actualizar")
+            {
+                $type = "Se asigno registro";
+                $color = "secundary";
+            }
+            if($log->Type=="Eliminar")
+            {
+                $type = "Se elimino registro";
+                $color = "danger";
+            }
+            if($log->Type=="Login")
+            {
+                $type = "Ha iniciado sesión";
+                $color = "primary";
+            }
+            if($log->Type=="Activar")
+            {
+                $type = "Se ha activado";
+                $color = "primary";
+            }
+            $data = [
+                'id' => $log->id,
+                'responsible' => $log->User_Id,
+                'activity' => $log->Description,
+                'type' => $type,
+                'color' => $color,
+                'datatime' => $mes." a las ".date("g:i A", strtotime($log->created_at))
+            ];
+            array_push($models,$data);
+        }
+        return view('Teacher/Activity',compact('models','titles'));
+    }
+    public function workspaceview(Request $request,$id)
+    {
         $buttons =[];
         $button = [
-            "Name" => 'Info',
-            "Link" => '#',
-            "Type" => "btn1"
+            "Name" => 'Eliminar publicación',
+            "Link" => 'administration/teacher/workspace/delete/'.$id,
+            "Type" => "btndelete"
         ];
         array_push($buttons,$button);
-        $teacher = $course->Teacher();
-        
-        $vol = "No asignado";
-        if($teacher)
-        {
-            $vol = $teacher->person()->Names." ".$teacher->person()->LastNames;
-        }
-            $model= [
+        $info= information::find($id); 
+        $course = course::find($info->To);
+        setlocale(LC_TIME, "spanish");
+        $newDate = date("d-m-Y", strtotime($info->created_at));	
+        $mes = strftime("%d de %B del %Y", strtotime($newDate));
+        $conection= $mes." a las ".date("H:m A", strtotime($info->created_at));
+        $teacher = $course->Teacher()->Person()->Names." ".$course->Teacher()->Person()->LastNames;
+        $information=[
             "Course"=>$course->Name,
-            "Teacher"=>$vol,
-            "Info"=>" ",
-            "Students"=> count($course->Grade()->Students()),
-            "Test"=> $course->Tests(),
+            "Title" =>$info->Title,
+            "Description" =>$info->Message,
+            "Date" => $conection,
+            "Teacher"=>$teacher??'No asignado'
         ];
-        return view('Administration/Teachers/spaceWork',compact('buttons','model','id'));
+        if($request->session()->get('rol_Name')=="Voluntario")
+        {
+            return view('Teacher/ViewWorkspace',compact('information'));
+        }
+        $id=$info->To;
+        return view('Administration/Teachers/ViewWorkspace',compact('buttons','information','id'));
+    }
+    public function workspacedelete($id)
+    {
+        $info= information::find($id); 
+        $info->State="Delete";
+        $info->save();
+        $id=$info->To;
+        Session::put([
+            'message' => "¡Se ha eliminado con exito la publicación!",
+             ]);
+        return redirect()->route('WorkspaceTeacher',$id);
+    }
+    public function workspace($id)
+    {
+
+        $course = course::find($id);
+        $teacher = $course->Teacher();
+        $id2=$course->Teacher();
+        $model = [];
+        $grade = grade::find($course->Grade_id);
+        $students = Assign_student_grade::where([['Grade_id',$course->Grade_id],['State','Active']])->get();
+        $teacher ="";
+        if($id2)
+        {
+            $teacher = $id2->Person()->Names." ".$id2->Person()->LastNames;
+        }
+        $model = [
+            "Course" => $course->Name." ". $grade->GradeNamePeriod(),
+            "Period" => $grade->Period()->Name,
+            "Students" => count($students),
+            "Teacher"=> $teacher ?? 'No asignado',
+            "Test" => count($course->Tests()),
+        ];
+        if($id2)
+        {
+            $teacher = Person::find($id2->Person_id);
+        }
+        $infos= information::where(['Type'=>'Course','To'=>$id,'State'=>'Active'])->get(); 
+        $informations = [];
+        foreach($infos as $info)
+        {
+            setlocale(LC_TIME, "spanish");
+            $newDate = date("d-m-Y", strtotime($info->created_at));	
+            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $conection= $mes." a las ".date("H:m A", strtotime($info->created_at));
+            $information=[
+                "id" =>$info->id,
+                "Title" =>$info->Title,
+                "Date" => $conection,
+            ];
+            array_push($informations,$information);
+        }
+        return view('Administration/Teachers/spaceWork',compact('model','teacher','id','informations'));
     }
     public function __construct()
 	{
@@ -89,7 +207,7 @@ class Teacher extends Controller
         $model = [];
         $grade = grade::find($course->Grade_id)->Period();
         $students = Assign_student_grade::where([['Grade_id',$course->Grade_id],['State','Active']])->get();
-        $tests = Asign_test_course::where('Teacher_id',$id2)->get();
+        $tests = Asign_test_course::where('Teacher_id',$id2->id)->get();
         $teacher = $id2->Person()->Names." ".$id2->Person()->Lastnames;
         $model = [
             "Course" => $course->Name,
@@ -99,7 +217,7 @@ class Teacher extends Controller
             "Test" => count($tests),
         ];
         $teacher = Person::find($id2->Person_id);
-        $infos= information::where(['Type'=>'Course','To'=>$id])->get(); 
+        $infos= information::where(['Type'=>'Course','To'=>$id,'State'=>'Active'])->get(); 
         $informations = [];
         foreach($infos as $info)
         {
@@ -108,6 +226,7 @@ class Teacher extends Controller
             $mes = strftime("%d de %B del %Y", strtotime($newDate));
             $conection= $mes." a las ".date("H:m A", strtotime($info->created_at));
             $information=[
+                "id" =>$info->id,
                 "Title" =>$info->Title,
                 "Date" => $conection,
             ];
@@ -127,6 +246,7 @@ class Teacher extends Controller
             $model->Message = $data['Contenido'];
             $model->Type = "Course";
             $model->To = $request['ID'];
+            $model->State = "Active";
             $model->save();
             $log = new logs;
             $log->Table = "Voluntario";
@@ -138,6 +258,7 @@ class Teacher extends Controller
         } catch (\Throwable $th) {
             //throw $th;
             DB::rollBack();
+            return response()->json(["Error" => "No se ha guardado la publicación debe llenar todos los campos..."]);;
         }
         return response()->json(["Accion completada"]);
     }
@@ -301,14 +422,14 @@ class Teacher extends Controller
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver Voluntarios inactivos',
-            "Link" => 'administration/teacher/desactive',
+            "Name" => 'Listado de voluntarios eliminados',
+            "Link" => 'administration/teacher/list/desactive',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver Logs de Voluntarios',
-            "Link" => 'administration/teacher/logs',
+            "Name" => 'Historial de Voluntarios',
+            "Link" => 'administration/teacher/list/logs',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
@@ -357,7 +478,7 @@ class Teacher extends Controller
         $button = [
             "Name" => 'Listado Voluntarios',
             "Link" => 'administration/teacher/list',
-            "Type" => "add"
+            "Type" => "btn1"
         ];  
         array_push($buttons,$button);
         return view('Administration/Teachers/formulario',compact('buttons'));
@@ -634,11 +755,11 @@ class Teacher extends Controller
         $button = [
             "Name" => 'Enviar notas a revisión',
             "Link" => '/teacher/send/state/test/'.$id,
-            "Type" => "btn1"
+            "Type" => "btncheck"
         ];
         array_push($buttons,$button);
         $Nombre = $vol->Names.' '.$vol->LastNames;
-        $grado = grade::find($course->Grade_id)->GradeName();
+        $grado = grade::find($course->Grade_id)->GradeNamePeriod();
         if(session()->get('rol_Name')=="Voluntario"){
             return view('Teacher/listadoNotas',compact('buttons','Modal','Titles','Models','Nombre','course','grado'));
         }else{
@@ -757,15 +878,15 @@ class Teacher extends Controller
         } else{
             $assign = Asign_teacher_course::where([['Course_id',$id],['State','Active']])->first();
             $button = [
-                "Name" => 'Listado Voluntarios',
-                "Link" => 'administration/teacher/list',
-                "Type" => "btn1"
-            ];
-            array_push($buttons,$button);
-            $button = [
                 "Name" => 'Crear Examen',
                 "Link" => 'administration/teacher/create/test/'."$id",
                 "Type" => "add"
+            ];
+            array_push($buttons,$button);
+            $button = [
+                "Name" => 'Listado Voluntarios',
+                "Link" => 'administration/teacher/list',
+                "Type" => "btn1"
             ];
             array_push($buttons,$button);
             if(isset($assign->user_id)){
@@ -787,15 +908,28 @@ class Teacher extends Controller
                 "No" =>count($Activity->Tests()),
                 "Test" => $Activity->Tests(),
             ];
-            foreach($Activity->Tests() as $Test)
+            if(count($Activity->Tests())>0)
+            {
+                foreach($Activity->Tests() as $Test)
+                {
+                    $model =[
+                        "Id" => $Test->id,
+                        "Tipo" => $Test->State,
+                        "NoQuestions" => $Test->NoQuestions(),
+                    ];
+                    array_push($Models,$model);
+                }
+            }
+            else
             {
                 $model =[
-                    "Id" => $Test->id,
-                    "Tipo" => $Test->State,
-                    "NoQuestions" => $Test->NoQuestions(),
+                    "Id" => 0,
+                    "Tipo" => "No",
+                    "NoQuestions" => 0,
                 ];
                 array_push($Models,$model);
             }
+            
             array_push($Titles,$act);
         }
         
@@ -889,7 +1023,13 @@ class Teacher extends Controller
         $course = course::find($id);
         $nota = Note::where('Course_id',$id)->get();
         if($nota->isempty()){
+            if(session()->get('rol_Name')=="Voluntario"){
             return redirect('/teacher/score/list/'.$id)->withError('No existen notas de examenes calificados');
+            }
+            else
+            {
+                return redirect('/administration/teacher/score/'.$id)->withError('No existen notas de examenes calificados');
+            }
         }
         foreach ($nota as $value) {
             // if (($value->State != 'Qualified') || ($value->State != 'Pre-Qualified') || ($value->State != 'Approved')) {
@@ -1363,14 +1503,14 @@ class Teacher extends Controller
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver Voluntarios inactivos',
-            "Link" => 'administration/teacher/desactive',
+            "Name" => 'Listado de voluntarios activos',
+            "Link" => 'administration/teacher/list',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver Logs Voluntarios',
-            "Link" => 'administration/teacher/logs',
+            "Name" => 'Historial de Voluntarios',
+            "Link" => 'administration/teacher/list/logs',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
@@ -1420,35 +1560,109 @@ class Teacher extends Controller
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver Voluntarios inactivos',
-            "Link" => 'administration/teacher/desactive',
+            "Name" => 'Listado de voluntarios activos',
+            "Link" => 'administration/teacher/list',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
         $button = [
-            "Name" => 'Ver Logs de Voluntarios',
-            "Link" => 'administration/teacher/logs',
+            "Name" => 'Listado de voluntarios eliminados',
+            "Link" => 'administration/teacher/list/desactive',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
-        $Titles =['Id del registro','Usuario Responsable','Descripcion','Tipo','Hora y fecha de creacion'];
-        $logs = logs::where('Table','Voluntario')->get();
-        $Models = [];
-        foreach ($logs as $l) {
-                $data = [
-                    'Id' => $l->id,
-                    'Usuario' => $l->User_Id,
-                    'Descripcion' => $l->Description,
-                    'Tipo' => $l->Type,
-                    'HF' => $l->created_at,
-                ];
-                array_push($Models,$data);
+        $Titles = [
+            'No',
+            'Responsable',
+            'Actividad',
+            'Tipo',
+            'Fecha y hora'
+        ];
+        $logs = logs::whereIn('Table',['Voluntario'])->get();
+        $Models=[];
+        foreach ($logs as $log)
+        {
+            setlocale(LC_TIME, "spanish");
+            $newDate = date("d-m-Y", strtotime($log->created_at));	
+            $mes = strftime("%d de %B del %Y", strtotime($newDate));
+            $type = "";
+            $color = "Success";
+            if($log->Type=="Create")
+            {
+                $type = "Nuevo registro";
+                $color = "success";
+            }
+            if($log->Type=="Assign")
+            {
+                $type = "Se asigno registro";
+                $color = "warning";
+            }
+            if($log->Type=="Update")
+            {
+                $type = "Se asigno registro";
+                $color = "secundary";
+            }
+            if($log->Type=="Delete")
+            {
+                $type = "Se elimino registro";
+                $color = "danger";
+            }
+            if($log->Type=="Login")
+            {
+                $type = "Ha iniciado sesión";
+                $color = "primary";
+            }
+            if($log->Type=="Active")
+            {
+                $type = "Se ha activado";
+                $color = "primary";
+            }
+            $data = [
+                'id' => $log->id,
+                'responsible' => $log->User_Id,
+                'activity' => $log->Description,
+                'type' => $type,
+                'color' => $color,
+                'datatime' => $mes." a las ".date("g:i A", strtotime($log->created_at))
+            ];
+            array_push($Models,$data);
         }
         return view('Administration/Teachers/logs',compact('Models','Titles','buttons'));
     }
     public function statistics()        #VISTA DE ESTADISTICAS
     {
-        return view('Administration/Teachers/statistics');
+        $periods = period::where('State','Active')->get();
+        $models=[];
+        foreach($periods as $period)
+        {
+            $asing=[];
+            $vol=0;
+            foreach($period->Grades() as $grade)
+            {
+                foreach($grade->Courses() as $course)
+                {
+                    $asing = Asign_teacher_course::where(['Course_id'=>$course->id,'Year'=>date('Y'),'State'=>'Active'])->get();
+                    $vol=$vol+count($asing);
+                }
+            }
+            $Activity=[];
+            for($i=1;$i<=12;$i++)
+            {
+                $month=date("m", strtotime("01-".$i."-2020"));
+                $logs = logs::whereMonth('created_at', '=', $month)->get();
+                $logs = $logs->where('Table','Voluntario');
+                $logs = $logs->where('Period_id',$period->id);
+                array_push($Activity,count($logs));
+            }
+            $model =[
+                "Name"=>$period->Name,
+                "Activity"=>$Activity,
+                "Teachers"=>$vol,
+            ];
+            array_push($models,$model);
+        }
+       
+        return view('Administration/Teachers/statistics',compact('models'));
     }
 
     public function viewProfile(Request $request)
@@ -1526,7 +1740,7 @@ class Teacher extends Controller
     public function TeacherLoadCourse(Request $request)         //Cargar cursos asignados de un voluntario
     {
         $id = $request->session()->get('User_id');
-        $assign = Asign_teacher_course::where('user_id',$id)->get();
+        $assign = Asign_teacher_course::where(['user_id'=>$id,'State'=>'Active','Year'=>date('Y')])->get();
         // if(count($assign) > 1){
             $courses = [];
             foreach ($assign as $value) {
@@ -1600,7 +1814,7 @@ class Teacher extends Controller
                     if (!isset($verificar)) {
                         $usuario_curso = new Asign_teacher_course;
                         $curso = course::find($Cursos[$i]);
-                        $grado = grade::find($curso->Grade_id)->GradeName();
+                        $grado = grade::find($curso->Grade_id);
                         $usuario_curso->user_id = $vol->id;
                         $usuario_curso->Course_id = $Cursos[$i];
                         $usuario_curso->Year = date("Y");
@@ -1611,7 +1825,7 @@ class Teacher extends Controller
                         $log->Table = "Voluntario";
                         $log->User_ID = $id->name;
                         $log->Description = "Se asigno el usuario: ".$vol->name.
-                        " al curso de ".$curso->Name." del grado de ".$grado;
+                        " al curso de ".$curso->Name." del grado de ".$grado->GradeName();
                         $log->Type = "Assign";
                         $log->Period_id = $grado->Period()->id;
                         $log->save();
