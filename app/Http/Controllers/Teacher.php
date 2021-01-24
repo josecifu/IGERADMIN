@@ -740,11 +740,17 @@ class Teacher extends Controller
                 $course = course::find($assignV->Course_id);
                 $vol = Person::find($teacher);
                 $button = [
-                    "Name" => 'Crear Examen',
+                    "Name" => 'Crear Exámen',
                     "Link" => 'teacher/create/test/'."$course->id",
                     "Type" => "add"
                 ];
                 array_push($buttons,$button);
+                // $button = [
+                //     "Name" => 'Editar Exámen',
+                //     "Link" => 'modal()',
+                //     "Type" => "addFunction1"
+                // ];
+                // array_push($buttons,$button);
             }else{
                 return redirect('/teacher/home/dashboard')->withError('No tiene cursos asignados');
             }
@@ -772,6 +778,7 @@ class Teacher extends Controller
         }
         $Titles = [];
         $Models = [];
+        $Modal = [];
         $Activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
         foreach($Activities as $Activity)
         {
@@ -1068,6 +1075,31 @@ class Teacher extends Controller
             }
         }        
     }
+    public function editExam($curso,$idTest)
+    {
+        $test = test::find($idTest);
+        if($test->State == 'Active'){
+            $FInicio = explode(' ',$test->StartDate);
+            $FFinal = explode(' ',$test->EndDate);
+            $Fecha = $FInicio[0].' - '.$FFinal[0];
+            $HI = $FInicio[1].' '.$FInicio[2];
+            $HF = $FFinal[1].' '.$FFinal[2];
+            $Models = [
+                'id' => $idTest,
+                'Name' => $test->Title,
+                'Date' => $Fecha,
+                'HI' => $HI,
+                'HF' => $HF,
+            ];
+        }
+        // dd($Models);
+        return view('Teacher/EditTest',compact('Models','curso'));
+    }
+    public function updateExam()
+    {
+        
+    }
+
     public function AssignQuestion($id,$preguntas)
     {
         if(session()->get('rol_Name')=="Voluntario"){
@@ -1321,7 +1353,6 @@ class Teacher extends Controller
         }
         return view('Teacher/geplandeTests',compact('Titles','Models'));
     }
-
     public function Desactive()         //vista usuarios desactivados
     {
         $buttons =[];
