@@ -125,7 +125,40 @@
                                 </div>
                                 <!--end::Card-->
                             </div>
-
+                            <div class="modal fade" id="kt_grades_modal1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Visualizar actividades del curso {{$course->Name}}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <i aria-hidden="true" class="ki ki-close"></i>
+                                            </button>
+                                        </div>
+                                        <form class="form">
+                                            <div class="modal-body">
+                                                <div class="form-group row">
+                                                    <label class="col-form-label text-right col-lg-3 col-sm-12">Seleccione el nivel</label>
+                                                    <div class="col-lg-9 col-md-9 col-sm-12">
+                                                        <select class="form-control selectpicker" data-size="10" data-live-search="true" id="detailA">
+                                                            <option value="0">--Seleccione una opción</option>
+                                                            @foreach($Titles as $Title)
+                                                                @foreach($Title['Test'] as $m)
+                                                                    <option value="{{ $m->id}} ">{{$m->Title}} </option>
+                                                                @endforeach
+                                                            @endforeach
+                                                        </select>
+                                                        <span class="form-text text-muted">Visualice los detalles de la actividad seleccionada</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                <button type="button" class="btn btn-primary mr-2" onclick="detalleExamen();">Visualizar</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
 	@stop
 	@section('scripts')
 
@@ -177,7 +210,16 @@
                 var $url_path = '{!! url('/') !!}';
                 window.location.href = $url_path+"/teacher/question/"+$id+"/"+$curso;
             }
-
+            function modal() {
+                $("#kt_grades_modal1").modal("show");
+            }
+            function detalleExamen() {
+                var id = $('#detailA').val();
+                var $url_path = '{!! url('/') !!}';
+                if(id > 0){
+                    window.location.href = $url_path+"/teacher/edit/exam/"+{{$course->id}}+"/"+id;
+                }
+            }
        </script>
 
       
