@@ -758,7 +758,12 @@ class Teacher extends Controller
             "Type" => "btncheck"
         ];
         array_push($buttons,$button);
-        $Nombre = $vol->Names.' '.$vol->LastNames;
+         $Nombre = " ";
+        if($vol!=null)
+        {
+            $Nombre = $vol->Names.' '.$vol->LastNames;
+        }
+        
         $grado = grade::find($course->Grade_id)->GradeNamePeriod();
         if(session()->get('rol_Name')=="Voluntario"){
             return view('Teacher/listadoNotas',compact('buttons','Modal','Titles','Models','Nombre','course','grado'));
@@ -1648,7 +1653,7 @@ class Teacher extends Controller
             $Activity=[];
             for($i=1;$i<=12;$i++)
             {
-                $month=date("m", strtotime("01-".$i."-2020"));
+                $month=date("m", strtotime("01-".$i."-"));
                 $logs = logs::whereMonth('created_at', '=', $month)->get();
                 $logs = $logs->where('Table','Voluntario');
                 $logs = $logs->where('Period_id',$period->id);
