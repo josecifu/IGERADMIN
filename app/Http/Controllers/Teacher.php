@@ -758,7 +758,12 @@ class Teacher extends Controller
             "Type" => "btncheck"
         ];
         array_push($buttons,$button);
-        $Nombre = $vol->Names.' '.$vol->LastNames;
+         $Nombre = " ";
+        if($vol!=null)
+        {
+            $Nombre = $vol->Names.' '.$vol->LastNames;
+        }
+        
         $grado = grade::find($course->Grade_id)->GradeNamePeriod();
         if(session()->get('rol_Name')=="Voluntario"){
             return view('Teacher/listadoNotas',compact('buttons','Modal','Titles','Models','Nombre','course','grado'));
@@ -861,7 +866,7 @@ class Teacher extends Controller
                 $course = course::find($assignV->Course_id);
                 $vol = Person::find($teacher);
                 $button = [
-                    "Name" => 'Crear Examen',
+                    "Name" => 'Crear Exámen',
                     "Link" => 'teacher/create/test/'."$course->id",
                     "Type" => "add"
                 ];
@@ -893,6 +898,7 @@ class Teacher extends Controller
         }
         $Titles = [];
         $Models = [];
+        $Modal = [];
         $Activities = Assign_activity::where([['Course_id',$course->id],['State','Active']])->get();
         foreach($Activities as $Activity)
         {
@@ -927,7 +933,11 @@ class Teacher extends Controller
         }
         
         $grado = grade::find($course->Grade_id)->GradeName();
-        $Nombre = $vol->Names .' '.$vol->LastNames;
+        $Nombre =" ";
+        if($vol!=null)
+        {
+            $Nombre = $vol->Names .' '.$vol->LastNames;
+        }
         if (session()->get('rol_Name')=="Voluntario") {
             return view('Teacher/ViewTests',compact('Titles','buttons','Nombre','course','grado','Models'));
         } else {
@@ -1461,7 +1471,6 @@ class Teacher extends Controller
         }
         return view('Teacher/geplandeTests',compact('Titles','Models'));
     }
-
     public function Desactive()         //vista usuarios desactivados
     {
         $buttons =[];
@@ -1617,7 +1626,7 @@ class Teacher extends Controller
             $Activity=[];
             for($i=1;$i<=12;$i++)
             {
-                $month=date("m", strtotime("01-".$i."-2020"));
+                $month=date("m", strtotime("01-".$i."-"));
                 $logs = logs::whereMonth('created_at', '=', $month)->get();
                 $logs = $logs->where('Table','Voluntario');
                 $logs = $logs->where('Period_id',$period->id);

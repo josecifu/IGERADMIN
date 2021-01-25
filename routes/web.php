@@ -164,6 +164,7 @@ Route::group([ 'prefix' => 'administration','middleware' => 'auth'], function(){
 		Route::post('/add/question/test', $route.'\Teacher@AddQuestion')->name('AddQuestion');
 		Route::post('/save/question/test', $route.'\Teacher@SaveAssignQuestion')->name('SaveAssignQuestion');
 		Route::post('/save/test', $route.'\Teacher@saveExam')->name('saveExam');
+		Route::get('/edit/exam/{model}/{test}',$route.'\Teacher@editExam')->name('EditExam');
 		Route::post('/save/activity/{model}', $route.'\Teacher@saveActivity')->name('saveActivity');
 		Route::post('/update/activity', $route.'\Teacher@updateActivity')->name('updateActivity');
 		Route::get('/delete/activity/{curso}/{model}', $route.'\Teacher@deleteActivity')->name('deleteActivity');

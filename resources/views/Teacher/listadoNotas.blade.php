@@ -320,6 +320,38 @@
                 var $url_path = '{!! url('/') !!}';
                 window.location.href = $url_path+"/teacher/detail/activity/"+{{$course->id}}+"/"+id;   
             }
+            function checkinfo ($url)
+            {
+                Swal.fire({
+                        title: "¿Esta seguro que desea enviar las notas?",
+                        text:"Las notas no podran ser modificadas despues de enviadas",
+                        icon: "success",
+                        showCancelButton: true,
+                        buttonsStyling: false,
+                        confirmButtonText: "Enviar para confirmar",
+                        cancelButtonText: "Cancelar",
+                        customClass: {
+                            confirmButton: "btn font-weight-bold btn-warning",
+                            cancelButton: "btn font-weight-bold btn-default"
+                        }
+                    }).then(function (result) {
+                        if (result.value) {
+                            console.log($url);
+                            window.location.href = $url;
+                        } else if (result.dismiss === 'cancel') {
+                            Swal.fire({
+                                text: "¡Las notas no han sido enviadas!.",
+                                icon: "error",
+                                buttonsStyling: false,
+                                confirmButtonText: "Aceptar",
+                                customClass: {
+                                    confirmButton: "btn font-weight-bold btn-success",
+                                }
+                            });
+                        }
+                    });
+                    
+			}
        </script>
 
       
