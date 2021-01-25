@@ -87,7 +87,7 @@
                                                         <!--end::Svg Icon-->
                                                     </span>
                                                 </span>
-                                                <span class="navi-text font-size-lg">Personal Information</span>
+                                                <span class="navi-text font-size-lg">Información Personal</span>
                                             </a>
                                         </li>
                                     </ul>
