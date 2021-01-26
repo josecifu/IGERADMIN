@@ -480,13 +480,16 @@ class Student extends Controller
             {
                 foreach($course->Tests()->where('Year',$year) as $test)
                 {
-                    $count = $test->NoQuestions();
                     $state = [];
                     $question = Question::where('Test_id',$test->id)->first();
                     $check = Note::where(['Test_id'=>$test->id,'Student_id'=>$assign->id,'State'=>'Approved','Year'=>$year])->first();
                     if(($question == null) && ($check != null))
                     {
                         $state = "written";
+                    }
+                    else
+                    {
+                        $state = "none";
                     }
                     if($question != null)
                     {
@@ -504,10 +507,6 @@ class Student extends Controller
                         {
                             $state = "approved";
                         }
-                    }
-                    if($count == "0")
-                    {
-                        $state = "none";
                     }
                     $dateStrStart = str_replace("/","-",$test->StartDate);
                     $StartDate = date("d-m-Y",strtotime($dateStrStart." - 5 days")); 
@@ -811,7 +810,7 @@ class Student extends Controller
         return view('Administration/Student/list',compact('models','titles','buttons'));
     }
 
-    public function list_bygrade($id)                   ////mejorarrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+    public function list_bygrade($id)
     {
         $buttons = [];
         $button = [
@@ -1434,9 +1433,7 @@ class Student extends Controller
                 ];
                 array_push($models,$query);
             }
-            $grade = $grade->GradeNamePeriod();
-        
-            
+            $grade = $grade->GradeNamePeriod();            
         return view('Administration/Student/score',compact('models','titles','grade'));
     }
 
