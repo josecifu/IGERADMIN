@@ -97,7 +97,7 @@
                                                     @foreach($Titles as $Title)
                                                         <th colspan="{{ $Title['No'] }}" ><center>{{ $Title['Name'] }}</center></th>
                                                     @endforeach
-                                                    <th></th>
+                                                    
                                                 </tr>
                                                 <tr>
                                                     <th>Nombre de los alumnos</th>
@@ -196,13 +196,7 @@
                         "language": {
                             "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
                         },
-                        columnDefs: [
-                            {
-                               
-                            },
-                           
-                          
-                        ],
+                       
                     });
 
                 };
