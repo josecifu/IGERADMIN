@@ -847,7 +847,7 @@ class Administration extends Controller
 
       
         $button = [
-            "Name" => 'Ver circulos de estudio activos activas',
+            "Name" => 'Ver circulos de estudio activos',
             "Link" => 'administration/configurations/level/list',
             "Type" => "btn1"
         ];
