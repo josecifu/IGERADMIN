@@ -845,20 +845,15 @@ class Administration extends Controller
     {
         $buttons =[];
 
+      
         $button = [
-            "Name" => 'Ver grados de una jornada',
-            "Link" => 'administration/home/dashboard',
-            "Type" => "btn1"
-        ];
-        array_push($buttons,$button);
-        $button = [
-            "Name" => 'Ver jornadas activas',
+            "Name" => 'Ver circulos de estudio activos activas',
             "Link" => 'administration/configurations/level/list',
             "Type" => "btn1"
         ];
         array_push($buttons,$button);
 
-        $Titles =['Id','Dia','Niveles','No de Grados','Acciones'];
+        $Titles =['Id','Circulo de estudio','Niveles','No de Grados','Acciones'];
         $Models = [];
         $model = period::where("State","Delete")->get();
        
