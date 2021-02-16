@@ -90,7 +90,7 @@
                                 exportOptions: {
                                     columns: [ 0, 1, 2, 3 ],
                                 },
-                                title: 'Listado Voluntarios -'+strDate
+                                title: 'Listado de alumnos inscritos -'+strDate
                             },
                             {
                                 text: 'Exportar a PDF',
@@ -101,7 +101,7 @@
                                 exportOptions: {
                                     columns: [ 0, 1, 2, 3 ],
                                 },
-                                title: 'Listado Voluntarios -'+strDate,
+                                title: 'Listado de alumnos inscritos -'+strDate,
                                 customize: function(doc) {
                                     doc['styles'] = {
                                         userTable: {
