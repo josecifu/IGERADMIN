@@ -8,24 +8,7 @@
                 <span class="nav-text">Exportar datos</span>
             </a>
         </li>
-        <li class="nav-item">
-            <a href="#" onclick="exportdata(2)" class="nav-link">
-                <i class="nav-icon la la-file-excel-o"></i>
-                <span class="nav-text">Exportar datos a Excel</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="#" onclick="exportdata(3)" class="nav-link">
-                <i class="nav-icon la la-file-text-o"></i>
-                <span class="nav-text">Exportar datos a CSV</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="#" onclick="exportdata(1)" class="nav-link">
-                <i class="nav-icon la la-file-pdf-o"></i>
-                <span class="nav-text">Exportar datos a PDF</span>
-            </a>
-        </li>
+       
     </ul>
 </div>
 <!--end::Dropdown Menu-->
