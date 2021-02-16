@@ -225,12 +225,7 @@ class Administration extends Controller
                 return redirect('/teacher/home/dashboard')->withError('No tiene cursos asignados');
             }
         } else {
-            $button = [
-                "Name" => 'Crear Actividad',
-                "Link" => "create()",
-                "Type" => "addFunction"
-            ];
-            array_push($buttons,$button);
+           
             $button = [
                 "Name" => 'Ver detalles de actividad',
                 "Link" => 'modal()',
@@ -299,7 +294,7 @@ class Administration extends Controller
         }
         
         $button = [
-            "Name" => 'Enviar notas a revisión',
+            "Name" => 'Aprobar notas',
             "Link" => '/teacher/send/state/test/'.$id,
             "Type" => "btn1"
         ];
