@@ -297,7 +297,11 @@
                     }
                 });
             }
-            
+            function vermanual()
+            {
+                window.location.href = "https://drive.google.com/file/d/1KWrjt3uXozLldBAdVOH3sTBQVIwPj9mb/view?usp=sharing";
+                
+            }
         </script>
       
 	@stop
