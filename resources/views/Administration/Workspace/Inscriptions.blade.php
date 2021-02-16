@@ -79,7 +79,7 @@
                                 fieldSeparator: '\t',
                                 messageTop: 'Listado de alumnos inscritos.',
                                 exportOptions: {
-                                    columns: [ 0, 1, 2, 3],
+                                    columns: [  1, 2, 3],
                                 },
                                 title: 'Listado de alumnos inscritos -'+strDate
                             },
@@ -88,7 +88,7 @@
                                 extend: 'csvHtml5',
                                 extension: '.csv',
                                 exportOptions: {
-                                    columns: [ 0, 1, 2, 3 ],
+                                    columns: [  1, 2, 3 ],
                                 },
                                 title: 'Listado de alumnos inscritos -'+strDate
                             },
