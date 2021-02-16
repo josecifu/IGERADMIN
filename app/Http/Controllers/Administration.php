@@ -1281,7 +1281,7 @@ class Administration extends Controller
     }
     public function Inscriptions()
     {
-        $Titles =['Id','Nombres','Grado','Fecha de inscripción','Acciones'];
+        $Titles =['Id','Nombres','Grado','Fecha de inscripción'];
         $Models = [];
         $data = period::where('State','Active')->get();
         foreach($data as $value)
